@@ -113,8 +113,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             if (other.isTrigger && other.TryGetComponent(out principal))
             {
-                FirstPrize_Active
-
                 gottaBully.BackHome();
                 return;
             }
@@ -131,9 +129,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             sweepTime -= Time.deltaTime * npc.TimeScale;
             if (sweepTime <= 0f)
-            {
                 npc.behaviorStateMachine.ChangeState(new GottaBully_Returning(gottaBully));
-            }
         }
     }
 
@@ -151,13 +147,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.DestinationEmpty();
             if (!gottaSweep.IsHome)
-            {
                 npc.behaviorStateMachine.CurrentNavigationState.UpdatePosition(gottaSweep.home);
-            }
             else
-            {
                 npc.behaviorStateMachine.ChangeState(new GottaBully_Wait(gottaBully));
-            }
         }
     }
 }

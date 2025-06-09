@@ -41,6 +41,45 @@
 	{ "key": "RecChars_Sfx_Boing", "value": "*Boing!*" },
 	
 	{ "key": "RecChars_Pst_ManMeme1", "value": "Man Meme Coin" },
-	{ "key": "RecChars_Pst_ManMeme2", "value": "A sentient coin that strolls around the school, unaware of its REAL purpose. Go figure!" }
+	{ "key": "RecChars_Pst_ManMeme2", "value": "A sentient coin resembling a certain someone.\nWill reward those who chase down and beat it up with a few special goodies!" },
+	
+	{ "key": "RecChars_Itm_Pie", "value": "Pie" },
+	{ "key": "RecChars_Desc_Pie", "value": "Pie\nTBA" },
+	{ "key": "RecChars_Sfx_PieThrow", "value": "*Pie thrown*" },
+	{ "key": "RecChars_Sfx_PieSplat", "value": "*SPLAT!*" },
+	
+	{ "key": "RecChars_Pst_Daycare1", "value": "Mr. Daycare" },
+	{ "key": "RecChars_Pst_Daycare2", "value": "\"Hey there! I'm Mr. Daycare!\"\nMr. Daycare is the man who runs the daycare! He's very good at keeping things in order!" },
+	
+	{ "key": "RecChars_Daycare_Timeout", "value": "You'll be sitting in the timeout corner for" },
+	{ "key": "RecChars_Daycare_Seconds", "value": "seconds." },
+	{ "key": "RecChars_Daycare_30", "value": "30" },
+	{ "key": "RecChars_Daycare_60", "value": "60" },
+	{ "key": "RecChars_Daycare_100", "value": "100" },
+	{ "key": "RecChars_Daycare_200", "value": "200" },
+	{ "key": "RecChars_Daycare_500", "value": "500" },
+	{ "key": "RecChars_Daycare_3161", "value": "3161" },
+	
+	{ "key": "RecChars_Daycare_NoRunning", "value": "Do not run inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoDrinking", "value": "Do not consume beverages inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoEating", "value": "Do not consume eat food inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoThrowing", "value": "Do not throw things at faculty members inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoEscaping", "value": "Do not leave the timeout corner without my permission inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoLoudSound", "value": "Do not make loud sounds in the hallway!" },
+	
+	{ "key": "RecChars_Pst_Bsodaa1", "value": "Eveyone's Bsodaa" },
+	{ "key": "RecChars_Pst_Bsodaa2", "value": "The inventor of BSODA himself! Watch out, or he'll spray you with it!\nHe doesn't talk yet speaks a thousand words with his actions..." },
+	
+	{ "key": "RecChars_Bsodaa_Happy1", "value": "What fun!" },
+	{ "key": "RecChars_Bsodaa_Happy2", "value": "WOOOOOAAAAAH!" },
+	{ "key": "RecChars_Bsodaa_Thanks", "value": "Thanks!" },
+	{ "key": "RecChars_Bsodaa_Charging", "value": "*CHARGING SODA*" },
+	
+	{ "key": "RecChars_Pst_BsodaaHelper1", "value": "Bsodaa Helper" },
+	{ "key": "RecChars_Pst_BsodaaHelper2", "value": "Eveyone's Bsodaa's greatest pal! She makes sure he always has soda on him!\n<b>DON'T steal from her!</b>" },
+	
+	{ "key": "RecChars_BsodaaHelper_OutOf", "value": "OOPS!" },
+	{ "key": "RecChars_BsodaaHelper_GiveSoda", "value": "HEHEHEHEHEE!" },
+	{ "key": "RecChars_BsodaaHelper_Sprayed", "value": "OH! THAT MAKES ME SAD!" }
   ]
 }

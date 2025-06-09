@@ -2,12 +2,15 @@
 
 using MTM101BaldAPI;
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
 
 using UnityEngine;
+using MTM101BaldAPI.Registers;
+using System;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
@@ -82,6 +85,42 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 Debug.LogError("Transpiler \"ShapeWorldCircle.ScissorsItemPatch.Transpiler\" did not go through!");
 
             yield break;
+        }
+    }
+
+    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "CaAprilFools")]
+    [HarmonyPatch(typeof(LevelGenerator), "StartGenerate")]
+    class ManMemeCoinMainSpawn
+    {
+        // This function in itself is pretty much boilerplate, transpiling the generator would be more ideal
+        private static IEnumerator AddManMemeCoin(SceneObject scene, ManMemeCoin coin)
+        {
+            NPC[] npcs = scene.forcedNpcs;
+            scene.forcedNpcs = scene.forcedNpcs.AddToArray(coin);
+            // Revert once the cells are initialised, as that's when the NPCs have been added to the list
+            yield return new WaitUntil(() => BaseGameManager.Instance.Ec.cells?.Length > 0);
+            scene.forcedNpcs = npcs;
+        }
+
+        private static void Prefix(SceneObject ___scene)
+        {
+            if (___scene == null) return;
+
+            SceneObjectMetadata meta = SceneObjectMetaStorage.Instance.Get(___scene);
+            if (meta == null)
+            {
+                if (!___scene.levelTitle.StartsWith("F")) return;
+            }
+            else if (!meta.tags.Contains("main")) return;
+
+            int chance = ___scene.levelNo;
+            SceneObject next = ___scene;
+            while (next = next.nextLevel)
+                chance++;
+
+            chance = new System.Random(CoreGameManager.Instance.Seed() + 41223).Next(chance);
+            if (chance == ___scene.levelNo)
+                BaseGameManager.Instance.StartCoroutine(AddManMemeCoin(___scene, RecommendedCharsPlugin.AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc")));
         }
     }
 

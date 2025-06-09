@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -26,5 +27,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
             list.Add(newNpc.Weighted(weightedToCopy.weight));
         }
+    }
+
+    public static class RoomAssetHelper
+    {
+        public static CellData Cell(int x, int y, int type) => new CellData() { pos = new IntVector2(x, y), type = type };
+        public static PosterData PosterData(int x, int y, PosterObject pst, Direction dir) => new PosterData() { position = new IntVector2(x, y), poster = pst, direction = dir};
+        public static BasicObjectData ObjectPlacement(Component obj, Vector3 pos, Vector3 eulerAngles) => new BasicObjectData() {position = pos, prefab = obj.transform, rotation = Quaternion.Euler(eulerAngles)};
+        public static BasicObjectData ObjectPlacement(Component obj, Vector3 pos, float angle) => ObjectPlacement(obj, pos, Vector3.up * angle);
     }
 }

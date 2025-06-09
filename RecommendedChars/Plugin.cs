@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 
 using HarmonyLib;
@@ -8,6 +9,7 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +26,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public const string ModName = "Luei's Recommended Character Pack";
         public const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
-        public const string ModVersion = "1.1.1";
+        public const string ModVersion = "1.2";
 
         public static readonly AssetManager AssetMan = new AssetManager();
         internal static RecommendedCharsPlugin Plugin { get; private set; }
@@ -36,7 +38,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Log = Logger;
 
             // Read the config values and remove disabled modules
-            RecommendedCharactersConfig.BindConfig(Config);
+            RecommendedCharsConfig.BindConfig(Config);
             Modules = Modules.Where(x => x.Enabled).ToArray();
 
             RecommendedCharsSaveGameIO saveGameSystem = new RecommendedCharsSaveGameIO(Info);
@@ -46,6 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetLoader.LocalizationFromFile(Path.Combine(AssetLoader.GetModPath(this), "Lang_En.json"), Language.English);
 
             LoadingEvents.RegisterOnAssetsLoaded(Info, LoadModules(), false);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, PostLoadModules(), true);
             GeneratorManagement.Register(this, GenerationModType.Addend, GeneratorAddend);
             GeneratorManagement.RegisterFieldTripLootChange(this, FieldTripLootChange);
 
@@ -58,10 +61,35 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             new Module_Circle(),
             new Module_GottaBully(),
             new Module_ArtsWithWires(),
-#if DEBUG
-            new Module_CaAprilFools()
-#endif
+            new Module_CaAprilFools(),
+            new Module_MrDaycare(),
+            new Module_Bsodaa(),
         };
+
+        // Like AssetLoader.SpritesFromSpritesheet, but based on sprite size and sprite count
+        internal static Sprite[] SplitSpriteSheet(Texture2D atlas, int spriteWidth, int spriteHeight, int totalSprites = 0, float pixelsPerUnit = 100f)
+        {
+            int horizontalTiles = atlas.width / spriteWidth;
+            int verticalTiles = atlas.height / spriteHeight;
+
+            if (totalSprites == 0)
+                totalSprites = horizontalTiles * verticalTiles;
+            Sprite[] array = new Sprite[totalSprites];
+
+            Vector2 center = Vector2.one / 2f;
+
+            int i = 0;
+            for (int y = verticalTiles - 1; y >= 0; y--)
+            {
+                for (int x = 0; x < horizontalTiles && i < totalSprites; x++)
+                {
+                    Sprite sprite = Sprite.Create(atlas, new Rect(x * spriteWidth, y * spriteHeight, spriteWidth, spriteHeight), center, pixelsPerUnit, 0u, SpriteMeshType.FullRect);
+                    sprite.name = atlas.name + "_"+i;
+                    array[i++] = sprite;
+                }
+            }
+            return array;
+        }
 
         internal static X CloneComponent<T, X>(T original) where T : MonoBehaviour where X : T
         {
@@ -88,12 +116,37 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator LoadModules()
         {
+            if (Modules.Length == 0)
+            {
+                yield return 1;
+                yield return "No module loads found";
+                yield break;
+            }
             yield return Modules.Length;
 
             foreach (Module module in Modules)
             { 
                 yield return $"Loading module \"{module.Name}\"";
                 module.LoadAction?.Invoke();
+            }
+        }
+
+        private IEnumerator PostLoadModules()
+        {
+            Module[] postModules = Modules.Where(x => x.PostLoadAction != null).ToArray();
+            if (postModules.Length == 0)
+            {
+                yield return 1;
+                yield return "No module post-loads found";
+                yield break;
+            }
+
+            yield return postModules.Length;
+
+            foreach (Module module in postModules)
+            {
+                yield return $"Post-loading module \"{module.Name}\"";
+                module.PostLoadAction.Invoke();
             }
         }
 
@@ -114,6 +167,25 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             foreach (Module module in Modules)
                 module.FieldTripLootAction?.Invoke(fieldTrip, table);
         }
+    }
+
+    public abstract class Module
+    {
+        // These three are here for convenience sake
+        protected static AssetManager AssetMan => RecommendedCharsPlugin.AssetMan;
+        internal static RecommendedCharsPlugin Plugin => RecommendedCharsPlugin.Plugin;
+        internal static PluginInfo Info => Plugin.Info;
+
+        public bool Enabled => ConfigEntry != null && ConfigEntry.Value;
+        public abstract string Name { get; }
+        public virtual string SaveTag => Name;
+        protected abstract ConfigEntry<bool> ConfigEntry { get; }
+
+        public virtual Action LoadAction => null;
+        public virtual Action PostLoadAction => null;
+        public virtual Action<string, int, SceneObject> FloorAddendAction => null;
+        public virtual Action<string, int, CustomLevelObject> LevelAddendAction => null;
+        public virtual Action<FieldTrips, FieldTripLoot> FieldTripLootAction => null;
     }
 
     public class RecommendedCharsSaveGameIO : ModdedSaveGameIOBinary
@@ -148,9 +220,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 tags.Add(module.Name);
             if (tags.Count > 0)
             {
-                if (RecommendedCharactersConfig.guaranteeSpawnChar.Value)
+                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                     tags.Add("GuaranteedSpawn");
-                if ( RecommendedCharactersConfig.intendedWiresBehavior.Value)
+                if ( RecommendedCharsConfig.intendedWiresBehavior.Value)
                     tags.Add("GuaranteedSpawn");
             }
 

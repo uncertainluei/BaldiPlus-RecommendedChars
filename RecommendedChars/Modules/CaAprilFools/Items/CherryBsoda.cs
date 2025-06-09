@@ -16,7 +16,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected PlayerManager currentPlayer;
 
         protected float Speed => bsoda.speed;
-        public byte bouncesLeft = 3;
+        public byte bouncesLeft = 8;
 
         private bool destroyQueued = false;
 
@@ -35,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected virtual void AddPlayerToMoveMod()
         {
-            pm.plm.Entity.ExternalActivity.moveMods.Add(MoveMod);
+            currentPlayer.plm.Entity.ExternalActivity.moveMods.Add(MoveMod);
         }
 
         private void Update()
