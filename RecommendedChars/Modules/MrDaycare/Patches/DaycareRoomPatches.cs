@@ -31,6 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(StandardDoor), "InsertItem")]
         [HarmonyPatch(typeof(StandardDoor), "OpenTimedWithKey")]
         [HarmonyPrefix]
+        private static bool NotebookGateTryOpen(StandardDoor __instance) => !IsNotebookGate(__instance);
 
         [HarmonyPatch(typeof(BaseGameManager), "CollectNotebooks")]
         [HarmonyPostfix]
