@@ -38,6 +38,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LoadNerfGun();
             LoadCircle();
+
+            if (RecommendedCharsPlugin.AnimationsCompat)
+                AnimationsCompat();
         }
         private void LoadNerfGun()
         {
@@ -139,9 +142,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             jumprope.startVal = 100;
             jumprope.penaltyVal = 10;
 
+            AssetMan.Add("CircleJumprope", jumprope);
             AssetMan.Add("CircleNpc", circle);
             NPCMetadata circleMeta = new NPCMetadata(Info, new NPC[] { circle }, circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, new string[] { "student" });
             NPCMetaStorage.Instance.Add(circleMeta);
+        }
+
+        private void AnimationsCompat()
+        {
+            GameObject.DestroyImmediate(AssetMan.Get<CircleJumprope>("CircleJumprope").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(AssetMan.Get<CircleNpc>("CircleNpc").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

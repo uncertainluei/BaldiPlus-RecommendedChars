@@ -24,6 +24,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override string SaveTag => Name + (RecommendedCharsConfig.npcCherryBsoda.Value ? "(Cherry BSODA pushes NPCs)" : "");
 
         public override Action LoadAction => Load;
+        public override Action PostLoadAction => PostLoad;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCaAprilFools;
@@ -38,7 +39,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadItems();
             LoadFixedMap();
             LoadManMemeCoinNpc();
-            ManMemeCoinEvents.InitializeBaseEvents();
+
+            LevelGeneratorEventPatch.OnNpcAdd += TrySpawnManMemeCoin;
         }
 
         private void LoadItems()
@@ -47,7 +49,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject cheetos = new ItemBuilder(Info)
             .SetNameAndDescription("RecChars_Itm_FlaminHotCheetos", "RecChars_Desc_FlaminHotCheetos")
             .SetEnum("RecChars_FlaminHotCheetos")
-            .SetMeta(ItemFlags.Persists, new string[] { "food" })
+            .SetMeta(ItemFlags.Persists, new string[] { "food", "recchars_daycare_exempt", "cann_hate" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminHotCheetos_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminHotCheetos_Large"), 50f))
             .SetShopPrice(750)
             .SetGeneratorCost(80)
@@ -67,7 +69,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject cherryBsoda = new ItemBuilder(Info)
             .SetNameAndDescription("RecChars_Itm_CherryBsoda", RecommendedCharsConfig.npcCherryBsoda.Value ? "RecChars_Desc_CherryBsoda_NoPlayerPush" : "RecChars_Desc_CherryBsoda")
             .SetEnum("RecChars_CherryBsoda")
-            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "drink" })
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "drink" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Large"), 50f))
             .SetShopPrice(750)
             .SetGeneratorCost(80)
@@ -122,7 +124,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Can of Mangles
             ItemMetaData manglesMeta = new ItemMetaData(Info, new ItemObject[0]);
             manglesMeta.flags = ItemFlags.MultipleUse;
-            manglesMeta.tags.Add("food");
+            manglesMeta.tags.Add("food"); 
+            manglesMeta.tags.Add("recchars_daycare_exempt");
+            // The Mangles would have this "homemade" flavor, thus you can feed that to Cann
 
             Items manglesEnum = EnumExtensions.ExtendEnum<Items>("RecChars_Mangles");
 
@@ -215,6 +219,35 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (scene.levelTitle == "END")
                 scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
+        }
+
+        private void PostLoad()
+        {
+            ManMemeCoinEvents.InitializeBaseEvents();
+        }
+
+        private void TrySpawnManMemeCoin(LevelGenerator gen)
+        {
+            if (gen.scene == null) return;
+
+            ManMemeCoin coin = AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc");
+            if (gen.Ec.npcsToSpawn.Contains(coin)) return;
+
+            SceneObjectMetadata meta = SceneObjectMetaStorage.Instance.Get(gen.scene);
+            if (meta == null)
+            {
+                if (!gen.scene.levelTitle.StartsWith("F")) return;
+            }
+            else if (!meta.tags.Contains("main")) return;
+
+            int chance = gen.scene.levelNo;
+            SceneObject next = gen.scene;
+            while (next = next.nextLevel)
+                chance++;
+
+            chance = new System.Random(gen.seed + 41223).Next(chance);
+            if (chance == gen.scene.levelNo)
+                gen.Ec.npcsToSpawn.Add(coin);
         }
     }
 }

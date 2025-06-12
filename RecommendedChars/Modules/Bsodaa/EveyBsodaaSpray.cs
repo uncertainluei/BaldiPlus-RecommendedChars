@@ -16,7 +16,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             unscaledSpeed = speed;
 
-            spriteRenderer.SetSpriteRotation(Random.Range(0f, 360f));
             bsodaa.audMan.PlaySingle(sound);
             moveMod.priority = 1;
         }
@@ -33,9 +32,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public new void EntityTriggerEnter(Collider other)
         {
-            Debug.Log(other);
+            if (launching) return;
+            if (!other.isTrigger && other.gameObject.layer == 1)
+            {
+                if (!finished)
+                    BsodaFinished(false);
+                Destroy(gameObject);
+                return;
+            }
 
-            if (!launching && other.TryGetComponent(out Entity entity))
+            if (other.TryGetComponent(out Entity entity))
             {
                 if (!finished)
                     BsodaFinished(true);
@@ -50,7 +56,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (other.transform == bsodaa.transform)
                 launching = false;
 
-            if (other.TryGetComponent(out Entity entity))
+            if (other.TryGetComponent(out Entity entity)) 
             {
                 entity.ExternalActivity.moveMods.Remove(moveMod);
                 activityMods.Remove(entity.ExternalActivity);

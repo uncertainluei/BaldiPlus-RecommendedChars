@@ -24,6 +24,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override bool Use(PlayerManager pm)
         {
 		    CoreGameManager.Instance.audMan.PlaySingle(audEat);
+            DaycareGuiltManager.TryBreakRule(pm, "Eating", 1.6f, 0.125f);
             StartCoroutine(Timer(pm, 15f));
             return true;
         }

@@ -34,6 +34,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             GottaBully gottaBully = LoadGottaBully();
             LoadSwapCloset(gottaBully);
+
+            if (RecommendedCharsPlugin.AnimationsCompat)
+                AnimationsCompat();
         }
 
         private GottaBully LoadGottaBully()
@@ -43,6 +46,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             gottaBully.character = EnumExtensions.ExtendEnum<Character>("RecChars_GottaBully");
             PineDebugNpcIconPatch.icons.Add(gottaBully.character, AssetMan.Get<Texture2D>("GottaBullyTex/BorderGottaBully"));
+
+            gottaBully.ignorePlayerOnSpawn = true;
 
             gottaBully.looker.npc = gottaBully;
             gottaBully.navigator.npc = gottaBully;
@@ -84,13 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bullyRoomAsset.keepTextures = true;
             bullyRoomAsset.potentialDoorPositions = new List<IntVector2>() { new IntVector2(0, 0) };
 
-            bullyRoomAsset.cells = new List<CellData>()
-            {
-                new CellData() { pos = new IntVector2(0,0), type=12},
-                new CellData() { pos = new IntVector2(1,0), type=6},
-                new CellData() { pos = new IntVector2(0,1), type=9},
-                new CellData() { pos = new IntVector2(1,1), type=3},
-            };
+            bullyRoomAsset.cells = RoomAssetHelper.CellRect(2, 2);
 
             bullyRoomAsset.standardLightCells.Add(new IntVector2(0, 0));
             bullyRoomAsset.entitySafeCells.Add(new IntVector2(0, 1));
@@ -116,16 +115,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ((ScriptableObject)bullyRoomAsset).name = "Room_SwappedCloset_1";
             bullyRoomAsset.name = "SwappedCloset_1";
 
-            bullyRoomAsset.cells = new List<CellData>()
-            {
-                new CellData() { pos = new IntVector2(0,0), type=14},
-                new CellData() { pos = new IntVector2(0,1), type=10},
-                new CellData() { pos = new IntVector2(0,2), type=10},
-                new CellData() { pos = new IntVector2(0,3), type=11},
-            };
+            bullyRoomAsset.cells = RoomAssetHelper.CellRect(1, 4);
 
             bullyRoomAsset.entitySafeCells[0] = new IntVector2(0, 2);
             gottaBully.potentialRoomAssets[1].selection = bullyRoomAsset;
+        }
+
+        private void AnimationsCompat()
+        {
+            GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<BBPlusAnimations.Components.GottaSweepComponent>());
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

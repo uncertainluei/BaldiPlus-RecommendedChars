@@ -55,6 +55,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public void Clicked(int player)
         {
+            if (dead) return;
+
             WeightedSelection<AbstractManMemeAction>[] events = ManMemeCoinEvents.Events.Where(x => x.selection.ShouldInclude(player)).ToArray();
             WeightedSelection<AbstractManMemeAction>.RandomSelection(events).Invoke(this, player);
 

@@ -33,7 +33,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             entity.OnEntityMoveInitialCollision += OnWallCollision;
 
             CoreGameManager.Instance.audMan.PlaySingle(audThrow);
-            pm.RuleBreak("Throwing", 0.8f, 0.25f);
+            DaycareGuiltManager.GetInstance(pm).BreakRule("Throwing", 0.8f, 0.125f);
             moveMod.priority = 1;
             return true;
         }

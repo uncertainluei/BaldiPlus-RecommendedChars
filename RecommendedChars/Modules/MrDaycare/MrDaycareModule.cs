@@ -21,6 +21,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleExp;
 
         public override Action LoadAction => Load;
+        public override Action PostLoadAction => PostLoad;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
 
         private void Load()
@@ -31,7 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "Daycare"), "DaycareAud/");
 
-            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieThrow.wav"), "RecChars_Sfx_PieThrow", SoundType.Effect, Color.white));
+            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieThrow.wav"), "RecChars_Sfx_PieThrow", SoundType.Effect, Color.white, 0f));
             AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieSplat.wav"), "RecChars_Sfx_PieSplat", SoundType.Effect, Color.white));
             AssetMan.Add("DaveDoorOpen", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveOpen.wav"), "Sfx_Doors_StandardOpen", SoundType.Effect, Color.white));
             AssetMan.Add("DaveDoorShut", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveShut.wav"), "Sfx_Doors_StandardShut", SoundType.Effect, Color.white));
@@ -46,7 +47,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             ItemObject pie = new ItemBuilder(Info)
             .SetNameAndDescription("RecChars_Itm_Pie", "RecChars_Desc_Pie")
-            .SetEnum("RecChars_CherryBsoda")
+            .SetEnum("RecChars_Pie")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "recchars_daycare_exempt" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/Pie_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/Pie_Large"), 50f))
             .SetShopPrice(500)
@@ -76,7 +77,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             pieUse.groundedSprite.transform.localPosition = Vector3.back * -0.1f;
             pieUse.groundedSprite.GetComponent<SpriteRenderer>().sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/PieSplat"), 10f);
 
-            pieUse.noBillboardMat = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "SpriteStandard_NoBillboard" && x.GetInstanceID() >= 0);
+            pieUse.noBillboardMat = AssetMan.Get<Material>("NoBillboardMaterial");
 
             GameObject.DestroyImmediate(gumClone);
 
@@ -97,6 +98,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetWanderEnterRooms()
                 .IgnorePlayerOnSpawn()
                 .Build();
+
+            MrDaycare.charEnum = daycare.character;
 
             daycare.spriteRenderer[0].transform.localPosition = Vector3.up * -1f;
             daycare.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/MrDaycare"), 65f);
@@ -125,7 +128,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 { "Throwing" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoThrowing"), "RecChars_Daycare_NoThrowing", SoundType.Voice, daycare.audMan.subtitleColor)},
                 { "LoudSound" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoLoudSound"), "RecChars_Daycare_NoLoudSound", SoundType.Voice, daycare.audMan.subtitleColor)}
             };
-            MrDaycare.audRuleBreaks.Add("DaycareEating", MrDaycare.audRuleBreaks["Eating"]);
 
             daycare.detentionNoise = 125;
 
@@ -177,18 +179,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoomAsset.mapMaterial = ObjectCreators.CreateMapTileShader(AssetMan.Get<Texture2D>("DaycareRoom/Map_Daycare"));
             daycareRoomAsset.color = Color.green;
 
-            daycareRoomAsset.cells = new List<CellData>()
-            {
-                RoomAssetHelper.Cell(0,0,12),
-                RoomAssetHelper.Cell(1,0,4),
-                RoomAssetHelper.Cell(2,0,6),
-                RoomAssetHelper.Cell(0,1,8),
-                RoomAssetHelper.Cell(1,1,0),
-                RoomAssetHelper.Cell(2,1,2),
-                RoomAssetHelper.Cell(0,2,9),
-                RoomAssetHelper.Cell(1,2,1),
-                RoomAssetHelper.Cell(2,2,3)
-            };
+            daycareRoomAsset.cells = RoomAssetHelper.CellRect(3, 3);
 
             daycareRoomAsset.posterChance = 0.1f;
             daycareRoomAsset.posters = new List<WeightedPosterObject>();
@@ -228,11 +219,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             daycareRoomAsset.roomFunctionContainer = roomFunction.GetComponent<RoomFunctionContainer>();
             GameObject.DestroyImmediate(daycareRoomAsset.roomFunctionContainer.GetComponent<CharacterPostersRoomFunction>());
+            GameObject.DestroyImmediate(daycareRoomAsset.roomFunctionContainer.GetComponent<RuleFreeZone>());
+
+            DaycareRuleFreeZone ruleFreeZone = daycareRoomAsset.roomFunctionContainer.gameObject.AddComponent<DaycareRuleFreeZone>();
+            ruleFreeZone.excludeEscaping = false;
+
             daycareRoomAsset.roomFunctionContainer.functions = new List<RoomFunction>()
             {
-                daycareRoomAsset.roomFunctionContainer .GetComponent<RuleFreeZone>(),
                 roomFunction,
-                daycareRoomAsset.roomFunctionContainer .GetComponent<CoverRoomFunction>()
+                ruleFreeZone,
+                daycareRoomAsset.roomFunctionContainer.GetComponent<CoverRoomFunction>()
             };
 
             return daycareRoomAsset;
@@ -274,6 +270,21 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
+            }
+        }
+
+        private void PostLoad()
+        {
+            RuleFreeZone[] zones = Resources.FindObjectsOfTypeAll<RuleFreeZone>();
+            RoomFunctionContainer container;
+            foreach (RuleFreeZone ruleFreeZone in zones)
+            {
+                if (!ruleFreeZone.TryGetComponent(out container))
+                    continue;
+
+                if (container.functions.FirstOrDefault(x => x is DaycareRuleFreeZone) == null && // Does not already have a DaycareRuleFreeZone
+                    container.functions.FirstOrDefault(x => x is DetentionRoomFunction) == null) // Is not a Principal's office
+                    container.functions.Add(container.gameObject.AddComponent<DaycareRuleFreeZone>()); // Make Mr. Daycare ignore rule breaks
             }
         }
     }

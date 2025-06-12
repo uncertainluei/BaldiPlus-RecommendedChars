@@ -34,6 +34,9 @@
 		<Reference Include="BBPlusCustomMusics" Publicize="true">
 			<HintPath>..\Dependencies\BBPlusCustomMusics.dll</HintPath>
 		</Reference>
+		<Reference Include="BBPlusAnimations" Publicize="true">
+			<HintPath>..\Dependencies\BBPlusAnimations.dll</HintPath>
+		</Reference>
 		<Reference Include="MTM101BaldAPI">
 			<HintPath>..\Dependencies\MTM101BaldAPI.dll</HintPath>
 		</Reference>

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MTM101BaldAPI;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    //TODO: Rename to MrDaycare
     [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Experimental")]
     [HarmonyPatch]
-    class MrDaycarePatches
+    class DaycareRoomPatches
     {
         private static StandardDoor _door;
         private static DaycareNotebookGate _daycareDoor;
@@ -36,7 +31,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [HarmonyPatch(typeof(StandardDoor), "InsertItem")]
         [HarmonyPatch(typeof(StandardDoor), "OpenTimedWithKey")]
         [HarmonyPrefix]
-        private static bool NotebookGateTryOpen(StandardDoor __instance) => !IsNotebookGate(__instance);
 
         [HarmonyPatch(typeof(BaseGameManager), "CollectNotebooks")]
         [HarmonyPostfix]
@@ -44,16 +38,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             DaycareRoomFunction.NotebookCollected();
         }
-        
-        [HarmonyPatch(typeof(Principal), "ObservePlayer")]
-        [HarmonyPrefix]
-        private static bool BlacklistRuleBreaks(PlayerManager player) => !player.Disobeying || !blacklistedRuleBreaks.Contains(player.ruleBreak);
-        private static readonly string[] blacklistedRuleBreaks = new string[]
-        {
-            "DaycareEscaping",
-            "DaycareEating",
-            "Throw",
-            "LoudSound"
-        };
     }
 }

@@ -45,7 +45,6 @@
 	
 	{ "key": "RecChars_Itm_Pie", "value": "Pie" },
 	{ "key": "RecChars_Desc_Pie", "value": "Pie\nTBA" },
-	{ "key": "RecChars_Sfx_PieThrow", "value": "*Pie thrown*" },
 	{ "key": "RecChars_Sfx_PieSplat", "value": "*SPLAT!*" },
 	
 	{ "key": "RecChars_Pst_Daycare1", "value": "Mr. Daycare" },
@@ -62,13 +61,13 @@
 	
 	{ "key": "RecChars_Daycare_NoRunning", "value": "Do not run inside the hallway!" },
 	{ "key": "RecChars_Daycare_NoDrinking", "value": "Do not consume beverages inside the hallway!" },
-	{ "key": "RecChars_Daycare_NoEating", "value": "Do not consume eat food inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoEating", "value": "Do not eat food inside the hallway!" },
 	{ "key": "RecChars_Daycare_NoThrowing", "value": "Do not throw things at faculty members inside the hallway!" },
 	{ "key": "RecChars_Daycare_NoEscaping", "value": "Do not leave the timeout corner without my permission inside the hallway!" },
 	{ "key": "RecChars_Daycare_NoLoudSound", "value": "Do not make loud sounds in the hallway!" },
 	
 	{ "key": "RecChars_Pst_Bsodaa1", "value": "Eveyone's Bsodaa" },
-	{ "key": "RecChars_Pst_Bsodaa2", "value": "The inventor of BSODA himself! Watch out, or he'll spray you with it!\nHe doesn't talk yet speaks a thousand words with his actions..." },
+	{ "key": "RecChars_Pst_Bsodaa2", "value": "The inventor of BSODA himself!\nWatch out, or he'll spray you with it!\nHe might not talk, but his actions speak louder!" },
 	
 	{ "key": "RecChars_Bsodaa_Happy1", "value": "What fun!" },
 	{ "key": "RecChars_Bsodaa_Happy2", "value": "WOOOOOAAAAAH!" },

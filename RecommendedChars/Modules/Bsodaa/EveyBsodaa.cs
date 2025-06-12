@@ -13,7 +13,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public class EveyBsodaa : NPC
     {
+        internal static Character charEnum = (Character)(-1);
         internal static Dictionary<string, Sprite[]> animations;
+
         public CustomSpriteAnimator animator;
 
         public AudioManager audMan;
@@ -217,6 +219,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Update();
             timeLeft -= Time.deltaTime * npc.TimeScale;
+            if (timeLeft <= 0f)
+                npc.behaviorStateMachine.ChangeState(new EveyBsodaa_Wandering(bsodaa));
         }
     }
 

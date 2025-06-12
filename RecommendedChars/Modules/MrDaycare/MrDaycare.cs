@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public class MrDaycare : Principal
     {
+        internal static Character charEnum = (Character)(-1);
+
         private readonly int[] lockTimes = new int[]
         {
             30,
@@ -24,8 +25,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             "Running",
             "Drinking",
             "Eating", // Used by Lots Of Items
-            "DaycareEating",
-            "DaycareEscaping",
             "Throwing",
             "LoudSound"
         };
@@ -44,7 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public void Start()
         {
             Cell currentCell = ec.CellFromPosition(transform.position);
-            if (currentCell == null || (daycareRoom = currentCell.room) == null || !daycareRoom.functionObject.TryGetComponent<DaycareRoomFunction>(out daycareFunction))
+            if (currentCell == null || (daycareRoom = currentCell.room) == null || !daycareRoom.functionObject.TryGetComponent(out daycareFunction))
             {
                 RecommendedCharsPlugin.Log.LogError("Mr. Daycare spawned in an invalid location! Despawning...");
                 Despawn();
@@ -66,13 +65,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public new void ObservePlayer(PlayerManager player)
         {
-            if (player.Disobeying && !player.Tagged && rules.Contains(player.ruleBreak))
+            if (!player.Tagged && DaycareGuiltManager.GetInstance(player).Disobeying)
             {
-                timeInSight[player.playerNumber] += Time.deltaTime * TimeScale * 2f;
-                if (timeInSight[player.playerNumber] >= player.GuiltySensitivity)
+                timeInSight[player.playerNumber] += Time.deltaTime * TimeScale;
+                if (timeInSight[player.playerNumber] >= DaycareGuiltManager.GetInstance(player).GuiltSensitivity)
                 {
                     targetedPlayer = player;
-                    Scold(player.ruleBreak);
+                    Scold(DaycareGuiltManager.GetInstance(player).RuleBreak);
                     behaviorStateMachine.ChangeState(new MrDaycare_ChasingPlayer(this, player));
                 }
             }
@@ -90,7 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public void SendToTimeout()
         {
             targetedPlayer.Teleport(ec.RealRoomMid(daycareRoom));
-            targetedPlayer.ClearGuilt();
+            DaycareGuiltManager.GetInstance(targetedPlayer).ClearGuilt();
             transform.position = targetedPlayer.transform.position + targetedPlayer.transform.forward * 10f;
             daycareFunction.Activate(lockTimes[detentionLevel], ec);
 
@@ -266,8 +265,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override void Update()
         {
-            if (daycare.audMan.AnyAudioIsPlaying) return;
-            npc.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
+            if (!daycare.audMan.AnyAudioIsPlaying)
+                npc.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
         }
     }
 }

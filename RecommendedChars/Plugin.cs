@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 
@@ -21,6 +22,7 @@ using UnityEngine;
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [BepInPlugin(ModGuid, ModName, ModVersion)]
+    [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("mtm101.rulerp.bbplus.baldidevapi")]
     class RecommendedCharsPlugin : BaseUnityPlugin
     {
@@ -31,6 +33,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public static readonly AssetManager AssetMan = new AssetManager();
         internal static RecommendedCharsPlugin Plugin { get; private set; }
         internal static ManualLogSource Log { get; private set; }
+
+        internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
+        internal static bool AnimationsCompat { get; private set; }
 
         private void Awake()
         {
@@ -47,7 +52,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Load localization file
             AssetLoader.LocalizationFromFile(Path.Combine(AssetLoader.GetModPath(this), "Lang_En.json"), Language.English);
 
-            LoadingEvents.RegisterOnAssetsLoaded(Info, LoadModules(), false);
+            AnimationsCompat = Chainloader.PluginInfos.ContainsKey(AnimationsGuid);
+
+            LoadingEvents.RegisterOnAssetsLoaded(Info, LoadAssets(), false);
             LoadingEvents.RegisterOnAssetsLoaded(Info, PostLoadModules(), true);
             GeneratorManagement.Register(this, GenerationModType.Addend, GeneratorAddend);
             GeneratorManagement.RegisterFieldTripLootChange(this, FieldTripLootChange);
@@ -114,8 +121,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        private IEnumerator LoadModules()
+        private IEnumerator LoadAssets()
         {
+            // Sprite materials
+            Material[] materials = Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0).ToArray();
+            AssetMan.Add("BillboardMaterial", materials.First(x => x.name == "SpriteStandard_Billboard"));
+            AssetMan.Add("NoBillboardMaterial", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
+
             if (Modules.Length == 0)
             {
                 yield return 1;

@@ -33,12 +33,60 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LoadBsodaaHelper();
             LoadEveyBsodaa();
+
+            LevelGeneratorEventPatch.OnNpcAdd += AddBsodaaHelpers;
+            LevelGeneratorEventPatch.OnGeneratorCompletion += RemoveBsodaaHelpers;
         }
 
         private void LoadBsodaaHelper()
         {
             // Essentially this other guy will not be like the below guy, as in she's a glorified structure rather than an
             // NPC.
+
+            GameObject helperObj = new GameObject("BsodaaHelper", typeof(BsodaaHelper), typeof(CapsuleCollider), typeof(PropagatedAudioManager));
+            helperObj.transform.parent = MTM101BaldiDevAPI.prefabTransform;
+            helperObj.transform.localPosition = Vector3.zero;
+
+            BsodaaHelper helper = helperObj.GetComponent<BsodaaHelper>();
+            helper.audMan = helperObj.GetComponent<PropagatedAudioManager>();
+            GameObject.DestroyImmediate(helper.audMan.audioDevice.gameObject);
+            ((PropagatedAudioManager)helper.audMan).minDistance = 10f;
+            ((PropagatedAudioManager)helper.audMan).maxDistance = 150f;
+
+            helper.audMan.overrideSubtitleColor = true;
+            helper.audMan.subtitleColor = new Color(110f/255f, 134f/255f, 1f);
+
+            helper.audOutOf = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_OutOf"), "RecChars_BsodaaHelper_OutOf", SoundType.Voice, helper.audMan.subtitleColor);
+            helper.audGiveSoda = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_GiveSoda"), "RecChars_BsodaaHelper_GiveSoda", SoundType.Voice, helper.audMan.subtitleColor);
+            helper.audSad = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_Sprayed"), "RecChars_BsodaaHelper_Sprayed", SoundType.Voice, helper.audMan.subtitleColor);
+
+            GameObject spriteObj = new GameObject("Sprite", typeof(SpriteRenderer));
+            spriteObj.transform.parent = helperObj.transform;
+            spriteObj.transform.localPosition = Vector3.up * -2.16f;
+            spriteObj.layer = LayerMask.NameToLayer("Billboard");
+
+            helper.sprite = spriteObj.GetComponent<SpriteRenderer>();
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 100f, Vector2.one/2f, AssetMan.Get<Texture2D>("BsodaaTex/BsodaaHelper"));
+
+            helper.sprite.sprite = sprites[0];
+            helper.sprite.material = AssetMan.Get<Material>("BillboardMaterial");
+            helper.sprEmpty = sprites[1];
+            helper.sprSprayed = sprites[2];
+
+            helper.itmBsoda = ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value;
+            helper.itmDietBsoda = ItemMetaStorage.Instance.FindByEnum(Items.DietBsoda).value;
+
+            AssetMan.Add("BsodaaHelperObject", helper);
+
+            // Dummy NPC for Principal's Office poster
+            GameObject helperNpcObj = new GameObject("BsodaaHelperDummyNpc", typeof(BsodaaHelperDummyNpc));
+            helperNpcObj.transform.parent = MTM101BaldiDevAPI.prefabTransform;
+            NPC dummy = helperNpcObj.GetComponent<NPC>();
+            dummy.ignorePlayerOnSpawn = true;
+            dummy.potentialRoomAssets = new WeightedRoomAsset[0];
+            dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "RecChars_Pst_BsodaaHelper1", "RecChars_Pst_BsodaaHelper2");
+
+            AssetMan.Add("BsodaaHelperPoster", dummy);
         }
 
         private void LoadEveyBsodaa()
@@ -53,6 +101,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .AddTrigger()
                 .IgnorePlayerOnSpawn()
                 .Build();
+
+            EveyBsodaa.charEnum = bsodaaGuy.Character;
 
             Sprite[] sprites = RecommendedCharsPlugin.SplitSpriteSheet(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Idle"), 106, 256, 3, 32f);
 
@@ -103,6 +153,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             };
 
             bsodaaGuy.projectilePre = RecommendedCharsPlugin.CloneComponent<ITM_BSODA, EveyBsodaaSpray>(GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform));
+            bsodaaGuy.projectilePre.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Spray"), 8f);
+            bsodaaGuy.projectilePre.time = 10f;
             bsodaaGuy.projectilePre.name = "Bsodaa_Spray";
 
             PineDebugNpcIconPatch.icons.Add(bsodaaGuy.Character, AssetMan.Get<Texture2D>("BsodaaTex/BorderBsodaa"));
@@ -177,7 +229,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaRoomAsset.basicObjects = new List<BasicObjectData>()
             {
                 RoomAssetHelper.ObjectPlacement(dBsodaMachine, new Vector3(5f,0f,15f), 0f),
-                RoomAssetHelper.ObjectPlacement(dBsodaMachine, new Vector3(25f,0f,15f), 0f)
+                RoomAssetHelper.ObjectPlacement(dBsodaMachine, new Vector3(25f,0f,15f), 0f),
+                RoomAssetHelper.ObjectPlacement(AssetMan.Get<BsodaaHelper>("BsodaaHelperObject"), new Vector3(15f,5f,25f), 0f)
             };
 
             //DetentionRoomFunction detention = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
@@ -228,6 +281,32 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
             }
+        }
+        private void AddBsodaaHelpers(LevelGenerator gen)
+        {
+            NPC helperDummy = RecommendedCharsPlugin.AssetMan.Get<NPC>("BsodaaHelperPoster");
+            int bsodaas = gen.Ec.npcsToSpawn.Where(x => x != null && x.Character == EveyBsodaa.charEnum).ToArray().Length;
+            for (int i = 0; i < bsodaas; i++)
+                gen.Ec.npcsToSpawn.Add(helperDummy);
+        }
+
+        // While it is a dummy NPC that deletes itself upon initializing, I'd rather just have it 
+        private void RemoveBsodaaHelpers(LevelGenerator gen)
+        {
+            NPC helperDummy = RecommendedCharsPlugin.AssetMan.Get<NPC>("BsodaaHelperPoster");
+            List<Cell> npcSpawnTiles = new List<Cell>(gen.Ec.npcSpawnTile);
+            bool changesFound = false;
+
+            for (int i = gen.Ec.npcsToSpawn.Count - 1; i >= 0; i--)
+            {
+                if (gen.Ec.npcsToSpawn[i] != helperDummy) continue;
+
+                changesFound = true;
+                gen.Ec.npcsToSpawn.RemoveAt(i);
+                npcSpawnTiles.RemoveAt(i);
+            }
+            if (changesFound)
+                gen.Ec.npcSpawnTile = npcSpawnTiles.ToArray();
         }
     }
 }

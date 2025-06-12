@@ -1,8 +1,5 @@
-﻿using System;
+﻿using MTM101BaldAPI.UI;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using MTM101BaldAPI.UI;
 using TMPro;
 using UnityEngine;
 
@@ -23,7 +20,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (materials.ContainsKey(num))
                 return materials[num];
-
 
             if (dummyPoster == null)
             {
