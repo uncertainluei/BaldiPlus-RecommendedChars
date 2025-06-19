@@ -3,7 +3,7 @@ aka "The WORST Baldi's Basics Mod I've Ever Played.." according to grays and lan
 README is WIP.
 
 ## Build Instructions
-This is for building the mods' .DLL and .PDB files, which should be found at the `[MODNAME]/bin/Debug*/netstandard2.0/` directory.
+This is for building the mod's .DLL and .PDB, which should be found at the `RecommendedChars/bin/Debug*/netstandard2.0/` directory.
 
 \*`Release` if built with the *Release* configuration
 
