@@ -8,14 +8,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static ConfigEntry<bool> moduleGottaBully;
         internal static ConfigEntry<bool> moduleArtsWWires;
         internal static ConfigEntry<bool> moduleCaAprilFools;
+        internal static ConfigEntry<bool> moduleMrDaycare;
 
         internal static ConfigEntry<bool> moduleExp;
 
-        internal static ConfigEntry<bool> npcCherryBsoda;
-
         internal static ConfigEntry<bool> intendedWiresBehavior;
-        internal static ConfigEntry<bool> ogWiresSprites;
-
         internal static ConfigEntry<bool> guaranteeSpawnChar;
 
 
@@ -41,29 +38,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "CaAprilFools",
                 true,
                 "Adds a few features from the April Fools updates from the Chaos Awakens Minecraft mod.");
+            moduleMrDaycare = config.Bind(
+                "Modules",
+                "MrDaycare",
+                true,
+                "Adds Mr. Daycare and the Pie item from Dave's House.");
 
             moduleExp = config.Bind(
                 "Modules",
                 "Experimental",
-                true,
+                false,
                 "Experimental modules. TBA");
 
-            npcCherryBsoda = config.Bind(
-                "Misc",
-                "NpcCherryBsoda",
-                false,
-                "Cherry BSODA will not push the player, and thus rather act like a BSODA that bounces.");
             intendedWiresBehavior = config.Bind(
                 "Misc",
                 "IntendedWiresBehavior",
                 true,
                 "Arts with Wires will not reset their stare time when the player stops looking at it.");
-            ogWiresSprites = config.Bind(
-                "Misc",
-                "OriginalWiresSprites",
-                false,
-                "Arts with Wires will use the sprites used in Playtime's Swapped Basics instead.");
-
             guaranteeSpawnChar = config.Bind(
                 "Misc",
                 "GuaranteeCharacterSpawn",

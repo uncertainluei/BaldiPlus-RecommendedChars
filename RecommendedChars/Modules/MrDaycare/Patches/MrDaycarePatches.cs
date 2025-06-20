@@ -5,14 +5,15 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 using HarmonyLib;
+
 using MTM101BaldAPI;
 using MTM101BaldAPI.Registers;
+
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    //TODO: Rename to MrDaycare
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Experimental")]
+    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
     [HarmonyPatch]
     static class MrDaycarePatches
     {    
@@ -101,7 +102,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
 
         [ConditionalPatchMod(RecommendedCharsPlugin.AnimationsGuid)]
-        [HarmonyPatch(typeof(BBPlusAnimations.Patches.PrincipalDetentionPatch), "CoolDetentionAnimation"), HarmonyPrefix]
-        private static bool NoDetentionAnimation(object[] __args) => ((Principal)__args[0]).Character != MrDaycare.charEnum;
+        [HarmonyPatch(typeof(BBPlusAnimations.Patches.PrincipalDetentionPatch), "CoolDetentionAnimation")]
+        static class MrDaycareAnimationPatche
+        {
+            private static bool Prefix(object[] __args) => ((Principal)__args[0]).Character != MrDaycare.charEnum;
+        }
     }
 }

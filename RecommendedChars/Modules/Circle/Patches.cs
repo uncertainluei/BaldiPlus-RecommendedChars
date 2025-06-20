@@ -7,8 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-using UnityEngine;
-
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
     [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Circle")]
@@ -77,11 +75,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             {
                 yield return array[i];
 
-                if (array[i].opcode == OpCodes.Ble &&
-                    array[i - 1].opcode == OpCodes.Ldc_I4_0 &&
-                    array[i - 2].opcode == OpCodes.Callvirt &&
-                    array[i - 3].opcode == OpCodes.Ldfld &&
-                    array[i - 4].opcode == OpCodes.Ldarg_1)
+                if (i >= 4 &&
+                    array[i].opcode   == OpCodes.Ble &&
+                    array[i-1].opcode == OpCodes.Ldc_I4_0 &&
+                    array[i-2].opcode == OpCodes.Callvirt &&
+                    array[i-3].opcode == OpCodes.Ldfld &&
+                    array[i-4].opcode == OpCodes.Ldarg_1)
                 {
                     yield return new CodeInstruction(OpCodes.Ldarg_1);
                     yield return new CodeInstruction(OpCodes.Call, jumpropeCheckMethod);
@@ -115,14 +114,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     static class CircleMusicCompatPatch
     {
         private static bool Prefix(object[] __args) => ((Playtime)__args[0]).Character != CircleNpc.charEnum;
-    }
-
-    [ConditionalPatchMod(RecommendedCharsPlugin.AnimationsGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Circle")]
-    [HarmonyPatch]
-    static class CircleAnimationsCompatPatch
-    {
-        [HarmonyPatch(typeof(BBPlusAnimations.Patches.PlaytimeJumpropePatch), "Prefix", typeof(Jumprope), typeof(Animator), typeof(Canvas), typeof(MovementModifier), typeof(Canvas)), HarmonyPrefix]
-        private static bool DisableRainbowCut(object[] __args) => !((Jumprope)__args[0] is CircleJumprope);
     }
 }

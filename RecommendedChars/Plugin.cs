@@ -49,8 +49,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             RecommendedCharsSaveGameIO saveGameSystem = new RecommendedCharsSaveGameIO(Info);
             ModdedSaveGame.AddSaveHandler(saveGameSystem);
 
-            // Load localization file
-            AssetLoader.LocalizationFromFile(Path.Combine(AssetLoader.GetModPath(this), "Lang_En.json"), Language.English);
+            // Load localization files
+            AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);
 
             AnimationsCompat = Chainloader.PluginInfos.ContainsKey(AnimationsGuid);
 

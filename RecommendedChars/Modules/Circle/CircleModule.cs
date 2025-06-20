@@ -48,6 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 flags = ItemFlags.MultipleUse
             };
+            nerfGunMeta.tags.AddRange(new string[] {"adv_normal", "adv_sm_potential_reward"});
 
             Items nerfGunEnum = EnumExtensions.ExtendEnum<Items>("RecChars_NerfGun");
 
@@ -56,8 +57,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetEnum(nerfGunEnum)
             .SetMeta(nerfGunMeta)
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Large"), 50f))
-            .SetShopPrice(750)
-            .SetGeneratorCost(75)
+            .SetShopPrice(450)
+            .SetGeneratorCost(50)
             .SetItemComponent<ITM_NerfGun>();
 
             ItemObject nerfItm = nerfGunBuilder.Build();
@@ -114,8 +115,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             music.subtitleColor = circle.audMan.subtitleColor = new Color(52f / 255f, 182f / 255f, 69f / 255f);
 
             // The default speed was 500 but this should flow better in-game
-            circle.normSpeed = 90f;
-            circle.runSpeed = 90f;
+            circle.normSpeed = 65f;
+            circle.runSpeed = 75f;
 
             circle.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("CircleTex/pri_circle"), "RecChars_Pst_Circle1", "RecChars_Pst_Circle2");
             circle.poster.textData[1].font = BaldiFonts.ComicSans18.FontAsset();
@@ -202,15 +203,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (title == "END")
             {
-                lvl.posters = lvl.posters.AddToArray(new WeightedPosterObject() { selection = AssetMan.Get<PosterObject>("NerfGunPoster"), weight = 100 });
-                lvl.potentialItems = lvl.potentialItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 50 });
+                lvl.posters = lvl.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(100));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(50));
                 return;
             }
-
             if (title.StartsWith("F") && id > 0)
             {
-                lvl.posters = lvl.posters.AddToArray(new WeightedPosterObject() { selection = AssetMan.Get<PosterObject>("NerfGunPoster"), weight = 75 });
-                lvl.potentialItems = lvl.potentialItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 25 });
+                lvl.posters = lvl.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(75));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(25));
             }
         }
     }

@@ -18,11 +18,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public override string Name => "Mr. Daycare";
 
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleExp;
+        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleMrDaycare;
 
         public override Action LoadAction => Load;
         public override Action PostLoadAction => PostLoad;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
+        public override Action<string, int, CustomLevelObject> LevelAddendAction => FloorAddendLvl;
 
         private void Load()
         {
@@ -91,6 +92,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_MrDaycare")
                 .SetPoster(AssetMan.Get<Texture2D>("DaycareTex/pri_daycare"), "RecChars_Pst_Daycare1", "RecChars_Pst_Daycare2")
                 .AddMetaFlag(NPCFlags.Standard | NPCFlags.MakeNoise)
+                .SetMetaTags(new string[] {})
                 .AddPotentialRoomAsset(LoadDaycareRoom(), 100)
                 .AddLooker()
                 .AddTrigger()
@@ -128,6 +130,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 { "Throwing" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoThrowing"), "RecChars_Daycare_NoThrowing", SoundType.Voice, daycare.audMan.subtitleColor)},
                 { "LoudSound" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoLoudSound"), "RecChars_Daycare_NoLoudSound", SoundType.Voice, daycare.audMan.subtitleColor)}
             };
+
+            // Set all these lines to silence (in the event another mod calls a function from base principal)
+            daycare.audComing = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Silence" && x.GetInstanceID() >= 0);
+            daycare.audNoAfterHours = daycare.audComing;
+            daycare.audNoBullying = daycare.audComing;
+            daycare.audNoDrinking = daycare.audComing;
+            daycare.audNoEating = daycare.audComing;
+            daycare.audNoEscaping = daycare.audComing;
+            daycare.audNoFaculty = daycare.audComing;
+            daycare.audNoLockers = daycare.audComing;
+            daycare.audNoRunning = daycare.audComing;
+            daycare.audNoStabbing = daycare.audComing;
+            daycare.audScolds = new SoundObject[] {daycare.audComing};
 
             daycare.detentionNoise = 125;
 
@@ -246,6 +261,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title == "END")
             {
                 scene.MarkAsNeverUnload();
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(20));
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -260,6 +276,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(20));
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -270,6 +287,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
+            }
+        }
+
+        private void FloorAddendLvl(string title, int id, LevelObject lvl)
+        {
+            if (title == "END" || title.StartsWith("F"))
+            {
+                lvl.posters = lvl.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(25));
+                return;
             }
         }
 

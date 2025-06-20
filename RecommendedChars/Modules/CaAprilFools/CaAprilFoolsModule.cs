@@ -20,8 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public sealed class Module_CaAprilFools : Module
     {
-        public override string Name => "Man Meme Coin";
-        public override string SaveTag => Name + (RecommendedCharsConfig.npcCherryBsoda.Value ? "(Cherry BSODA pushes NPCs)" : "");
+        public override string Name => "CA April Fools";
 
         public override Action LoadAction => Load;
         public override Action PostLoadAction => PostLoad;
@@ -49,10 +48,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject cheetos = new ItemBuilder(Info)
             .SetNameAndDescription("RecChars_Itm_FlaminHotCheetos", "RecChars_Desc_FlaminHotCheetos")
             .SetEnum("RecChars_FlaminHotCheetos")
-            .SetMeta(ItemFlags.Persists, new string[] { "food", "recchars_daycare_exempt", "cann_hate" })
+            .SetMeta(ItemFlags.Persists, new string[] { "food", "recchars_daycare_exempt", "cann_hate", "adv_perfect", "adv_sm_potential_reward" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminHotCheetos_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminHotCheetos_Large"), 50f))
-            .SetShopPrice(750)
-            .SetGeneratorCost(80)
+            .SetShopPrice(800)
+            .SetGeneratorCost(85)
             .SetItemComponent<ITM_FlaminHotCheetos>()
             .Build();
 
@@ -67,12 +66,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Cherry BSODA
             ItemObject cherryBsoda = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_CherryBsoda", RecommendedCharsConfig.npcCherryBsoda.Value ? "RecChars_Desc_CherryBsoda_NoPlayerPush" : "RecChars_Desc_CherryBsoda")
+            .SetNameAndDescription("RecChars_Itm_CherryBsoda", "RecChars_Desc_CherryBsoda")
             .SetEnum("RecChars_CherryBsoda")
-            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "drink" })
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "drink", "adv_perfect", "adv_sm_potential_reward" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Large"), 50f))
-            .SetShopPrice(750)
-            .SetGeneratorCost(80)
+            .SetShopPrice(600)
+            .SetGeneratorCost(75)
             .Build();
 
             cherryBsoda.name = "RecChars CherryBsoda";
@@ -83,11 +82,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaClone.speed = 40f;
             bsodaClone.time = 10f;
 
-            ITM_CherryBsoda cherryBsodaUse;
-            if (!RecommendedCharsConfig.npcCherryBsoda.Value)
-                cherryBsodaUse = bsodaClone.gameObject.AddComponent<ITM_CherryBsoda>();
-            else
-                cherryBsodaUse = bsodaClone.gameObject.AddComponent<ITM_CherryBsoda_PushesNpcs>();
+            ITM_CherryBsoda cherryBsodaUse = bsodaClone.gameObject.AddComponent<ITM_CherryBsoda>();
 
             cherryBsoda.item = cherryBsodaUse;
             cherryBsoda.item.name = "Itm_CherryBsoda";
@@ -106,7 +101,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject ultiApple = new ItemBuilder(Info)
             .SetNameAndDescription("RecChars_Itm_UltimateApple", "RecChars_Desc_UltimateApple")
             .SetEnum("RecChars_UltimateApple")
-            .SetMeta(ItemFlags.NoUses, new string[] { "food" })
+            .SetMeta(ItemFlags.NoUses, new string[] { "food", "crmp_contraband", "adv_forbidden_present" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Large"), 50f))
             .SetShopPrice(2500)
             .SetGeneratorCost(100)
@@ -124,8 +119,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Can of Mangles
             ItemMetaData manglesMeta = new ItemMetaData(Info, new ItemObject[0]);
             manglesMeta.flags = ItemFlags.MultipleUse;
-            manglesMeta.tags.Add("food"); 
-            manglesMeta.tags.Add("recchars_daycare_exempt");
+            manglesMeta.tags.AddRange(new string[] {"food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"});
             // The Mangles would have this "homemade" flavor, thus you can feed that to Cann
 
             Items manglesEnum = EnumExtensions.ExtendEnum<Items>("RecChars_Mangles");
@@ -183,6 +177,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_ManMemeCoin")
                 .SetPoster(AssetMan.Get<Texture2D>("MMCoinTex/pri_manmeme"), "RecChars_Pst_ManMeme1", "RecChars_Pst_ManMeme2")
                 .AddMetaFlag(NPCFlags.Standard)
+                .SetMetaTags(new string[] {"no_balloon_frenzy", "adv_exclusion_hammer_immunity", "adv_ev_cold_school_immunity"})
                 .SetAirborne()
                 .AddLooker()
                 .AddTrigger()

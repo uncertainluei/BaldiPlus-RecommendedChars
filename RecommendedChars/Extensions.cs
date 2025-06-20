@@ -14,6 +14,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
         public static WeightedNPC Weighted(this NPC selection, int weight) => selection.Weighted<NPC, WeightedNPC>(weight);
         public static WeightedItemObject Weighted(this ItemObject selection, int weight) => selection.Weighted<ItemObject, WeightedItemObject>(weight);
+        public static WeightedPosterObject Weighted(this PosterObject selection, int weight) => selection.Weighted<PosterObject, WeightedPosterObject>(weight);
 
         // Done for future-proofing
         public static void CopyCharacterWeight(this List<WeightedNPC> list, Character characterToCopy, NPC newNpc)
@@ -29,7 +30,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    // This is here to 
+    // This is here to make creating new rooms from scratch easier
     public static class RoomAssetHelper
     {
         public static CellData Cell(int x, int y, int type) => new CellData() { pos = new IntVector2(x, y), type = type };

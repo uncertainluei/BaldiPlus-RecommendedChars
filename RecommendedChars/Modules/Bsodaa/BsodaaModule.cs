@@ -35,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadEveyBsodaa();
 
             LevelGeneratorEventPatch.OnNpcAdd += AddBsodaaHelpers;
-            LevelGeneratorEventPatch.OnGeneratorCompletion += RemoveBsodaaHelpers;
+            //LevelGeneratorEventPatch.OnGeneratorCompletion += RemoveBsodaaHelpers;
         }
 
         private void LoadBsodaaHelper()
@@ -290,7 +290,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 gen.Ec.npcsToSpawn.Add(helperDummy);
         }
 
-        // While it is a dummy NPC that deletes itself upon initializing, I'd rather just have it 
+        /* The dummy NPC already despawns itself upon spawning, so this isn't necessary 
         private void RemoveBsodaaHelpers(LevelGenerator gen)
         {
             NPC helperDummy = RecommendedCharsPlugin.AssetMan.Get<NPC>("BsodaaHelperPoster");
@@ -307,6 +307,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
             if (changesFound)
                 gen.Ec.npcSpawnTile = npcSpawnTiles.ToArray();
-        }
+        } */
     }
 }

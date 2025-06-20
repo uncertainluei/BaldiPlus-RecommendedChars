@@ -1,0 +1,24 @@
+{
+  "items": [
+	{ "key": "RecChars_Itm_NerfGun1", "value": "(1) Nerf Gun" },
+	{ "key": "RecChars_Itm_NerfGun2", "value": "(2) Nerf Gun" },
+	{ "key": "RecChars_Desc_NerfGun", "value": "Nerf Gun\n<s>Shoot</s> squirt water at people with it! Or at least one specific circle..." },
+
+	{ "key": "RecChars_Itm_FlaminHotCheetos", "value": "Flamin' Hot Cheetos" },
+	{ "key": "RecChars_Desc_FlaminHotCheetos", "value": "Flamin' Hot Cheetos\nHot, spicy flavor packed into crunchy, cheesy snacks.\nTheir spices will indeed put you into a short rush!" },
+
+	{ "key": "RecChars_Itm_Mangles1", "value": "(1) Can of Mangles" },
+	{ "key": "RecChars_Itm_Mangles2", "value": "(2) Can of Mangles" },
+	{ "key": "RecChars_Itm_Mangles3", "value": "(3) Can of Mangles" },
+	{ "key": "RecChars_Desc_Mangles", "value": "Can of Mangles\nHmm, that brand name sounds pretty familiar!\nEat a few of these to gain a burst of energy,\nwhether you're in a rush, or saving it for later!" },
+
+	{ "key": "RecChars_Itm_UltimateApple", "value": "Ultimate Apple" },
+	{ "key": "RecChars_Desc_UltimateApple", "value": "Ultimate Apple\nBaldi may surely take longer to eat it,\nbut that apple is definitely tough stuff!\nMake sure you know where to hide once he's done!" },
+
+	{ "key": "RecChars_Itm_CherryBsoda", "value": "Cherry BSODA" },
+	{ "key": "RecChars_Desc_CherryBsoda", "value": "Cherry BSODA\nA special limited-edition flavored BSODA!\nIts unique cherry fizz will propel you as if you were a golf ball!" },
+
+	{ "key": "RecChars_Itm_Pie", "value": "Pie" },
+	{ "key": "RecChars_Desc_Pie", "value": "Pie\nTBA" }
+  ]
+}

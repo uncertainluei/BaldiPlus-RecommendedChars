@@ -1,0 +1,47 @@
+{
+  "items": [
+	{ "key": "RecChars_JumpRope_Start", "value": "LETS PLAY!" },
+	{ "key": "RecChars_JumpRope_Continue", "value": "SHAPE WORLD" },
+	{ "key": "RecChars_JumpRope_Fail", "value": "OOPS!" },
+
+	{ "key": "RecChars_Circle_Music", "value": "*Jingle Bells*" },
+	{ "key": "RecChars_Circle_Sad", "value": "OH! I guess I'll play with you later..." },
+	{ "key": "RecChars_Circle_Go", "value": "Go!" },
+	{ "key": "RecChars_Circle_Oops", "value": "Try agAIn!" },
+	{ "key": "RecChars_Circle_Congrats", "value": "Wow, you're awesome! Let's play another time!" },
+	{ "key": "RecChars_Circle_Random", "value": "?!?!?!?!?!?" },
+
+	{ "key": "RecChars_GottaBully_Intro", "value": "Looks like it's *bullying* time!" },
+	{ "key": "RecChars_GottaBully_Sweep", "value": "Gotta, *bully bully bully*!" },
+
+	{ "key": "RecChars_Wires_Instructions", "value": "Oh noes! You've been grabbed!\nMash {0}!" },
+
+	{ "key": "RecChars_Wires_Loop", "value": "*ROBOTIC STATIC*" },
+	{ "key": "RecChars_Wires_Intro", "value": "*ROBOTIC STATIC*" },
+	
+	{ "key": "RecChars_Daycare_Timeout", "value": "You'll be sitting in the timeout corner for" },
+	{ "key": "RecChars_Daycare_Seconds", "value": "seconds." },
+	{ "key": "RecChars_Daycare_30", "value": "30" },
+	{ "key": "RecChars_Daycare_60", "value": "60" },
+	{ "key": "RecChars_Daycare_100", "value": "100" },
+	{ "key": "RecChars_Daycare_200", "value": "200" },
+	{ "key": "RecChars_Daycare_500", "value": "500" },
+	{ "key": "RecChars_Daycare_3161", "value": "3161" },
+	
+	{ "key": "RecChars_Daycare_NoRunning", "value": "Do not run inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoDrinking", "value": "Do not consume beverages inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoEating", "value": "Do not eat food inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoThrowing", "value": "Do not throw things at faculty members inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoEscaping", "value": "Do not leave the timeout corner without my permission inside the hallway!" },
+	{ "key": "RecChars_Daycare_NoLoudSound", "value": "Do not make loud sounds in the hallway!" },
+	
+	{ "key": "RecChars_Bsodaa_Happy1", "value": "What fun!" },
+	{ "key": "RecChars_Bsodaa_Happy2", "value": "WOOOOOAAAAAH!" },
+	{ "key": "RecChars_Bsodaa_Thanks", "value": "Thanks!" },
+	{ "key": "RecChars_Bsodaa_Charging", "value": "*CHARGING SODA*" },
+	
+	{ "key": "RecChars_BsodaaHelper_OutOf", "value": "OOPS!" },
+	{ "key": "RecChars_BsodaaHelper_GiveSoda", "value": "HEHEHEHEHEE!" },
+	{ "key": "RecChars_BsodaaHelper_Sprayed", "value": "OH! THAT MAKES ME SAD!" }
+  ]
+}

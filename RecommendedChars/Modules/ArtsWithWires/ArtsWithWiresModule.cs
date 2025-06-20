@@ -33,20 +33,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "ArtsWWires"), x => "WiresTex/" + x.name);
             RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "ArtsWWires"), "WiresAud/");
 
-            string suffix = RecommendedCharsConfig.ogWiresSprites.Value ? "_Old" : "";
-
             ArtsWithWires artsWithWires = new NPCBuilder<ArtsWithWires>(Info)
                 .SetName("ArtsWithWires")
                 .SetEnum("RecChars_ArtsWithWires")
-                .SetPoster(AssetMan.Get<Texture2D>("WiresTex/pri_wires" + suffix), "RecChars_Pst_Wires1", "RecChars_Pst_Wires2")
+                .SetPoster(AssetMan.Get<Texture2D>("WiresTex/pri_wires"), "RecChars_Pst_Wires1", "RecChars_Pst_Wires2")
                 .AddMetaFlag(NPCFlags.Standard)
                 .AddLooker()
                 .AddTrigger()
                 .Build();
 
-            PineDebugNpcIconPatch.icons.Add(artsWithWires.character, AssetMan.Get<Texture2D>("WiresTex/BorderWires" + suffix));
+            PineDebugNpcIconPatch.icons.Add(artsWithWires.character, AssetMan.Get<Texture2D>("WiresTex/BorderWires"));
 
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("WiresTex/WiresSprites" + suffix));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("WiresTex/WiresSprites"));
 
             artsWithWires.sprite = artsWithWires.spriteRenderer[0];
             artsWithWires.sprite.transform.localPosition = Vector3.zero;

@@ -1,0 +1,24 @@
+{
+  "items": [
+	{ "key": "RecChars_Pst_Circle1", "value": "Circle" },
+	{ "key": "RecChars_Pst_Circle2", "value": "i bet you\nwon't get\nthe\nreference." },
+
+	{ "key": "RecChars_Pst_GottaBully1", "value": "Gotta Bully" },
+	{ "key": "RecChars_Pst_GottaBully2", "value": "It's A Bully's magnum opus! With Baldi's help, their newest experiment was a success, it makes bullying 10 times easier!" },
+
+	{ "key": "RecChars_Pst_Wires1", "value": "Arts with Wires" },
+	{ "key": "RecChars_Pst_Wires2", "value": "A robotic puppet made of spare parts that came to life after being struck by a lightening bolt!\nDon't let it grab ya, though...!" },
+
+	{ "key": "RecChars_Pst_ManMeme1", "value": "Man Meme Coin" },
+	{ "key": "RecChars_Pst_ManMeme2", "value": "A sentient coin resembling a certain someone.\nWill reward those who chase down and beat it up with a few special goodies!" },
+
+	{ "key": "RecChars_Pst_Daycare1", "value": "Mr. Daycare" },
+	{ "key": "RecChars_Pst_Daycare2", "value": "\"Hey there! I'm Mr. Daycare!\"\nMr. Daycare is the man who runs the daycare! He's very good at keeping things in order!" },
+
+	{ "key": "RecChars_Pst_Bsodaa1", "value": "Eveyone's Bsodaa" },
+	{ "key": "RecChars_Pst_Bsodaa2", "value": "The inventor of BSODA himself!\nWatch out, or he'll spray you with it!\nHe might not talk, but his actions speak louder!" },
+
+	{ "key": "RecChars_Pst_BsodaaHelper1", "value": "Bsodaa Helper" },
+	{ "key": "RecChars_Pst_BsodaaHelper2", "value": "Eveyone's Bsodaa's greatest pal! She makes sure he always has soda on him!\n<b>DON'T steal from her!</b>" }
+  ]
+}

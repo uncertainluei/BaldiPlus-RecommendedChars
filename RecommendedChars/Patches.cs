@@ -42,12 +42,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
         private static void NpcAddInvoke(LevelGenerator gen)
         {
-            OnNpcAdd(gen);
+            OnNpcAdd?.Invoke(gen);
         }
 
         private static void GeneratorCompletionInvoke(LevelGenerator gen)
         {
-            OnGeneratorCompletion(gen);
+            OnGeneratorCompletion?.Invoke(gen);
         }
 
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -60,14 +60,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             for (; i < length && patchesLeft == 2; i++)
             {
                 // if (levelGenerator.ld.potentialBaldis.Length != 0)
-                if (array[i].opcode == OpCodes.Ldloc_2 &&
-                    array[i + 1].opcode == OpCodes.Ldfld &&
-                    array[i + 2].opcode == OpCodes.Ldfld &&
-                    array[i + 3].opcode == OpCodes.Ldlen &&
-                    array[i + 4].opcode == OpCodes.Brfalse)
+                if (array[i].opcode   == OpCodes.Ldloc_2 &&
+                    array[i+1].opcode == OpCodes.Ldfld &&
+                    array[i+2].opcode == OpCodes.Ldfld &&
+                    array[i+3].opcode == OpCodes.Ldlen &&
+                    array[i+4].opcode == OpCodes.Brfalse)
                 {
                     patchesLeft--;
-                    // TryAddBsodaaHelperPoster(this);
+                    // NpcAddInvoke(this);
                     yield return new CodeInstruction(OpCodes.Ldloc_2);
                     yield return new CodeInstruction(OpCodes.Call, npcAddMethod);
                 }
@@ -79,26 +79,26 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 // levelCreated = true;
                 // if (CoreGameManager.Instance.GetCamera(0) != null)
                 //     CoreGameManager.Instance.GetCamera(0).StopRendering(false);
-                if (array[i].opcode == OpCodes.Ldloc_2 &&
-                    array[i + 1].opcode == OpCodes.Ldc_I4_0 &&
-                    array[i + 2].opcode == OpCodes.Stfld &&
-                    array[i + 3].opcode == OpCodes.Ldloc_2 &&
-                    array[i + 4].opcode == OpCodes.Ldc_I4_1 &&
-                    array[i + 5].opcode == OpCodes.Stfld &&
-                    array[i + 6].opcode == OpCodes.Call &&
-                    array[i + 7].opcode == OpCodes.Ldc_I4_0 &&
-                    array[i + 8].opcode == OpCodes.Callvirt &&
-                    array[i + 9].opcode == OpCodes.Ldnull &&
-                    array[i + 10].opcode == OpCodes.Call &&
-                    array[i + 11].opcode == OpCodes.Brfalse &&
-                    array[i + 12].opcode == OpCodes.Call &&
-                    array[i + 13].opcode == OpCodes.Ldc_I4_0 &&
-                    array[i + 14].opcode == OpCodes.Callvirt &&
-                    array[i + 13].opcode == OpCodes.Ldc_I4_0 &&
-                    array[i + 14].opcode == OpCodes.Callvirt)
+                if (array[i].opcode    == OpCodes.Ldloc_2 &&
+                    array[i+1].opcode  == OpCodes.Ldc_I4_0 &&
+                    array[i+2].opcode  == OpCodes.Stfld &&
+                    array[i+3].opcode  == OpCodes.Ldloc_2 &&
+                    array[i+4].opcode  == OpCodes.Ldc_I4_1 &&
+                    array[i+5].opcode  == OpCodes.Stfld &&
+                    array[i+6].opcode  == OpCodes.Call &&
+                    array[i+7].opcode  == OpCodes.Ldc_I4_0 &&
+                    array[i+8].opcode  == OpCodes.Callvirt &&
+                    array[i+9].opcode  == OpCodes.Ldnull &&
+                    array[i+10].opcode == OpCodes.Call &&
+                    array[i+11].opcode == OpCodes.Brfalse &&
+                    array[i+12].opcode == OpCodes.Call  &&
+                    array[i+13].opcode == OpCodes.Ldc_I4_0 &&
+                    array[i+14].opcode == OpCodes.Callvirt &&
+                    array[i+13].opcode == OpCodes.Ldc_I4_0 &&
+                    array[i+14].opcode == OpCodes.Callvirt)
                 {
                     patchesLeft--;
-                    // RemoveAllBsodaHelpers(this);
+                    // GeneratorCompletionInvoke(this);
                     yield return new CodeInstruction(OpCodes.Ldloc_2);
                     yield return new CodeInstruction(OpCodes.Call, genCompleteMethod);
                 }

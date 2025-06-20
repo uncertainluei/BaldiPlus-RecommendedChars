@@ -16,7 +16,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected PlayerManager currentPlayer;
 
         protected float Speed => bsoda.speed;
-        public byte bouncesLeft = 8;
+        public byte bouncesLeft = 3;
 
         private bool destroyQueued = false;
 
@@ -102,6 +102,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
+    /* Similar in function to the Times Cherry BSODA. 
     public class ITM_CherryBsoda_PushesNpcs : ITM_CherryBsoda
     {   
         protected override void AddPlayerToMoveMod()
@@ -128,5 +129,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             foreach (ActivityModifier activityMod in bsoda.activityMods)
                 activityMod.moveMods.Remove(MoveMod);
         }
-    }
+    } */
 }

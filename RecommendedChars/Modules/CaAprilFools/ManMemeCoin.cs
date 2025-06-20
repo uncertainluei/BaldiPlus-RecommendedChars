@@ -1,17 +1,11 @@
-﻿using System;
+﻿using MTM101BaldAPI;
+using MTM101BaldAPI.Components;
+
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Text;
-using System.Xml;
-using HarmonyLib;
-using MTM101BaldAPI;
-using MTM101BaldAPI.Components;
-using MTM101BaldAPI.Registers;
-using Rewired.Demos;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -42,7 +36,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public bool ClickableRequiresNormalHeight()
         {
-            return false;
+            return !Navigator.Entity.squished;
         }
             
         public void ClickableSighted(int player)

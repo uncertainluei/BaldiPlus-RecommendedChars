@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+
 using MTM101BaldAPI.Registers;
 using UnityEngine;
 
@@ -50,9 +50,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             //ItemsRare.SetInclusionCriteria((i) => GetPlayerInventoryCost(i) < 2500);
             ItemsRare.AddItem(Items.Quarter, 29);
             ItemsRare.AddItem(Items.Nametag, 28);
-            ItemsRare.AddItem(Items.DoorLock, 28);
-            ItemsRare.AddItem(Items.Bsoda, 28);
-            ItemsRare.AddModdedItem("NerfGunItem", 25);
+            ItemsRare.AddModdedItem("NerfGunItem", 28);
+            ItemsRare.AddItem(Items.DoorLock, 26);
+            ItemsRare.AddModdedItem("PieItem", 26);
+            ItemsRare.AddItem(Items.Bsoda, 26);
             ItemsRare.AddItem(Items.PortalPoster, 25);
             ItemsRare.AddItem(Items.GrapplingHook, 22);
             ItemsRare.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 20);
@@ -122,7 +123,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 idx = WeightedSelection<ItemObject>.RandomIndexList(items);
                 do
                 {
-                    target = coin.navigator.currentTile.RandomCenterWorldPosition;
+                    target = coin.navigator.currentTile.CenterWorldPosition + new Vector3(UnityEngine.Random.Range(-3f, 3f), 0f, UnityEngine.Random.Range(-3f, 3f));
                 }
                 while (InDistanceOf(target, ref pickups, 1.5f));
                 pickups.Add(target);

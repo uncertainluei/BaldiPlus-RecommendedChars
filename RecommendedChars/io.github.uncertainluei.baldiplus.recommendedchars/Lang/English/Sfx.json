@@ -1,0 +1,6 @@
+{
+  "items": [
+	{ "key": "RecChars_Sfx_Boing", "value": "*Boing!*" },
+	{ "key": "RecChars_Sfx_PieSplat", "value": "*SPLAT!*" }
+  ]
+}
