@@ -16,6 +16,7 @@ using System.Linq;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -25,7 +26,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override Action LoadAction => Load;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-        public override Action<string, int, CustomLevelObject> LevelAddendAction => FloorAddendLvl;
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCircle;
 
@@ -38,6 +38,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LoadNerfGun();
             LoadCircle();
+
+            LevelGeneratorEventPatch.OnNpcAdd += AddItemsToLevel;
 
             if (RecommendedCharsPlugin.AnimationsCompat)
                 AnimationsCompat();
@@ -53,7 +55,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Items nerfGunEnum = EnumExtensions.ExtendEnum<Items>("RecChars_NerfGun");
 
             ItemBuilder nerfGunBuilder = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_NerfGun2", "RecChars_Desc_NerfGun")
+            .SetNameAndDescription("Itm_RecChars_NerfGun2", "Desc_RecChars_NerfGun")
             .SetEnum(nerfGunEnum)
             .SetMeta(nerfGunMeta)
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Large"), 50f))
@@ -66,7 +68,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             nerfItm.item.name = "Itm_NerfGun2";
             AssetMan.Add("NerfGunItem", nerfItm);
 
-            nerfGunBuilder.SetNameAndDescription("RecChars_Itm_NerfGun1", "RecChars_Desc_NerfGun");
+            nerfGunBuilder.SetNameAndDescription("Itm_RecChars_NerfGun1", "Desc_RecChars_NerfGun");
             ItemObject nerfItm1 = nerfGunBuilder.Build();
             nerfItm1.name = "RecChars NerfGun1";
             nerfItm1.item.name = "Itm_NerfGun1";
@@ -98,27 +100,27 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             for (int i = 0; i < 9; i++)
                 circle.audCount[i] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>($"CircleAud/Circle_{i + 1}"), $"Vfx_Playtime_{i + 1}", SoundType.Voice, circle.audMan.subtitleColor);
 
-            circle.audLetsPlay = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_LetsPlay"), "Vfx_Playtime_LetsPlay", SoundType.Voice, circle.audMan.subtitleColor);
-            circle.audGo = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_ReadyGo"), "RecChars_Circle_Go", SoundType.Voice, circle.audMan.subtitleColor);
-            circle.audOops = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Oops"), "RecChars_Circle_Oops", SoundType.Voice, circle.audMan.subtitleColor);
-            circle.audCongrats = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Congrats"), "RecChars_Circle_Congrats", SoundType.Voice, circle.audMan.subtitleColor);
-            circle.audSad = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Sad"), "RecChars_Circle_Sad", SoundType.Voice, circle.audMan.subtitleColor);
+            circle.audLetsPlay = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_LetsPlay"), "Vfx_RecChars_Circle_LetsPlay", SoundType.Voice, circle.audMan.subtitleColor);
+            circle.audGo = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_ReadyGo"), "Vfx_RecChars_Circle_Go", SoundType.Voice, circle.audMan.subtitleColor);
+            circle.audOops = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Oops"), "Vfx_RecChars_Circle_Oops", SoundType.Voice, circle.audMan.subtitleColor);
+            circle.audCongrats = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Congrats"), "Vfx_RecChars_Circle_Congrats", SoundType.Voice, circle.audMan.subtitleColor);
+            circle.audSad = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Sad"), "Vfx_RecChars_Circle_Sad", SoundType.Voice, circle.audMan.subtitleColor);
 
             circle.audCalls = new SoundObject[]
             {
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random1"), "RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random2"), "RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor)
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random1"), "Vfx_RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random2"), "Vfx_RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor)
             };
 
             PropagatedAudioManager music = circle.GetComponents<PropagatedAudioManager>()[1];
-            music.soundOnStart[0] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Music"), "RecChars_Circle_Music", SoundType.Effect, circle.audMan.subtitleColor);
+            music.soundOnStart[0] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Music"), "Mfx_RecChars_JingleBells", SoundType.Effect, circle.audMan.subtitleColor);
             music.subtitleColor = circle.audMan.subtitleColor = new Color(52f / 255f, 182f / 255f, 69f / 255f);
 
             // The default speed was 500 but this should flow better in-game
             circle.normSpeed = 65f;
             circle.runSpeed = 75f;
 
-            circle.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("CircleTex/pri_circle"), "RecChars_Pst_Circle1", "RecChars_Pst_Circle2");
+            circle.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("CircleTex/pri_circle"), "PST_PRI_RecChars_Circle1", "PST_PRI_RecChars_Circle2");
             circle.poster.textData[1].font = BaldiFonts.ComicSans18.FontAsset();
             circle.poster.textData[1].fontSize = 18;
             circle.poster.name = "CirclePoster";
@@ -160,7 +162,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title == "END")
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 25 });
                 AddToNpcs(scene, 100, true);
                 return;
             }
@@ -183,8 +184,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         AddToNpcs(scene, 100);
                         break;
                 }
-
-                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 25 });
+                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 30 });
             }
         }
 
@@ -199,19 +199,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        private void FloorAddendLvl(string title, int id, LevelObject lvl)
+        private void AddItemsToLevel(LevelGenerator gen)
         {
-            if (title == "END")
+            if (gen.scene == null) return;
+            if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == CircleNpc.charEnum) == null) return;
+
+            SceneObjectMetadata meta = SceneObjectMetaStorage.Instance.Get(gen.scene);
+            if (meta == null || !meta.tags.Contains("endless") || gen.scene.levelTitle != "END")
             {
-                lvl.posters = lvl.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(100));
-                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(50));
+                gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(75));
+                gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(25));
                 return;
             }
-            if (title.StartsWith("F") && id > 0)
-            {
-                lvl.posters = lvl.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(75));
-                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(25));
-            }
+
+            gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(100));
+            gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(50));
+            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 30 });
         }
     }
 }

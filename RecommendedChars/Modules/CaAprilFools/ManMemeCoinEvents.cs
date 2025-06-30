@@ -15,7 +15,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public static readonly ManMemeItemAction ItemsRare = new ManMemeItemAction(1, 2);
         public static readonly ManMemeItemAction ItemsUnique = new ManMemeUniqueItemAction();
 
-        private static readonly ManMemeItemAction ItemsMap = new ManMemeItemAction();
+        //private static readonly ManMemeItemAction ItemsMap = new ManMemeItemAction();
 
         public static void AddToEvents(this AbstractManMemeAction action, int weight)
         {
@@ -45,31 +45,45 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemsYtps.AddItem(ItemMetaStorage.Instance.GetPointsObject(25, true), 45);
             ItemsYtps.AddItem(ItemMetaStorage.Instance.GetPointsObject(50, true), 25);
             ItemsYtps.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 8);
-            AddToEvents(ItemsYtps, 75);
+            AddToEvents(ItemsYtps, 50);
 
             //ItemsRare.SetInclusionCriteria((i) => GetPlayerInventoryCost(i) < 2500);
             ItemsRare.AddItem(Items.Quarter, 29);
-            ItemsRare.AddItem(Items.Nametag, 28);
-            ItemsRare.AddModdedItem("NerfGunItem", 28);
+            ItemsRare.AddItem(Items.Nametag, 27);
             ItemsRare.AddItem(Items.DoorLock, 26);
-            ItemsRare.AddModdedItem("PieItem", 26);
             ItemsRare.AddItem(Items.Bsoda, 26);
-            ItemsRare.AddItem(Items.PortalPoster, 25);
+            ItemsRare.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 25);
+            ItemsRare.AddItem(Items.PortalPoster, 24);
+            ItemsRare.AddItem(Items.InvisibilityElixir, 23);
             ItemsRare.AddItem(Items.GrapplingHook, 22);
-            ItemsRare.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 20);
             ItemsRare.AddItem(Items.Apple, 18);
-            AddToEvents(ItemsRare, 80);
+            AddToEvents(ItemsRare, 60);
 
             //ItemsUnique.SetInclusionCriteria((i) => GetPlayerInventoryCost(i) < 1500);
             ItemsUnique.AddModdedItem("CherryBsodaItem", 20);
             ItemsUnique.AddModdedItem("ManglesItem", 22);
-            ItemsUnique.AddModdedItem("FlaminHotCheetosItem", 18);
+            ItemsUnique.AddModdedItem("FlaminPuffsItem", 18);
             ItemsUnique.AddModdedItem("UltimateAppleItem", 6);
-            AddToEvents(ItemsUnique, 80);
+            AddToEvents(ItemsUnique, 85);
 
-            ItemsMap.SetInclusionCriteria((i) => !CoreGameManager.Instance.mapChallenge && !CoreGameManager.Instance.saveMapPurchased);
+            /*ItemsMap.SetInclusionCriteria((i) => !CoreGameManager.Instance.mapChallenge && !CoreGameManager.Instance.saveMapPurchased);
             ItemsMap.AddItem(Items.Map, 100);
-            AddToEvents(ItemsMap, 60);
+            AddToEvents(ItemsMap, 30);*/
+        }
+
+        internal static void InitializePostEvents()
+        {
+            ItemsRare.AddModdedItem("NerfGunItem", 28);
+            ItemsRare.AddModdedItem("PieItem", 26);
+            ItemsRare.AddModdedItem("DoorKey", 25);
+
+            ItemObject smallBsoda = RecommendedCharsPlugin.AssetMan.Get<ItemObject>("SmallDietBsodaItem");
+            if (smallBsoda != null)
+            {
+                ManMemeItemAction itemsSmallBsodas = new ManMemeItemAction(2, 3, true);
+                itemsSmallBsodas.AddItem(smallBsoda, 1);
+                AddToEvents(itemsSmallBsodas, 35);
+            }
         }
     }
 

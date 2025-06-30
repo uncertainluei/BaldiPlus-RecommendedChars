@@ -62,8 +62,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             return success;
         }
 
-        [HarmonyPatch(typeof(ITM_Scissors), "Use")]
-        [HarmonyTranspiler]
+        [HarmonyPatch(typeof(ITM_Scissors), "Use"), HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> ScissorsUseTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             bool patched = false;

@@ -1,0 +1,33 @@
+{
+  "items": [
+	{ "key": "PST_PRI_RecChars_Daycare1", "value": "Mr. Daycare" },
+	{ "key": "PST_PRI_RecChars_Daycare2", "value": "\"Hey there! I'm Mr. Daycare!\"\nMr. Daycare is the man who runs the daycare! He's very good at keeping things in order!" },
+  
+	{ "key": "Vfx_RecChars_Daycare_Timeout", "value": "You'll be sitting in the timeout corner for" },
+	{ "key": "Vfx_RecChars_Daycare_Seconds", "value": "seconds." },
+	{ "key": "Vfx_RecChars_Daycare_30", "value": "30" },
+	{ "key": "Vfx_RecChars_Daycare_60", "value": "60" },
+	{ "key": "Vfx_RecChars_Daycare_100", "value": "100" },
+	{ "key": "Vfx_RecChars_Daycare_200", "value": "200" },
+	{ "key": "Vfx_RecChars_Daycare_500", "value": "500" },
+	{ "key": "Vfx_RecChars_Daycare_3161", "value": "3161" },
+	
+	{ "key": "Vfx_RecChars_Daycare_NoRunning", "value": "Do not run inside the hallway!" },
+	{ "key": "Vfx_RecChars_Daycare_NoDrinking", "value": "Do not consume beverages inside the hallway!" },
+	{ "key": "Vfx_RecChars_Daycare_NoEating", "value": "Do not eat food inside the hallway!" },
+	{ "key": "Vfx_RecChars_Daycare_NoThrowing", "value": "Do not throw things at faculty members inside the hallway!" },
+	{ "key": "Vfx_RecChars_Daycare_NoEscaping", "value": "Do not leave the timeout corner without my permission inside the hallway!" },
+	{ "key": "Vfx_RecChars_Daycare_NoLoudSound", "value": "Do not make loud sounds in the hallway!" },
+  
+	{ "key": "Itm_RecChars_Pie", "value": "Pie" },
+	{ "key": "Itm_RecChars_DoorKey", "value": "Door Key" },
+	{ "key": "Itm_RecChars_DoorKey1", "value": "(1) Door Key" },
+	{ "key": "Itm_RecChars_DoorKey2", "value": "(2) Door Key" },
+	{ "key": "Itm_RecChars_DoorKey3", "value": "(3) Door Key" },
+	
+	{ "key": "Desc_RecChars_Pie", "value": "Pie\nOne of Dave's countless home-baked pies! While you could eat it,\nit's more fun to throw these towards unsuspecting victims!" },
+	{ "key": "Desc_RecChars_DoorKey", "value": "Door Key\nThe end-all-be-all solution to unlocking all (non-swinging) doors!\nIt is also quite sturdy for its use case..." },
+	
+	{ "key": "Sfx_RecChars_PieSplat", "value": "*SPLAT!*" }
+  ]
+}

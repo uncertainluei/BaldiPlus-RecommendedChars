@@ -398,7 +398,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!PlayerFileManager.Instance.authenticMode)
                 textScaler.scaleFactor = Mathf.RoundToInt(PlayerFileManager.Instance.resolutionY / 360f);
 
-            instructionsTmp.text = string.Format(LocalizationManager.Instance.GetLocalizedText("RecChars_Wires_Instructions"), InputManager.Instance.GetInputButtonName("Interact", "InGame", false));
+            instructionsTmp.text = string.Format(LocalizationManager.Instance.GetLocalizedText("Hud_RecChars_WiresInstructions"), InputManager.Instance.GetInputButtonName("Interact", "InGame", false));
 
             needlePosition = needle.anchoredPosition;
         }

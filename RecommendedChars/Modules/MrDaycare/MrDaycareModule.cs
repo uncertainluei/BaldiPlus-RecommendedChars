@@ -29,28 +29,29 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Room", "Daycare"), x => "DaycareRoom/" + x.name);
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "Daycare"), x => "DaycareTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "Pie"), x => "Pie/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "Daycare"), x => "DaycareItm/" + x.name);
 
             RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "Daycare"), "DaycareAud/");
 
-            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieThrow.wav"), "RecChars_Sfx_PieThrow", SoundType.Effect, Color.white, 0f));
-            AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieSplat.wav"), "RecChars_Sfx_PieSplat", SoundType.Effect, Color.white));
-            AssetMan.Add("DaveDoorOpen", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveOpen.wav"), "Sfx_Doors_StandardOpen", SoundType.Effect, Color.white));
-            AssetMan.Add("DaveDoorShut", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveShut.wav"), "Sfx_Doors_StandardShut", SoundType.Effect, Color.white));
+            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
+            AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
 
-            LoadPie();
+            LoadItems();
 
             AssetMan.Add("DaycareRulesPoster", CreatePoster("DaycareRoom/pst_daycarerules", "DaycarePoster_Rules"));
             LoadMrDaycare();
+
+            LevelGeneratorEventPatch.OnNpcAdd += AddPosterToLevel;
         }
 
-        private void LoadPie()
+        private void LoadItems()
         {
+            // Pie
             ItemObject pie = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_Pie", "RecChars_Desc_Pie")
+            .SetNameAndDescription("Itm_RecChars_Pie", "Desc_RecChars_Pie")
             .SetEnum("RecChars_Pie")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "recchars_daycare_exempt" })
-            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/Pie_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/Pie_Large"), 50f))
+            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/Pie_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/Pie_Large"), 50f))
             .SetShopPrice(500)
             .SetGeneratorCost(75)
             .Build();
@@ -70,19 +71,62 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             pieUse.audSplat = AssetMan.Get<SoundObject>("PieSplat");
 
             pieUse.flyingSprite = gumClone.flyingSprite;
-            Sprite thrownPieSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/Pie_Large"), 25f);
+            Sprite thrownPieSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/Pie_Large"), 25f);
             thrownPieSprite.name = "Pie_Thrown";
             pieUse.flyingSprite.GetComponent<SpriteRenderer>().sprite = thrownPieSprite;
 
             pieUse.groundedSprite = gumClone.groundedSprite;
             pieUse.groundedSprite.transform.localPosition = Vector3.back * -0.1f;
-            pieUse.groundedSprite.GetComponent<SpriteRenderer>().sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("Pie/PieSplat"), 10f);
+            pieUse.groundedSprite.GetComponent<SpriteRenderer>().sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/PieSplat"), 10f);
 
             pieUse.noBillboardMat = AssetMan.Get<Material>("NoBillboardMaterial");
 
             GameObject.DestroyImmediate(gumClone);
 
             AssetMan.Add("PieItem", pie);
+
+
+            // Door Key
+            ItemMetaData doorKeyMeta = new ItemMetaData(Info, new ItemObject[0]);
+            doorKeyMeta.flags = ItemFlags.MultipleUse;
+            doorKeyMeta.tags.AddRange(new string[] { "key",  });
+
+            Items keyEnum = EnumExtensions.ExtendEnum<Items>("RecChars_DoorKey");
+
+            ItemBuilder keyBuilder = new ItemBuilder(Info)
+            .SetNameAndDescription("Itm_RecChars_DoorKey1", "Desc_RecChars_DoorKey")
+            .SetEnum(keyEnum)
+            .SetMeta(doorKeyMeta)
+            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/DoorKey_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/DoorKey_Large"), 50f))
+            .SetShopPrice(600)
+            .SetGeneratorCost(75)
+            .SetItemComponent<ITM_DoorKey>();
+
+            ItemObject keyItemObject = keyBuilder.Build();
+            keyItemObject.name = "RecChars DoorKey1";
+            ITM_DoorKey keyItm = (ITM_DoorKey)keyItemObject.item;
+            keyItm.name = "Itm_DoorKey1";
+            keyItm.layerMask = ((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DetentionKey).value.item).layerMask;
+
+            keyBuilder.SetNameAndDescription("Itm_RecChars_DoorKey2", "Desc_RecChars_DoorKey");
+            keyBuilder.SetItemComponent<ITM_DoorKey>(null);
+            ItemObject keyItemObject2 = keyBuilder.Build();
+            keyItemObject2.name = "RecChars DoorKey2";
+            keyItm = GameObject.Instantiate(keyItm, MTM101BaldiDevAPI.prefabTransform);
+            keyItemObject2.item = keyItm;
+            keyItm.name = "Itm_DoorKey2";
+            keyItm.nextStage = keyItemObject;
+
+            keyBuilder.SetNameAndDescription("Itm_RecChars_DoorKey3", "Desc_RecChars_DoorKey");
+            keyItemObject = keyItemObject2;
+            keyItemObject2 = keyBuilder.Build();
+            keyItemObject2.name = "RecChars DoorKey3";
+            keyItm = GameObject.Instantiate(keyItm, MTM101BaldiDevAPI.prefabTransform);
+            keyItemObject2.item = keyItm;
+            keyItm.name = "Itm_DoorKey3";
+            keyItm.nextStage = keyItemObject;
+
+            AssetMan.Add("DoorKeyItem", keyItemObject2);
         }
 
         private void LoadMrDaycare()
@@ -90,9 +134,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             MrDaycare daycare = new NPCBuilder<MrDaycare>(Info)
                 .SetName("MrDaycare")
                 .SetEnum("RecChars_MrDaycare")
-                .SetPoster(AssetMan.Get<Texture2D>("DaycareTex/pri_daycare"), "RecChars_Pst_Daycare1", "RecChars_Pst_Daycare2")
+                .SetPoster(AssetMan.Get<Texture2D>("DaycareTex/pri_daycare"), "PST_PRI_RecChars_Daycare1", "PST_PRI_RecChars_Daycare2")
                 .AddMetaFlag(NPCFlags.Standard | NPCFlags.MakeNoise)
-                .SetMetaTags(new string[] {})
+                .SetMetaTags(new string[] { "faculty", "no_balloon_frenzy" })
                 .AddPotentialRoomAsset(LoadDaycareRoom(), 100)
                 .AddLooker()
                 .AddTrigger()
@@ -109,47 +153,57 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.audMan = daycare.GetComponent<AudioManager>();
             daycare.audMan.subtitleColor = new Color(192f/255f, 242f/255f, 75f/255f);
 
-            daycare.audDetention = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_Timeout"), "RecChars_Daycare_Timeout", SoundType.Voice, daycare.audMan.subtitleColor);
-            daycare.audSeconds = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_Seconds"), "RecChars_Daycare_Seconds", SoundType.Voice, daycare.audMan.subtitleColor);
+            daycare.audDetention = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_Timeout"), "Vfx_RecChars_Daycare_Timeout", SoundType.Voice, daycare.audMan.subtitleColor);
+            daycare.audSeconds = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_Seconds"), "Vfx_RecChars_Daycare_Seconds", SoundType.Voice, daycare.audMan.subtitleColor);
 
             daycare.audTimes = new SoundObject[]
             {
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_30"), "RecChars_Daycare_30", SoundType.Voice, daycare.audMan.subtitleColor),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_60"), "RecChars_Daycare_60", SoundType.Voice, daycare.audMan.subtitleColor),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_100"), "RecChars_Daycare_100", SoundType.Voice, daycare.audMan.subtitleColor),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_200"), "RecChars_Daycare_200", SoundType.Voice, daycare.audMan.subtitleColor),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_500"), "RecChars_Daycare_500", SoundType.Voice, daycare.audMan.subtitleColor),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_3161"), "RecChars_Daycare_3161", SoundType.Voice, daycare.audMan.subtitleColor)
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_30"), "Vfx_RecChars_Daycare_30", SoundType.Voice, daycare.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_60"), "Vfx_RecChars_Daycare_60", SoundType.Voice, daycare.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_100"), "Vfx_RecChars_Daycare_100", SoundType.Voice, daycare.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_200"), "Vfx_RecChars_Daycare_200", SoundType.Voice, daycare.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_500"), "Vfx_RecChars_Daycare_500", SoundType.Voice, daycare.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_3161"), "Vfx_RecChars_Daycare_3161", SoundType.Voice, daycare.audMan.subtitleColor)
             };
+
+            daycare.audNoRunning = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoRunning"), "Vfx_RecChars_Daycare_NoRunning", SoundType.Voice, daycare.audMan.subtitleColor);
+            daycare.audNoDrinking = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoDrinking"), "Vfx_RecChars_Daycare_NoDrinking", SoundType.Voice, daycare.audMan.subtitleColor);
+            daycare.audNoEating = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoEating"), "Vfx_RecChars_Daycare_NoEating", SoundType.Voice, daycare.audMan.subtitleColor);
+            daycare.audNoEscaping = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoEscaping"), "Vfx_RecChars_Daycare_NoEscaping", SoundType.Voice, daycare.audMan.subtitleColor);
+
             MrDaycare.audRuleBreaks = new Dictionary<string, SoundObject>()
             {
-                { "Running" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoRunning"), "RecChars_Daycare_NoRunning", SoundType.Voice, daycare.audMan.subtitleColor)},
-                { "Drinking" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoDrinking"), "RecChars_Daycare_NoDrinking", SoundType.Voice, daycare.audMan.subtitleColor)},
-                { "Eating" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoEating"), "RecChars_Daycare_NoEating", SoundType.Voice, daycare.audMan.subtitleColor)},
-                { "DaycareEscaping" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoEscaping"), "RecChars_Daycare_NoEscaping", SoundType.Voice, daycare.audMan.subtitleColor)},
-                { "Throwing" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoThrowing"), "RecChars_Daycare_NoThrowing", SoundType.Voice, daycare.audMan.subtitleColor)},
-                { "LoudSound" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoLoudSound"), "RecChars_Daycare_NoLoudSound", SoundType.Voice, daycare.audMan.subtitleColor)}
+                { "Running" , daycare.audNoRunning},
+                { "Drinking" , daycare.audNoDrinking},
+                { "Eating" , daycare.audNoEating},
+                { "DaycareEscaping" , daycare.audNoEscaping},
+                { "Throwing" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoThrowing"), "Vfx_RecChars_Daycare_NoThrowing", SoundType.Voice, daycare.audMan.subtitleColor)},
+                { "LoudSound" , ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("DaycareAud/Day_NoLoudSound"), "Vfx_RecChars_Daycare_NoLoudSound", SoundType.Voice, daycare.audMan.subtitleColor)}
             };
 
             // Set all these lines to silence (in the event another mod calls a function from base principal)
             daycare.audComing = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Silence" && x.GetInstanceID() >= 0);
             daycare.audNoAfterHours = daycare.audComing;
             daycare.audNoBullying = daycare.audComing;
-            daycare.audNoDrinking = daycare.audComing;
-            daycare.audNoEating = daycare.audComing;
-            daycare.audNoEscaping = daycare.audComing;
-            daycare.audNoFaculty = daycare.audComing;
             daycare.audNoLockers = daycare.audComing;
-            daycare.audNoRunning = daycare.audComing;
             daycare.audNoStabbing = daycare.audComing;
             daycare.audScolds = new SoundObject[] {daycare.audComing};
 
             daycare.detentionNoise = 125;
 
             Principal principle = (Principal)NPCMetaStorage.Instance.Get(Character.Principal).value;
-            daycare.Navigator.speed = principle.Navigator.speed;
             daycare.Navigator.accel = principle.Navigator.accel;
-            daycare.Navigator.maxSpeed = 35f;
+
+            daycare.Navigator.speed = 36f;
+            daycare.Navigator.maxSpeed = 36f;
+            if (RecommendedCharsConfig.nerfedMrDaycare.Value)
+            {
+                daycare.Navigator.speed = 30f;
+                daycare.Navigator.maxSpeed = 30f;
+                daycare.maxTimeoutLevel = 1;
+                daycare.ruleSensitivityMul = 1;
+            }
+
             daycare.Navigator.passableObstacles = principle.Navigator.passableObstacles;
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
 
@@ -161,12 +215,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private RoomAsset LoadDaycareRoom()
         {
             DaycareDoorAssets.template = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Shut"));
+            DaycareDoorAssets.locked = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Locked"));
+
             DaycareDoorAssets.mask = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First().mask[0]);
             DaycareDoorAssets.mask.name = "DaycareDoor_Mask";
             DaycareDoorAssets.mask.SetMaskTexture(AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Mask"));
 
-            DaycareDoorAssets.open = AssetMan.Get<SoundObject>("DaveDoorOpen");
-            DaycareDoorAssets.shut = AssetMan.Get<SoundObject>("DaveDoorShut");
+            DaycareDoorAssets.open = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveOpen.wav"), "Sfx_Doors_StandardOpen", SoundType.Effect, Color.white);
+            DaycareDoorAssets.shut = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveShut.wav"), "Sfx_Doors_StandardShut", SoundType.Effect, Color.white);
+            DaycareDoorAssets.unlock = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveUnlock.wav"), "Sfx_Doors_StandardUnlock", SoundType.Effect, Color.white);
 
             RoomAsset daycareRoomAsset = RoomAsset.CreateInstance<RoomAsset>();
             ((ScriptableObject)daycareRoomAsset).name = "Room_Daycare_0";
@@ -262,6 +319,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
                 scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(20));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(12));
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -277,6 +335,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
                 scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(20));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(10));
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -294,14 +353,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (title == "END" || title.StartsWith("F"))
             {
-                lvl.posters = lvl.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
                 lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(25));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(15));
                 return;
             }
         }
 
+        private void AddPosterToLevel(LevelGenerator gen)
+        {
+            if (gen.scene == null) return;
+            if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == MrDaycare.charEnum) == null) return;
+
+            gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
+        }
+
         private void PostLoad()
         {
+            // Add Mr. Daycare Rule Free Zones to everything except the Principal's office
             RuleFreeZone[] zones = Resources.FindObjectsOfTypeAll<RuleFreeZone>();
             RoomFunctionContainer container;
             foreach (RuleFreeZone ruleFreeZone in zones)
@@ -313,6 +381,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     container.functions.FirstOrDefault(x => x is DetentionRoomFunction) == null) // Is not a Principal's office
                     container.functions.Add(container.gameObject.AddComponent<DaycareRuleFreeZone>()); // Make Mr. Daycare ignore rule breaks
             }
+
+            List<Items> keyItems = new List<Items>()
+            {
+                Items.DetentionKey
+            };
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAllWithTags(false, "key", "shape_key"))
+            {
+                if (!keyItems.Contains(meta.id))
+                    keyItems.Add(meta.id);
+            }
+            ITM_DoorKey.keyEnums = keyItems.ToArray();
         }
     }
 }

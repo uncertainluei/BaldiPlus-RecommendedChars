@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private bool flying = true;
 
         private EnvironmentController ec;
-        private readonly MovementModifier moveMod = new MovementModifier(Vector3.zero, 0.3f);
+        private readonly MovementModifier moveMod = new MovementModifier(Vector3.zero, 0.8f);
 
         public override bool Use(PlayerManager pm)
         {
@@ -33,7 +33,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             entity.OnEntityMoveInitialCollision += OnWallCollision;
 
             CoreGameManager.Instance.audMan.PlaySingle(audThrow);
-            DaycareGuiltManager.GetInstance(pm).BreakRule("Throwing", 0.8f, 0.125f);
+            DaycareGuiltManager.GetInstance(pm).BreakRule("Throwing", 0.8f, 0.25f);
             moveMod.priority = 1;
             return true;
         }

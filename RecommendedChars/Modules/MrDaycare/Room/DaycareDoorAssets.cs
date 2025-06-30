@@ -9,8 +9,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         internal static SoundObject open;
         internal static SoundObject shut;
+        internal static SoundObject unlock;
 
         internal static StandardDoorMats template;
+        internal static StandardDoorMats locked;
+
         internal static Material mask;
         private static readonly Dictionary<int, StandardDoorMats> materials = new Dictionary<int, StandardDoorMats>();
 

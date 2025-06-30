@@ -7,31 +7,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     [HarmonyPatch]
     class DaycareRoomPatches
     {
-        private static StandardDoor _door;
-        private static DaycareNotebookGate _daycareDoor;
-
-        private static bool IsNotebookGate(StandardDoor door)
-        {
-            if (door != _door)
-            {
-                _door = door;
-                _daycareDoor = _door.GetComponent<DaycareNotebookGate>();
-            }
-            return _daycareDoor != null;
-        }
 
         [HarmonyPatch(typeof(StandardDoor), "ItemFits")]
         [HarmonyPostfix]
         private static void NotebookGateItemFits(StandardDoor __instance, ref bool __result)
         {
-            if (IsNotebookGate(__instance))
+            if (__instance is DaycareStandardDoor)
                 __result = false;
         }
-
-        [HarmonyPatch(typeof(StandardDoor), "InsertItem")]
-        [HarmonyPatch(typeof(StandardDoor), "OpenTimedWithKey")]
-        [HarmonyPrefix]
-        private static bool NotebookGateTryOpen(StandardDoor __instance) => !IsNotebookGate(__instance);
 
         [HarmonyPatch(typeof(BaseGameManager), "CollectNotebooks")]
         [HarmonyPostfix]
@@ -39,5 +22,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         {
             DaycareRoomFunction.NotebookCollected();
         }
+
+        [HarmonyPatch(typeof(StandardDoor), "InsertItem")]
+        [HarmonyPatch(typeof(StandardDoor), "OpenTimedWithKey")]
+        [HarmonyPrefix]
+        private static bool NotebookGateTryOpen(StandardDoor __instance) => !(__instance is DaycareStandardDoor daycareDoor) || !daycareDoor.IsNotebookGate;
     }
 }

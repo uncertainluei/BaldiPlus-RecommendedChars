@@ -120,7 +120,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void PlayerInSight(PlayerManager player)
         {
             base.PlayerInSight(player);
-            if (Vector3.Distance(player.transform.position, transform.position) <= player.pc.reach * 2)
+            if (Vector3.Distance(player.transform.position, transform.position) <= player.pc.Reach * 2)
                 npc.behaviorStateMachine.ChangeState(new ManMemeCoin_Fleeing(coin, player));
         }
     }

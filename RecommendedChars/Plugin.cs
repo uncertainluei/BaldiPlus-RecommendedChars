@@ -23,18 +23,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [BepInPlugin(ModGuid, ModName, ModVersion)]
     [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("mtm101.rulerp.bbplus.baldidevapi")]
+    [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(ApiGuid)]
     class RecommendedCharsPlugin : BaseUnityPlugin
     {
-        public const string ModName = "Luei's Recommended Character Pack";
+        public const string ModName = "Recommended Character Pack";
         public const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
         public const string ModVersion = "1.2";
+
+        internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
+        internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
+        internal const string CrispyPlusGuid = "mtm101.rulerp.baldiplus.crispyplus";
 
         public static readonly AssetManager AssetMan = new AssetManager();
         internal static RecommendedCharsPlugin Plugin { get; private set; }
         internal static ManualLogSource Log { get; private set; }
 
-        internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
         internal static bool AnimationsCompat { get; private set; }
 
         private void Awake()
@@ -48,6 +52,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             RecommendedCharsSaveGameIO saveGameSystem = new RecommendedCharsSaveGameIO(Info);
             ModdedSaveGame.AddSaveHandler(saveGameSystem);
+            ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
 
             // Load localization files
             AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);

@@ -28,8 +28,12 @@
 		<Reference Include="Assembly-CSharp" Publicize="true">
 			<HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
 		</Reference>
+		
 		<Reference Include="PineDebug">
 			<HintPath>..\Dependencies\PineDebug.dll</HintPath>
+		</Reference>
+		<Reference Include="AnalogFeelings.CharacterRadar">
+			<HintPath>..\Dependencies\AnalogFeelings.CharacterRadar.dll</HintPath>
 		</Reference>
 		<Reference Include="BBPlusCustomMusics" Publicize="true">
 			<HintPath>..\Dependencies\BBPlusCustomMusics.dll</HintPath>
@@ -37,6 +41,7 @@
 		<Reference Include="BBPlusAnimations" Publicize="true">
 			<HintPath>..\Dependencies\BBPlusAnimations.dll</HintPath>
 		</Reference>
+		
 		<Reference Include="MTM101BaldAPI">
 			<HintPath>..\Dependencies\MTM101BaldAPI.dll</HintPath>
 		</Reference>

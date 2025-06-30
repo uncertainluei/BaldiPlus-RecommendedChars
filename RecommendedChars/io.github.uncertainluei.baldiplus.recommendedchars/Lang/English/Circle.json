@@ -1,0 +1,24 @@
+{
+  "items": [
+	{ "key": "PST_PRI_RecChars_Circle1", "value": "Circle" },
+	{ "key": "PST_PRI_RecChars_Circle2", "value": "i bet you\nwon't get\nthe\nreference." },
+	
+	{ "key": "Mfx_RecChars_JingleBells", "value": "*Jingle Bells*" },
+	
+	{ "key": "Vfx_RecChars_Circle_LetsPlay", "value": "Let's play!" },
+	{ "key": "Vfx_RecChars_Circle_Go", "value": "Go!" },
+	{ "key": "Vfx_RecChars_Circle_Oops", "value": "Try agAIn!" },
+	{ "key": "Vfx_RecChars_Circle_Congrats", "value": "Wow, you're awesome! Let's play another time!" },
+	{ "key": "Vfx_RecChars_Circle_Sad", "value": "OH! I guess I'll play with you later..." },
+	{ "key": "Vfx_RecChars_Circle_Random", "value": "?!?!?!?!?!?" },
+	
+	{ "key": "Itm_RecChars_NerfGun", "value": "Nerf Gun" },
+	{ "key": "Itm_RecChars_NerfGun1", "value": "(1) Nerf Gun" },
+	{ "key": "Itm_RecChars_NerfGun2", "value": "(2) Nerf Gun" },
+	{ "key": "Desc_RecChars_NerfGun", "value": "Nerf Gun\n<s>Shoot</s> squirt water at people with it! Or at least one specific circle..." },
+	
+	{ "key": "Hud_RecChars_CircleRope_Start", "value": "LETS PLAY!" },
+	{ "key": "Hud_RecChars_CircleRope_Continue", "value": "SHAPE WORLD" },
+	{ "key": "Hud_RecChars_CircleRope_Fail", "value": "OOPS!" }
+  ]
+}

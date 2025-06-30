@@ -59,13 +59,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Reference for item rejection (yeah that's pretty much it)
             gottaBully.bullyReference = (Bully)NPCMetaStorage.Instance.Get(Character.Bully).value;
 
-            gottaBully.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("GottaBullyTex/pri_gbully"), "RecChars_Pst_GottaBully1", "RecChars_Pst_GottaBully2");
+            gottaBully.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("GottaBullyTex/pri_gbully"), "PRI_PST_RecChars_GBully1", "PRI_PST_RecChars_GBully2");
             gottaBully.poster.name = "GottaBullyPoster";
 
             gottaBully.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("GottaBullyTex/GottaBully"), 26f);
             gottaBully.audMan.subtitleColor = new Color(198f / 255f, 136f / 255f, 91f / 255f);
-            gottaBully.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_Intro"), "RecChars_GottaBully_Intro", SoundType.Voice, gottaBully.audMan.subtitleColor);
-            gottaBully.audSweep = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_GottaBully"), "RecChars_GottaBully_Sweep", SoundType.Voice, gottaBully.audMan.subtitleColor);
+            gottaBully.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_Intro"), "Vfx_RecChars_GBully_Intro", SoundType.Voice, gottaBully.audMan.subtitleColor);
+            gottaBully.audSweep = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_GottaBully"), "Vfx_RecChars_GBully_Sweep", SoundType.Voice, gottaBully.audMan.subtitleColor);
 
             AssetMan.Add("GottaBullyNpc", gottaBully);
             NPCMetadata gottaBullyMeta = new NPCMetadata(Info, new NPC[] { gottaBully }, gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, new string[0]);

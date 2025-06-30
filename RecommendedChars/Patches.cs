@@ -2,14 +2,12 @@
 
 using MTM101BaldAPI;
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
 
 using UnityEngine;
-using MTM101BaldAPI.Registers;
 using System;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
@@ -42,14 +40,29 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
         private static void NpcAddInvoke(LevelGenerator gen)
         {
-            OnNpcAdd?.Invoke(gen);
+            try
+            {
+                OnNpcAdd?.Invoke(gen);
+            }
+            catch (Exception e)
+            {
+                RecommendedCharsPlugin.Log.LogError(e);
+            }
         }
 
         private static void GeneratorCompletionInvoke(LevelGenerator gen)
         {
-            OnGeneratorCompletion?.Invoke(gen);
+            try
+            {
+                OnGeneratorCompletion?.Invoke(gen);
+            }
+            catch (Exception e)
+            {
+                RecommendedCharsPlugin.Log.LogError(e);
+            }
         }
 
+        [HarmonyBefore(RecommendedCharsPlugin.ApiGuid)]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             byte patchesLeft = 2;

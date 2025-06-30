@@ -20,9 +20,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     class CircleJumprope : Jumprope
     {
-        private const string startKey = "RecChars_JumpRope_Start";
-        private const string continueKey = "RecChars_JumpRope_Continue";
-        private const string failKey = "RecChars_JumpRope_Fail";
+        private const string startKey = "Hud_RecChars_CircleRope_Start";
+        private const string continueKey = "Hud_RecChars_CircleRope_Continue";
+        private const string failKey = "Hud_RecChars_CircleRope_Fail";
 
         internal static Dictionary<string, Sprite[]> ropeAnimation;
         public CustomSpriteAnimator ropeAnimator;

@@ -1,0 +1,21 @@
+{
+  "items": [
+	{ "key": "PST_PRI_RecChars_Bsodaa1", "value": "Eveyone's Bsodaa" },
+	{ "key": "PST_PRI_RecChars_Bsodaa2", "value": "The inventor of BSODA himself!\nWatch out, or he'll spray you with it!\nHe might not talk, but his actions speak louder!" },
+
+	{ "key": "PST_PRI_RecChars_BsodaaHelper1", "value": "Bsodaa Helper" },
+	{ "key": "PST_PRI_RecChars_BsodaaHelper2", "value": "Eveyone's Bsodaa's greatest pal! She makes sure he always has soda on him!\n<b>DON'T steal from her!</b>" },
+	
+	{ "key": "Vfx_RecChars_Bsodaa_Happy1", "value": "What fun!" },
+	{ "key": "Vfx_RecChars_Bsodaa_Happy2", "value": "WOOOOOAAAAAH!" },
+	{ "key": "Vfx_RecChars_Bsodaa_Thanks", "value": "Thanks!" },
+	{ "key": "Vfx_RecChars_BsodaaHelper_Oops", "value": "OOPS!" },
+	{ "key": "Vfx_RecChars_BsodaaHelper_Laugh", "value": "HEHEHEHEHEE!" },
+	{ "key": "Vfx_RecChars_BsodaaHelper_Sad", "value": "OH! THAT MAKES ME SAD!" },
+	
+	{ "key": "Sfx_RecChars_Bsodaa_Charging", "value": "*CHARGING SODA*" },
+	
+	{ "key": "Itm_RecChars_SmallDietBsoda", "value": "Diet BSODA Mini" },
+	{ "key": "Desc_RecChars_SmallDietBsoda", "value": "Diet BSODA Mini\nFor budgeting (and balancing) reasons, we have made Diet BSODA available\nin sip-sized cans! Now the healthier alternative is in smaller capacity for short bursts!" }
+  ]
+}

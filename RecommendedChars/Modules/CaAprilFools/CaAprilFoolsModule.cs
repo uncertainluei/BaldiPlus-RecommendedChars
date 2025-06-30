@@ -23,50 +23,53 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override string Name => "CA April Fools";
 
         public override Action LoadAction => Load;
-        public override Action PostLoadAction => PostLoad;
+        public override Action PostLoadAction => ManMemeCoinEvents.InitializePostEvents;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCaAprilFools;
 
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "CAItems"), x => "CAItems/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "CaAprilFools"), x => "CAItems/" + x.name);
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "MMCoin"), x => "MMCoinTex/" + x.name);
 
             AssetMan.Add("Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Boing.wav"), "RecChars_Sfx_Boing", SoundType.Effect, Color.white));
+            AssetMan.Add("CartoonEating", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CartoonEating" && x.GetInstanceID() >= 0));
 
             LoadItems();
             LoadFixedMap();
             LoadManMemeCoinNpc();
+            ManMemeCoinEvents.InitializeBaseEvents();
 
             LevelGeneratorEventPatch.OnNpcAdd += TrySpawnManMemeCoin;
         }
 
         private void LoadItems()
         {
-            // Flamin' Hot Cheetos
-            ItemObject cheetos = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_FlaminHotCheetos", "RecChars_Desc_FlaminHotCheetos")
-            .SetEnum("RecChars_FlaminHotCheetos")
+            // Flamin' Hot Cheepers
+            ItemObject puffs = new ItemBuilder(Info)
+            .SetNameAndDescription("Itm_RecChars_FlaminPuffs", "Desc_RecChars_FlaminPuffs")
+            .SetEnum("RecChars_FlaminPuffs")
             .SetMeta(ItemFlags.Persists, new string[] { "food", "recchars_daycare_exempt", "cann_hate", "adv_perfect", "adv_sm_potential_reward" })
-            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminHotCheetos_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminHotCheetos_Large"), 50f))
+            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminPuffs_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminPuffs_Large"), 50f))
             .SetShopPrice(800)
             .SetGeneratorCost(85)
-            .SetItemComponent<ITM_FlaminHotCheetos>()
+            .SetItemComponent<ITM_FlaminPuffs>()
             .Build();
 
-            cheetos.name = "RecChars FlaminHotCheetos";
+            puffs.name = "RecChars FlaminPuffs";
 
-            ITM_FlaminHotCheetos cheetosItm = (ITM_FlaminHotCheetos)cheetos.item;
-            cheetosItm.name = "Itm_FlaminHotCheetos";
-            cheetosItm.gaugeSprite = cheetos.itemSpriteSmall;
-            cheetosItm.audEat = ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat;
+            ITM_FlaminPuffs puffsItm = (ITM_FlaminPuffs)puffs.item;
+            puffsItm.name = "Itm_FlaminPuffs";
+            puffsItm.gaugeSprite = puffs.itemSpriteSmall;
+            puffsItm.audEat = ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat;
 
-            AssetMan.Add("FlaminHotCheetosItem", cheetos);
+            AssetMan.Add("FlaminPuffsItem", puffs);
+
 
             // Cherry BSODA
             ItemObject cherryBsoda = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_CherryBsoda", "RecChars_Desc_CherryBsoda")
+            .SetNameAndDescription("Itm_RecChars_CherryBsoda", "Desc_RecChars_CherryBsoda")
             .SetEnum("RecChars_CherryBsoda")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "drink", "adv_perfect", "adv_sm_potential_reward" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Large"), 50f))
@@ -81,6 +84,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaClone.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Spray"), 12f);
             bsodaClone.speed = 40f;
             bsodaClone.time = 10f;
+            bsodaClone.moveMod.movementMultiplier = 0.45f;
 
             ITM_CherryBsoda cherryBsodaUse = bsodaClone.gameObject.AddComponent<ITM_CherryBsoda>();
 
@@ -99,7 +103,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Ultimate Apple
             ItemObject ultiApple = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_UltimateApple", "RecChars_Desc_UltimateApple")
+            .SetNameAndDescription("Itm_RecChars_UltimateApple", "Desc_RecChars_UltimateApple")
             .SetEnum("RecChars_UltimateApple")
             .SetMeta(ItemFlags.NoUses, new string[] { "food", "crmp_contraband", "adv_forbidden_present" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Large"), 50f))
@@ -125,7 +129,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Items manglesEnum = EnumExtensions.ExtendEnum<Items>("RecChars_Mangles");
 
             ItemBuilder manglesBuilder = new ItemBuilder(Info)
-            .SetNameAndDescription("RecChars_Itm_Mangles1", "RecChars_Desc_Mangles")
+            .SetNameAndDescription("Itm_RecChars_Mangles1", "Desc_RecChars_Mangles")
             .SetEnum(manglesEnum)
             .SetMeta(manglesMeta)
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/Mangles_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/Mangles_Large"), 50f))
@@ -137,23 +141,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             manglesItemObject.name = "RecChars Mangles1";
             ITM_Mangles manglesItm = (ITM_Mangles)manglesItemObject.item;
             manglesItm.name = "Itm_Mangles1";
-            manglesItm.audEat = cheetosItm.audEat;
+            manglesItm.audEat = puffsItm.audEat;
 
-            manglesBuilder.SetNameAndDescription("RecChars_Itm_Mangles2", "RecChars_Desc_Mangles");
+            manglesBuilder.SetNameAndDescription("Itm_RecChars_Mangles2", "Desc_RecChars_Mangles");
             ItemObject manglesItemObject2 = manglesBuilder.Build();
             manglesItemObject2.name = "RecChars Mangles2";
             manglesItm = (ITM_Mangles)manglesItemObject2.item;
             manglesItm.name = "Itm_Mangles2";
-            manglesItm.audEat = cheetosItm.audEat;
+            manglesItm.audEat = puffsItm.audEat;
             manglesItm.nextStage = manglesItemObject;
 
-            manglesBuilder.SetNameAndDescription("RecChars_Itm_Mangles3", "RecChars_Desc_Mangles");
+            manglesBuilder.SetNameAndDescription("Itm_RecChars_Mangles3", "Desc_RecChars_Mangles");
             manglesItemObject = manglesItemObject2;
             manglesItemObject2 = manglesBuilder.Build();
             manglesItemObject2.name = "RecChars Mangles3";
             manglesItm = (ITM_Mangles)manglesItemObject2.item;
             manglesItm.name = "Itm_Mangles3";
-            manglesItm.audEat = cheetosItm.audEat;
+            manglesItm.audEat = puffsItm.audEat;
             manglesItm.nextStage = manglesItemObject;
 
             AssetMan.Add("ManglesItem", manglesItemObject2);
@@ -175,7 +179,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ManMemeCoin coin = new NPCBuilder<ManMemeCoin>(Info)
                 .SetName("ManMemeCoin")
                 .SetEnum("RecChars_ManMemeCoin")
-                .SetPoster(AssetMan.Get<Texture2D>("MMCoinTex/pri_manmeme"), "RecChars_Pst_ManMeme1", "RecChars_Pst_ManMeme2")
+                .SetPoster(AssetMan.Get<Texture2D>("MMCoinTex/pri_manmeme"), "PST_PRI_RecChars_ManMeme1", "PST_PRI_RecChars_ManMeme2")
                 .AddMetaFlag(NPCFlags.Standard)
                 .SetMetaTags(new string[] {"no_balloon_frenzy", "adv_exclusion_hammer_immunity", "adv_ev_cold_school_immunity"})
                 .SetAirborne()
@@ -214,11 +218,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (scene.levelTitle == "END")
                 scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
-        }
-
-        private void PostLoad()
-        {
-            ManMemeCoinEvents.InitializeBaseEvents();
         }
 
         private void TrySpawnManMemeCoin(LevelGenerator gen)

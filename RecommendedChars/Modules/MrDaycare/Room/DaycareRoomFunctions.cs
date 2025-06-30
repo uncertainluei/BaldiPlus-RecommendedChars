@@ -39,15 +39,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void OnGenerationFinished()
         {
             base.OnGenerationFinished();
-            
-            DaycareNotebookGate daycareDoor;
-            foreach (Door door in room.doors)
+            DaycareStandardDoor daycareDoor; 
+            for (int i = 0; i < room.doors.Count; i++)
             {
-                if (!(door is StandardDoor standardDoor)) continue;
-                if (!door.TryGetComponent(out daycareDoor))
-                    daycareDoor = door.gameObject.AddComponent<DaycareNotebookGate>();
-
-                daycareDoor.Setup(standardDoor, room);
+                if (room.doors[i] == null) continue;
+                if (room.doors[i] is DaycareStandardDoor) continue;
+                if (room.doors[i] is StandardDoor standardDoor)
+                {
+                    daycareDoor = RecommendedCharsPlugin.CloneComponent<StandardDoor, DaycareStandardDoor>(standardDoor);
+                    daycareDoor.Setup(room);
+                    room.doors[i] = daycareDoor;
+                }
             }
         }
 
@@ -61,7 +63,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (BaseGameManager.Instance.NotebookTotal < 5)
                 NotebookRequirement = BaseGameManager.Instance.NotebookTotal - 1;
 
-            DaycareNotebookGate daycareDoor;
+            DaycareStandardDoor daycareDoor;
             int doorCount = room.doors.Count;
             for (int i = 0; i < doorCount; i++)
                 if (room.doors[i].TryGetComponent(out daycareDoor))
@@ -132,11 +134,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Inactive = false;
             OnNotebookCollect -= NotebookCheck;
 
-            DaycareNotebookGate daycareDoor;
             int doorCount = room.doors.Count;
             for (int i = 0; i < doorCount; i++)
-                if (room.doors[i].TryGetComponent(out daycareDoor))
-                    daycareDoor.Unlock();
+                if (room.doors[i] is DaycareStandardDoor daycareDoor && daycareDoor.IsNotebookGate)
+                    daycareDoor.UnlockNotebookGate();
 
             foreach (MrDaycare daycare in mrDaycares)
                 daycare.Activate();

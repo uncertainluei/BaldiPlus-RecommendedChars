@@ -16,3 +16,12 @@ Make sure you have the [.NET SDK](https://dotnet.microsoft.com/en-us/download) i
 `dotnet build .\RecommendedChars.sln`
 
 This will build to the *Debug* configuration by default, append `-c Release` if you want to built it with the *Release* configuration.
+
+### Functional Dependencies
+This mod depends on the following mods to build:
+
+- [Baldi's Basics Dev API](https://gamebanana.com/mods/383711)
+- [PineDebug](https://gamebanana.com/mods/542418)
+- [Character Radar](https://gamebanana.com/mods/321209)
+- [BB+ Custom Musics](https://gamebanana.com/mods/527812)
+- [BB+ Animations](https://gamebanana.com/mods/503644)

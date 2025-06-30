@@ -16,7 +16,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected PlayerManager currentPlayer;
 
         protected float Speed => bsoda.speed;
-        public byte bouncesLeft = 3;
+        public byte bouncesLeft = 5;
 
         private bool destroyQueued = false;
 

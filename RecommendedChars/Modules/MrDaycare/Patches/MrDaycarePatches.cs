@@ -21,7 +21,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         private static void DaycareRuleBreak(PlayerManager __instance, string rule, float linger, float sensitivity)
         {
             if (daycareRules.Contains(rule))
-                DaycareGuiltManager.GetInstance(__instance).BreakRule(rule, linger, sensitivity/2);
+                DaycareGuiltManager.GetInstance(__instance).BreakRule(rule, linger, sensitivity);
         }
         public static readonly string[] daycareRules = new string[]
         {
@@ -37,7 +37,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         private static void OnUseWhistle(PlayerManager pm)
         {
             if (!pm.ec.silent && !pm.ec.CellFromPosition(IntVector2.GetGridPosition(pm.transform.position)).Silent)
-                DaycareGuiltManager.GetInstance(pm).BreakRule("LoudSound", 1.5f, 0.25f);
+                DaycareGuiltManager.GetInstance(pm).BreakRule("LoudSound", 1.5f, 0.5f);
         }
 
         private static int _lowestDist;
@@ -61,15 +61,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 }
             }
             if (_player)
-                DaycareGuiltManager.GetInstance(_player).BreakRule("LoudSound", 0.02f*value, 0.25f);
+                DaycareGuiltManager.GetInstance(_player).BreakRule("LoudSound", 0.02f*value, 0.5f);
         }
 
         public static readonly MethodInfo itemUsedMethod = AccessTools.Method(typeof(MrDaycarePatches), "OnItemUseSuccess");
         public static void OnItemUseSuccess(ItemManager itemMan, int slot)
         {
             ItemMetaData meta = itemMan.items[slot].GetMeta();
-            if (meta != null && meta.tags.Contains("food") && !meta.tags.Contains("drink") && !meta.tags.Contains("recchars_daycare_exempt"))
-                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Eating", 0.8f, 0.125f);
+            if (meta == null) return;
+            if (meta.tags.Contains("food") && !meta.tags.Contains("drink") && !meta.tags.Contains("recchars_daycare_exempt"))
+            {
+                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Eating", 0.8f, 0.25f);
+                return;
+            }
         }
 
         [HarmonyPatch(typeof(ItemManager), "UseItem"), HarmonyTranspiler]
@@ -103,7 +107,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
         [ConditionalPatchMod(RecommendedCharsPlugin.AnimationsGuid)]
         [HarmonyPatch(typeof(BBPlusAnimations.Patches.PrincipalDetentionPatch), "CoolDetentionAnimation")]
-        static class MrDaycareAnimationPatche
+        static class MrDaycareAnimationPatch
         {
             private static bool Prefix(object[] __args) => ((Principal)__args[0]).Character != MrDaycare.charEnum;
         }

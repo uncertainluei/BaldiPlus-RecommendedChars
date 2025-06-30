@@ -21,7 +21,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public sealed class Module_ArtsWithWires : Module
     {
         public override string Name => "Arts with Wires";
-        public override string SaveTag => Name + (RecommendedCharsConfig.intendedWiresBehavior.Value ? " (v1.1.1+)" : "");
 
         public override Action LoadAction => Load;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
@@ -36,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ArtsWithWires artsWithWires = new NPCBuilder<ArtsWithWires>(Info)
                 .SetName("ArtsWithWires")
                 .SetEnum("RecChars_ArtsWithWires")
-                .SetPoster(AssetMan.Get<Texture2D>("WiresTex/pri_wires"), "RecChars_Pst_Wires1", "RecChars_Pst_Wires2")
+                .SetPoster(AssetMan.Get<Texture2D>("WiresTex/pri_wires"), "PST_PRI_RecChars_Wires1", "PST_PRI_RecChars_Wires2")
                 .AddMetaFlag(NPCFlags.Standard)
                 .AddLooker()
                 .AddTrigger()
@@ -56,8 +55,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             artsWithWires.audMan = artsWithWires.GetComponent<AudioManager>();
             artsWithWires.audMan.subtitleColor = new Color(138f / 255f, 22f / 255f, 15f / 255f);
 
-            artsWithWires.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Intro"), "RecChars_Wires_Intro", SoundType.Effect, artsWithWires.audMan.subtitleColor);
-            artsWithWires.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Loop"), "RecChars_Wires_Intro", SoundType.Effect, artsWithWires.audMan.subtitleColor);
+            artsWithWires.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Intro"), "Sfx_RecChars_Wires_Intro", SoundType.Effect, artsWithWires.audMan.subtitleColor);
+            artsWithWires.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Loop"), "Sfx_RecChars_Wires_Loop", SoundType.Effect, artsWithWires.audMan.subtitleColor);
 
             artsWithWires.stareStacks = RecommendedCharsConfig.intendedWiresBehavior.Value;
 

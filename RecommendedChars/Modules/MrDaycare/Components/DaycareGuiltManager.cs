@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public static void TryBreakRule(PlayerManager player, string rule, float linger, float sensitivity = 1f)
         {
-            if (RecommendedCharsConfig.moduleExp.Value)
+            if (RecommendedCharsConfig.moduleBsodaa.Value)
                 GetInstance(player).BreakRule(rule, linger, sensitivity);
         }
 

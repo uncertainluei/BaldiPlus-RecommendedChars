@@ -1,0 +1,21 @@
+{
+  "items": [
+	{ "key": "PST_PRI_RecChars_ManMeme1", "value": "Man Meme Coin" },
+	{ "key": "PST_PRI_RecChars_ManMeme2", "value": "A sentient coin resembling a certain someone.\nWill reward those who chase down and beat it up with a few special goodies!" },
+	
+	{ "key": "Itm_RecChars_FlaminPuffs", "value": "Flamin' Hot Cheepers" },
+	{ "key": "Itm_RecChars_Mangles", "value": "Can of Mangles" },
+	{ "key": "Itm_RecChars_Mangles1", "value": "(1) Can of Mangles" },
+	{ "key": "Itm_RecChars_Mangles2", "value": "(2) Can of Mangles" },
+	{ "key": "Itm_RecChars_Mangles3", "value": "(3) Can of Mangles" },
+	{ "key": "Itm_RecChars_UltimateApple", "value": "Ultimate Apple" },
+	{ "key": "Itm_RecChars_CherryBsoda", "value": "Cherry BSODA" },
+	
+	{ "key": "Desc_RecChars_FlaminPuffs", "value": "Flamin' Hot Cheepers\nA bag of cheesy puffs with incredible spice.\nTheir spices will indeed put you into a short rush!" },
+	{ "key": "Desc_RecChars_Mangles", "value": "Can of Mangles\nHmm, that brand name sounds pretty familiar!\nEat a few of these to gain a burst of energy,\nwhether you're in a rush, or saving it for later!" },
+	{ "key": "Desc_RecChars_UltimateApple", "value": "Ultimate Apple\nBaldi may surely take longer to eat it,\nbut that apple is definitely tough stuff!\nMake sure you know where to hide once he's done!" },
+	{ "key": "Desc_RecChars_CherryBsoda", "value": "Cherry BSODA\nA special limited-edition flavored BSODA!\nIts unique cherry fizz will propel you as if you were a golf ball!" },
+	
+	{ "key": "Sfx_RecChars_CherryBsodaBoing", "value": "*Boing!*" }
+  ]
+}

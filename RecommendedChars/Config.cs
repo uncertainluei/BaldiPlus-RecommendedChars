@@ -10,9 +10,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static ConfigEntry<bool> moduleCaAprilFools;
         internal static ConfigEntry<bool> moduleMrDaycare;
 
-        internal static ConfigEntry<bool> moduleExp;
+        internal static ConfigEntry<bool> moduleBsodaa;
 
         internal static ConfigEntry<bool> intendedWiresBehavior;
+        internal static ConfigEntry<bool> nerfedMrDaycare;
         internal static ConfigEntry<bool> guaranteeSpawnChar;
 
 
@@ -32,29 +33,33 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Modules",
                 "ArtsWWires",
                 true,
-                "Adds Arts with Wires, character sprites and audio from Kinzo/Kracc's 1st Prize Mania and Playtime's Swapped Basics respectively.");
+                "Adds Arts with Wires, based off the Arts and Crafters equivalent in Kinzo/Kracc's 1st Prize Mania and Playtime's Swapped Basics respectively.");
             moduleCaAprilFools = config.Bind(
                 "Modules",
                 "CaAprilFools",
                 true,
-                "Adds a few features from the April Fools updates from the Chaos Awakens Minecraft mod.");
+                "Adds a few features based on the April Fools updates from the Chaos Awakens Minecraft mod.");
             moduleMrDaycare = config.Bind(
                 "Modules",
                 "MrDaycare",
                 true,
-                "Adds Mr. Daycare and the Pie item from Dave's House.");
-
-            moduleExp = config.Bind(
+                "Adds Mr. Daycare from Dave's House, as well the Pie and Door Key items.");
+            moduleBsodaa = config.Bind(
                 "Modules",
-                "Experimental",
-                false,
-                "Experimental modules. TBA");
+                "Bsodaa",
+                true,
+                "Adds Baldi and Playtime from Eveything is Bsodaa, with their own room and mechanic.");
 
             intendedWiresBehavior = config.Bind(
                 "Misc",
                 "IntendedWiresBehavior",
                 true,
                 "Arts with Wires will not reset their stare time when the player stops looking at it.");
+            nerfedMrDaycare = config.Bind(
+                "Misc",
+                "NerfedMrDaycare",
+                true,
+                "Nerfs Mr. Daycare to be overall more manageable.");
             guaranteeSpawnChar = config.Bind(
                 "Misc",
                 "GuaranteeCharacterSpawn",

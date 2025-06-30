@@ -19,7 +19,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             3161
         };
 
-        public SoundObject audSeconds;
+        public int maxTimeoutLevel = -1;
+        public float ruleSensitivityMul = 1.5f;
+
         public readonly string[] rules = new string[]
         {
             "Running",
@@ -30,9 +32,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         };
 
         public static Dictionary<string, SoundObject> audRuleBreaks = new Dictionary<string, SoundObject>();
+        public SoundObject audSeconds;
 
         private RoomController daycareRoom;
         private DaycareRoomFunction daycareFunction;
+
 
         public override void Initialize()
         {
@@ -42,6 +46,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public void Start()
         {
+            if (maxTimeoutLevel < 0)
+                maxTimeoutLevel = lockTimes.Length-1;
+
             Cell currentCell = ec.CellFromPosition(transform.position);
             if (currentCell == null || (daycareRoom = currentCell.room) == null || !daycareRoom.functionObject.TryGetComponent(out daycareFunction))
             {
@@ -67,7 +74,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (!player.Tagged && DaycareGuiltManager.GetInstance(player).Disobeying)
             {
-                timeInSight[player.playerNumber] += Time.deltaTime * TimeScale;
+                timeInSight[player.playerNumber] += Time.deltaTime * TimeScale * ruleSensitivityMul;
                 if (timeInSight[player.playerNumber] >= DaycareGuiltManager.GetInstance(player).GuiltSensitivity)
                 {
                     targetedPlayer = player;
@@ -98,7 +105,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             audMan.QueueAudio(audSeconds);
 
             timeInSight[targetedPlayer.playerNumber] = 0f;
-            detentionLevel = Math.Min(detentionLevel + 1, lockTimes.Length-1);
+            detentionLevel = Math.Min(detentionLevel+1, maxTimeoutLevel);
             ec.MakeNoise(targetedPlayer.transform.position, detentionNoise);
             behaviorStateMachine.ChangeState(new MrDaycare_Timeout(this));
         }
