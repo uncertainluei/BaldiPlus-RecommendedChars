@@ -27,7 +27,7 @@
   - *Cherry BSODA* boing sound effect from the Yorgurt Kingdom Discord server soundboard
   
 ## Requests
-- [VerySugaryGoon](https://gamebanana.com/members/2720722): [Circle](https://gamebanana.com/requests/59865), [Gotta Bully and Arts with Wires](https://gamebanana.com/requests/75363), [Mr. Daycare and Eveyone's Bsodaa](https://gamebanana.com/requests/75637)
+- [**VerySugaryGoon**](https://gamebanana.com/members/2720722) - [Circle](https://gamebanana.com/requests/59865), [Gotta Bully and Arts with Wires](https://gamebanana.com/requests/75363), [Mr. Daycare and Eveyone's Bsodaa](https://gamebanana.com/requests/75637)
 
 ## Special Thanks
 - [PixelGuy](https://gamebanana.com/members/1713226)
