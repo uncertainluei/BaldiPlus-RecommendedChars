@@ -11,15 +11,15 @@
   - *Cherry BSODA* textures by me (uncertain_luei), [base BSODA model](https://gamebanana.com/models/5037) by [MatejMakesStuff](https://gamebanana.com/members/2024162), original BSODA spray sprite by [Basically Games (mystman12)](https://basicallygames.com)
   - *Ultimate Apple* textures by me (uncertain_luei), original Apple assets by Basically Games (mystman12), based on the *Ultimate Apple* in [Chaos Awakens]().
 - [*Mr. Daycare* sprites](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Npc/Daycare) made by [MeltingRED3](https://gamebanana.com/members/1698319), adapted by [MoldyGangstaHero](https://gamebanana.com/members/2128693), me (uncertain_luei) and VerySugaryGoon
-- [*Mr. Daycare* voicelines](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/Daycare) made by MoldyGangstaHero, except [`Day_NoLoudSound`](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/Daycare/Day_NoLoudSound) which was made by me (uncertain_luei)
-- [*Daycare room* assets](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Room/Daycare) made by MoldyGangstaHero, adapted by me (uncertain_luei) and VerySugaryGoon
+- [*Mr. Daycare* voicelines](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/Daycare) made by MoldyGangstaHero, except [`Day_NoLoudSound`](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/Daycare/Day_NoLoudSound.wav) which was made by me (uncertain_luei)
+- [*Daycare room* assets](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Room/Daycare) sans the [map background](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Room/Daycare/Map_Daycare.png), made by MoldyGangstaHero, adapted by me (uncertain_luei) and VerySugaryGoon
 - [*Pie* and *Door Key* textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Item/Daycare):
   - *Pie* texture made by MoldyGangstaHero, adapted by me (uncertain_luei)
   - *Pie* splat texture presumably made by [barribarrii](https://tenor.com/users/barribarrii), adjusted by me (uncertain_luei)
   - *Door Key* texture presumably made by VerySugaryGoon
 - [*Eveyone's Bsodaa* and *Bsodaa Helper* textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Npc/Bsodaa) poorly recolored by [1n00bY7](https://gamebanana.com/mods/51775), adjusted by me (uncertain_luei) and VerySugaryGoon, old BSODA spray texture by Basically Games (mystman12)
 - [*Eveyone's Bsodaa* and *Bsodaa Helper* audio](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/Bsodaa) originally made by Basically Games (mystman12), edited by VerySugaryGoon using FakeYou
-- [*Bsodaa room* assets](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Room/Bsodaa) made by VerySugaryGoon, ceiling light by me (uncertain_luei)
+- [*Bsodaa room* assets](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Room/Bsodaa) made by VerySugaryGoon, ceiling light and map background by me (uncertain_luei)
 - [*Diet BSODA Mini* textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Item/Bsodaa) edited by me (uncertain_luei), original by Basically Games (mystman12)
 - [Sound effects](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Audio/Sfx):
   - *Daycare room* door and* Pie* throw sounds from *Dave's House* by MoldyGangstaHero
