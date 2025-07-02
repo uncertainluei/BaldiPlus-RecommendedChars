@@ -50,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject pie = new ItemBuilder(Info)
             .SetNameAndDescription("Itm_RecChars_Pie", "Desc_RecChars_Pie")
             .SetEnum("RecChars_Pie")
-            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "recchars_daycare_exempt" })
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward" })
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/Pie_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/Pie_Large"), 50f))
             .SetShopPrice(500)
             .SetGeneratorCost(75)
@@ -89,7 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Door Key
             ItemMetaData doorKeyMeta = new ItemMetaData(Info, new ItemObject[0]);
             doorKeyMeta.flags = ItemFlags.MultipleUse;
-            doorKeyMeta.tags.AddRange(new string[] { "key",  });
+            doorKeyMeta.tags.AddRange(new string[] { "key", "crmp_contraband" });
 
             Items keyEnum = EnumExtensions.ExtendEnum<Items>("RecChars_DoorKey");
 
@@ -208,6 +208,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
 
             PineDebugNpcIconPatch.icons.Add(daycare.Character, AssetMan.Get<Texture2D>("DaycareTex/BorderDaycare"));
+            CharacterRadarColorPatch.colors.Add(daycare.Character, daycare.audMan.subtitleColor);
 
             AssetMan.Add("MrDaycareNpc", daycare);
         }
@@ -318,8 +319,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title == "END")
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(20));
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(12));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(30));
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -334,8 +335,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(20));
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(10));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(30));
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -386,7 +387,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 Items.DetentionKey
             };
-            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAllWithTags(false, "key", "shape_key"))
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAllWithTags(false, "shape_key"))
             {
                 if (!keyItems.Contains(meta.id))
                     keyItems.Add(meta.id);

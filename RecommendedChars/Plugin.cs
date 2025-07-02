@@ -21,10 +21,13 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInPlugin(ModGuid, ModName, ModVersion)]
+    [BepInPlugin(ModGuid, ModName, ModVersion), BepInDependency(ApiGuid)]
+
     [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CustomMusicsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(PineDebugGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CharacterRadarGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(ApiGuid)]
     class RecommendedCharsPlugin : BaseUnityPlugin
     {
         public const string ModName = "Recommended Character Pack";
@@ -33,6 +36,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
         internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
+        internal const string CustomMusicsGuid = "pixelguy.pixelmodding.baldiplus.custommusics";
+        internal const string PineDebugGuid = "alexbw145.baldiplus.pinedebug";
+        internal const string CharacterRadarGuid = "org.aestheticalz.baldi.characterradar";
         internal const string CrispyPlusGuid = "mtm101.rulerp.baldiplus.crispyplus";
 
         public static readonly AssetManager AssetMan = new AssetManager();

@@ -55,6 +55,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             artsWithWires.audMan = artsWithWires.GetComponent<AudioManager>();
             artsWithWires.audMan.subtitleColor = new Color(138f / 255f, 22f / 255f, 15f / 255f);
 
+            CharacterRadarColorPatch.colors.Add(artsWithWires.character, artsWithWires.audMan.subtitleColor);
+
             artsWithWires.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Intro"), "Sfx_RecChars_Wires_Intro", SoundType.Effect, artsWithWires.audMan.subtitleColor);
             artsWithWires.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Loop"), "Sfx_RecChars_Wires_Loop", SoundType.Effect, artsWithWires.audMan.subtitleColor);
 

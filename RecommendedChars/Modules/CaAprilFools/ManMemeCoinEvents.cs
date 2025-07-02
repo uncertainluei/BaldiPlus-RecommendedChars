@@ -52,6 +52,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemsRare.AddItem(Items.Nametag, 27);
             ItemsRare.AddItem(Items.DoorLock, 26);
             ItemsRare.AddItem(Items.Bsoda, 26);
+            ItemsRare.AddItem(Items.ReachExtender, 26);
             ItemsRare.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 25);
             ItemsRare.AddItem(Items.PortalPoster, 24);
             ItemsRare.AddItem(Items.InvisibilityElixir, 23);
@@ -82,7 +83,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 ManMemeItemAction itemsSmallBsodas = new ManMemeItemAction(2, 3, true);
                 itemsSmallBsodas.AddItem(smallBsoda, 1);
-                AddToEvents(itemsSmallBsodas, 35);
+                AddToEvents(itemsSmallBsodas, 45);
             }
         }
     }

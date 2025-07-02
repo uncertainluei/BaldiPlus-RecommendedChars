@@ -15,6 +15,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public static WeightedNPC Weighted(this NPC selection, int weight) => selection.Weighted<NPC, WeightedNPC>(weight);
         public static WeightedItemObject Weighted(this ItemObject selection, int weight) => selection.Weighted<ItemObject, WeightedItemObject>(weight);
         public static WeightedPosterObject Weighted(this PosterObject selection, int weight) => selection.Weighted<PosterObject, WeightedPosterObject>(weight);
+        public static WeightedGameObject Weighted(this GameObject selection, int weight) => selection.Weighted<GameObject, WeightedGameObject>(weight);
+        public static WeightedTransform Weighted(this Transform selection, int weight) => selection.Weighted<Transform, WeightedTransform>(weight);
 
         // Done for future-proofing
         public static void CopyCharacterWeight(this List<WeightedNPC> list, Character characterToCopy, NPC newNpc)

@@ -60,7 +60,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetMeta(nerfGunMeta)
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Large"), 50f))
             .SetShopPrice(450)
-            .SetGeneratorCost(50)
+            .SetGeneratorCost(45)
             .SetItemComponent<ITM_NerfGun>();
 
             ItemObject nerfItm = nerfGunBuilder.Build();
@@ -96,6 +96,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             circle.animator.enabled = false;
 
             circle.audMan.subtitleColor = new Color(52f / 255f, 182f / 255f, 69f / 255f);
+            CharacterRadarColorPatch.colors.Add(CircleNpc.charEnum, circle.audMan.subtitleColor);
+
             circle.audCount = new SoundObject[9];
             for (int i = 0; i < 9; i++)
                 circle.audCount[i] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>($"CircleAud/Circle_{i + 1}"), $"Vfx_Playtime_{i + 1}", SoundType.Voice, circle.audMan.subtitleColor);
@@ -184,7 +186,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         AddToNpcs(scene, 100);
                         break;
                 }
-                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 30 });
+                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 50 });
             }
         }
 
@@ -214,7 +216,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(100));
             gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(50));
-            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 30 });
+            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 50 });
         }
     }
 }

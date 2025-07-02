@@ -12,7 +12,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPostfix]
         private static void NotebookGateItemFits(StandardDoor __instance, ref bool __result)
         {
-            if (__instance is DaycareStandardDoor)
+            if (__instance is DaycareStandardDoor daycareDoor && daycareDoor.IsNotebookGate)
                 __result = false;
         }
 

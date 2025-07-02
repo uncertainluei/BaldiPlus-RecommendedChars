@@ -15,6 +15,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public Sprite sprNormal;
         public Sprite sprSad;
 
+        public float successCooldown = 50f;
+
         internal static Character charEnum = (Character)(-1);
     }
 

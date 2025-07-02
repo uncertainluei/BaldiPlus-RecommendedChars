@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Design;
-using AsmResolver.DotNet;
-using MTM101BaldAPI.Registers;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {

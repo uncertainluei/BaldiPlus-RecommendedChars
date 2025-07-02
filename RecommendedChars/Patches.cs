@@ -12,7 +12,23 @@ using System;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchMod("alexbw145.baldiplus.pinedebug")]
+    [ConditionalPatchMod(RecommendedCharsPlugin.CharacterRadarGuid)]
+    [HarmonyPatch(typeof(CharacterRadar.Hooks.NpcHooks), "AwakePostfix")]
+    static class CharacterRadarColorPatch
+    {
+        internal static readonly Dictionary<Character, Color> colors = new Dictionary<Character, Color>();
+
+        private static bool Prefix(NPC __0)
+        {
+            if (__0.Navigator == null || __0.Navigator.Entity == null) return false;
+            if (!colors.ContainsKey(__0.character)) return true;
+
+            BaseGameManager.Instance.Ec.map.AddArrow(__0.Navigator.Entity, colors[__0.character]);
+            return false;
+        }
+    }
+
+    [ConditionalPatchMod(RecommendedCharsPlugin.PineDebugGuid)]
     [HarmonyPatch(typeof(PineDebug.PineDebugManager), "InitAssets")]
     static class PineDebugNpcIconPatch
     {

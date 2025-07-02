@@ -32,7 +32,7 @@
 		<Reference Include="PineDebug">
 			<HintPath>..\Dependencies\PineDebug.dll</HintPath>
 		</Reference>
-		<Reference Include="AnalogFeelings.CharacterRadar">
+		<Reference Include="AnalogFeelings.CharacterRadar" Publicize="true">
 			<HintPath>..\Dependencies\AnalogFeelings.CharacterRadar.dll</HintPath>
 		</Reference>
 		<Reference Include="BBPlusCustomMusics" Publicize="true">

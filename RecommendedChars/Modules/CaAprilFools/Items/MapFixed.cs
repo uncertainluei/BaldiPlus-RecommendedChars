@@ -1,5 +1,6 @@
 ﻿namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
+    /* Commented out for now
     public class ITM_MapFixed : ITM_Map
     {
         public SoundObject ding;
@@ -12,4 +13,5 @@
             return true;
         }
     }
+    */
 }

@@ -15,18 +15,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override bool Use(PlayerManager pm)
         {
             Destroy(gameObject);
-
             if (!Physics.Raycast(pm.transform.position, CoreGameManager.Instance.GetCamera(pm.playerNumber).transform.forward, out _hit, pm.pc.reach, layerMask.mask))
                 return false;
 
             _acceptors = _hit.transform.GetComponents<IItemAcceptor>();
-
-            foreach (Items itm in keyEnums)
+            foreach (IItemAcceptor itemAcceptor in _acceptors)
             {
-                foreach (IItemAcceptor itemAcceptor in _acceptors)
+                foreach (Items itm in keyEnums)
                 {
-                    if (itemAcceptor == null) break;
                     if (!itemAcceptor.ItemFits(itm)) continue;
+                    itemAcceptor.InsertItem(pm, pm.ec);
 
                     if (nextStage)
                     {

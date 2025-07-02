@@ -28,9 +28,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 circle.sprite.sprite = circle.sprSad;
                 return;
             }
-            // If you win the jump rope game, then his cooldown is added by 200%
+            // If you win the jump rope game, then his cooldown is instead 50 seconds
             if (circle.behaviorStateMachine.currentState is Playtime_Cooldown cooldown)
-                cooldown.time = circle.initialCooldown * 3;
+                cooldown.time = circle.successCooldown;
         }
 
         [HarmonyAfter(RecommendedCharsPlugin.AnimationsGuid)]
@@ -107,7 +107,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [ConditionalPatchMod("pixelguy.pixelmodding.baldiplus.custommusics")]
+    [ConditionalPatchMod(RecommendedCharsPlugin.CustomMusicsGuid)]
     [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Circle")]
     [HarmonyPatch(typeof(BBPlusCustomMusics.MusicalInjection), "PlaytimeDingOverride")]
     static class CircleMusicCompatPatch

@@ -15,6 +15,9 @@ using System.Linq;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.ComponentModel;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -23,8 +26,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override string Name => "CA April Fools";
 
         public override Action LoadAction => Load;
-        public override Action PostLoadAction => ManMemeCoinEvents.InitializePostEvents;
+        public override Action PostLoadAction => PostLoad;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
+        public override Action<string, int, CustomLevelObject> LevelAddendAction => FloorAddendLvl;
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCaAprilFools;
 
@@ -37,7 +41,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("CartoonEating", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CartoonEating" && x.GetInstanceID() >= 0));
 
             LoadItems();
-            LoadFixedMap();
+            //LoadFixedMap();
             LoadManMemeCoinNpc();
             ManMemeCoinEvents.InitializeBaseEvents();
 
@@ -99,6 +103,31 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             cherryBsodaUse.layerMask = hook.layerMask;
 
             AssetMan.Add("CherryBsodaItem", cherryBsoda);
+
+
+            // Cherry BSODA Machine
+            SodaMachine sodaMachine = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<SodaMachine>().First(x => x.name == "SodaMachine" && x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform);
+            sodaMachine.name = "RecChars CherrySodaMachine";
+            sodaMachine.item = cherryBsoda;
+
+            Renderer renderer = sodaMachine.meshRenderer;
+
+            renderer.sharedMaterials = new Material[]
+            {
+                renderer.sharedMaterials[0],
+                new Material(renderer.sharedMaterials[1])
+                {
+                    name = "CherryBsodaMachine",
+                    mainTexture = AssetMan.Get<Texture2D>("CAItems/CherryBsodaMachine")
+                }
+            };
+            sodaMachine.outOfStockMat = new Material(sodaMachine.outOfStockMat)
+            {
+                name = "CherryBsodaMachine_Out",
+                mainTexture = AssetMan.Get<Texture2D>("CAItems/CherryBsodaMachine_Out")
+            };
+
+            AssetMan.Add("CherrySodaMachine", sodaMachine);
 
 
             // Ultimate Apple
@@ -163,7 +192,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("ManglesItem", manglesItemObject2);
         }
 
-        // TODO: Implement this in my own "bugfix" mod
+        /*
         private void LoadFixedMap()
         {
             ItemObject map = ItemMetaStorage.Instance.FindByEnum(Items.Map).value;
@@ -172,7 +201,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ITM_MapFixed fixedMap = RecommendedCharsPlugin.CloneComponent<ITM_Map, ITM_MapFixed>((ITM_Map)map.item);
             fixedMap.ding = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CashBell");
             map.item = fixedMap;
-        }
+        }*/
 
         private void LoadManMemeCoinNpc()
         {
@@ -196,6 +225,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             coin.spriteRenderer[0].sprite = sprites[0];
 
             PineDebugNpcIconPatch.icons.Add(coin.Character, AssetMan.Get<Texture2D>("MMCoinTex/BorderMMCoin"));
+            CharacterRadarColorPatch.colors.Add(coin.Character, new Color(206/255f, 165/255f, 66/255f));
 
             coin.Navigator.avoidRooms = true;
             coin.Navigator.Entity.SetHeight(6f);
@@ -216,8 +246,80 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (scene.levelTitle == "END")
+            if (title == "END")
+            {
                 scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
+                scene.shopItems = scene.shopItems.AddRangeToArray(new WeightedItemObject[]
+                {
+                    AssetMan.Get<ItemObject>("ManglesItem").Weighted(40),
+                    AssetMan.Get<ItemObject>("CherryBsodaItem").Weighted(25),
+                    AssetMan.Get<ItemObject>("FlaminPuffsItem").Weighted(20),
+                    AssetMan.Get<ItemObject>("UltimateAppleItem").Weighted(5)
+                });
+                return;
+            }
+            if (title.StartsWith("F"))
+            {
+                if (id >= 2)
+                {
+                    scene.shopItems = scene.shopItems.AddRangeToArray(new WeightedItemObject[]
+                    {
+                        AssetMan.Get<ItemObject>("ManglesItem").Weighted(6+id*2),
+                        AssetMan.Get<ItemObject>("CherryBsodaItem").Weighted(5+id*2),
+                        AssetMan.Get<ItemObject>("FlaminPuffsItem").Weighted(4+id*2)
+                    });
+                }
+                if (scene.nextLevel?.nextLevel == null) // Is the final floor
+                    scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("UltimateAppleItem").Weighted(10));
+            }
+        }
+
+        private void FloorAddendLvl(string title, int id, CustomLevelObject lvl)
+        {
+            if (title != "END" && (!title.StartsWith("F") || id < 1)) return;
+
+            GameObject cherryMachine = AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject;
+
+            List<StructureWithParameters> structures = new List<StructureWithParameters>(lvl.forcedStructures.Where(x =>
+                x.prefab is Structure_EnvironmentObjectPlacer));
+            foreach (WeightedStructureWithParameters potential in lvl.potentialStructures)
+            {
+                if (potential.selection?.prefab is Structure_EnvironmentObjectPlacer)
+                    structures.Add(potential.selection);
+            }
+            foreach (StructureWithParameters strct in structures)
+            {
+                if (strct.parameters.prefab == null || strct.parameters.prefab.Length == 0) continue;
+                WeightedGameObject sodaMachine = strct.parameters.prefab.FirstOrDefault(x =>
+                    x.selection?.name == "SodaMachine" &&
+                    x.selection?.GetInstanceID() >= 0);
+                if (sodaMachine == null) continue;
+
+                strct.parameters.prefab = strct.parameters.prefab.AddToArray(cherryMachine.Weighted(6));
+            }
+        }
+
+        private void PostLoad()
+        {
+            ManMemeCoinEvents.InitializePostEvents();
+
+            // Modify RoomAssets containing vending machines to include Cherry BSODA machines if possible
+            Transform cherryMachine = AssetMan.Get<SodaMachine>("CherrySodaMachine").transform;
+            RoomAsset[] roomsWithSodaMachines = Resources.FindObjectsOfTypeAll<RoomAsset>()
+                .Where(x => x.basicSwaps?.Count > 0).ToArray();
+
+            foreach (RoomAsset room in roomsWithSodaMachines)
+            {
+                foreach (BasicObjectSwapData swapData in room.basicSwaps)
+                {
+                    if (swapData.prefabToSwap == null ||
+                        swapData.prefabToSwap.name != "SodaMachine" ||
+                        swapData.prefabToSwap.GetInstanceID() < 0)
+                        continue;
+
+                    swapData.potentialReplacements = swapData.potentialReplacements.AddToArray(cherryMachine.Weighted(6));
+                }
+            }
         }
 
         private void TrySpawnManMemeCoin(LevelGenerator gen)

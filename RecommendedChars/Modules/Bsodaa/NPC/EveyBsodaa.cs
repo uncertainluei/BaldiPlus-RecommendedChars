@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
-using AsmResolver.DotNet;
+using MTM101BaldAPI;
 using MTM101BaldAPI.Components;
 
 using UnityEngine;
@@ -14,6 +13,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static Character charEnum = (Character)(-1);
         internal static Dictionary<string, Sprite[]> animations;
 
+        public float normalSpeed;
+        public float restockSpeed = 24f;
 
         public CustomSpriteAnimator animator;
 
@@ -34,6 +35,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Initialize();
 
+            normalSpeed = Navigator.maxSpeed;
+
             animator.PopulateAnimations(animations, 8);
             animator.Play("Idle",1f);
 
@@ -45,7 +48,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void Start()
         {
-            Debug.LogWarning("Start");
             if (autoRestock)
             {
                 behaviorStateMachine.ChangeState(new EveyBsodaa_WanderingReady(this));
@@ -322,7 +324,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             base.Update();
             timeLeft -= Time.deltaTime * npc.TimeScale;
             if (timeLeft <= 0f)
-                npc.behaviorStateMachine.ChangeState(new EveyBsodaa_Wandering(bsodaa));
+                npc.behaviorStateMachine.ChangeState(new EveyBsodaa_WanderingReady(bsodaa));
         }
     }
 
@@ -345,6 +347,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Enter()
         {
             base.Enter();
+            bsodaa.Navigator.maxSpeed = bsodaa.restockSpeed;
             ChangeNavigationState(new NavigationState_TargetPosition(npc, 127, targetLocation));
         }
 
@@ -352,18 +355,26 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void DestinationEmpty()
         {
             base.DestinationEmpty();
+            bsodaa.StartCoroutine(Restock());
+        }
+
+        private IEnumerator Restock()
+        {
+            yield return new WaitForSecondsNPCTimescale(npc, 0.5f);
+            bsodaa.Navigator.maxSpeed = bsodaa.normalSpeed;
             if (bsodaaRoom.HelperInStock)
             {
                 bsodaaRoom.Helper.Restock();
+                yield return new WaitForSecondsNPCTimescale(npc, 0.3f);
                 npc.behaviorStateMachine.ChangeState(new EveyBsodaa_LeavingRoom(bsodaa));
-                return;
+                yield break;
             }
             bsodaa.BsodaaRooms.Remove(bsodaaRoom.Room);
             if (!bsodaa.RoomsToRestock())
             {
                 ChangeNavigationState(new NavigationState_TargetPosition(npc, 127, npc.ec.RealRoomMid(bsodaaRoom.room)));
                 npc.behaviorStateMachine.ChangeState(new EveyBsodaa_EmptyHanded(bsodaa));
-                return;
+                yield break;
             }
         }
     }

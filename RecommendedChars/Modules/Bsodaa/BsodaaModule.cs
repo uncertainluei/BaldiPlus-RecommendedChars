@@ -179,11 +179,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 bsodaaGuy.spriteRenderer[0].sprite
             });
 
+            bsodaaGuy.navigator.accel = 10f;
+            bsodaaGuy.navigator.speed = 14f;
+            bsodaaGuy.navigator.maxSpeed = 14f;
+
             bsodaaGuy.animator = bsodaaGuy.gameObject.AddComponent<CustomSpriteAnimator>();
             bsodaaGuy.animator.spriteRenderer = bsodaaGuy.spriteRenderer[0];
 
             bsodaaGuy.audMan = bsodaaGuy.GetComponent<AudioManager>();
             bsodaaGuy.audMan.subtitleColor = new Color(3f/255f, 36f/255f, 1f);
+
+            PineDebugNpcIconPatch.icons.Add(bsodaaGuy.Character, AssetMan.Get<Texture2D>("BsodaaTex/BorderBsodaa"));
+            CharacterRadarColorPatch.colors.Add(bsodaaGuy.Character, bsodaaGuy.audMan.subtitleColor);
 
             bsodaaGuy.audCharging = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Charging"), "Sfx_RecChars_Bsodaa_Charging", SoundType.Effect, bsodaaGuy.audMan.subtitleColor);
             bsodaaGuy.audReloaded = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Thanks"), "Vfx_RecChars_Bsodaa_Thanks", SoundType.Voice, bsodaaGuy.audMan.subtitleColor);
@@ -198,8 +205,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.projectilePre.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Spray"), 8f);
             bsodaaGuy.projectilePre.time = 10f;
             bsodaaGuy.projectilePre.name = "Bsodaa_Spray";
-
-            PineDebugNpcIconPatch.icons.Add(bsodaaGuy.Character, AssetMan.Get<Texture2D>("BsodaaTex/BorderBsodaa"));
 
             AssetMan.Add("BsodaaNpc", bsodaaGuy);
         }
