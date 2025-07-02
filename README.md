@@ -1,8 +1,7 @@
 ![Recommended Characters Pack](Info/logo.png)
-aka "The WORST Baldi's Basics Mod I've Ever Played.." according to grays and land... (don't worry though, he just REALLY hates playtime).
-
-![Version](https://img.shields.io/badge/version-1.1-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
+![Version](https://img.shields.io/badge/version-1.2-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
 ![BB+ version](https://img.shields.io/badge/bb+-0.11-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-7.0.1.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+*aka "The WORST Baldi's Basics Mod I've Ever Played.." according to grays and land... (don't worry though, he just REALLY hates playtime)*
 
 A decently sized and modular Baldi's Basics Plus mod that adds content with no rhyme or reason, usually requested by members in the Baldi GameBanana section and/or reinterpretations of characters from mods/fan games from the past.
 
