@@ -30,7 +30,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
     class RecommendedCharsPlugin : BaseUnityPlugin
     {
-        public const string ModName = "Recommended Character Pack";
+        public const string ModName = "Recommended Characters Pack";
         public const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
         public const string ModVersion = "1.2";
 
