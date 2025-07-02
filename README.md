@@ -9,6 +9,7 @@ A decently sized and modular Baldi's Basics Plus mod that adds content with no r
 # Licensing & Credits
 Code is licensed under the [GNU General Public License v3](LICENSE).
 
+Non-code assets:
 - *Circle* assets ([Textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Npc/Circle), [Audio](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/Circle)) and [*Nerf Gun* assets]((Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Item/NerfGun)) are property of [displ_ay](https://gamebanana.com/members/1698080), adjusted by [me (uncertain_luei)](https://github.com/uncertainluei) and [VerySugaryGoon](https://gamebanana.com/members/2720722) - proof of permission can be seen [here](Info/screenshot-display.png)
 - *Gotta Bully* assets ([Textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Npc/GottaBully), [Audio](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/GottaBully)), [*Swapped Closet* assets](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Room/SwapCloset) and [*Arts with Wires* audio](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Audio/ArtsWWires) originally edited by [Tapliasmy](https://gamebanana.com/members/1661542), adjusted by me (uncertain_luei) and VerySugaryGoon
 - [*Arts with Wires* textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Npc/ArtsWWires) made by [B-Side Skid](https://gamebanana.com/members/1879552), 1st Prize model by [saintza4](https://gamebanana.com/members/1657511)
