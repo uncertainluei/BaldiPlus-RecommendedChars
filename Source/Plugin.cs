@@ -32,7 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public const string ModName = "Recommended Characters Pack";
         public const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
-        public const string ModVersion = "1.2";
+        public const string ModVersion = "1.2.0.1";
 
         internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
         internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";

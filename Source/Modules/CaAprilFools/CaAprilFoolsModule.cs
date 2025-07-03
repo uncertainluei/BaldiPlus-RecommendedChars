@@ -37,7 +37,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "CaAprilFools"), x => "CAItems/" + x.name);
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "MMCoin"), x => "MMCoinTex/" + x.name);
 
-            AssetMan.Add("Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Boing.wav"), "RecChars_Sfx_Boing", SoundType.Effect, Color.white));
+            AssetMan.Add("Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_CherryBsodaBoing", SoundType.Effect, Color.white));
             AssetMan.Add("CartoonEating", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CartoonEating" && x.GetInstanceID() >= 0));
 
             LoadItems();
@@ -66,7 +66,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ITM_FlaminPuffs puffsItm = (ITM_FlaminPuffs)puffs.item;
             puffsItm.name = "Itm_FlaminPuffs";
             puffsItm.gaugeSprite = puffs.itemSpriteSmall;
-            puffsItm.audEat = ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat;
+            puffsItm.audEat = AssetMan.Get<SoundObject>("CartoonEating");
 
             AssetMan.Add("FlaminPuffsItem", puffs);
 
@@ -166,18 +166,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetGeneratorCost(60)
             .SetItemComponent<ITM_Mangles>();
 
+            SoundObject audEat = ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat;
+
             ItemObject manglesItemObject = manglesBuilder.Build();
             manglesItemObject.name = "RecChars Mangles1";
             ITM_Mangles manglesItm = (ITM_Mangles)manglesItemObject.item;
             manglesItm.name = "Itm_Mangles1";
-            manglesItm.audEat = puffsItm.audEat;
+            manglesItm.audEat = audEat;
 
             manglesBuilder.SetNameAndDescription("Itm_RecChars_Mangles2", "Desc_RecChars_Mangles");
             ItemObject manglesItemObject2 = manglesBuilder.Build();
             manglesItemObject2.name = "RecChars Mangles2";
             manglesItm = (ITM_Mangles)manglesItemObject2.item;
             manglesItm.name = "Itm_Mangles2";
-            manglesItm.audEat = puffsItm.audEat;
+            manglesItm.audEat = audEat;
             manglesItm.nextStage = manglesItemObject;
 
             manglesBuilder.SetNameAndDescription("Itm_RecChars_Mangles3", "Desc_RecChars_Mangles");
@@ -186,7 +188,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             manglesItemObject2.name = "RecChars Mangles3";
             manglesItm = (ITM_Mangles)manglesItemObject2.item;
             manglesItm.name = "Itm_Mangles3";
-            manglesItm.audEat = puffsItm.audEat;
+            manglesItm.audEat = audEat;
             manglesItm.nextStage = manglesItemObject;
 
             AssetMan.Add("ManglesItem", manglesItemObject2);
