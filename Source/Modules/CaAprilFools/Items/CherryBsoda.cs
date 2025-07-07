@@ -18,8 +18,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected float Speed => bsoda.speed;
         public byte bouncesLeft = 5;
 
-        private bool destroyQueued = false;
-
         public override bool Use(PlayerManager pm)
         {
             bsoda.Use(pm);
@@ -27,15 +25,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Entity.OnEntityMoveInitialCollision += OnEntityMoveCollision;
             // Remove the ITM_BSODA EntityTrigger as it is grabbed by the Entity regardless of the component being disabled
-            Entity.iEntityTrigger = Entity.iEntityTrigger.Where(x => !(x is ITM_BSODA)).ToArray();
+            Entity.iEntityTrigger = Entity.iEntityTrigger.Where(x => x is not ITM_BSODA).ToArray();
 
-            AddPlayerToMoveMod();
-            return true;
-        }
-
-        protected virtual void AddPlayerToMoveMod()
-        {
             currentPlayer.plm.Entity.ExternalActivity.moveMods.Add(MoveMod);
+            bsoda.launching = true;
+            return true;
         }
 
         private void Update()
@@ -51,41 +45,34 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public void EntityTriggerEnter(Collider other)
         {
-            if (!destroyQueued)
-                VirtualTriggerEnter(other);
+            bsoda.EntityTriggerEnter(other);
         }
 
         public void EntityTriggerExit(Collider other)
         {
-            if (!destroyQueued)
-                VirtualTriggerExit(other);
+            bsoda.EntityTriggerExit(other);
+            if (other.CompareTag("Player") && other.transform == currentPlayer.transform && currentPlayer.plm.am.moveMods.Contains(MoveMod))
+            {
+                currentPlayer.plm.am.moveMods.Remove(MoveMod);
+                bsoda.time *= 0.66f;
+            }
         }
 
         public void EntityTriggerStay(Collider other)
         {
         }
 
-        protected virtual void VirtualTriggerEnter(Collider other)
-        {
-        }
-        protected virtual void VirtualTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Player") && other.transform == currentPlayer.transform)
-                Destroy();
-        }
-
         protected void Destroy()
         {
-            destroyQueued = true;
-            VirtualDestroy();
+            if (currentPlayer.plm.am.moveMods.Contains(MoveMod))
+                currentPlayer.plm.am.moveMods.Remove(MoveMod);
+
+            foreach (ActivityModifier activityMod in bsoda.activityMods)
+                activityMod?.moveMods.Remove(MoveMod);
+
             Destroy(gameObject);
         }
-
-        protected virtual void VirtualDestroy()
-        {
-            currentPlayer.plm.am.moveMods.Remove(MoveMod);
-        }
-
+        
         private void OnEntityMoveCollision(RaycastHit hit)
         {
             if (layerMask.Contains(hit.collider.gameObject.layer))
@@ -101,33 +88,4 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
     }
-
-    /* Similar in function to the Times Cherry BSODA. 
-    public class ITM_CherryBsoda_PushesNpcs : ITM_CherryBsoda
-    {   
-        protected override void AddPlayerToMoveMod()
-        {
-        }
-
-        protected override void VirtualTriggerEnter(Collider other)
-        {
-            bsoda.EntityTriggerEnter(other);
-        }
-
-        protected override void VirtualTriggerExit(Collider other)
-        {
-            bsoda.EntityTriggerExit(other);
-            if (other.CompareTag("Player") && other.transform == currentPlayer.transform && currentPlayer.plm.am.moveMods.Contains(MoveMod))
-                currentPlayer.plm.am.moveMods.Remove(MoveMod);
-        }
-
-        protected override void VirtualDestroy()
-        {
-            if (currentPlayer.plm.am.moveMods.Contains(MoveMod))
-                currentPlayer.plm.am.moveMods.Remove(MoveMod);
-
-            foreach (ActivityModifier activityMod in bsoda.activityMods)
-                activityMod.moveMods.Remove(MoveMod);
-        }
-    } */
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MTM101BaldAPI;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches

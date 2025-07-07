@@ -28,6 +28,11 @@
 	{ "key": "Desc_RecChars_Pie", "value": "Pie\nOne of Dave's countless home-baked pies! While you could eat it,\nit's more fun to throw these towards unsuspecting victims!" },
 	{ "key": "Desc_RecChars_DoorKey", "value": "Door Key\nThe end-all-be-all solution to unlocking all (non-swinging) doors!\nIt is also quite sturdy for its use case..." },
 	
-	{ "key": "Sfx_RecChars_PieSplat", "value": "*SPLAT!*" }
+	{ "key": "Sfx_RecChars_PieSplat", "value": "*SPLAT!*" },
+	
+	{ "key": "Adv_Elv_Tip_RecChars_Pie", "value": "Throw a pie at a character to temporarily obstruct their vision!" },
+	{ "key": "Adv_Elv_Tip_RecChars_DoorKey", "value": "The Door Key can be used to unlock regular locked doors as well as shape key doors!" },
+	{ "key": "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "value": "Mr. Daycare doesn't scold you for entering faculty-only rooms, escaping detention or being in school after-hours!" },
+	{ "key": "Adv_Elv_Tip_RecChars_MrDaycareEarly", "value": "Mr. Daycare will activate early if you enter the Daycare before you get the required notebook count." }
   ]
 }

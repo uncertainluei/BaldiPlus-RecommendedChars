@@ -17,7 +17,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public abstract class Module
     {
-        // These three are here for convenience sake
+        // For quick access
         protected static AssetManager AssetMan => RecommendedCharsPlugin.AssetMan;
         internal static RecommendedCharsPlugin Plugin => RecommendedCharsPlugin.Plugin;
         internal static PluginInfo Info => Plugin.Info;
@@ -51,8 +51,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     ModuleLoadEvent loadEvent = (ModuleLoadEvent)Activator.CreateInstance(data.AttributeType, [.. args]);
                     if (!loadEvent.ShouldRun(order)) continue;
 
-                    RecommendedCharsPlugin.Log.LogInfo($"{Name} - {method.Name}");
-                    method.Invoke(this, []);
+                    try
+                    {
+                        method.Invoke(this, []);
+                    }
+                    catch (Exception e)
+                    {
+                        MTM101BaldiDevAPI.CauseCrash(Info, e);
+                    }
                     break;
                 }
             }

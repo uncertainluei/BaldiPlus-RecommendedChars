@@ -8,11 +8,12 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
+using BaldiLevelEditor;
 using PlusLevelLoader;
 
 using System;
 using System.IO;
-
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
@@ -104,6 +105,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLegacyEditor()
+        {
+            AssetMan.Add("WiresEditor/Npc_artswithwires", AssetLoader.TextureFromMod(Plugin, "Textures", "Editor", "Npc_artswithwires.png"));
+
+            BaldiLevelEditorPlugin.characterObjects.Add("recchars_artswithwires", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc").gameObject, true));
+            LegacyEditorPatches.OnEditorInit += editor => editor.toolCats.Find(x => x.name == "characters").tools.Add(new ExtendedNpcTool("recchars_artswithwires", "WiresEditor/Npc_artswithwires"));
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

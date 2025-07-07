@@ -26,9 +26,13 @@
   - *Pie* splat sound effect uploaded by [NastyGooeySlimyFanboy on YouTube](https://www.youtube.com/watch?v=2FhsMJB0_fs)
   - *Cherry BSODA* boing sound effect from the Yorgurt Kingdom Discord server soundboard
   
+- Base Legacy Editor UI assets made by MissingTextureMan101](https://gamebanana.com/members/1665049), modified for use for the mod's [Legacy Editor UI textures](Resources/io.github.uncertainluei.baldiplus.recommendedchars/Textures/Editor).
+  
 ## Requests
 - [**VerySugaryGoon**](https://gamebanana.com/members/2720722) - [Circle](https://gamebanana.com/requests/59865), [Gotta Bully and Arts with Wires](https://gamebanana.com/requests/75363), [Mr. Daycare and Eveyone's Bsodaa](https://gamebanana.com/requests/75637)
 
 ## Special Thanks
 - [PixelGuy](https://gamebanana.com/members/1713226)
 - [MissingTextureMan101](https://gamebanana.com/members/1665049)
+- [Mr. Sasha](https://gamebanana.com/members/2489058)
+- [B-Side Skid](https://gamebanana.com/members/1879552) - Idea for one of the Bsodaa Room layouts

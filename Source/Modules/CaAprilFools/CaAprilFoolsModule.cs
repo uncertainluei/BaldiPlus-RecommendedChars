@@ -8,17 +8,19 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI;
 
+using BaldiLevelEditor;
+using PlusLevelFormat;
+using PlusLevelLoader;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.ComponentModel;
-using Unity.Collections.LowLevel.Unsafe;
-using PlusLevelLoader;
+using BaldisBasicsPlusAdvanced.API;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -41,7 +43,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("CartoonEating", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CartoonEating" && x.GetInstanceID() >= 0));
 
             LoadItems();
-            //LoadFixedMap();
             LoadManMemeCoinNpc();
             ManMemeCoinEvents.InitializeBaseEvents();
 
@@ -87,8 +88,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaClone.enabled = false;
             bsodaClone.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Spray"), 12f);
             bsodaClone.speed = 40f;
-            bsodaClone.time = 10f;
-            bsodaClone.moveMod.movementMultiplier = 0.45f;
+            bsodaClone.time = 15f;
+            bsodaClone.moveMod.movementMultiplier = 0.33f;
 
             ITM_CherryBsoda cherryBsodaUse = bsodaClone.gameObject.AddComponent<ITM_CherryBsoda>();
 
@@ -194,17 +195,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("ManglesItem", manglesItemObject2);
         }
 
-        /*
-        private void LoadFixedMap()
-        {
-            ItemObject map = ItemMetaStorage.Instance.FindByEnum(Items.Map).value;
-            map.addToInventory = false;
-
-            ITM_MapFixed fixedMap = RecommendedCharsPlugin.CloneComponent<ITM_Map, ITM_MapFixed>((ITM_Map)map.item);
-            fixedMap.ding = Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CashBell");
-            map.item = fixedMap;
-        }*/
-
         private void LoadManMemeCoinNpc()
         {
             ManMemeCoin coin = new NPCBuilder<ManMemeCoin>(Info)
@@ -251,12 +241,55 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_manmemecoin", AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
 
-            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_flaminpuffs", AssetMan.Get<ItemObject>("FlaminPuffs"));
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_flaminpuffs", AssetMan.Get<ItemObject>("FlaminPuffsItem"));
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_cherrybsoda", AssetMan.Get<ItemObject>("CherryBsodaItem"));
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_ultimateapple", AssetMan.Get<ItemObject>("UltimateAppleItem"));
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_mangles",  AssetMan.Get<ItemObject>("ManglesItem"));
 
             PlusLevelLoaderPlugin.Instance.prefabAliases.Add("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject);
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLegacyEditor()
+        {
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "CaAprilFools"), x => "CAEditor/" + x.name);
+
+            BaldiLevelEditorPlugin.characterObjects.Add("recchars_manmemecoin", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc").gameObject, true));
+
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_flaminpuffs", AssetMan.Get<ItemObject>("FlaminPuffsItem"));
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_cherrybsoda", AssetMan.Get<ItemObject>("CherryBsodaItem"));
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_ultimateapple", AssetMan.Get<ItemObject>("UltimateAppleItem"));
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_mangles", AssetMan.Get<ItemObject>("ManglesItem"));
+
+            BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject, Vector3.zero));
+            
+            LegacyEditorPatches.OnEditorInit += editor =>
+            {
+                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
+                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
+                List<EditorTool> objects = editor.toolCats.Find(x => x.name == "objects").tools;
+
+                npcs.Add(new ExtendedNpcTool("recchars_manmemecoin", "CAEditor/Npc_manmemecoin"));
+
+                items.Add(new ExtendedItemTool("recchars_flaminpuffs", "CAEditor/Itm_flaminpuffs"));
+                items.Add(new ExtendedItemTool("recchars_cherrybsoda", "CAEditor/Itm_cherrybsoda"));
+                items.Add(new ExtendedItemTool("recchars_ultimateapple", "CAEditor/Itm_ultimateapple"));
+                items.Add(new ExtendedItemTool("recchars_mangles", "CAEditor/Itm_mangles"));
+
+                objects.Add(new ExtendedRotatableTool("recchars_cherrysodamachine", "CAEditor/Object_cherrysodamachine"));
+            };
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        private void AdvancedCompat()
+        {
+            ItemObject flaminPuffs = AssetMan.Get<ItemObject>("FlaminPuffsItem");
+            flaminPuffs.item = RecommendedCharsPlugin.CloneComponent<ITM_FlaminPuffs, ITM_FlaminPuffs_AdvancedCompat>((ITM_FlaminPuffs)flaminPuffs.item);
+
+            ApiManager.AddNewSymbolMachineWords(Info, "Monk", "Tone", "Chaos", "Meme", "Pear", "Weird", "Zeed", "Roy", "Oreo");
+            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_ManMemeSpawning", "Adv_Elv_Tip_RecChars_ManMemeCoin",
+                "Adv_Elv_Tip_RecChars_FlaminPuffsWarmth", "Adv_Elv_Tip_RecChars_FlaminPuffsWindows",
+                "Adv_Elv_Tip_RecChars_CherryBsoda", "Adv_Elv_Tip_RecChars_UltimateApple");
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

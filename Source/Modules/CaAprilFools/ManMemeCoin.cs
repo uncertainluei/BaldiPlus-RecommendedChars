@@ -72,22 +72,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public abstract class ManMemeCoin_StateBase : NpcState
+    public abstract class ManMemeCoin_StateBase(ManMemeCoin coin) : NpcState(coin)
     {
-        protected readonly ManMemeCoin coin;
-
-        public ManMemeCoin_StateBase(ManMemeCoin coin) : base(coin)
-        {
-            this.coin = coin;
-        }
+        protected readonly ManMemeCoin coin = coin;
     }
 
-    public class ManMemeCoin_Collected : ManMemeCoin_StateBase
+    public class ManMemeCoin_Collected(ManMemeCoin coin) : ManMemeCoin_StateBase(coin)
     {
-        public ManMemeCoin_Collected(ManMemeCoin coin) : base(coin)
-        {
-        }
-
         public override void Enter()
         {
             npc.normalLayer = 20;
@@ -102,14 +93,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ManMemeCoin_Idling : ManMemeCoin_StateBase
+    public class ManMemeCoin_Idling(ManMemeCoin coin) : ManMemeCoin_StateBase(coin)
     {
-        private readonly Transform transform;
-
-        public ManMemeCoin_Idling(ManMemeCoin coin) : base(coin)
-        {
-            transform = coin.transform;
-        }
+        private readonly Transform transform = coin.transform;
 
         public override void Enter()
         {
@@ -125,24 +111,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ManMemeCoin_Fleeing : ManMemeCoin_StateBase
+    public class ManMemeCoin_Fleeing(ManMemeCoin coin, PlayerManager player) : ManMemeCoin_StateBase(coin)
     {
-        private readonly PlayerManager player;
+        private readonly PlayerManager player = player;
 
         private bool playerInSight = true;
         private float fleeTime;
-
-        public ManMemeCoin_Fleeing(ManMemeCoin coin, PlayerManager player) : base(coin)
-        {
-            this.player = player;
-            npc.Navigator.SetSpeed(player.plm.realVelocity);
-        }
 
         public override void Enter()
         {
             base.Enter();
             fleeTime = 10f;
             playerInSight = true;
+            npc.Navigator.SetSpeed(player.plm.realVelocity);
             ChangeNavigationState(new NavigationState_WanderFlee(npc, 32, player.dijkstraMap));
         }
 

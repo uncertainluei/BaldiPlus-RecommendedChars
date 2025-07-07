@@ -52,7 +52,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (ClickableHidden()) return;
 
             _player = CoreGameManager.Instance.GetPlayer(player);
-            if (!_player.Tagged || (lastPlayer >= 0 && lastPlayer != player) || bsodaCount == 0 || _player.itm.InventoryFull())
+            if (!_player.Tagged || _player.Invisible || (lastPlayer >= 0 && lastPlayer != player) || bsodaCount == 0 || _player.itm.InventoryFull())
             {
                 if (!audMan.QueuedAudioIsPlaying)
                     audMan.PlaySingle(audOops);

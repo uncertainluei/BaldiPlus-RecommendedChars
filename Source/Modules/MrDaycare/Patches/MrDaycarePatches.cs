@@ -1,16 +1,19 @@
-﻿using System;
+﻿using BaldisBasicsPlusAdvanced.Game.Events;
+using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
+using BaldisBasicsPlusAdvanced.Patches.Characters;
+
+using HarmonyLib;
+
+using MTM101BaldAPI;
+using MTM101BaldAPI.Registers;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using HarmonyLib;
-using MTM101BaldAPI;
-using MTM101BaldAPI.Registers;
-using UnityEngine;
 
-using BaldisBasicsPlusAdvanced.Game.Events;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
-using BaldisBasicsPlusAdvanced.Patches.Characters;
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
@@ -178,7 +181,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         private static bool MrDaycareIgnoreRules(PlayerManager player)
         {
             if (!VotingEvent.TopicIsActive<PrincipalIgnoresSomeRulesTopic>()) return true;
-
             return !PrincipalObservePatch.allowedRulesWhenTopicActive.Contains(DaycareGuiltManager.GetInstance(player).RuleBreak);
         }
     }

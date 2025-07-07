@@ -9,13 +9,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public static class ManMemeCoinEvents
     {
-        public static readonly List<WeightedSelection<AbstractManMemeAction>> Events = new List<WeightedSelection<AbstractManMemeAction>>();
+        public static readonly List<WeightedSelection<AbstractManMemeAction>> Events = [];
 
-        public static readonly ManMemeItemAction ItemsYtps = new ManMemeItemAction(3, 5, true);
-        public static readonly ManMemeItemAction ItemsRare = new ManMemeItemAction(1, 2);
+        public static readonly ManMemeItemAction ItemsYtps = new(3, 5, true);
+        public static readonly ManMemeItemAction ItemsRare = new(1, 2);
         public static readonly ManMemeItemAction ItemsUnique = new ManMemeUniqueItemAction();
-
-        //private static readonly ManMemeItemAction ItemsMap = new ManMemeItemAction();
 
         public static void AddToEvents(this AbstractManMemeAction action, int weight)
         {
@@ -48,40 +46,36 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddToEvents(ItemsYtps, 50);
 
             //ItemsRare.SetInclusionCriteria((i) => GetPlayerInventoryCost(i) < 2500);
-            ItemsRare.AddItem(Items.Quarter, 29);
-            ItemsRare.AddItem(Items.Nametag, 27);
-            ItemsRare.AddItem(Items.DoorLock, 26);
-            ItemsRare.AddItem(Items.Bsoda, 26);
-            ItemsRare.AddItem(Items.ReachExtender, 26);
-            ItemsRare.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 25);
-            ItemsRare.AddItem(Items.PortalPoster, 24);
-            ItemsRare.AddItem(Items.InvisibilityElixir, 23);
-            ItemsRare.AddItem(Items.GrapplingHook, 22);
-            ItemsRare.AddItem(Items.Apple, 18);
+            ItemsRare.AddItem(Items.Quarter, 30);
+            ItemsRare.AddItem(Items.ZestyBar, 28);
+            ItemsRare.AddItem(Items.Nametag, 28);
+            ItemsRare.AddItem(Items.DoorLock, 25);
+            ItemsRare.AddItem(Items.Bsoda, 25);
+            ItemsRare.AddItem(Items.ReachExtender, 25);
+            ItemsRare.AddItem(ItemMetaStorage.Instance.GetPointsObject(100, true), 22);
+            ItemsRare.AddItem(Items.PortalPoster, 20);
+            ItemsRare.AddItem(Items.InvisibilityElixir, 20);
+            ItemsRare.AddItem(Items.GrapplingHook, 20);
             AddToEvents(ItemsRare, 60);
 
             //ItemsUnique.SetInclusionCriteria((i) => GetPlayerInventoryCost(i) < 1500);
-            ItemsUnique.AddModdedItem("CherryBsodaItem", 20);
-            ItemsUnique.AddModdedItem("ManglesItem", 22);
-            ItemsUnique.AddModdedItem("FlaminPuffsItem", 18);
-            ItemsUnique.AddModdedItem("UltimateAppleItem", 6);
+            ItemsUnique.AddModdedItem("CherryBsodaItem", 16);
+            ItemsUnique.AddModdedItem("ManglesItem", 16);
+            ItemsUnique.AddModdedItem("FlaminPuffsItem", 14);
+            ItemsUnique.AddModdedItem("UltimateAppleItem", 5);
             AddToEvents(ItemsUnique, 85);
-
-            /*ItemsMap.SetInclusionCriteria((i) => !CoreGameManager.Instance.mapChallenge && !CoreGameManager.Instance.saveMapPurchased);
-            ItemsMap.AddItem(Items.Map, 100);
-            AddToEvents(ItemsMap, 30);*/
         }
 
         internal static void InitializePostEvents()
         {
             ItemsRare.AddModdedItem("NerfGunItem", 28);
-            ItemsRare.AddModdedItem("PieItem", 26);
-            ItemsRare.AddModdedItem("DoorKey", 25);
+            ItemsRare.AddModdedItem("PieItem", 25);
+            ItemsRare.AddModdedItem("DoorKey", 20);
 
             ItemObject smallBsoda = RecommendedCharsPlugin.AssetMan.Get<ItemObject>("SmallDietBsodaItem");
             if (smallBsoda != null)
             {
-                ManMemeItemAction itemsSmallBsodas = new ManMemeItemAction(2, 3, true);
+                ManMemeItemAction itemsSmallBsodas = new(2, 3, true);
                 itemsSmallBsodas.AddItem(smallBsoda, 1);
                 AddToEvents(itemsSmallBsodas, 45);
             }
@@ -120,7 +114,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public void AddItem(Items itm, int weight) => AddItem(ItemMetaStorage.Instance.FindByEnum(itm).value, weight);
         public void AddItem(ItemObject itm, int weight) => potentialItems.Add(itm.Weighted(weight));
 
-        private readonly List<WeightedItemObject> potentialItems = new List<WeightedItemObject>();
+        private readonly List<WeightedItemObject> potentialItems = [];
         private readonly byte minItems;
         private readonly byte maxItems;
         private readonly bool repeatItems;
@@ -128,7 +122,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Invoke(ManMemeCoin coin, int player)
         {
             List<WeightedSelection<ItemObject>> items = WeightedItemObject.Convert(potentialItems);
-            List<Vector3> pickups = new List<Vector3>();
+            List<Vector3> pickups = [];
             Vector3 target;
 
             int amount = UnityEngine.Random.Range(minItems, maxItems), idx;
@@ -166,12 +160,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ManMemeUniqueItemAction : ManMemeItemAction
+    public class ManMemeUniqueItemAction(byte min = 1, byte max = 1, bool repeat = false) : ManMemeItemAction(min, max, repeat)
     {
-        public ManMemeUniqueItemAction(byte min = 1, byte max = 1, bool repeat = false) : base(min, max, repeat)
-        {
-        }
-
         protected override Pickup CreatePickup(RoomController room, ItemObject itm, Vector2 pos)
         {
             Pickup pickup = base.CreatePickup(room, itm, pos);
@@ -207,7 +197,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class ManMemeProcedureAction : AbstractManMemeAction
     {
-        private Action<ManMemeCoin, int> runAction;
+        private readonly Action<ManMemeCoin, int> runAction;
 
         public ManMemeProcedureAction(Action<ManMemeCoin, int> action, Func<int, bool> inclusionCriteria = null)
         {

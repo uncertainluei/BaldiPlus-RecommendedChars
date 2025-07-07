@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using BepInEx.Bootstrap;
 using BepInEx.Logging;
 
 using HarmonyLib;
@@ -20,7 +19,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInPlugin(ModGuid, ModName, ModVersion), BepInDependency(ApiGuid)]
+    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(ApiGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(PineDebugGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -30,27 +29,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LevelLoaderGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LegacyEditorGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    class RecommendedCharsPlugin : BaseUnityPlugin
+
+    partial class RecommendedCharsPlugin : BaseUnityPlugin
     {
-        public const string ModName = "Recommended Characters Pack";
-        public const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
-        public const string ModVersion = "1.2.1";
+        internal const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
+        internal const string ModName = "Recommended Characters Pack";
 
-        internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
-
-        internal const string CrispyPlusGuid = "mtm101.rulerp.baldiplus.crispyplus";
-        internal const string PineDebugGuid = "alexbw145.baldiplus.pinedebug";
-        internal const string CustomMusicsGuid = "pixelguy.pixelmodding.baldiplus.custommusics";
-        internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
-        internal const string CharacterRadarGuid = "org.aestheticalz.baldi.characterradar";
-        internal const string AdvancedGuid = "mrsasha5.baldi.basics.plus.advanced";
-        internal const string LevelLoaderGuid = "mtm101.rulerp.baldiplus.levelloader";
-        internal const string LegacyEditorGuid = "mtm101.rulerp.baldiplus.leveleditor";
-
-        public static readonly AssetManager AssetMan = new();
+        internal static readonly AssetManager AssetMan = new();
         internal static RecommendedCharsPlugin Plugin { get; private set; }
         internal static ManualLogSource Log { get; private set; }
-
 
         private void Awake()
         {
@@ -79,7 +66,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             harmony.PatchAllConditionals();
         }
 
-        public Module[] Modules { get; private set; } =
+        internal Module[] Modules { get; private set; } =
         [
             new Module_Circle(),
             new Module_GottaBully(),
@@ -118,7 +105,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             X val = original.gameObject.AddComponent<X>();
             
-            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToArray();
+            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (FieldInfo fieldInfo in fields)
                 fieldInfo.SetValue(val, fieldInfo.GetValue(original));
 

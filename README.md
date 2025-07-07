@@ -24,6 +24,8 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 - [BB+ Custom Musics](https://gamebanana.com/mods/527812)
 - [BB+ Animations](https://gamebanana.com/mods/503644)
 - [Advanced Edition](https://gamebanana.com/mods/504169)
+- [Legacy Level Editor](https://gamebanana.com/wips/84160)
+- [Level Loading System](https://gamebanana.com/mods/508477)
 
 
 # Build Instructions
@@ -40,6 +42,8 @@ This mod depends on the following mods to build:
 - [BB+ Custom Musics](https://gamebanana.com/mods/527812)
 - [BB+ Animations](https://gamebanana.com/mods/503644)
 - [Advanced Edition](https://gamebanana.com/mods/504169)
+- [Legacy Level Editor](https://gamebanana.com/wips/84160)
+- [Level Loading System](https://gamebanana.com/mods/508477)
 
 ### Visual Studio 2022 (.NET)
 Run `RecommendedChars.sln` in Visual Studio as a project. Building should then be as simple as going to **Build -> Build Solution** in the menu bar (or pressing Ctrl+Shift+B).

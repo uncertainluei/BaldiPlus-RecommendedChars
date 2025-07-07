@@ -1,4 +1,5 @@
-﻿using MTM101BaldAPI.Components;
+﻿using BaldisBasicsPlusAdvanced.Game.Events;
+using MTM101BaldAPI.Components;
 using MTM101BaldAPI.PlusExtensions;
 
 using System.Collections;
@@ -11,6 +12,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public SoundObject audEat;
         public Sprite gaugeSprite;
+        public float effectTime = 15f;
 
         private HudGauge timerGauge;
 
@@ -25,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             CoreGameManager.Instance.audMan.PlaySingle(audEat);
             DaycareGuiltManager.TryBreakRule(pm, "Eating", 1.6f, 0.25f);
-            StartCoroutine(Timer(pm, 15f));
+            StartCoroutine(Timer(pm, effectTime));
             return true;
         }
 
@@ -57,6 +59,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             timerGauge.Deactivate();
             Destroy(gameObject);
             yield break;
+        }
+    }
+
+    class ITM_FlaminPuffs_AdvancedCompat : ITM_FlaminPuffs
+    {
+        public override bool Use(PlayerManager pm)
+        {
+            if (!base.Use(pm)) return false;
+
+            // Shield player from the Cold event for the duration of the item's status effect
+            foreach (ColdSchoolEvent coldEvent in FindObjectsOfType<ColdSchoolEvent>())
+            {
+                if (!coldEvent.Active) continue;
+                coldEvent.moveMod.movementMultiplier = coldEvent.maxMultiplier;
+                coldEvent.SetCooldown(effectTime);
+            }
+            return true;
         }
     }
 }

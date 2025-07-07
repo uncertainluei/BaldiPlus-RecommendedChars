@@ -1,9 +1,14 @@
 ﻿using BepInEx.Configuration;
+
 using HarmonyLib;
+
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 
+using BBPlusAnimations.Components;
+
+using BaldiLevelEditor;
 using PlusLevelLoader;
 
 using System;
@@ -11,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
@@ -183,8 +189,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
-            GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
-            GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<BBPlusAnimations.Components.GottaSweepComponent>());
+            GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<GottaSweepComponent>());
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
@@ -197,6 +203,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_swapceil", blueprint.texCeil);
 
             PlusLevelLoaderPlugin.Instance.roomSettings.Add("recchars_swapcloset", new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats));
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLegacyEditor()
+        {
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "GottaBully"), x => "GottaBullyEditor/" + x.name);
+
+            BaldiLevelEditorPlugin.characterObjects.Add("recchars_gottabully", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<GottaBully>("GottaBullyNpc").gameObject, true));
+
+            LegacyEditorPatches.OnRoomInit += texs => texs.Add("recchars_swapcloset", new("BlueCarpet", "recchars_swapwall", "recchars_swapceil"));
+            LegacyEditorPatches.OnEditorInit += editor =>
+            {
+                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
+                List<EditorTool> halls = editor.toolCats.Find(x => x.name == "halls").tools;
+
+                npcs.Add(new ExtendedNpcTool("recchars_gottabully", "GottaBullyEditor/Npc_gottabully"));
+                halls.Add(new ExtendedFloorTool("recchars_swapcloset", "GottaBullyEditor/Floor_swappedcloset"));
+            };
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

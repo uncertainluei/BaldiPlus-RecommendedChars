@@ -8,6 +8,9 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
+using BBPlusAnimations.Components;
+
+using BaldiLevelEditor;
 using PlusLevelLoader;
 
 using System;
@@ -15,10 +18,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using BaldisBasicsPlusAdvanced.API;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -74,7 +78,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             nerfItm1.item.name = "Itm_NerfGun1";
             ((ITM_NerfGun)nerfItm.item).nextStage = nerfItm1;
 
-            AssetMan.Add("NerfGunPoster", ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), new PosterTextData[0]));
+            AssetMan.Add("NerfGunPoster", ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []));
             AssetMan.Get<PosterObject>("NerfGunPoster").name = "NerfGunPoster";
 
             // Reverse itemObject list so the (2) variant is always selected first
@@ -97,7 +101,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             PropagatedAudioManager music = circle.GetComponents<PropagatedAudioManager>()[1];
             music.soundOnStart[0] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Music"), "Mfx_RecChars_JingleBells", SoundType.Effect, circle.audMan.subtitleColor);
-            circle.audMan.subtitleColor = music.subtitleColor = new(52f / 255f, 182f / 255f, 69f / 255f);
+            circle.audMan.subtitleColor = music.subtitleColor = new(52/255f, 182/255f, 69/255f);
             CharacterRadarColorPatch.colors.Add(CircleNpc.charEnum, circle.audMan.subtitleColor);
 
             circle.audCount = new SoundObject[9];
@@ -154,8 +158,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
-            GameObject.DestroyImmediate(AssetMan.Get<CircleJumprope>("CircleJumprope").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
-            GameObject.DestroyImmediate(AssetMan.Get<CircleNpc>("CircleNpc").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(AssetMan.Get<CircleJumprope>("CircleJumprope").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(AssetMan.Get<CircleNpc>("CircleNpc").GetComponent<GenericAnimationExtraComponent>());
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
@@ -165,6 +169,31 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
             PlusLevelLoaderPlugin.Instance.posters.Add("recchars_nerfgunposter", AssetMan.Get<PosterObject>("NerfGunPoster"));
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLegacyEditor()
+        {
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Circle"), x => "CircleEditor/" + x.name);
+
+            BaldiLevelEditorPlugin.characterObjects.Add("recchars_circle", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<CircleNpc>("CircleNpc").gameObject, true));
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
+
+            LegacyEditorPatches.OnEditorInit += editor =>
+            {
+                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
+                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
+
+                npcs.Add(new ExtendedNpcTool("recchars_circle", "CircleEditor/Npc_circle"));
+                items.Add(new ExtendedItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun"));
+            };
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        private void AdvancedCompat()
+        {
+            ApiManager.AddNewSymbolMachineWords(Info, "TCMG", "Edits", "Round", "John", "Shape", "World");
+            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Circle");
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

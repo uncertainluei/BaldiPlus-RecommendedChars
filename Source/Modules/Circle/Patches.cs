@@ -111,6 +111,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     [HarmonyPatch(typeof(BBPlusCustomMusics.MusicalInjection), "PlaytimeDingOverride")]
     static class CircleMusicCompatPatch
     {
-        private static bool Prefix(object[] __args) => ((Playtime)__args[0]).Character != CircleNpc.charEnum;
+        private static bool Prefix(Playtime __0) => __0.Character != CircleNpc.charEnum;
     }
 }

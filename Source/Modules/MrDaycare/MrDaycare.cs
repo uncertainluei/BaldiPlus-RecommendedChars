@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -26,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [
             "Running",
             "Drinking",
-            "Eating", // Used by Lots Of Items
+            "Eating",
             "Throwing",
             "LoudSound"
         ];

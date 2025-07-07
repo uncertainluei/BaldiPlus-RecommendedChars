@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using BaldiLevelEditor;
+
 using BepInEx.Configuration;
+
 using HarmonyLib;
+
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
-using PlusLevelFormat;
+
+using BaldiLevelEditor;
 using PlusLevelLoader;
+
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+
 using UnityEngine;
+using BaldisBasicsPlusAdvanced.API;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -103,8 +109,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetEnum(keyEnum)
             .SetMeta(doorKeyMeta)
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/DoorKey_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/DoorKey_Large"), 50f))
-            .SetShopPrice(600)
-            .SetGeneratorCost(75)
+            .SetShopPrice(750)
+            .SetGeneratorCost(90)
             .SetItemComponent<ITM_DoorKey>();
 
             ItemObject keyItemObject = keyBuilder.Build();
@@ -351,72 +357,33 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Daycare"), x => "DaycareEditor/" + x.name);
+
             BaldiLevelEditorPlugin.characterObjects.Add("recchars_mrdaycare", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<MrDaycare>("MrDaycareNpc").gameObject, true));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
 
             LegacyEditorPatches.OnRoomInit += texs => texs.Add("recchars_daycare", new("recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"));
-        }
-
-        private PosterObject CreatePoster(string path, string name)
-        {
-            PosterObject poster = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>(path), []);
-            poster.name = name;
-            return poster;
-        }
-
-        private void FloorAddend(string title, int id, SceneObject scene)
-        {
-            if (title == "END")
+            LegacyEditorPatches.OnEditorInit += editor =>
             {
-                scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(30));
+                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
+                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
+                List<EditorTool> halls = editor.toolCats.Find(x => x.name == "halls").tools;
 
-                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
-                    scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
-                }
-                else
-                    scene.potentialNPCs.CopyCharacterWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
-                return;
-            }
+                npcs.Add(new ExtendedNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare"));
 
-            if (title.StartsWith("F"))
-            {
-                scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(30));
+                items.Add(new ExtendedItemTool("recchars_pie", "DaycareEditor/Itm_pie"));
+                items.Add(new ExtendedItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey"));
 
-                if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                {
-                    scene.potentialNPCs.CopyCharacterWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
-                }
-                else if (id == 0)
-                {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
-                    scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
-                }
-            }
+                halls.Add(new ExtendedFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare"));
+            };
         }
 
-        private void FloorAddendLvl(string title, int id, LevelObject lvl)
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        private void AdvancedCompat()
         {
-            if (title == "END" || title.StartsWith("F"))
-            {
-                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(25));
-                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(15));
-                return;
-            }
-        }
-
-        private void AddPosterToLevel(LevelGenerator gen)
-        {
-            if (gen.scene == null) return;
-            if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == MrDaycare.charEnum) == null) return;
-
-            gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
+            ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "House");
+            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Pie, Adv_Elv_Tip_RecChars_DoorKey, Adv_Elv_Tip_RecChars_MrDaycareExceptions, Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Post)]
@@ -445,6 +412,69 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     keyItems.Add(meta.id);
             }
             ITM_DoorKey.keyEnums = [.. keyItems];
+        }
+
+        private PosterObject CreatePoster(string path, string name)
+        {
+            PosterObject poster = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>(path), []);
+            poster.name = name;
+            return poster;
+        }
+
+        private void FloorAddend(string title, int id, SceneObject scene)
+        {
+            if (title == "END")
+            {
+                scene.MarkAsNeverUnload();
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(25));
+
+                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                {
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
+                }
+                else
+                    scene.potentialNPCs.CopyCharacterWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                return;
+            }
+
+            if (title.StartsWith("F"))
+            {
+                scene.MarkAsNeverUnload();
+                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
+                if (id > 0)
+                    scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(25));
+
+                if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                {
+                    scene.potentialNPCs.CopyCharacterWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                }
+                else if (id == 0)
+                {
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
+                }
+            }
+        }
+
+        private void FloorAddendLvl(string title, int id, LevelObject lvl)
+        {
+            if (title == "END" || title.StartsWith("F"))
+            {
+                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(25));
+                if (title == "END" || id > 0)
+                    lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(10));
+                return;
+            }
+        }
+
+        private void AddPosterToLevel(LevelGenerator gen)
+        {
+            if (gen.scene == null) return;
+            if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == MrDaycare.charEnum) == null) return;
+
+            gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
         }
     }
 }
