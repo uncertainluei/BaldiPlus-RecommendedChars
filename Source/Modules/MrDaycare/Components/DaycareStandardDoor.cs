@@ -27,9 +27,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 mask[1] = DaycareDoorAssets.mask;
             }
 
-            if (RecommendedCharsPlugin.AnimationsCompat)
-                AnimationsCompat();
-
             audDoorOpen = DaycareDoorAssets.open;
             audDoorShut = DaycareDoorAssets.shut;
             audDoorUnlock = DaycareDoorAssets.unlock;
@@ -47,11 +44,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (room.type == RoomType.Hall) return true; // Is a hallway
             if (room.category != RoomCategory.Class && room.doorMats.name == "ClassDoorSet") return true; // Is not a classroom and has the 'classroom' doors
             return false;
-        }
-
-        private void AnimationsCompat()
-        {
-            Destroy(GetComponent<BBPlusAnimations.Components.StandardDoorExtraMaterials>());
         }
 
         private void SetMaterial(StandardDoorMats mat)

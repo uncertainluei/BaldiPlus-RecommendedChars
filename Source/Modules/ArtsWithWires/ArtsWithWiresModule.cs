@@ -8,6 +8,8 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
+using PlusLevelLoader;
+
 using System;
 using System.IO;
 
@@ -22,11 +24,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public override string Name => "Arts with Wires";
 
-        public override Action LoadAction => Load;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleArtsWWires;
 
+        [ModuleLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "ArtsWWires"), x => "WiresTex/" + x.name);
@@ -37,6 +39,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_ArtsWithWires")
                 .SetPoster(AssetMan.Get<Texture2D>("WiresTex/pri_wires"), "PST_PRI_RecChars_Wires1", "PST_PRI_RecChars_Wires2")
                 .AddMetaFlag(NPCFlags.Standard)
+                .SetMetaTags(["adv_exclusion_hammer_weakness"])
                 .AddLooker()
                 .AddTrigger()
                 .Build();
@@ -53,7 +56,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             artsWithWires.sprAngry = sprites[1];
 
             artsWithWires.audMan = artsWithWires.GetComponent<AudioManager>();
-            artsWithWires.audMan.subtitleColor = new Color(138f / 255f, 22f / 255f, 15f / 255f);
+            artsWithWires.audMan.subtitleColor = new(138/255f, 22/255f, 15/255f);
 
             CharacterRadarColorPatch.colors.Add(artsWithWires.character, artsWithWires.audMan.subtitleColor);
 
@@ -95,6 +98,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             artsWithWires.gamePrefab.needle.name = "Meter_Needle";
 
             AssetMan.Add("ArtsWithWiresNpc", artsWithWires);
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLevelLoader()
+        {
+            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

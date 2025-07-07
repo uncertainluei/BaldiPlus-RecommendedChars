@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-
 using HarmonyLib;
-
 using MTM101BaldAPI;
 using MTM101BaldAPI.Registers;
-
 using UnityEngine;
+
+using BaldisBasicsPlusAdvanced.Game.Events;
+using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
+using BaldisBasicsPlusAdvanced.Patches.Characters;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
@@ -23,15 +24,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             if (daycareRules.Contains(rule))
                 DaycareGuiltManager.GetInstance(__instance).BreakRule(rule, linger, sensitivity);
         }
-        public static readonly string[] daycareRules = new string[]
-        {
+        public static readonly string[] daycareRules =
+        [
             "Running",
             "Drinking",
             "Eating",
             "DaycareEscaping",
             "Throwing",
             "LoudSound"
-        };
+        ];
 
         [HarmonyPatch(typeof(ITM_PrincipalWhistle), "Use"), HarmonyPostfix]
         private static void OnUseWhistle(PlayerManager pm)
@@ -43,7 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         private static int _lowestDist;
         private static PlayerManager _player;
         [HarmonyPatch(typeof(EnvironmentController), "MakeNoise", typeof(GameObject), typeof(Vector3), typeof(int)), HarmonyPostfix]
-        private static void OnNoiseMade(EnvironmentController __instance, GameObject source, Vector3 position, int value)
+        private static void OnNoiseMade(EnvironmentController __instance, Vector3 position, int value)
         {
             if (__instance.silent || __instance.CellFromPosition(IntVector2.GetGridPosition(position)).Silent || value < 70) return;
 
@@ -100,16 +101,85 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             }
 
             if (!patched)
-                RecommendedCharsPlugin.Log.LogError("Transpiler \"MrDaycarePatches.CheckForItemUse\" did not go through!");
+                RecommendedCharsPlugin.Log.LogError("Transpiler \"MrDaycarePatches.CheckForItemUse\" wasn't properly applied!");
+
+            yield break;
+        }
+    }
+
+    [ConditionalPatchMod(RecommendedCharsPlugin.AdvancedGuid)]
+    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
+    [HarmonyPatch]
+    static class MrDaycareAdvancedPatches
+    {
+        // Prioritize getting the Principal, part of the Advanced PR
+        private static Principal GetPrincipal()
+        {
+            Principal fallback = null;
+            foreach (NPC npc in BaseGameManager.Instance.Ec.Npcs)
+            {
+                if (npc is not Principal pri) continue;
+                fallback = pri;
+                if (npc.Character == Character.Principal)
+                    return pri;
+            }
+            return fallback;
+        }
+
+        private static readonly MethodInfo getPrincipalMethod = AccessTools.Method(typeof(MrDaycareAdvancedPatches), "GetPrincipal");
+
+        // Temporary patch until Advanced updates with the PR
+        [HarmonyPatch(typeof(VotingEvent), "Begin"), HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> VotingBeginTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            bool patched = false;
+
+            CodeInstruction[] array = instructions.ToArray();
+            int length = array.Length, i = 0;
+
+            for (; i < length && !patched; i++)
+            {
+                if (array[i].opcode == OpCodes.Call &&
+                    array[i].operand?.ToString() == "Principal FindObjectOfType[Principal]()")
+                {
+                    patched = true;
+                    yield return new CodeInstruction(OpCodes.Call, getPrincipalMethod);
+                    continue;
+                }
+                yield return array[i];
+            }
+            for (; i < length; i++)
+            {
+                yield return array[i];
+            }
+
+            if (!patched)
+                RecommendedCharsPlugin.Log.LogWarning("Transpiler \"RecommendedChars.MrDaycareAdvancedPatches.VotingBeginTranspiler\" wasn't properly applied! It is extremely likely Advanced has released a fix!");
 
             yield break;
         }
 
-        [ConditionalPatchMod(RecommendedCharsPlugin.AnimationsGuid)]
-        [HarmonyPatch(typeof(BBPlusAnimations.Patches.PrincipalDetentionPatch), "CoolDetentionAnimation")]
-        static class MrDaycareAnimationPatch
+        [HarmonyPatch(typeof(VotingEvent.PrincipalController), "SetCheckingRoomMode"), HarmonyPrefix]
+        private static bool VotingEventCheck(bool value, Principal ___principal, ref NavigationState_PartyEvent ___state, RoomController ___room)
         {
-            private static bool Prefix(object[] __args) => ((Principal)__args[0]).Character != MrDaycare.charEnum;
+            if (!value || ___principal == null || ___principal.Character != MrDaycare.charEnum) return true;
+
+            MrDaycare daycare = (MrDaycare)___principal;
+
+            daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
+            daycare.Navigator.Entity.SetBlinded(true);
+            ___state = new NavigationState_PartyEvent(daycare, int.MaxValue, ___room);
+            daycare.navigationStateMachine.ChangeState(___state);
+            return false;
+        }
+
+
+        [HarmonyPatch(typeof(MrDaycare), "ObservePlayer"), HarmonyPrefix]
+        private static bool MrDaycareIgnoreRules(PlayerManager player)
+        {
+            if (!VotingEvent.TopicIsActive<PrincipalIgnoresSomeRulesTopic>()) return true;
+
+            return !PrincipalObservePatch.allowedRulesWhenTopicActive.Contains(DaycareGuiltManager.GetInstance(player).RuleBreak);
         }
     }
 }

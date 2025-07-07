@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 
 using HarmonyLib;
@@ -23,29 +22,35 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [BepInPlugin(ModGuid, ModName, ModVersion), BepInDependency(ApiGuid)]
 
-    [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(CustomMusicsGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(PineDebugGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(CharacterRadarGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(PineDebugGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CustomMusicsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CharacterRadarGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(LevelLoaderGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(LegacyEditorGuid, BepInDependency.DependencyFlags.SoftDependency)]
     class RecommendedCharsPlugin : BaseUnityPlugin
     {
         public const string ModName = "Recommended Characters Pack";
         public const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
-        public const string ModVersion = "1.2.0.1";
+        public const string ModVersion = "1.2.1";
 
         internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
-        internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
-        internal const string CustomMusicsGuid = "pixelguy.pixelmodding.baldiplus.custommusics";
-        internal const string PineDebugGuid = "alexbw145.baldiplus.pinedebug";
-        internal const string CharacterRadarGuid = "org.aestheticalz.baldi.characterradar";
-        internal const string CrispyPlusGuid = "mtm101.rulerp.baldiplus.crispyplus";
 
-        public static readonly AssetManager AssetMan = new AssetManager();
+        internal const string CrispyPlusGuid = "mtm101.rulerp.baldiplus.crispyplus";
+        internal const string PineDebugGuid = "alexbw145.baldiplus.pinedebug";
+        internal const string CustomMusicsGuid = "pixelguy.pixelmodding.baldiplus.custommusics";
+        internal const string AnimationsGuid = "pixelguy.pixelmodding.baldiplus.newanimations";
+        internal const string CharacterRadarGuid = "org.aestheticalz.baldi.characterradar";
+        internal const string AdvancedGuid = "mrsasha5.baldi.basics.plus.advanced";
+        internal const string LevelLoaderGuid = "mtm101.rulerp.baldiplus.levelloader";
+        internal const string LegacyEditorGuid = "mtm101.rulerp.baldiplus.leveleditor";
+
+        public static readonly AssetManager AssetMan = new();
         internal static RecommendedCharsPlugin Plugin { get; private set; }
         internal static ManualLogSource Log { get; private set; }
 
-        internal static bool AnimationsCompat { get; private set; }
 
         private void Awake()
         {
@@ -56,33 +61,33 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             RecommendedCharsConfig.BindConfig(Config);
             Modules = Modules.Where(x => x.Enabled).ToArray();
 
-            RecommendedCharsSaveGameIO saveGameSystem = new RecommendedCharsSaveGameIO(Info);
+            RecommendedCharsSaveGameIO saveGameSystem = new(Info);
             ModdedSaveGame.AddSaveHandler(saveGameSystem);
             ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
 
             // Load localization files
             AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);
 
-            AnimationsCompat = Chainloader.PluginInfos.ContainsKey(AnimationsGuid);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, GrabBaseAssets(), LoadingEventOrder.Pre);
+            foreach (LoadingEventOrder order in Enum.GetValues(typeof(LoadingEventOrder)))
+                LoadingEvents.RegisterOnAssetsLoaded(Info, LoadModules(order), order);
 
-            LoadingEvents.RegisterOnAssetsLoaded(Info, LoadAssets(), false);
-            LoadingEvents.RegisterOnAssetsLoaded(Info, PostLoadModules(), true);
             GeneratorManagement.Register(this, GenerationModType.Addend, GeneratorAddend);
             GeneratorManagement.RegisterFieldTripLootChange(this, FieldTripLootChange);
 
-            Harmony harmony = new Harmony(ModGuid);
+            Harmony harmony = new(ModGuid);
             harmony.PatchAllConditionals();
         }
 
-        public Module[] Modules { get; private set; } = new Module[]
-        {
+        public Module[] Modules { get; private set; } =
+        [
             new Module_Circle(),
             new Module_GottaBully(),
             new Module_ArtsWithWires(),
             new Module_CaAprilFools(),
             new Module_MrDaycare(),
             new Module_Bsodaa(),
-        };
+        ];
 
         // Like AssetLoader.SpritesFromSpritesheet, but based on sprite size and sprite count
         internal static Sprite[] SplitSpriteSheet(Texture2D atlas, int spriteWidth, int spriteHeight, int totalSprites = 0, float pixelsPerUnit = 100f)
@@ -132,44 +137,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        private IEnumerator LoadAssets()
+        private IEnumerator GrabBaseAssets()
         {
+            yield return 1;
+            yield return "Grabbing base assets";
             // Sprite materials
-            Material[] materials = Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0).ToArray();
+            Material[] materials = [.. Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0)];
             AssetMan.Add("BillboardMaterial", materials.First(x => x.name == "SpriteStandard_Billboard"));
             AssetMan.Add("NoBillboardMaterial", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
+        }
 
+        private IEnumerator LoadModules(LoadingEventOrder order)
+        {
             if (Modules.Length == 0)
             {
                 yield return 1;
-                yield return "No module loads found";
+                yield return "No modules to load";
                 yield break;
             }
+
             yield return Modules.Length;
-
             foreach (Module module in Modules)
-            { 
+            {
                 yield return $"Loading module \"{module.Name}\"";
-                module.LoadAction?.Invoke();
-            }
-        }
-
-        private IEnumerator PostLoadModules()
-        {
-            Module[] postModules = Modules.Where(x => x.PostLoadAction != null).ToArray();
-            if (postModules.Length == 0)
-            {
-                yield return 1;
-                yield return "No module post-loads found";
-                yield break;
-            }
-
-            yield return postModules.Length;
-
-            foreach (Module module in postModules)
-            {
-                yield return $"Post-loading module \"{module.Name}\"";
-                module.PostLoadAction.Invoke();
+                module.RunLoadEvents(order);
             }
         }
 
@@ -192,52 +183,44 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public abstract class Module
+    public class RecommendedCharsSaveGameIO(PluginInfo info) : ModdedSaveGameIOBinary
     {
-        // These three are here for convenience sake
-        protected static AssetManager AssetMan => RecommendedCharsPlugin.AssetMan;
-        internal static RecommendedCharsPlugin Plugin => RecommendedCharsPlugin.Plugin;
-        internal static PluginInfo Info => Plugin.Info;
-
-        public bool Enabled => ConfigEntry != null && ConfigEntry.Value;
-        public abstract string Name { get; }
-        public virtual string SaveTag => Name;
-        protected abstract ConfigEntry<bool> ConfigEntry { get; }
-
-        public virtual Action LoadAction => null;
-        public virtual Action PostLoadAction => null;
-        public virtual Action<string, int, SceneObject> FloorAddendAction => null;
-        public virtual Action<string, int, CustomLevelObject> LevelAddendAction => null;
-        public virtual Action<FieldTrips, FieldTripLoot> FieldTripLootAction => null;
-    }
-
-    public class RecommendedCharsSaveGameIO : ModdedSaveGameIOBinary
-    {
-        public RecommendedCharsSaveGameIO(PluginInfo info)
-        {
-            this.info = info;
-        }
-
-        private readonly PluginInfo info;
+        private readonly PluginInfo info = info;
         public override PluginInfo pluginInfo => info;
+
+        private const byte SaveVersion = 1;
+        internal Dictionary<string, object> savedValues;
+
+        public override void OnCGMCreated(CoreGameManager cgm, bool savedGame)
+        {
+            foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
+                module.SaveSystem?.CoreGameManCreated(cgm, savedGame);
+        }
 
         public override void Load(BinaryReader reader)
         {
-            reader.ReadByte();
+            byte ver = reader.ReadByte();
+            if (ver == 0) return;
+            foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
+                module.SaveSystem?.Load(reader);
         }
 
         public override void Save(BinaryWriter writer)
         {
-            writer.Write((byte)0);
+            writer.Write(SaveVersion);
+            foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
+                module.SaveSystem?.Save(writer);
         }
 
         public override void Reset()
         {
+            foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
+                module.SaveSystem?.Reset();
         }
 
         public override string[] GenerateTags()
         {
-            List<string> tags = new List<string>();
+            List<string> tags = [];
             
             foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
                 tags.Add(module.Name);
@@ -245,17 +228,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                     tags.Add("GuaranteedSpawn");
-                if ( RecommendedCharsConfig.intendedWiresBehavior.Value)
-                    tags.Add("GuaranteedSpawn");
             }
 
-            return tags.ToArray();
+            return [.. tags];
         }
 
         public override string DisplayTags(string[] tags)
         {
             string display = "<b>Modules:</b> ";
+
             bool addComma = false;
+            byte entryCount = 0;
 
             foreach (string tag in tags)
             {
@@ -266,8 +249,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 }
 
                 if (addComma)
-                    display += ", ";
+                    display += "," + (entryCount % 3 == 0 ? "\n" : " ");
+
                 addComma = true;
+                entryCount++;
 
                 display += tag;
             }

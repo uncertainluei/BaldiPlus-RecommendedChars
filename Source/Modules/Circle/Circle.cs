@@ -1,6 +1,4 @@
-﻿using HarmonyLib;
-using MTM101BaldAPI;
-using MTM101BaldAPI.Components;
+﻿using MTM101BaldAPI.Components;
 
 using System.Collections;
 using System.Collections.Generic;

@@ -8,6 +8,8 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
+using PlusLevelLoader;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,11 +26,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public override string Name => "TCMGB Circle";
 
-        public override Action LoadAction => Load;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCircle;
 
+
+        [ModuleLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "NerfGun"), x => "NerfGun/" + x.name);
@@ -40,17 +42,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadCircle();
 
             LevelGeneratorEventPatch.OnNpcAdd += AddItemsToLevel;
-
-            if (RecommendedCharsPlugin.AnimationsCompat)
-                AnimationsCompat();
         }
+
         private void LoadNerfGun()
         {
-            ItemMetaData nerfGunMeta = new ItemMetaData(Info, new ItemObject[0])
+            ItemMetaData nerfGunMeta = new(Info, [])
             {
                 flags = ItemFlags.MultipleUse
             };
-            nerfGunMeta.tags.AddRange(new string[] {"adv_normal", "adv_sm_potential_reward"});
+            nerfGunMeta.tags.AddRange(["adv_normal", "adv_sm_potential_reward"]);
 
             Items nerfGunEnum = EnumExtensions.ExtendEnum<Items>("RecChars_NerfGun");
 
@@ -95,12 +95,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             circle.animator.enabled = false;
 
-            circle.audMan.subtitleColor = new Color(52f / 255f, 182f / 255f, 69f / 255f);
+            PropagatedAudioManager music = circle.GetComponents<PropagatedAudioManager>()[1];
+            music.soundOnStart[0] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Music"), "Mfx_RecChars_JingleBells", SoundType.Effect, circle.audMan.subtitleColor);
+            circle.audMan.subtitleColor = music.subtitleColor = new(52f / 255f, 182f / 255f, 69f / 255f);
             CharacterRadarColorPatch.colors.Add(CircleNpc.charEnum, circle.audMan.subtitleColor);
 
             circle.audCount = new SoundObject[9];
             for (int i = 0; i < 9; i++)
-                circle.audCount[i] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>($"CircleAud/Circle_{i + 1}"), $"Vfx_Playtime_{i + 1}", SoundType.Voice, circle.audMan.subtitleColor);
+                circle.audCount[i] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>($"CircleAud/Circle_{i+1}"), $"Vfx_Playtime_{i+1}", SoundType.Voice, circle.audMan.subtitleColor);
 
             circle.audLetsPlay = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_LetsPlay"), "Vfx_RecChars_Circle_LetsPlay", SoundType.Voice, circle.audMan.subtitleColor);
             circle.audGo = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_ReadyGo"), "Vfx_RecChars_Circle_Go", SoundType.Voice, circle.audMan.subtitleColor);
@@ -108,15 +110,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             circle.audCongrats = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Congrats"), "Vfx_RecChars_Circle_Congrats", SoundType.Voice, circle.audMan.subtitleColor);
             circle.audSad = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Sad"), "Vfx_RecChars_Circle_Sad", SoundType.Voice, circle.audMan.subtitleColor);
 
-            circle.audCalls = new SoundObject[]
-            {
+            circle.audCalls =
+            [
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random1"), "Vfx_RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random2"), "Vfx_RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor)
-            };
-
-            PropagatedAudioManager music = circle.GetComponents<PropagatedAudioManager>()[1];
-            music.soundOnStart[0] = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Music"), "Mfx_RecChars_JingleBells", SoundType.Effect, circle.audMan.subtitleColor);
-            music.subtitleColor = circle.audMan.subtitleColor = new Color(52f / 255f, 182f / 255f, 69f / 255f);
+            ];
 
             // The default speed was 500 but this should flow better in-game
             circle.normSpeed = 65f;
@@ -149,14 +147,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             AssetMan.Add("CircleJumprope", jumprope);
             AssetMan.Add("CircleNpc", circle);
-            NPCMetadata circleMeta = new NPCMetadata(Info, new NPC[] { circle }, circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, new string[] { "student" });
+            NPCMetadata circleMeta = new(Info, [circle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
         }
 
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
             GameObject.DestroyImmediate(AssetMan.Get<CircleJumprope>("CircleJumprope").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
             GameObject.DestroyImmediate(AssetMan.Get<CircleNpc>("CircleNpc").GetComponent<BBPlusAnimations.Components.GenericAnimationExtraComponent>());
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLevelLoader()
+        {
+            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", AssetMan.Get<CircleNpc>("CircleNpc"));
+
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
+            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_nerfgunposter", AssetMan.Get<PosterObject>("NerfGunPoster"));
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

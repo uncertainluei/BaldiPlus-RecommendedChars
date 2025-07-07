@@ -1,50 +1,13 @@
 ﻿using HarmonyLib;
 
-using MTM101BaldAPI;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
 
-using UnityEngine;
-using System;
-
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchMod(RecommendedCharsPlugin.CharacterRadarGuid)]
-    [HarmonyPatch(typeof(CharacterRadar.Hooks.NpcHooks), "AwakePostfix")]
-    static class CharacterRadarColorPatch
-    {
-        internal static readonly Dictionary<Character, Color> colors = new Dictionary<Character, Color>();
-
-        private static bool Prefix(NPC __0)
-        {
-            if (__0.Navigator == null || __0.Navigator.Entity == null) return false;
-            if (!colors.ContainsKey(__0.character)) return true;
-
-            BaseGameManager.Instance.Ec.map.AddArrow(__0.Navigator.Entity, colors[__0.character]);
-            return false;
-        }
-    }
-
-    [ConditionalPatchMod(RecommendedCharsPlugin.PineDebugGuid)]
-    [HarmonyPatch(typeof(PineDebug.PineDebugManager), "InitAssets")]
-    static class PineDebugNpcIconPatch
-    {
-        internal static readonly Dictionary<Character, Texture2D> icons = new Dictionary<Character, Texture2D>();
-        private static bool initialized;
-
-        private static void Postfix()
-        {
-            if (initialized) return;
-            initialized = true;
-
-            foreach (Character character in icons.Keys)
-                PineDebug.PineDebugManager.pinedebugAssets.Add($"Border{character.ToStringExtended()}", icons[character]);
-        }
-    }
-
     [HarmonyPatch(typeof(LevelGenerator), "Generate", MethodType.Enumerator)]
     static class LevelGeneratorEventPatch
     {
@@ -139,7 +102,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             }
 
             if (patchesLeft > 0)
-                RecommendedCharsPlugin.Log.LogError("Transpiler \"RecommendedChars.LevelGeneratorEventPatch.Transpiler\" did not go through!");
+                RecommendedCharsPlugin.Log.LogError("Transpiler \"RecommendedChars.LevelGeneratorEventPatch.Transpiler\" wasn't properly applied!");
 
             yield break;
         }

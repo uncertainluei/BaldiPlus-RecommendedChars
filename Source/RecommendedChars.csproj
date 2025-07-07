@@ -3,28 +3,38 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		
-		<Version>1.2.0.1</Version>
+		<AssemblyName>UncertainLuei.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>UncertainLuei.BaldiPlus.$(MSBuildProjectName)</RootNamespace>
+
+		<Version>1.2.1</Version>
 		<FileVersion>$(Version)</FileVersion>
 		<ProductVersion>$(Version)</ProductVersion>
 		
-		<AssemblyName>UncertainLuei.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>UncertainLuei.BaldiPlus.$(MSBuildProjectName)</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>latest</LangVersion>
 		<NoWarn>1701;1702;IDE0051</NoWarn>
-	</PropertyGroup>
 
+		<RestoreAdditionalProjectSources>
+			https://api.nuget.org/v3/index.json;
+			https://nuget.bepinex.dev/v3/index.json;
+			https://nuget.samboy.dev/v3/index.json
+		</RestoreAdditionalProjectSources>
+	</PropertyGroup>
+	
 	<ItemGroup>
+		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+		<PackageReference Include="BepInEx.Core" Version="5.*" />
+		<PackageReference Include="UnityEngine.Modules" Version="2020.3.38" IncludeAssets="compile" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
 		<PackageReference Include="BepInEx.AssemblyPublicizer" Version="0.4.2" />
 		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="0Harmony">
-			<HintPath>..\Dependencies\0Harmony.dll</HintPath>
-		</Reference>
 		<Reference Include="Assembly-CSharp" Publicize="true">
 			<HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
 		</Reference>
@@ -41,49 +51,29 @@
 		<Reference Include="BBPlusAnimations" Publicize="true">
 			<HintPath>..\Dependencies\BBPlusAnimations.dll</HintPath>
 		</Reference>
+		<Reference Include="BaldisBasicsPlusAdvanced" Publicize="true">
+			<HintPath>..\Dependencies\BaldisBasicsPlusAdvanced.dll</HintPath>
+		</Reference>
+		
+		<Reference Include="PlusLevelLoader">
+			<HintPath>..\Dependencies\PlusLevelLoader.dll</HintPath>
+		</Reference>
+		<Reference Include="PlusLevelFormat">
+			<HintPath>..\Dependencies\PlusLevelFormat.dll</HintPath>
+		</Reference>
+		<Reference Include="BaldiLevelEditor">
+			<HintPath>..\Dependencies\BaldiLevelEditor.dll</HintPath>
+		</Reference>
 		
 		<Reference Include="MTM101BaldAPI">
 			<HintPath>..\Dependencies\MTM101BaldAPI.dll</HintPath>
 		</Reference>
-		<Reference Include="BepInEx">
-			<HintPath>..\Dependencies\BepInEx.dll</HintPath>
-		</Reference>
-		<Reference Include="BepInEx.Harmony">
-			<HintPath>..\Dependencies\BepInEx.Harmony.dll</HintPath>
-		</Reference>
-		<Reference Include="BepInEx.Preloader">
-			<HintPath>..\Dependencies\BepInEx.Preloader.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine">
-			<HintPath>..\Dependencies\UnityEngine.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.CoreModule">
-			<HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.AnimationModule">
-			<HintPath>..\Dependencies\UnityEngine.AnimationModule.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.PhysicsModule">
-			<HintPath>..\Dependencies\UnityEngine.PhysicsModule.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.AudioModule">
-			<HintPath>..\Dependencies\UnityEngine.AudioModule.dll</HintPath>
-		</Reference>
+
 		<Reference Include="UnityEngine.UI">
 			<HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.UIModule">
-			<HintPath>..\Dependencies\UnityEngine.UIModule.dll</HintPath>
 		</Reference>
 		<Reference Include="Unity.TextMeshPro">
 			<HintPath>..\Dependencies\Unity.TextMeshPro.dll</HintPath>
 		</Reference>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="io.github.uncertainluei.baldiplus.recommendedchars\Lang_En.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

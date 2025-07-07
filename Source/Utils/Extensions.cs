@@ -15,6 +15,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public static WeightedNPC Weighted(this NPC selection, int weight) => selection.Weighted<NPC, WeightedNPC>(weight);
         public static WeightedItemObject Weighted(this ItemObject selection, int weight) => selection.Weighted<ItemObject, WeightedItemObject>(weight);
         public static WeightedPosterObject Weighted(this PosterObject selection, int weight) => selection.Weighted<PosterObject, WeightedPosterObject>(weight);
+        public static WeightedRoomAsset Weighted(this RoomAsset selection, int weight) => selection.Weighted<RoomAsset, WeightedRoomAsset>(weight);
         public static WeightedGameObject Weighted(this GameObject selection, int weight) => selection.Weighted<GameObject, WeightedGameObject>(weight);
         public static WeightedTransform Weighted(this Transform selection, int weight) => selection.Weighted<Transform, WeightedTransform>(weight);
 
@@ -35,10 +36,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     // This is here to make creating new rooms from scratch easier
     public static class RoomAssetHelper
     {
-        public static CellData Cell(int x, int y, int type) => new CellData() { pos = new IntVector2(x, y), type = type };
+        public static CellData Cell(int x, int y, int type) => new() { pos = new(x, y), type = type };
         public static List<CellData> CellRect(int width, int height)
         {
-            List<CellData> cells = new List<CellData>();
+            List<CellData> cells = [];
             for (int y = 0; y < height; y++)
             {
                 int yOffset = 0;
@@ -63,5 +64,77 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public static PosterData PosterData(int x, int y, PosterObject pst, Direction dir) => new PosterData() { position = new IntVector2(x, y), poster = pst, direction = dir};
         public static BasicObjectData ObjectPlacement(Component obj, Vector3 pos, Vector3 eulerAngles) => new BasicObjectData() {position = pos, prefab = obj.transform, rotation = Quaternion.Euler(eulerAngles)};
         public static BasicObjectData ObjectPlacement(Component obj, Vector3 pos, float angle) => ObjectPlacement(obj, pos, Vector3.up * angle);
+    }
+
+    public class RoomBlueprint(string name, RoomCategory cat)
+    {
+        public RoomBlueprint(string name, string cat) : this(name, EnumExtensions.ExtendEnum<RoomCategory>(cat))
+        {
+        }
+
+        public string name = name;
+        public RoomCategory category = cat;
+
+        public RoomType type = RoomType.Room;
+        public Color color = Color.white;
+
+        public Texture2D texFloor;
+        public Texture2D texCeil;
+        public Texture2D texWall;
+        public bool keepTextures;
+
+        public Transform lightObj;
+        public Material mapMaterial;
+        public StandardDoorMats doorMats;
+
+        public float posterChance = 0.25f;
+        public List<WeightedPosterObject> posters = [];
+
+        public float windowChance;
+        public WindowObject windowSet;
+
+        public int itemValMin;
+        public int itemValMax = 100;
+
+        public bool offLimits;
+        public bool holdsActivity;
+
+        public RoomFunctionContainer functionContainer;
+
+        public RoomAsset CreateAsset(string idName)
+        {
+            RoomAsset roomAsset = RoomAsset.CreateInstance<RoomAsset>();
+            ((ScriptableObject)roomAsset).name = $"{type}_{name}_{idName}";
+            roomAsset.name = $"{name}_{idName}";
+
+            roomAsset.type = type;
+            roomAsset.category = category;
+            roomAsset.color = color;
+
+            roomAsset.florTex = texFloor;
+            roomAsset.ceilTex = texCeil;
+            roomAsset.wallTex = texWall;
+            roomAsset.keepTextures = keepTextures;
+
+            roomAsset.lightPre = lightObj;
+            roomAsset.mapMaterial = mapMaterial;
+            roomAsset.doorMats = doorMats;
+
+            roomAsset.posterChance = posterChance;
+            roomAsset.posters = posters;
+
+            roomAsset.windowChance = windowChance;
+            roomAsset.windowObject = windowSet;
+
+            roomAsset.minItemValue = itemValMin;
+            roomAsset.maxItemValue = itemValMax;
+
+            roomAsset.offLimits = offLimits;
+            roomAsset.hasActivity = holdsActivity;
+
+            roomAsset.roomFunctionContainer = functionContainer;
+
+            return roomAsset;
+        }
     }
 }

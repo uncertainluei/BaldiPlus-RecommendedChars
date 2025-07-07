@@ -9,29 +9,29 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         internal static Character charEnum = (Character)(-1);
 
-        private readonly int[] lockTimes = new int[]
-        {
+        private readonly int[] lockTimes =
+        [
             30,
             60,
             100,
             200,
             500,
             3161
-        };
+        ];
 
         public int maxTimeoutLevel = -1;
         public float ruleSensitivityMul = 1.5f;
 
-        public readonly string[] rules = new string[]
-        {
+        public readonly string[] rules =
+        [
             "Running",
             "Drinking",
             "Eating", // Used by Lots Of Items
             "Throwing",
             "LoudSound"
-        };
+        ];
 
-        public static Dictionary<string, SoundObject> audRuleBreaks = new Dictionary<string, SoundObject>();
+        public static Dictionary<string, SoundObject> audRuleBreaks = [];
         public SoundObject audSeconds;
 
         private RoomController daycareRoom;
@@ -117,12 +117,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class MrDaycare_Waiting : NpcState
+    public class MrDaycare_Waiting(MrDaycare daycare) : NpcState(daycare)
     {
-        public MrDaycare_Waiting(MrDaycare daycare) : base(daycare)
-        {
-        }
-
         public override void Enter()
         {
             base.Enter();
@@ -136,13 +132,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class MrDaycare_Wandering : Principal_Wandering
+    public class MrDaycare_Wandering(MrDaycare daycare) : Principal_Wandering(daycare)
     {
-        private readonly MrDaycare daycare;
-        public MrDaycare_Wandering(MrDaycare daycare) : base(daycare)
-        {
-            this.daycare = daycare;
-        }
+        private readonly MrDaycare daycare = daycare;
 
         public override void Enter()
         {
@@ -192,15 +184,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class MrDaycare_ChasingPlayer : Principal_ChasingPlayer
+    public class MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer(daycare, player)
     {
-        private readonly MrDaycare daycare;
         private int currentNoiseVal = 0;
-
-        public MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : base(daycare, player)
-        {
-            this.daycare = daycare;
-        }
 
         public override void DestinationEmpty()
         {
@@ -233,14 +219,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class MrDaycare_ChasingNpc : Principal_ChasingNpc
+    public class MrDaycare_ChasingNpc(MrDaycare daycare, NPC targetedNpc) : Principal_ChasingNpc(daycare, targetedNpc)
     {
-        private readonly MrDaycare daycare;
-
-        public MrDaycare_ChasingNpc(MrDaycare daycare, NPC targetedNpc) : base(daycare, targetedNpc)
-        {
-            this.daycare = daycare;
-        }
+        private readonly MrDaycare daycare = daycare;
 
         public override void Resume()
         {
@@ -262,13 +243,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class MrDaycare_Timeout : Principal_Detention
+    public class MrDaycare_Timeout(MrDaycare daycare) : Principal_Detention(daycare, 0)
     {
-        private readonly MrDaycare daycare;
-        public MrDaycare_Timeout(MrDaycare daycare) : base(daycare, 0)
-        {
-            this.daycare = daycare;
-        }
+        private readonly MrDaycare daycare = daycare;
 
         public override void Update()
         {

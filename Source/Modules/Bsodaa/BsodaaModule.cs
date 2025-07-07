@@ -1,17 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using BaldiLevelEditor;
+
 using BepInEx.Configuration;
+
 using HarmonyLib;
+
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI;
-using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
-using UnityEngine;
 using MTM101BaldAPI.Components;
+
+using PlusLevelLoader;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+
+using UnityEngine;
+using PlusLevelFormat;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -21,10 +30,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleBsodaa;
 
-        public override Action LoadAction => Load;
-        public override Action PostLoadAction => PostLoad;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
 
+        private readonly ModuleSaveSystem_Bsodaa saveSystem = new();
+        public override ModuleSaveSystem SaveSystem => saveSystem;
+
+        [ModuleLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Room", "Bsodaa"), x => "BsodaaRoom/" + x.name);
@@ -34,6 +45,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "Bsodaa"), "BsodaaAud/");
 
             LoadMiniBsoda();
+            CreateBsodaaRoomBlueprint();
             LoadBsodaaHelper();
             LoadEveyBsodaa();
 
@@ -46,7 +58,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject miniBsoda = new ItemBuilder(Info)
             .SetNameAndDescription("Itm_RecChars_SmallDietBsoda", "Desc_RecChars_SmallDietBsoda")
             .SetEnum("RecChars_SmallDietBsoda")
-            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "drink" })
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallDietBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallDietBsoda_Large"), 50f))
             .SetShopPrice(160)
             .SetGeneratorCost(40)
@@ -81,20 +93,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ((PropagatedAudioManager)helper.audMan).maxDistance = 150f;
 
             helper.audMan.overrideSubtitleColor = true;
-            helper.audMan.subtitleColor = new Color(110f/255f, 134f/255f, 1f);
+            helper.audMan.subtitleColor = new(110f/255f, 134f/255f, 1f);
 
             helper.audOops = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_OutOf"), "Vfx_RecChars_BsodaaHelper_Oops", SoundType.Voice, helper.audMan.subtitleColor);
             helper.audLaugh = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_GiveSoda"), "Vfx_RecChars_BsodaaHelper_Laugh", SoundType.Voice, helper.audMan.subtitleColor);
             helper.audSad = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_Sprayed"), "Vfx_RecChars_BsodaaHelper_Sad", SoundType.Voice, helper.audMan.subtitleColor);
 
-            helper.audCount = new SoundObject[]
-            {
+            helper.audCount =
+            [
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_1"), "Vfx_Playtime_1", SoundType.Voice, helper.audMan.subtitleColor),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_2"), "Vfx_Playtime_2", SoundType.Voice, helper.audMan.subtitleColor),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_3"), "Vfx_Playtime_3", SoundType.Voice, helper.audMan.subtitleColor)
-            };
+            ];
 
-            GameObject spriteObj = new GameObject("Sprite", typeof(SpriteRenderer));
+            GameObject spriteObj = new("Sprite", typeof(SpriteRenderer));
             spriteObj.transform.parent = helperObj.transform;
             spriteObj.transform.localPosition = Vector3.up * -2.16f;
             spriteObj.layer = LayerMask.NameToLayer("Billboard");
@@ -120,11 +132,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("BsodaaHelperObject", helper);
 
             // Dummy NPC for Principal's Office poster
-            GameObject helperNpcObj = new GameObject("BsodaaHelperDummyNpc");
+            GameObject helperNpcObj = new("BsodaaHelperDummyNpc");
             helperNpcObj.transform.parent = MTM101BaldiDevAPI.prefabTransform;
             NPC dummy = helperNpcObj.AddComponent<BsodaaHelperDummyNpc>();
             dummy.ignorePlayerOnSpawn = true;
-            dummy.potentialRoomAssets = new WeightedRoomAsset[0];
+            dummy.potentialRoomAssets = [];
             dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "PST_PRI_RecChars_BsodaaHelper1", "PST_PRI_RecChars_BsodaaHelper2");
 
             AssetMan.Add("BsodaaHelperPoster", dummy);
@@ -137,8 +149,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_Bsodaa")
                 .SetPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaa"), "PST_PRI_RecChars_Bsodaa1", "PST_PRI_RecChars_Bsodaa2")
                 .AddMetaFlag(NPCFlags.Standard)
-                .SetMetaTags(new string[] { "lower_balloon_frenzy_priority", "adv_exclusion_hammer_immunity" })
-                .AddPotentialRoomAsset(LoadBsodaaRoom(), 100)
+                .SetMetaTags(["lower_balloon_frenzy_priority", "adv_exclusion_hammer_immunity"])
+                .AddPotentialRoomAssets(CreateBsodaaRoomAssets())
                 .AddLooker()
                 .AddTrigger()
                 .IgnorePlayerOnSpawn()
@@ -160,8 +172,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             sprites = RecommendedCharsPlugin.SplitSpriteSheet(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Shoot"), 106, 256, 6, 32f);
 
-            EveyBsodaa.animations.Add("Charge", new Sprite[]
-            {
+            EveyBsodaa.animations.Add("Charge",
+            [
                 sprites[4],
                 sprites[4],
                 sprites[4],
@@ -170,14 +182,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 sprites[2],
                 sprites[1],
                 sprites[0]
-            });
-            EveyBsodaa.animations.Add("Shoot", new Sprite[]
-            {
+            ]);
+            EveyBsodaa.animations.Add("Shoot",
+            [
                 sprites[5],
                 sprites[5],
                 sprites[5],
                 bsodaaGuy.spriteRenderer[0].sprite
-            });
+            ]);
 
             bsodaaGuy.navigator.accel = 10f;
             bsodaaGuy.navigator.speed = 14f;
@@ -195,11 +207,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.audCharging = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Charging"), "Sfx_RecChars_Bsodaa_Charging", SoundType.Effect, bsodaaGuy.audMan.subtitleColor);
             bsodaaGuy.audReloaded = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Thanks"), "Vfx_RecChars_Bsodaa_Thanks", SoundType.Voice, bsodaaGuy.audMan.subtitleColor);
 
-            bsodaaGuy.audSuccess = new SoundObject[]
-            {
+            bsodaaGuy.audSuccess =
+            [
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Happy1"), "Vfx_RecChars_Bsodaa_Happy1", SoundType.Voice, bsodaaGuy.audMan.subtitleColor),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Happy2"), "Vfx_RecChars_Bsodaa_Happy2", SoundType.Voice, bsodaaGuy.audMan.subtitleColor)
-            };
+            ];
 
             bsodaaGuy.projectilePre = RecommendedCharsPlugin.CloneComponent<ITM_BSODA, EveyBsodaaSpray>(GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform));
             bsodaaGuy.projectilePre.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Spray"), 8f);
@@ -209,37 +221,55 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("BsodaaNpc", bsodaaGuy);
         }
 
-        private RoomAsset LoadBsodaaRoom()
+        private void CreateBsodaaRoomBlueprint()
         {
-            RoomAsset bsodaaRoomAsset = RoomAsset.CreateInstance<RoomAsset>();
-            ((ScriptableObject)bsodaaRoomAsset).name = "Room_Bsodaa_0";
-            bsodaaRoomAsset.name = "Bsodaa_0";
+            RoomBlueprint bsodaaRoom = new("BsodaaRoom", "RecChars_Bsodaa");
 
-            bsodaaRoomAsset.type = RoomType.Room;
-            bsodaaRoomAsset.category = EnumExtensions.ExtendEnum<RoomCategory>("RecChars_Bsodaa");
+            bsodaaRoom.texFloor = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaCarpet");
+            bsodaaRoom.texWall = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaWall");
+            bsodaaRoom.texCeil = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaCeiling");
+            bsodaaRoom.keepTextures = true;
 
-            bsodaaRoomAsset.florTex = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaCarpet");
-            bsodaaRoomAsset.wallTex = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaWall");
-            bsodaaRoomAsset.ceilTex = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaCeiling");
+            bsodaaRoom.doorMats = ObjectCreators.CreateDoorDataObject("BsodaaDoor", AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaDoor_Open"), AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaDoor_Closed"));
 
-            bsodaaRoomAsset.doorMats = ObjectCreators.CreateDoorDataObject("BsodaaDoor", AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaDoor_Open"), AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaDoor_Closed"));
-            bsodaaRoomAsset.keepTextures = true;
-
-            bsodaaRoomAsset.lightPre = GameObject.Instantiate(((DrReflex)NPCMetaStorage.Instance.Get(Character.DrReflex).value).potentialRoomAssets[0].selection.lightPre, MTM101BaldiDevAPI.prefabTransform);
-            bsodaaRoomAsset.lightPre.name = "BsodaaLight";
-
-            MeshRenderer light = bsodaaRoomAsset.lightPre.GetComponentInChildren<MeshRenderer>();
+            bsodaaRoom.lightObj = GameObject.Instantiate(((DrReflex)NPCMetaStorage.Instance.Get(Character.DrReflex).value).potentialRoomAssets[0].selection.lightPre, MTM101BaldiDevAPI.prefabTransform);
+            bsodaaRoom.lightObj.name = "BsodaaLight";
+            MeshRenderer light = bsodaaRoom.lightObj.GetComponentInChildren<MeshRenderer>();
             light.sharedMaterial = new Material(light.sharedMaterial)
             {
                 name = "BsodaaRoom_Light",
                 mainTexture = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaLight")
             };
 
-            bsodaaRoomAsset.mapMaterial = ObjectCreators.CreateMapTileShader(AssetMan.Get<Texture2D>("BsodaaRoom/Map_Bsodaa"));
-            bsodaaRoomAsset.color = new Color(57f/255f, 87f/255f, 159f/255f);
+            bsodaaRoom.mapMaterial = ObjectCreators.CreateMapTileShader(AssetMan.Get<Texture2D>("BsodaaRoom/Map_Bsodaa"));
+            bsodaaRoom.color = new(57f/255f, 87f/255f, 159f/255f);
 
-            bsodaaRoomAsset.cells = new List<CellData>()
-            {
+            bsodaaRoom.posterChance = 0.1f;
+
+            GameObject roomFunction = new("BsodaaRoomFunction", typeof(RoomFunctionContainer), typeof(BsodaaRoomFunction));
+            roomFunction.transform.parent = MTM101BaldiDevAPI.prefabTransform;
+            roomFunction.transform.localPosition = Vector3.zero;
+            bsodaaRoom.functionContainer = roomFunction.GetComponent<RoomFunctionContainer>();
+            bsodaaRoom.functionContainer.functions =
+            [
+                roomFunction.GetComponent<BsodaaRoomFunction>()
+            ];
+
+            AssetMan.Add("BsodaaRoomBlueprint", bsodaaRoom);
+        }
+
+        private WeightedRoomAsset[] CreateBsodaaRoomAssets()
+        {
+            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("BsodaaRoomBlueprint");
+            SodaMachine dietSodaMachine = Resources.FindObjectsOfTypeAll<SodaMachine>().First(x => x.name == "DietSodaMachine" && x.GetInstanceID() >= 0);
+            BsodaaHelper helper = AssetMan.Get<BsodaaHelper>("BsodaaHelperObject");
+
+            List<WeightedRoomAsset> rooms = [];
+
+            RoomAsset newRoom = blueprint.CreateAsset("Sugary0");
+            rooms.Add(newRoom.Weighted(150));
+            newRoom.cells =
+            [
                 RoomAssetHelper.Cell(0,0,12),
                 RoomAssetHelper.Cell(1,0,4),
                 RoomAssetHelper.Cell(2,0,6),
@@ -247,53 +277,173 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 RoomAssetHelper.Cell(1,1,0),
                 RoomAssetHelper.Cell(2,1,3),
                 RoomAssetHelper.Cell(1,2,11)
-            };
+            ];
+            newRoom.standardLightCells = [new(1, 1)];
+            newRoom.potentialDoorPositions =
+            [
+                new(0,0),
+                new(1,0),
+                new(2,0)
+            ];
+            newRoom.entitySafeCells =
+            [
+                new(1,0),
+                new(1,1)
+            ];
+            newRoom.blockedWallCells =
+            [
+                new(0,1),
+                new(2,1)
+            ];
+            newRoom.basicObjects =
+            [
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(5f,0f,15f), 0f),
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(25f,0f,15f), 0f),
+                RoomAssetHelper.ObjectPlacement(helper, new Vector3(15f,5f,25f), 0f)
+            ];
 
-            bsodaaRoomAsset.posterChance = 0.1f;
-            bsodaaRoomAsset.posters = new List<WeightedPosterObject>();
+            // "Thumbs Up" shape
+            newRoom = blueprint.CreateAsset("Luei0");
+            rooms.Add(newRoom.Weighted(50));
+            newRoom.cells =
+            [
+                RoomAssetHelper.Cell(0,0,12),
+                RoomAssetHelper.Cell(1,0,4),
+                RoomAssetHelper.Cell(2,0,6),
+                RoomAssetHelper.Cell(0,1,8),
+                RoomAssetHelper.Cell(1,1,1),
+                RoomAssetHelper.Cell(2,1,3),
+                RoomAssetHelper.Cell(0,2,11)
+            ];
+            newRoom.standardLightCells = [new(1, 1)];
+            newRoom.potentialDoorPositions =
+            [
+                new(0,0),
+                new(1,0),
+                new(2,1)
+            ];
+            newRoom.entitySafeCells =
+            [
+                new(1,0),
+                new(1,1)
+            ];
+            newRoom.blockedWallCells =
+            [
+                new(2,0),
+                new(1,1)
+            ];
+            newRoom.basicObjects =
+            [
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(15f,0f,15f), 0f),
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(25f,0f,5f), 90f),
+                RoomAssetHelper.ObjectPlacement(helper, new Vector3(5f,5f,25f), 0f)
+            ];
 
-            bsodaaRoomAsset.standardLightCells = new List<IntVector2>() { new IntVector2(1, 1) };
-            bsodaaRoomAsset.potentialDoorPositions = new List<IntVector2>()
-            {
-                new IntVector2(0,0),
-                new IntVector2(1,0),
-                new IntVector2(2,0)
-            };
+            // Based on B-Side Skid's idea
+            newRoom = blueprint.CreateAsset("Luei1");
+            rooms.Add(newRoom.Weighted(50));
+            newRoom.cells =
+            [
+                RoomAssetHelper.Cell(0,0,13),
+                RoomAssetHelper.Cell(1,0,4),
+                RoomAssetHelper.Cell(2,0,4),
+                RoomAssetHelper.Cell(3,0,4),
+                RoomAssetHelper.Cell(4,0,7),
+                RoomAssetHelper.Cell(1,1,9),
+                RoomAssetHelper.Cell(2,1,0),
+                RoomAssetHelper.Cell(3,1,3),
+                RoomAssetHelper.Cell(2,2,11)
+            ];
+            newRoom.standardLightCells = [new(2, 1)];
+            newRoom.potentialDoorPositions =
+            [
+                new(2,0),
+                new(1,1),
+                new(3,1)
+            ];
+            newRoom.entitySafeCells =
+            [
+                new(2,0),
+                new(2,1)
+            ];
+            newRoom.blockedWallCells =
+            [
+                new(0,0),
+                new(4,0)
+            ];
+            newRoom.basicObjects =
+            [
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(5f,0f,5f), -90f),
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(45f,0f,5f), 90f),
+                RoomAssetHelper.ObjectPlacement(helper, new Vector3(25f,5f,25f), 0f)
+            ];
 
-            bsodaaRoomAsset.entitySafeCells = new List<IntVector2>()
-            {
-                new IntVector2(1,0),
-                new IntVector2(1,1)
-            };
+            // "Staircase" shape
+            newRoom = blueprint.CreateAsset("Luei2");
+            rooms.Add(newRoom.Weighted(50));
+            newRoom.cells =
+            [
+                RoomAssetHelper.Cell(0,0,12),
+                RoomAssetHelper.Cell(1,0,4),
+                RoomAssetHelper.Cell(2,0,7),
 
-            bsodaaRoomAsset.blockedWallCells = new List<IntVector2>()
-            {
-                new IntVector2(0,1),
-                new IntVector2(2,1)
-            };
+                RoomAssetHelper.Cell(0,1,8),
+                RoomAssetHelper.Cell(1,1,3),
 
-            SodaMachine dBsodaMachine = Resources.FindObjectsOfTypeAll<SodaMachine>().First(x => x.item.itemType == Items.DietBsoda && x.GetInstanceID() >= 0);
-            bsodaaRoomAsset.basicObjects = new List<BasicObjectData>()
-            {
-                RoomAssetHelper.ObjectPlacement(dBsodaMachine, new Vector3(5f,0f,15f), 0f),
-                RoomAssetHelper.ObjectPlacement(dBsodaMachine, new Vector3(25f,0f,15f), 0f),
-                RoomAssetHelper.ObjectPlacement(AssetMan.Get<BsodaaHelper>("BsodaaHelperObject"), new Vector3(15f,5f,25f), 0f)
-            };
+                RoomAssetHelper.Cell(0,2,11)
+            ];
+            newRoom.standardLightCells = [new(1, 1)];
+            newRoom.potentialDoorPositions =
+            [
+                new(0,0),
+                new(1,0),
+                new(0,1)
+            ];
+            newRoom.entitySafeCells = [new(0,0)];
+            newRoom.blockedWallCells =
+            [
+                new(2,0),
+                new(0,2)
+            ];
+            newRoom.basicObjects =
+            [
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(5f,0f,25f), 90f),
+                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(25f,0f,5f), 0f),
+                RoomAssetHelper.ObjectPlacement(helper, new Vector3(15f,5f,15f), 0f)
+            ];
 
-            GameObject roomFunction = new GameObject("BsodaaRoomFunction", typeof(RoomFunctionContainer), typeof(BsodaaRoomFunction));
-            roomFunction.transform.parent = MTM101BaldiDevAPI.prefabTransform;
-            roomFunction.transform.localPosition = Vector3.zero;
-
-            bsodaaRoomAsset.roomFunctionContainer = roomFunction.GetComponent<RoomFunctionContainer>();
-            bsodaaRoomAsset.roomFunctionContainer.functions = new List<RoomFunction>()
-            {
-                roomFunction.GetComponent<BsodaaRoomFunction>()
-            };
-
-            return bsodaaRoomAsset;
+            return [.. rooms];
         }
 
-        private void PostLoad()
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLevelLoader()
+        {
+            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
+            PlusLevelLoaderPlugin.Instance.prefabAliases.Add("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject").gameObject);
+
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
+
+            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("BsodaaRoomBlueprint");
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaaflor", blueprint.texFloor);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaawall", blueprint.texWall);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaaceil", blueprint.texCeil);
+
+            PlusLevelLoaderPlugin.Instance.roomSettings.Add("recchars_bsodaaroom", new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats, blueprint.mapMaterial));
+            PlusLevelLoaderPlugin.Instance.roomSettings["recchars_bsodaaroom"].container = blueprint.functionContainer;
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLegacyEditor()
+        {
+            BaldiLevelEditorPlugin.characterObjects.Add("recchars_bsodaa", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<EveyBsodaa>("BsodaaNpc").gameObject, true));
+            BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject").gameObject, Vector3.zero));
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
+
+            LegacyEditorPatches.OnRoomInit += texs => texs.Add("recchars_bsodaaroom", new("recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"));
+        }
+
+        [ModuleLoadEvent(LoadingEventOrder.Final)]
+        private void IdentifyBaseBsodaSpray()
         {
             // Add a component to identify base BSODA sprays
             ITM_BSODA bsoda = (ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item;

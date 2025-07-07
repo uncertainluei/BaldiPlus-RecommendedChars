@@ -89,11 +89,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             }
             for (i++; i < length; i++)
             {
-                if (array[i].opcode == OpCodes.Bgt)
-                {
-                    patched = true;
-                    break;
-                }
+                if (array[i].opcode != OpCodes.Bgt) continue;
+
+                patched = true;
+                break;
             }
             for (i++; i < length; i++)
             {
@@ -101,7 +100,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             }
 
             if (!patched)
-                RecommendedCharsPlugin.Log.LogError("Transpiler \"RecommendedChars.CirclePatches.ScissorsUseTranspiler\" did not go through!");
+                RecommendedCharsPlugin.Log.LogError("Transpiler \"RecommendedChars.CirclePatches.ScissorsUseTranspiler\" wasn't properly applied!");
 
             yield break;
         }

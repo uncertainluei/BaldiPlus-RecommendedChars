@@ -11,6 +11,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public static void NotebookCollected() => OnNotebookCollect?.Invoke();
 
         public bool Inactive { get; private set; } = true;
+
+        public bool animationsCompat;
         private bool setupInProgress = false;
 
         private readonly List<MrDaycare> mrDaycares = new List<MrDaycare>();
@@ -46,11 +48,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (room.doors[i] is DaycareStandardDoor) continue;
                 if (room.doors[i] is StandardDoor standardDoor)
                 {
+                    if (animationsCompat)
+                        RemoveDoorAnimComponent(standardDoor);
+
                     daycareDoor = RecommendedCharsPlugin.CloneComponent<StandardDoor, DaycareStandardDoor>(standardDoor);
                     daycareDoor.Setup(room);
                     room.doors[i] = daycareDoor;
                 }
             }
+        }
+
+        private void RemoveDoorAnimComponent(StandardDoor door)
+        {
+            DestroyImmediate(door.GetComponent<BBPlusAnimations.Components.StandardDoorExtraMaterials>());
         }
 
         public int NotebookRequirement { get; private set; } 

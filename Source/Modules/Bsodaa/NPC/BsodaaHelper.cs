@@ -9,7 +9,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private byte countUntilSmall = 3;
 
         private bool sprayed;
-        private bool dropDiet;
 
         public BsodaaRoomFunction bsodaaRoom;
 
@@ -88,6 +87,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 sprayed = true;
                 InStock = false;
+
                 audMan.FlushQueue(true);
                 audMan.PlaySingle(audSad);
                 sprite.sprite = sprSprayed;
@@ -95,8 +95,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 // Drop the two BSODAs here (Diet BSODAs if it's the second time)
                 RoomController room = ec.CellFromPosition(transform.position).room;
                 ItemObject itemToDrop = itmBsoda;
-                if (dropDiet)
+                if (ModuleSaveSystem_Bsodaa.Instance.helperDietMode || ModuleSaveSystem_Bsodaa.Instance.helperExhausted)
                     itemToDrop = itmDietBsoda;
+
+                ModuleSaveSystem_Bsodaa.Instance.helperExhausted = true;
 
                 Vector3 dropLocation = transform.position + transform.forward * 2f + transform.right * 3f;
                 Pickup pickup = ec.CreateItem(room, itemToDrop, new Vector2(dropLocation.x, dropLocation.z));
@@ -110,6 +112,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void LoadingFinished()
         {
             base.LoadingFinished();
+
             InStock = true;
 
             Cell currentCell = ec.CellFromPosition(transform.position);

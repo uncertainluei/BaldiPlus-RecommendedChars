@@ -1,5 +1,5 @@
 ![Recommended Characters Pack](Info/logo.png)
-![Version](https://img.shields.io/badge/version-1.2.0.1-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
+![Version](https://img.shields.io/badge/version-1.2.1-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
 ![BB+ version](https://img.shields.io/badge/bb+-0.11-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-8.0.0.0-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
@@ -23,6 +23,8 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 - [Character Radar](https://gamebanana.com/mods/321209)
 - [BB+ Custom Musics](https://gamebanana.com/mods/527812)
 - [BB+ Animations](https://gamebanana.com/mods/503644)
+- [Advanced Edition](https://gamebanana.com/mods/504169)
+
 
 # Build Instructions
 This is for building the mod's .DLL and .PDB, which should be found at the `RecommendedChars/bin/Debug*/netstandard2.0/` directory.
@@ -37,6 +39,7 @@ This mod depends on the following mods to build:
 - [Character Radar](https://gamebanana.com/mods/321209)
 - [BB+ Custom Musics](https://gamebanana.com/mods/527812)
 - [BB+ Animations](https://gamebanana.com/mods/503644)
+- [Advanced Edition](https://gamebanana.com/mods/504169)
 
 ### Visual Studio 2022 (.NET)
 Run `RecommendedChars.sln` in Visual Studio as a project. Building should then be as simple as going to **Build -> Build Solution** in the menu bar (or pressing Ctrl+Shift+B).

@@ -18,6 +18,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.ComponentModel;
 using Unity.Collections.LowLevel.Unsafe;
+using PlusLevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -25,13 +26,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public override string Name => "CA April Fools";
 
-        public override Action LoadAction => Load;
-        public override Action PostLoadAction => PostLoad;
         public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
         public override Action<string, int, CustomLevelObject> LevelAddendAction => FloorAddendLvl;
 
         protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCaAprilFools;
 
+        [ModuleLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "CaAprilFools"), x => "CAItems/" + x.name);
@@ -54,7 +54,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject puffs = new ItemBuilder(Info)
             .SetNameAndDescription("Itm_RecChars_FlaminPuffs", "Desc_RecChars_FlaminPuffs")
             .SetEnum("RecChars_FlaminPuffs")
-            .SetMeta(ItemFlags.Persists, new string[] { "food", "recchars_daycare_exempt", "cann_hate", "adv_perfect", "adv_sm_potential_reward" })
+            .SetMeta(ItemFlags.Persists, ["food", "recchars_daycare_exempt", "cann_hate", "adv_perfect", "adv_sm_potential_reward"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminPuffs_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/FlaminPuffs_Large"), 50f))
             .SetShopPrice(800)
             .SetGeneratorCost(85)
@@ -75,7 +75,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject cherryBsoda = new ItemBuilder(Info)
             .SetNameAndDescription("Itm_RecChars_CherryBsoda", "Desc_RecChars_CherryBsoda")
             .SetEnum("RecChars_CherryBsoda")
-            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, new string[] { "food", "drink", "adv_perfect", "adv_sm_potential_reward" })
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink", "adv_perfect", "adv_sm_potential_reward"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/CherryBsoda_Large"), 50f))
             .SetShopPrice(600)
             .SetGeneratorCost(75)
@@ -112,16 +112,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Renderer renderer = sodaMachine.meshRenderer;
 
-            renderer.sharedMaterials = new Material[]
-            {
+            renderer.sharedMaterials =
+            [
                 renderer.sharedMaterials[0],
-                new Material(renderer.sharedMaterials[1])
+                new(renderer.sharedMaterials[1])
                 {
                     name = "CherryBsodaMachine",
                     mainTexture = AssetMan.Get<Texture2D>("CAItems/CherryBsodaMachine")
                 }
-            };
-            sodaMachine.outOfStockMat = new Material(sodaMachine.outOfStockMat)
+            ];
+            sodaMachine.outOfStockMat = new(sodaMachine.outOfStockMat)
             {
                 name = "CherryBsodaMachine_Out",
                 mainTexture = AssetMan.Get<Texture2D>("CAItems/CherryBsodaMachine_Out")
@@ -134,7 +134,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject ultiApple = new ItemBuilder(Info)
             .SetNameAndDescription("Itm_RecChars_UltimateApple", "Desc_RecChars_UltimateApple")
             .SetEnum("RecChars_UltimateApple")
-            .SetMeta(ItemFlags.NoUses, new string[] { "food", "crmp_contraband", "adv_forbidden_present" })
+            .SetMeta(ItemFlags.NoUses, ["food", "crmp_contraband", "adv_forbidden_present"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Large"), 50f))
             .SetShopPrice(2500)
             .SetGeneratorCost(100)
@@ -150,9 +150,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Can of Mangles
-            ItemMetaData manglesMeta = new ItemMetaData(Info, new ItemObject[0]);
+            ItemMetaData manglesMeta = new(Info, []);
             manglesMeta.flags = ItemFlags.MultipleUse;
-            manglesMeta.tags.AddRange(new string[] {"food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"});
+            manglesMeta.tags.AddRange(["food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"]);
             // The Mangles would have this "homemade" flavor, thus you can feed that to Cann
 
             Items manglesEnum = EnumExtensions.ExtendEnum<Items>("RecChars_Mangles");
@@ -212,7 +212,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_ManMemeCoin")
                 .SetPoster(AssetMan.Get<Texture2D>("MMCoinTex/pri_manmeme"), "PST_PRI_RecChars_ManMeme1", "PST_PRI_RecChars_ManMeme2")
                 .AddMetaFlag(NPCFlags.Standard)
-                .SetMetaTags(new string[] {"no_balloon_frenzy", "adv_exclusion_hammer_immunity", "adv_ev_cold_school_immunity"})
+                .SetMetaTags(["no_balloon_frenzy", "adv_exclusion_hammer_immunity", "adv_ev_cold_school_immunity"])
                 .SetAirborne()
                 .AddLooker()
                 .AddTrigger()
@@ -227,7 +227,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             coin.spriteRenderer[0].sprite = sprites[0];
 
             PineDebugNpcIconPatch.icons.Add(coin.Character, AssetMan.Get<Texture2D>("MMCoinTex/BorderMMCoin"));
-            CharacterRadarColorPatch.colors.Add(coin.Character, new Color(206/255f, 165/255f, 66/255f));
+            CharacterRadarColorPatch.colors.Add(coin.Character, new(206/255f, 165/255f, 66/255f));
 
             coin.Navigator.avoidRooms = true;
             coin.Navigator.Entity.SetHeight(6f);
@@ -246,30 +246,43 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("ManMemeCoinNpc", coin);
         }
 
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        private void RegisterToLevelLoader()
+        {
+            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_manmemecoin", AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
+
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_flaminpuffs", AssetMan.Get<ItemObject>("FlaminPuffs"));
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_cherrybsoda", AssetMan.Get<ItemObject>("CherryBsodaItem"));
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_ultimateapple", AssetMan.Get<ItemObject>("UltimateAppleItem"));
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_mangles",  AssetMan.Get<ItemObject>("ManglesItem"));
+
+            PlusLevelLoaderPlugin.Instance.prefabAliases.Add("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject);
+        }
+
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
             {
                 scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
-                scene.shopItems = scene.shopItems.AddRangeToArray(new WeightedItemObject[]
-                {
+                scene.shopItems = scene.shopItems.AddRangeToArray(
+                [
                     AssetMan.Get<ItemObject>("ManglesItem").Weighted(40),
                     AssetMan.Get<ItemObject>("CherryBsodaItem").Weighted(25),
                     AssetMan.Get<ItemObject>("FlaminPuffsItem").Weighted(20),
                     AssetMan.Get<ItemObject>("UltimateAppleItem").Weighted(5)
-                });
+                ]);
                 return;
             }
             if (title.StartsWith("F"))
             {
                 if (id >= 2)
                 {
-                    scene.shopItems = scene.shopItems.AddRangeToArray(new WeightedItemObject[]
-                    {
+                    scene.shopItems = scene.shopItems.AddRangeToArray(
+                    [
                         AssetMan.Get<ItemObject>("ManglesItem").Weighted(6+id*2),
                         AssetMan.Get<ItemObject>("CherryBsodaItem").Weighted(5+id*2),
                         AssetMan.Get<ItemObject>("FlaminPuffsItem").Weighted(4+id*2)
-                    });
+                    ]);
                 }
                 if (scene.nextLevel?.nextLevel == null) // Is the final floor
                     scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("UltimateAppleItem").Weighted(10));
@@ -282,7 +295,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             GameObject cherryMachine = AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject;
 
-            List<StructureWithParameters> structures = new List<StructureWithParameters>(lvl.forcedStructures.Where(x =>
+            List<StructureWithParameters> structures = new(lvl.forcedStructures.Where(x =>
                 x.prefab is Structure_EnvironmentObjectPlacer));
             foreach (WeightedStructureWithParameters potential in lvl.potentialStructures)
             {
@@ -301,6 +314,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
+        [ModuleLoadEvent(LoadingEventOrder.Final)]
         private void PostLoad()
         {
             ManMemeCoinEvents.InitializePostEvents();

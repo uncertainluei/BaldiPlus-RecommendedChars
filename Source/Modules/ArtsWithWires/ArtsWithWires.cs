@@ -129,13 +129,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ArtsWithWires_PlayerInSight : ArtsWithWires_StateBase
+    public class ArtsWithWires_PlayerInSight(ArtsWithWires wires) : ArtsWithWires_StateBase(wires)
     {
-        public ArtsWithWires_PlayerInSight(ArtsWithWires wires) :
-            base(wires)
-        {
-        }
-
         public override void Enter()
         {
             base.Enter();
@@ -236,17 +231,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (!player.plm.Entity.resistAddend)
                     npc.behaviorStateMachine.ChangeState(new ArtsWithWires_Grabbing(wires, player));
                 else
-                    npc.behaviorStateMachine.ChangeState(new ArtsWithWires_KeepingDistanceWithinPlayer(wires, player, chaseTime));
+                    npc.behaviorStateMachine.ChangeState(new ArtsWithWires_Distancing(wires, player, chaseTime));
             }
         }
     }
 
-    public class ArtsWithWires_KeepingDistanceWithinPlayer : ArtsWithWires_Chasing
+    public class ArtsWithWires_Distancing(ArtsWithWires wires, PlayerManager player, float chaseTime) : ArtsWithWires_Chasing(wires, player, chaseTime)
     {
-        public ArtsWithWires_KeepingDistanceWithinPlayer(ArtsWithWires wires, PlayerManager player, float chaseTime) : base(wires, player, chaseTime)
-        {
-        }
-
         public override void Enter()
         {
             // Temporarily flee from player until they're no longer touching A&W
@@ -270,22 +261,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ArtsWithWires_Grabbing : ArtsWithWires_StateBase
+    public class ArtsWithWires_Grabbing(ArtsWithWires wires, PlayerManager player) : ArtsWithWires_StateBase(wires)
     {
         private GrabbingGame game;
-        private readonly PlayerManager player;
+        private readonly PlayerManager player = player;
 
-        private readonly Transform playerTransform;
-        private readonly Transform wiresTransform;
-
-        public ArtsWithWires_Grabbing(ArtsWithWires wires, PlayerManager player) :
-            base(wires)
-        {
-            this.player = player;
-
-            playerTransform = player.transform;
-            wiresTransform = wires.transform;
-        }
+        private readonly Transform playerTransform = player.transform;
+        private readonly Transform wiresTransform = wires.transform;
 
         public override void Enter()
         {
@@ -340,7 +322,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class GrabbingGameContainer : MonoBehaviour
     {
-        public List<GrabbingGame> grabbingGames = new List<GrabbingGame>();
+        public List<GrabbingGame> grabbingGames = [];
         public PlayerManager pm;
 
         public bool TryCutGrabbingGames()
@@ -357,9 +339,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class GrabbingGame : MonoBehaviour
     {
-        private static Dictionary<PlayerManager, List<GrabbingGame>> grabbingGames = new Dictionary<PlayerManager, List<GrabbingGame>>();
-
-        private readonly MovementModifier moveMod = new MovementModifier(default, 0f);
+        private readonly MovementModifier moveMod = new(default, 0f);
 
         public Canvas textCanvas;
         public CanvasScaler textScaler;
@@ -414,16 +394,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 End(true);
                 return;
             }
-            
+
             if (grabState < 0f)
                 grabState = 0f;
 
             UpdateNeedlePosition();
-        }   
+        }
 
         private void UpdateNeedlePosition()
         {
-            needlePosition.x = needleXMin+ needleXLength * grabState / grabMax;
+            needlePosition.x = needleXMin + needleXLength * grabState / grabMax;
             needle.anchoredPosition = needlePosition;
         }
 

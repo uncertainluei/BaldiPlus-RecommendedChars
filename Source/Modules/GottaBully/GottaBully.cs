@@ -26,14 +26,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new GottaBully_Wait(this));
         }
 
-        private List<int> slotsToSteal = new List<int>();
+        private readonly List<int> slotsToSteal = [];
         public Bully bullyReference;
         public void StealItem(PlayerManager pm)
         {
             audMan.PlaySingle(audSweep);
 
             slotsToSteal.Clear();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i <= pm.itm.maxItem; i++)
                 if (!bullyReference.itemsToReject.Contains(pm.itm.items[i].itemType))
                     slotsToSteal.Add(i);
 
@@ -48,16 +48,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class GottaBully_Wait : GottaSweep_Wait
+    public class GottaBully_Wait(GottaBully gottaBully) : GottaSweep_Wait(gottaBully, gottaBully)
     {
-        private readonly GottaBully gottaBully;
-
-        public GottaBully_Wait(GottaBully gottaBully)
-        : base(gottaBully, gottaBully)
-        {
-            this.gottaBully = gottaBully;
-        }
-
         public override void Enter()
         {
             base.Enter();
@@ -79,16 +71,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class GottaBully_Stealing : GottaSweep_StateBase
+    public class GottaBully_Stealing(GottaBully gottaBully) : GottaSweep_StateBase(gottaBully, gottaBully)
     {
-        private readonly GottaBully gottaBully;
-
-        public GottaBully_Stealing(GottaBully gottaBully)
-        : base(gottaBully, gottaBully)
-        {
-            this.gottaBully = gottaBully;
-        }
-
         public override void Update()
         {
             if (!gottaBully.audMan.AnyAudioIsPlaying)
@@ -96,22 +80,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class GottaBully_BullyingTime : GottaSweep_SweepingTime
+    public class GottaBully_BullyingTime(GottaBully gottaBully) : GottaSweep_SweepingTime(gottaBully, gottaBully)
     {
-        private readonly GottaBully gottaBully;
-        private Principal principal;
-
-        public GottaBully_BullyingTime(GottaBully gottaBully)
-        : base(gottaBully, gottaBully)
-        {
-            this.gottaBully = gottaBully;
-        }
-
         public override void OnStateTriggerEnter(Collider other)
         {
             base.OnStateTriggerEnter(other);
 
-            if (other.isTrigger && other.TryGetComponent(out principal))
+            if (other.isTrigger && other.GetComponent<Principal>() != null)
             {
                 gottaBully.BackHome();
                 return;
@@ -133,16 +108,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class GottaBully_Returning : GottaSweep_Returning
+    public class GottaBully_Returning(GottaBully gottaBully) : GottaSweep_Returning(gottaBully, gottaBully)
     {
-        private readonly GottaBully gottaBully;
-
-        public GottaBully_Returning(GottaBully gottaBully)
-        : base(gottaBully, gottaBully)
-        {
-            this.gottaBully = gottaBully;
-        }
-
         public override void DestinationEmpty()
         {
             base.DestinationEmpty();
