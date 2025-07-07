@@ -147,7 +147,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             jumprope.ropeTime = 1f;
             jumprope.maxJumps = 10;
             jumprope.startVal = 100;
-            jumprope.penaltyVal = 10;
+            jumprope.penaltyVal = -10;
 
             AssetMan.Add("CircleJumprope", jumprope);
             AssetMan.Add("CircleNpc", circle);
