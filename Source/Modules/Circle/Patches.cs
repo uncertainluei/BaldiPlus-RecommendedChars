@@ -108,7 +108,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
     [ConditionalPatchMod(RecommendedCharsPlugin.CustomMusicsGuid)]
     [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Circle")]
-    [HarmonyPatch(typeof(BBPlusCustomMusics.MusicalInjection), "PlaytimeDingOverride")]
+    [HarmonyPatch(typeof(BBPlusCustomMusics.Patches.PlaytimeDingOverridePatch), "PlaytimeDingOverride")]
     static class CircleMusicCompatPatch
     {
         private static bool Prefix(Playtime __0) => __0.Character != CircleNpc.charEnum;

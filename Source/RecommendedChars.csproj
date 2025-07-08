@@ -6,7 +6,7 @@
 		<AssemblyName>UncertainLuei.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>UncertainLuei.BaldiPlus.$(MSBuildProjectName)</RootNamespace>
 		
-		<Version>1.2.1</Version>
+		<Version>1.2.1.1</Version>
 		<FileVersion>$(Version)</FileVersion>
 		<ProductVersion>$(Version)</ProductVersion>
 		
