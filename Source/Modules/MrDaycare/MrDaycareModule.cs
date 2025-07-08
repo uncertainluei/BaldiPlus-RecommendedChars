@@ -383,7 +383,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void AdvancedCompat()
         {
             ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "House");
-            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Pie, Adv_Elv_Tip_RecChars_DoorKey, Adv_Elv_Tip_RecChars_MrDaycareExceptions, Adv_Elv_Tip_RecChars_MrDaycareEarly");
+            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Pie", "Adv_Elv_Tip_RecChars_DoorKey",
+                "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Post)]
