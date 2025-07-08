@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
 ![Version](https://img.shields.io/badge/version-1.2.1-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.11-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-8.1.0.0-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![BB+ version](https://img.shields.io/badge/bb+-0.11-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-8.1.0.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
