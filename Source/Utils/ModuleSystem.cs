@@ -57,7 +57,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     }
                     catch (Exception e)
                     {
-                        MTM101BaldiDevAPI.CauseCrash(Info, e);
+                        MTM101BaldiDevAPI.CauseCrash(Info, e.InnerException);
                     }
                     break;
                 }

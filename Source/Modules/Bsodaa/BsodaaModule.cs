@@ -20,8 +20,8 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using PlusLevelFormat;
 using BaldisBasicsPlusAdvanced.API;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -425,12 +425,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
 
             RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("BsodaaRoomBlueprint");
+            LevelLoaderCompatHelper.AddRoom(blueprint);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaaflor", blueprint.texFloor);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaawall", blueprint.texWall);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaaceil", blueprint.texCeil);
-
-            PlusLevelLoaderPlugin.Instance.roomSettings.Add("recchars_bsodaaroom", new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats, blueprint.mapMaterial));
-            PlusLevelLoaderPlugin.Instance.roomSettings["recchars_bsodaaroom"].container = blueprint.functionContainer;
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
@@ -438,24 +436,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Bsodaa"), x => "BsodaaEditor/" + x.name);
 
-            BaldiLevelEditorPlugin.characterObjects.Add("recchars_bsodaa", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<EveyBsodaa>("BsodaaNpc").gameObject, true));
-            BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject").gameObject, Vector3.up*5));
+            LegacyEditorCompatHelper.AddCharacterObject("recchars_bsodaa", AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
+            LegacyEditorCompatHelper.AddObject("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject"), Vector3.up*5);
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
 
-            LegacyEditorPatches.OnRoomInit += texs => texs.Add("recchars_bsodaaroom", new("recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"));
-            LegacyEditorPatches.OnEditorInit += editor =>
-            {
-                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
-                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
-                List<EditorTool> halls = editor.toolCats.Find(x => x.name == "halls").tools;
+            LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_bsodaaroom", "recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil");
 
-                npcs.Add(new ExtendedNpcTool("recchars_bsodaa", "BsodaaEditor/Npc_bsodaa"));
-                npcs.Add(new ExtendedObjectTool("recchars_bsodaahelper", "BsodaaEditor/Npc_bsodaahelper"));
-
-                items.Add(new ExtendedItemTool("recchars_smalldietbsoda", "BsodaaEditor/Itm_smalldietbsoda"));
-
-                halls.Add(new ExtendedFloorTool("recchars_bsodaaroom", "BsodaaEditor/Floor_bsodaa"));
-            };
+            new ExtendedNpcTool("recchars_bsodaa", "BsodaaEditor/Npc_bsodaa").AddToEditor("characters");
+            new ExtendedObjectTool("recchars_bsodaahelper", "BsodaaEditor/Npc_bsodaahelper").AddToEditor("characters");
+            new ExtendedItemTool("recchars_smalldietbsoda", "BsodaaEditor/Itm_smalldietbsoda").AddToEditor("items");
+            new ExtendedFloorTool("recchars_bsodaaroom", "BsodaaEditor/Floor_bsodaa").AddToEditor("halls");
         }
             
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

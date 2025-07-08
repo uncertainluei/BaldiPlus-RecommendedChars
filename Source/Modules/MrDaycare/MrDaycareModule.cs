@@ -20,6 +20,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -340,14 +341,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
 
             RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("DaycareBlueprint");
+            LevelLoaderCompatHelper.AddRoom(blueprint);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycareflor", blueprint.texFloor);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycarewall", blueprint.texWall);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycareceil", blueprint.texCeil);
-
             PlusLevelLoaderPlugin.Instance.windowObjects.Add("recchars_daycarewindow", blueprint.windowSet);
-
-            PlusLevelLoaderPlugin.Instance.roomSettings.Add("recchars_daycare", new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats, blueprint.mapMaterial));
-            PlusLevelLoaderPlugin.Instance.roomSettings["recchars_daycare"].container = blueprint.functionContainer;
 
             PlusLevelLoaderPlugin.Instance.posters.Add("recchars_daycareinfo", AssetMan.Get<PosterObject>("DaycareInfoPoster"));
             PlusLevelLoaderPlugin.Instance.posters.Add("recchars_daycarerules", AssetMan.Get<PosterObject>("DaycareRulesPoster"));
@@ -359,24 +357,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Daycare"), x => "DaycareEditor/" + x.name);
 
-            BaldiLevelEditorPlugin.characterObjects.Add("recchars_mrdaycare", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<MrDaycare>("MrDaycareNpc").gameObject, true));
+            LegacyEditorCompatHelper.AddCharacterObject("recchars_mrdaycare", AssetMan.Get<MrDaycare>("MrDaycareNpc"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
 
-            LegacyEditorPatches.OnRoomInit += texs => texs.Add("recchars_daycare", new("recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"));
-            LegacyEditorPatches.OnEditorInit += editor =>
-            {
-                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
-                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
-                List<EditorTool> halls = editor.toolCats.Find(x => x.name == "halls").tools;
+            LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_daycare", "recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil");
 
-                npcs.Add(new ExtendedNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare"));
-
-                items.Add(new ExtendedItemTool("recchars_pie", "DaycareEditor/Itm_pie"));
-                items.Add(new ExtendedItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey"));
-
-                halls.Add(new ExtendedFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare"));
-            };
+            new ExtendedNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare").AddToEditor("characters");
+            new ExtendedItemTool("recchars_pie", "DaycareEditor/Itm_pie").AddToEditor("items");
+            new ExtendedItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey").AddToEditor("items");
+            new ExtendedFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare").AddToEditor("halls");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

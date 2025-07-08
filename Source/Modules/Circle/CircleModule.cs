@@ -165,10 +165,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
-            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", AssetMan.Get<CircleNpc>("CircleNpc"));
-
-            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
-            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_nerfgunposter", AssetMan.Get<PosterObject>("NerfGunPoster"));
+            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", RecommendedCharsPlugin.AssetMan.Get<CircleNpc>("CircleNpc"));
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", RecommendedCharsPlugin.AssetMan.Get<ItemObject>("NerfGunItem"));
+            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_nerfgunposter", RecommendedCharsPlugin.AssetMan.Get<PosterObject>("NerfGunPoster"));
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
@@ -176,17 +175,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Circle"), x => "CircleEditor/" + x.name);
 
-            BaldiLevelEditorPlugin.characterObjects.Add("recchars_circle", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<CircleNpc>("CircleNpc").gameObject, true));
+            LegacyEditorCompatHelper.AddCharacterObject("recchars_circle", AssetMan.Get<CircleNpc>("CircleNpc"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
 
-            LegacyEditorPatches.OnEditorInit += editor =>
-            {
-                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
-                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
-
-                npcs.Add(new ExtendedNpcTool("recchars_circle", "CircleEditor/Npc_circle"));
-                items.Add(new ExtendedItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun"));
-            };
+            new ExtendedNpcTool("recchars_circle", "CircleEditor/Npc_circle").AddToEditor("characters");
+            new ExtendedItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun").AddToEditor("items");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

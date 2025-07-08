@@ -8,7 +8,6 @@ using MTM101BaldAPI.Registers;
 
 using BBPlusAnimations.Components;
 
-using BaldiLevelEditor;
 using PlusLevelLoader;
 
 using System;
@@ -20,6 +19,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -199,10 +199,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", AssetMan.Get<GottaBully>("GottaBullyNpc"));
 
             RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("SwapClosetBlueprint");
+            LevelLoaderCompatHelper.AddRoom(blueprint, "recchars_swapcloset");
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_swapwall", blueprint.texWall);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_swapceil", blueprint.texCeil);
-
-            PlusLevelLoaderPlugin.Instance.roomSettings.Add("recchars_swapcloset", new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats));
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
@@ -210,17 +209,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "GottaBully"), x => "GottaBullyEditor/" + x.name);
 
-            BaldiLevelEditorPlugin.characterObjects.Add("recchars_gottabully", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<GottaBully>("GottaBullyNpc").gameObject, true));
+            LegacyEditorCompatHelper.AddCharacterObject("recchars_gottabully", AssetMan.Get<GottaBully>("GottaBullyNpc"));
+            LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_swapcloset", "BlueCarpet", "recchars_swapwall", "recchars_swapceil");
 
-            LegacyEditorPatches.OnRoomInit += texs => texs.Add("recchars_swapcloset", new("BlueCarpet", "recchars_swapwall", "recchars_swapceil"));
-            LegacyEditorPatches.OnEditorInit += editor =>
-            {
-                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
-                List<EditorTool> halls = editor.toolCats.Find(x => x.name == "halls").tools;
-
-                npcs.Add(new ExtendedNpcTool("recchars_gottabully", "GottaBullyEditor/Npc_gottabully"));
-                halls.Add(new ExtendedFloorTool("recchars_swapcloset", "GottaBullyEditor/Floor_swappedcloset"));
-            };
+            new ExtendedNpcTool("recchars_gottabully", "GottaBullyEditor/Npc_gottabully").AddToEditor("characters");
+            new ExtendedFloorTool("recchars_swapcloset", "GottaBullyEditor/Floor_swappedcloset").AddToEditor("halls");
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

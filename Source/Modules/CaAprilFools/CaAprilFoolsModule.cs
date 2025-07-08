@@ -254,30 +254,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "CaAprilFools"), x => "CAEditor/" + x.name);
 
-            BaldiLevelEditorPlugin.characterObjects.Add("recchars_manmemecoin", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc").gameObject, true));
+            LegacyEditorCompatHelper.AddCharacterObject("recchars_manmemecoin", AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
 
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_flaminpuffs", AssetMan.Get<ItemObject>("FlaminPuffsItem"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_cherrybsoda", AssetMan.Get<ItemObject>("CherryBsodaItem"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_ultimateapple", AssetMan.Get<ItemObject>("UltimateAppleItem"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_mangles", AssetMan.Get<ItemObject>("ManglesItem"));
 
-            BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject, Vector3.zero));
-            
-            LegacyEditorPatches.OnEditorInit += editor =>
-            {
-                List<EditorTool> npcs = editor.toolCats.Find(x => x.name == "characters").tools;
-                List<EditorTool> items = editor.toolCats.Find(x => x.name == "items").tools;
-                List<EditorTool> objects = editor.toolCats.Find(x => x.name == "objects").tools;
+            LegacyEditorCompatHelper.AddObject("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine"));
 
-                npcs.Add(new ExtendedNpcTool("recchars_manmemecoin", "CAEditor/Npc_manmemecoin"));
+            new ExtendedNpcTool("recchars_manmemecoin", "CAEditor/Npc_manmemecoin").AddToEditor("characters");
 
-                items.Add(new ExtendedItemTool("recchars_flaminpuffs", "CAEditor/Itm_flaminpuffs"));
-                items.Add(new ExtendedItemTool("recchars_cherrybsoda", "CAEditor/Itm_cherrybsoda"));
-                items.Add(new ExtendedItemTool("recchars_ultimateapple", "CAEditor/Itm_ultimateapple"));
-                items.Add(new ExtendedItemTool("recchars_mangles", "CAEditor/Itm_mangles"));
+            new ExtendedItemTool("recchars_flaminpuffs", "CAEditor/Itm_flaminpuffs").AddToEditor("items");
+            new ExtendedItemTool("recchars_cherrybsoda", "CAEditor/Itm_cherrybsoda").AddToEditor("items");
+            new ExtendedItemTool("recchars_ultimateapple", "CAEditor/Itm_ultimateapple").AddToEditor("items");
+            new ExtendedItemTool("recchars_mangles", "CAEditor/Itm_mangles").AddToEditor("items");
 
-                objects.Add(new ExtendedRotatableTool("recchars_cherrysodamachine", "CAEditor/Object_cherrysodamachine"));
-            };
+            new ExtendedRotatableTool("recchars_cherrysodamachine", "CAEditor/Object_cherrysodamachine").AddToEditor("objects");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

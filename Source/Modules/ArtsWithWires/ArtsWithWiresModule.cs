@@ -18,6 +18,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.TextCore;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -113,7 +114,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("WiresEditor/Npc_artswithwires", AssetLoader.TextureFromMod(Plugin, "Textures", "Editor", "Npc_artswithwires.png"));
 
             BaldiLevelEditorPlugin.characterObjects.Add("recchars_artswithwires", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc").gameObject, true));
-            LegacyEditorPatches.OnEditorInit += editor => editor.toolCats.Find(x => x.name == "characters").tools.Add(new ExtendedNpcTool("recchars_artswithwires", "WiresEditor/Npc_artswithwires"));
+            new ExtendedNpcTool("recchars_artswithwires", "WiresEditor/Npc_artswithwires").AddToEditor("characters");
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)
