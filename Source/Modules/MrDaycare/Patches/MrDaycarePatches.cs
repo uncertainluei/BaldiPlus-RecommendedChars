@@ -115,53 +115,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     [HarmonyPatch]
     static class MrDaycareAdvancedPatches
     {
-        // Prioritize getting the Principal, part of the Advanced PR
-        private static Principal GetPrincipal()
-        {
-            Principal fallback = null;
-            foreach (NPC npc in BaseGameManager.Instance.Ec.Npcs)
-            {
-                if (npc is not Principal pri) continue;
-                fallback = pri;
-                if (npc.Character == Character.Principal)
-                    return pri;
-            }
-            return fallback;
-        }
-
-        private static readonly MethodInfo getPrincipalMethod = AccessTools.Method(typeof(MrDaycareAdvancedPatches), "GetPrincipal");
-
-        // Temporary patch until Advanced updates with the PR
-        [HarmonyPatch(typeof(VotingEvent), "Begin"), HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> VotingBeginTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            bool patched = false;
-
-            CodeInstruction[] array = instructions.ToArray();
-            int length = array.Length, i = 0;
-
-            for (; i < length && !patched; i++)
-            {
-                if (array[i].opcode == OpCodes.Call &&
-                    array[i].operand?.ToString() == "Principal FindObjectOfType[Principal]()")
-                {
-                    patched = true;
-                    yield return new CodeInstruction(OpCodes.Call, getPrincipalMethod);
-                    continue;
-                }
-                yield return array[i];
-            }
-            for (; i < length; i++)
-            {
-                yield return array[i];
-            }
-
-            if (!patched)
-                RecommendedCharsPlugin.Log.LogWarning("Transpiler \"RecommendedChars.MrDaycareAdvancedPatches.VotingBeginTranspiler\" wasn't properly applied! It is extremely likely Advanced has released a fix!");
-
-            yield break;
-        }
-
         [HarmonyPatch(typeof(VotingEvent.PrincipalController), "SetCheckingRoomMode"), HarmonyPrefix]
         private static bool VotingEventCheck(bool value, Principal ___principal, ref NavigationState_PartyEvent ___state, RoomController ___room)
         {
