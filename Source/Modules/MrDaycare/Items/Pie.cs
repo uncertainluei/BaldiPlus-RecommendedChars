@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private bool flying = true;
 
         private EnvironmentController ec;
-        private readonly MovementModifier moveMod = new MovementModifier(Vector3.zero, 0.8f);
+        private readonly MovementModifier moveMod = new(Vector3.zero, 0.8f);
 
         public override bool Use(PlayerManager pm)
         {

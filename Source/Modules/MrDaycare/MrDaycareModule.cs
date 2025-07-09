@@ -363,7 +363,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_daycare", "recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil");
 
-            new ExtendedNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare").AddToEditor("characters");
+            new ExtendedRoomNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare", "recchars_daycare").AddToEditor("characters");
             new ExtendedItemTool("recchars_pie", "DaycareEditor/Itm_pie").AddToEditor("items");
             new ExtendedItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey").AddToEditor("items");
             new ExtendedFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare").AddToEditor("halls");

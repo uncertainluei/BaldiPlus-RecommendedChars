@@ -13,7 +13,7 @@
             sodaMachines = room.objectObject.GetComponentsInChildren<SodaMachine>();
         }
 
-        public bool HelperInStock => Helper == null || Helper.InStock;
+        public bool HelperInStock => Helper != null && Helper.InStock;
         public bool MachinesInStock
         {
             get

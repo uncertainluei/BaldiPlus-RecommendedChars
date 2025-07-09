@@ -443,7 +443,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_bsodaaroom", "recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil");
 
             new ExtendedNpcTool("recchars_bsodaa", "BsodaaEditor/Npc_bsodaa").AddToEditor("characters");
-            new ExtendedObjectTool("recchars_bsodaahelper", "BsodaaEditor/Npc_bsodaahelper").AddToEditor("characters");
+            new ExtendedRoomObjTool("recchars_bsodaahelper", "BsodaaEditor/Npc_bsodaahelper", "recchars_bsodaaroom").AddToEditor("characters");
             new ExtendedItemTool("recchars_smalldietbsoda", "BsodaaEditor/Itm_smalldietbsoda").AddToEditor("items");
             new ExtendedFloorTool("recchars_bsodaaroom", "BsodaaEditor/Floor_bsodaa").AddToEditor("halls");
         }

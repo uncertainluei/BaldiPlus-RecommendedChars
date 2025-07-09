@@ -25,7 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public SoundObject[] audSuccess;
         public SoundObject audReloaded;
 
-        public List<RoomController> BsodaaRooms { get; private set; } = new List<RoomController>();
+        public List<RoomController> BsodaaRooms { get; private set; } = [];
         private DijkstraMap dijkstraMap;
         private bool autoRestock = false;
 
@@ -58,21 +58,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Cell currentCell = ec.CellFromPosition(transform.position);
             RoomController room;
-            if (currentCell != null && (room = currentCell.room) != null && room.functionObject.GetComponent<BsodaaRoomFunction>() != null)
+            BsodaaRoomFunction roomFunction;
+            if (currentCell != null && (room = currentCell.room) != null && room.functionObject.TryGetComponent(out roomFunction))
             {
                 insideRoom = true;
-                BsodaaRooms.Add(room);
-            }
 
+                if (roomFunction.HelperInStock)
+                    BsodaaRooms.Add(room);
+            }
             foreach (RoomController room2 in ec.rooms)
             {
                 if (BsodaaRooms.Contains(room2)) continue;
-                if (room2.functionObject != null && room2.functionObject.GetComponent<BsodaaRoomFunction>() != null)
+                if (room2.functionObject != null && room2.functionObject.TryGetComponent(out roomFunction) && roomFunction.HelperInStock)
                     BsodaaRooms.Add(room2);
             }
 
             if (insideRoom)
-                behaviorStateMachine.ChangeState(new EveyBsodaa_LeavingRoom(this));
+                behaviorStateMachine.ChangeState(new EveyBsodaa_LeavingRoom(this, currentCell.room));
             else
                 behaviorStateMachine.ChangeState(new EveyBsodaa_WanderingReady(this));
             if (BsodaaRooms.Count == 0)
@@ -150,23 +152,26 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new EveyBsodaa_AttemptRestock(this, currentRoom));
             return true;
         }
-    }
 
-    public class EveyBsodaa_Statebase : NpcState
-    {
-        protected readonly EveyBsodaa bsodaa;
-        public EveyBsodaa_Statebase(EveyBsodaa bsodaa) : base(bsodaa)
+        public void LeaveCurrentRoom()
         {
-            this.bsodaa = bsodaa;
+            Cell cell = ec.CellFromPosition(transform.position);
+            if (cell == null || cell.room == ec.nullRoom || cell.room.type == RoomType.Hall)
+            {
+                behaviorStateMachine.ChangeState(new EveyBsodaa_WanderingReady(this));
+                return;
+            }
+            behaviorStateMachine.ChangeState(new EveyBsodaa_LeavingRoom(this, cell.room));
         }
     }
 
-    public class EveyBsodaa_Wandering : EveyBsodaa_Statebase
+    public class EveyBsodaa_Statebase(EveyBsodaa bsodaa) : NpcState(bsodaa)
     {
-        public EveyBsodaa_Wandering(EveyBsodaa bsodaa) : base(bsodaa)
-        {
-        }
+        protected readonly EveyBsodaa bsodaa = bsodaa;
+    }
 
+    public class EveyBsodaa_Wandering(EveyBsodaa bsodaa) : EveyBsodaa_Statebase(bsodaa)
+    {
         public override void Enter()
         {
             base.Enter();
@@ -181,26 +186,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_LeavingRoom : EveyBsodaa_Wandering
+    public class EveyBsodaa_LeavingRoom(EveyBsodaa bsodaa, RoomController room) : EveyBsodaa_Wandering(bsodaa)
     {
-        public EveyBsodaa_LeavingRoom(EveyBsodaa bsodaa) : base(bsodaa)
-        {
-        }
+        private readonly RoomController roomToLeave = room;
 
         public override void OnRoomExit(RoomController room)
         {
             base.OnRoomExit(room);
-            if (bsodaa.BsodaaRooms.Contains(room))
+            if (room == roomToLeave)
                 npc.behaviorStateMachine.ChangeState(new EveyBsodaa_WanderingReady(bsodaa));
         }
     }
 
-    public class EveyBsodaa_WanderingReady : EveyBsodaa_Wandering
+    public class EveyBsodaa_WanderingReady(EveyBsodaa bsodaa) : EveyBsodaa_Wandering(bsodaa)
     {
-        public EveyBsodaa_WanderingReady(EveyBsodaa bsodaa) : base(bsodaa)
-        {
-        }
-
         public override void InPlayerSight(PlayerManager player)
         {
             base.InPlayerSight(player);
@@ -297,12 +296,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_EmptyHanded : EveyBsodaa_Statebase
+    public class EveyBsodaa_EmptyHanded(EveyBsodaa bsodaa) : EveyBsodaa_Statebase(bsodaa)
     {
-        public EveyBsodaa_EmptyHanded(EveyBsodaa bsodaa) : base(bsodaa)
-        {
-        }
-
         public override void DestinationEmpty()
         {
             base.DestinationEmpty();
@@ -310,14 +305,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    // Placeholder, used before implementing Bsodaa Helper
-    public class EveyBsodaa_TimedRestock : EveyBsodaa_Wandering
+    // Fallback state if no valid Bsodaa rooms are in the level
+    public class EveyBsodaa_TimedRestock(EveyBsodaa bsodaa, float time) : EveyBsodaa_Wandering(bsodaa)
     {
-        private float timeLeft;
-        public EveyBsodaa_TimedRestock(EveyBsodaa bsodaa, float time) : base(bsodaa)
-        {
-            timeLeft = time;
-        }
+        private float timeLeft = time;
 
         public override void Update()
         {
@@ -366,7 +357,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 bsodaaRoom.Helper.Restock();
                 yield return new WaitForSecondsNPCTimescale(npc, 0.3f);
-                npc.behaviorStateMachine.ChangeState(new EveyBsodaa_LeavingRoom(bsodaa));
+                bsodaa.LeaveCurrentRoom();
                 yield break;
             }
             bsodaa.BsodaaRooms.Remove(bsodaaRoom.Room);

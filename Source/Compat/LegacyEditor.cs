@@ -1,13 +1,17 @@
-﻿using MTM101BaldAPI.AssetTools;
-using BaldiLevelEditor;
-using UnityEngine;
-using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
-using HarmonyLib;
-using MTM101BaldAPI;
-using PlusLevelFormat;
-using System;
-using System.Collections.Generic;
+﻿using HarmonyLib;
+
 using MonoMod.Utils;
+
+using MTM101BaldAPI;
+using MTM101BaldAPI.AssetTools;
+
+using BaldiLevelEditor;
+using PlusLevelFormat;
+using PlusLevelLoader;
+
+using System.Collections.Generic;
+
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
 {
@@ -80,6 +84,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
         public override Sprite editorSprite => sprite;
     }
 
+    internal class ExtendedRoomNpcTool(string prefab, string spritePath, string type) : ExtendedNpcTool(prefab, spritePath)
+    {
+        private readonly string type = type;
+
+        public override void OnDrop(IntVector2 pos)
+        {
+            if (IsOutOfBounds(pos)) return;
+
+            TiledArea area = PlusLevelEditor.Instance.level.GetAreaOfPos(pos.ToByte());
+            if (area == null || area.roomId == 0) return;
+            if (PlusLevelEditor.Instance.level.rooms[area.roomId - 1].type != type) return;
+
+            base.OnDrop(pos);
+        }
+    }
+
     internal class ExtendedItemTool(string prefab, string spritePath) : ItemTool(prefab), IExtendedEditorTool
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
@@ -96,6 +116,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
         public override Sprite editorSprite => sprite;
+    }
+
+    internal class ExtendedRoomObjTool(string prefab, string spritePath, string type) : ExtendedObjectTool(prefab, spritePath)
+    {
+        private readonly string type = type;
+
+        public override void OnDrop(IntVector2 pos)
+        {
+            if (IsOutOfBounds(pos)) return;
+
+            TiledArea area = PlusLevelEditor.Instance.level.GetAreaOfPos(pos.ToByte());
+            if (area == null || area.roomId == 0) return;
+            if (PlusLevelEditor.Instance.level.rooms[area.roomId-1].type != type) return;
+
+            base.OnDrop(pos);
+        }
     }
 
     internal class ExtendedRotatableTool(string prefab, string spritePath) : RotateAndPlacePrefab(prefab), IExtendedEditorTool

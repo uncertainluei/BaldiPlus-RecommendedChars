@@ -5,6 +5,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class BsodaaHelper : EnvironmentObject, IClickable<int>
     {
         public bool InStock { get; private set; }
+
         private byte bsodaCount = 3;
         private byte countUntilSmall = 3;
 
