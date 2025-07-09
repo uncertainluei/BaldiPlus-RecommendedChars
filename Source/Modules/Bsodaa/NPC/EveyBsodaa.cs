@@ -266,16 +266,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_Charging : EveyBsodaa_Statebase
+    public class EveyBsodaa_Charging(EveyBsodaa bsodaa, Transform target, float chargeTime) : EveyBsodaa_Statebase(bsodaa)
     {
-        private readonly Transform targetTransform;
-        private float timeLeft;
-
-        public EveyBsodaa_Charging(EveyBsodaa bsodaa, Transform target, float chargeTime) : base(bsodaa)
-        {
-            targetTransform = target;
-            timeLeft = chargeTime;
-        }
+        private readonly Transform targetTransform = target;
+        private float timeLeft = chargeTime;
 
         public override void Enter()
         {
