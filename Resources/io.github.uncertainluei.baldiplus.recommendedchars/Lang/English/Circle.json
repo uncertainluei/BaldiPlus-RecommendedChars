@@ -19,6 +19,8 @@
 	
 	{ "key": "Hud_RecChars_CircleRope_Start", "value": "LETS PLAY!" },
 	{ "key": "Hud_RecChars_CircleRope_Continue", "value": "SHAPE WORLD" },
-	{ "key": "Hud_RecChars_CircleRope_Fail", "value": "OOPS!" }
+	{ "key": "Hud_RecChars_CircleRope_Fail", "value": "OOPS!" },
+	
+	{ "key": "Adv_Elv_Tip_RecChars_Circle", "value": "Make sure you are prepared for when Circle comes!" }
   ]
 }
