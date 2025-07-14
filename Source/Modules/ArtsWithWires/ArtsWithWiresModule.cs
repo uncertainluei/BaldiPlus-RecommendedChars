@@ -114,7 +114,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("WiresEditor/Npc_artswithwires", AssetLoader.TextureFromMod(Plugin, "Textures", "Editor", "Npc_artswithwires.png"));
 
             BaldiLevelEditorPlugin.characterObjects.Add("recchars_artswithwires", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc").gameObject, true));
-            new ExtendedNpcTool("recchars_artswithwires", "WiresEditor/Npc_artswithwires").AddToEditor("characters");
+            new ExtNpcTool("recchars_artswithwires", "WiresEditor/Npc_artswithwires").AddToEditor("characters");
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

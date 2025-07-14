@@ -21,6 +21,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -266,6 +267,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.posterChance = 0.1f;
 
             daycareRoom.windowSet = ObjectCreators.CreateWindowObject("Daycare_Window", AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow"), AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow_Broken"), AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow_Mask"));
+            daycareRoom.windowSet.mask.name = "DaycareWindow_Mask";
             daycareRoom.windowChance = 0.35f;
 
             DetentionRoomFunction detRoomFunction = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
@@ -363,18 +365,25 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_daycare", "recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil");
 
-            new ExtendedRoomNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare", "recchars_daycare").AddToEditor("characters");
-            new ExtendedItemTool("recchars_pie", "DaycareEditor/Itm_pie").AddToEditor("items");
-            new ExtendedItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey").AddToEditor("items");
-            new ExtendedFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare").AddToEditor("halls");
+            new ExtRoomNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare", "recchars_daycare").AddToEditor("characters");
+            new ExtItemTool("recchars_pie", "DaycareEditor/Itm_pie").AddToEditor("items");
+            new ExtItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey").AddToEditor("items");
+            new ExtFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare").AddToEditor("halls");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
-            ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "House");
+            ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "house");
             ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Pie", "Adv_Elv_Tip_RecChars_DoorKey",
                 "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
+        private void LoadDaveWindowlet()
+        {
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(Plugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
+            FragileWindowsCompatHelper.AddWindowlet<DaveWindowlet>("Dave", sprites[0], sprites[3], new(81/255f, 38/255f, 10/255f), 3);
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Post)]

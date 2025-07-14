@@ -29,6 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LevelLoaderGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LegacyEditorGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(FragileWindowsGuid, BepInDependency.DependencyFlags.SoftDependency)]
 
     partial class RecommendedCharsPlugin : BaseUnityPlugin
     {

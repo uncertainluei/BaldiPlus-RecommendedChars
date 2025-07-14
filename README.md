@@ -26,7 +26,7 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 - [Advanced Edition](https://gamebanana.com/mods/504169)
 - [Legacy Level Editor](https://gamebanana.com/wips/84160)
 - [Level Loading System](https://gamebanana.com/mods/508477)
-
+- [Fragile Windows v3](https://gamebanana.com/mods/512880)
 
 # Build Instructions
 This is for building the mod's .DLL and .PDB, which should be found at the `RecommendedChars/bin/Debug*/netstandard2.0/` directory.
@@ -44,6 +44,7 @@ This mod depends on the following mods to build:
 - [Advanced Edition](https://gamebanana.com/mods/504169)
 - [Legacy Level Editor](https://gamebanana.com/wips/84160)
 - [Level Loading System](https://gamebanana.com/mods/508477)
+- [Fragile Windows v3](https://gamebanana.com/mods/512880)
 
 ### Visual Studio 2022 (.NET)
 Run `RecommendedChars.sln` in Visual Studio as a project. Building should then be as simple as going to **Build -> Build Solution** in the menu bar (or pressing Ctrl+Shift+B).

@@ -212,8 +212,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LegacyEditorCompatHelper.AddCharacterObject("recchars_gottabully", AssetMan.Get<GottaBully>("GottaBullyNpc"));
             LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_swapcloset", "BlueCarpet", "recchars_swapwall", "recchars_swapceil");
 
-            new ExtendedNpcTool("recchars_gottabully", "GottaBullyEditor/Npc_gottabully").AddToEditor("characters");
-            new ExtendedFloorTool("recchars_swapcloset", "GottaBullyEditor/Floor_swappedcloset").AddToEditor("halls");
+            new ExtNpcTool("recchars_gottabully", "GottaBullyEditor/Npc_gottabully").AddToEditor("characters");
+            new ExtFloorTool("recchars_swapcloset", "GottaBullyEditor/Floor_swappedcloset").AddToEditor("halls");
         }
 
         private void FloorAddend(string title, int id, SceneObject scene)

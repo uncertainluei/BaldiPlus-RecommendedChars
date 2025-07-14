@@ -21,6 +21,8 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
+using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -263,14 +265,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LegacyEditorCompatHelper.AddObject("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine"));
 
-            new ExtendedNpcTool("recchars_manmemecoin", "CAEditor/Npc_manmemecoin").AddToEditor("characters");
+            new ExtNpcTool("recchars_manmemecoin", "CAEditor/Npc_manmemecoin").AddToEditor("characters");
 
-            new ExtendedItemTool("recchars_flaminpuffs", "CAEditor/Itm_flaminpuffs").AddToEditor("items");
-            new ExtendedItemTool("recchars_cherrybsoda", "CAEditor/Itm_cherrybsoda").AddToEditor("items");
-            new ExtendedItemTool("recchars_ultimateapple", "CAEditor/Itm_ultimateapple").AddToEditor("items");
-            new ExtendedItemTool("recchars_mangles", "CAEditor/Itm_mangles").AddToEditor("items");
+            new ExtItemTool("recchars_flaminpuffs", "CAEditor/Itm_flaminpuffs").AddToEditor("items");
+            new ExtItemTool("recchars_cherrybsoda", "CAEditor/Itm_cherrybsoda").AddToEditor("items");
+            new ExtItemTool("recchars_ultimateapple", "CAEditor/Itm_ultimateapple").AddToEditor("items");
+            new ExtItemTool("recchars_mangles", "CAEditor/Itm_mangles").AddToEditor("items");
 
-            new ExtendedRotatableTool("recchars_cherrysodamachine", "CAEditor/Object_cherrysodamachine").AddToEditor("objects");
+            new ExtRotatableTool("recchars_cherrysodamachine", "CAEditor/Object_cherrysodamachine").AddToEditor("objects");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -376,15 +378,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 if (!gen.scene.levelTitle.StartsWith("F")) return;
             }
-            else if (!meta.tags.Contains("main")) return;
+            else if (!meta.tags.Contains("main") && !meta.tags.Contains("recchars_mmcoin_spawns")) return;
 
-            int chance = gen.scene.levelNo;
+            int floorCount = gen.scene.levelNo;
             SceneObject next = gen.scene;
-            while (next = next.nextLevel)
-                chance++;
+            while (next != null && next.manager is MainGameManager)
+            {
+                floorCount++;
+                if (floorCount >= 10)
+                {
+                    floorCount = 10;
+                    break;
+                }
+                next = next.nextLevel;
+            }
+            if (floorCount == 0) return;
 
-            chance = new System.Random(gen.seed + 41223).Next(chance);
-            if (chance == gen.scene.levelNo)
+            if (new System.Random(gen.seed + 41223).Next(floorCount) == (gen.scene.levelNo % floorCount))
                 gen.Ec.npcsToSpawn.Add(coin);
         }
     }

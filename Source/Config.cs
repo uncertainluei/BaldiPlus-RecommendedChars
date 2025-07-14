@@ -9,11 +9,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static ConfigEntry<bool> moduleArtsWWires;
         internal static ConfigEntry<bool> moduleCaAprilFools;
         internal static ConfigEntry<bool> moduleMrDaycare;
-
         internal static ConfigEntry<bool> moduleBsodaa;
 
         internal static ConfigEntry<bool> intendedWiresBehavior;
         internal static ConfigEntry<bool> nerfedMrDaycare;
+
         internal static ConfigEntry<bool> guaranteeSpawnChar;
 
 

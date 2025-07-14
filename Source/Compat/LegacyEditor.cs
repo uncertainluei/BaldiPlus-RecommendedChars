@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-
 using MonoMod.Utils;
 
 using MTM101BaldAPI;
@@ -41,7 +40,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
         internal static void AddCharacterObject(string id, Component obj) => BaldiLevelEditorPlugin.characterObjects.Add(id, GetStrippedObject(obj, true));
         internal static void AddObject(string id, Component obj, Vector3 offset = default) => BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>(id, obj.gameObject, offset));
 
-        internal static void AddToEditor<T>(this T tool, string cat) where T : EditorTool, IExtendedEditorTool
+        internal static void AddToEditor<T>(this T tool, string cat) where T : EditorTool, IExtEditorTool
         {
             if (!toolsToInit.ContainsKey(cat))
                 toolsToInit.Add(cat, []);
@@ -75,16 +74,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
         }
     }
 
-    internal interface IExtendedEditorTool
+    internal interface IExtEditorTool
     {}
 
-    internal class ExtendedNpcTool(string prefab, string spritePath) : NpcTool(prefab), IExtendedEditorTool
+    internal class ExtNpcTool(string prefab, string spritePath) : NpcTool(prefab), IExtEditorTool
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
         public override Sprite editorSprite => sprite;
     }
 
-    internal class ExtendedRoomNpcTool(string prefab, string spritePath, string type) : ExtendedNpcTool(prefab, spritePath)
+    internal class ExtRoomNpcTool(string prefab, string spritePath, string type) : ExtNpcTool(prefab, spritePath)
     {
         private readonly string type = type;
 
@@ -100,25 +99,25 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
         }
     }
 
-    internal class ExtendedItemTool(string prefab, string spritePath) : ItemTool(prefab), IExtendedEditorTool
+    internal class ExtItemTool(string prefab, string spritePath) : ItemTool(prefab), IExtEditorTool
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
         public override Sprite editorSprite => sprite;
     }
 
-    internal class ExtendedFloorTool(string prefab, string spritePath) : FloorTool(prefab), IExtendedEditorTool
+    internal class ExtFloorTool(string prefab, string spritePath) : FloorTool(prefab), IExtEditorTool
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
         public override Sprite editorSprite => sprite;
     }
 
-    internal class ExtendedObjectTool(string prefab, string spritePath) : ObjectTool(prefab), IExtendedEditorTool
+    internal class ExtObjectTool(string prefab, string spritePath) : ObjectTool(prefab), IExtEditorTool
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
         public override Sprite editorSprite => sprite;
     }
 
-    internal class ExtendedRoomObjTool(string prefab, string spritePath, string type) : ExtendedObjectTool(prefab, spritePath)
+    internal class ExtRoomObjTool(string prefab, string spritePath, string type) : ExtObjectTool(prefab, spritePath)
     {
         private readonly string type = type;
 
@@ -134,7 +133,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
         }
     }
 
-    internal class ExtendedRotatableTool(string prefab, string spritePath) : RotateAndPlacePrefab(prefab), IExtendedEditorTool
+    internal class ExtRotatableTool(string prefab, string spritePath) : RotateAndPlacePrefab(prefab), IExtEditorTool
     {
         private readonly Sprite sprite = AssetLoader.SpriteFromTexture2D(RecommendedCharsPlugin.AssetMan.Get<Texture2D>(spritePath), 40);
         public override Sprite editorSprite => sprite;

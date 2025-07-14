@@ -178,14 +178,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LegacyEditorCompatHelper.AddCharacterObject("recchars_circle", AssetMan.Get<CircleNpc>("CircleNpc"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
 
-            new ExtendedNpcTool("recchars_circle", "CircleEditor/Npc_circle").AddToEditor("characters");
-            new ExtendedItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun").AddToEditor("items");
+            new ExtNpcTool("recchars_circle", "CircleEditor/Npc_circle").AddToEditor("characters");
+            new ExtItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun").AddToEditor("items");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
-            ApiManager.AddNewSymbolMachineWords(Info, "TCMG", "Edits", "Round", "John", "Shape", "World");
+            ApiManager.AddNewSymbolMachineWords(Info, "TCMG", "edits", "round", "John", "shape", "world");
             ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Circle");
         }
 
