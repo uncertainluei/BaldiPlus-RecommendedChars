@@ -384,6 +384,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(Plugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
             FragileWindowsCompatHelper.AddWindowlet<DaveWindowlet>("Dave", sprites[0], sprites[3], new(81/255f, 38/255f, 10/255f), 3);
+            DaveWindowlet.sprLo = sprites[1];
+            DaveWindowlet.sprHi = sprites[2];
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Post)]

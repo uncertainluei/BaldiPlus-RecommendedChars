@@ -42,7 +42,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "MMCoin"), x => "MMCoinTex/" + x.name);
 
             AssetMan.Add("Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_CherryBsodaBoing", SoundType.Effect, Color.white));
-            AssetMan.Add("CartoonEating", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "CartoonEating" && x.GetInstanceID() >= 0));
 
             LoadItems();
             LoadManMemeCoinNpc();
@@ -66,10 +65,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             puffs.name = "RecChars FlaminPuffs";
 
+            SoundObject audEat = ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat;
+
             ITM_FlaminPuffs puffsItm = (ITM_FlaminPuffs)puffs.item;
             puffsItm.name = "Itm_FlaminPuffs";
             puffsItm.gaugeSprite = puffs.itemSpriteSmall;
-            puffsItm.audEat = AssetMan.Get<SoundObject>("CartoonEating");
+            puffsItm.audEat = audEat;
 
             AssetMan.Add("FlaminPuffsItem", puffs);
 
@@ -168,8 +169,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetShopPrice(500)
             .SetGeneratorCost(60)
             .SetItemComponent<ITM_Mangles>();
-
-            SoundObject audEat = ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat;
 
             ItemObject manglesItemObject = manglesBuilder.Build();
             manglesItemObject.name = "RecChars Mangles1";
