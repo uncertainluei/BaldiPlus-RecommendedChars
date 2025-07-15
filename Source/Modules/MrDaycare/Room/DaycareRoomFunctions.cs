@@ -51,7 +51,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     if (animationsCompat)
                         RemoveDoorAnimComponent(standardDoor);
 
-                    daycareDoor = RecommendedCharsPlugin.CloneComponent<StandardDoor, DaycareStandardDoor>(standardDoor);
+                    daycareDoor = RecommendedCharsPlugin.SwapComponentSimple<StandardDoor, DaycareStandardDoor>(standardDoor);
                     daycareDoor.Setup(room);
                     room.doors[i] = daycareDoor;
                 }

@@ -14,6 +14,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public Sprite sprSad;
 
         public float successCooldown = 50f;
+        public float sadSpeed = 20f;
 
         internal static Character charEnum = (Character)(-1);
     }
@@ -60,12 +61,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             playtime.ec.MakeNoise(playtime.transform.position, noiseValue);
             jumps = 0;
-            ropeDelay = 2f;
+            ropeDelay = 1.5f;
             playtime.JumpropeHit();
 
             totalPoints += penaltyVal;
-            if (totalPoints < 20)
-                totalPoints = 20;
+            if (totalPoints < 10)
+                totalPoints = 10;
 
             countTmp.text = $"{jumps}/{LocalizationManager.Instance.GetLocalizedText(failKey)}";
         }

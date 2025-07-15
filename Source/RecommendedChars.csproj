@@ -55,8 +55,15 @@
 		<Reference Include="BaldisBasicsPlusAdvanced" Publicize="true">
 			<HintPath>..\Dependencies\BaldisBasicsPlusAdvanced.dll</HintPath>
 		</Reference>
+		
 		<Reference Include="brobowindowsmod" Publicize="true">
 			<HintPath>..\Dependencies\brobowindowsmod.dll</HintPath>
+		</Reference>
+		<Reference Include="BigThinkersEcoFriendlyPack">
+			<HintPath>..\Dependencies\BigThinkersEcoFriendlyPack.dll</HintPath>
+		</Reference>
+		<Reference Include="CRAZYBABYJUMPSCARE">
+			<HintPath>..\Dependencies\CRAZYBABYJUMPSCARE.dll</HintPath>
 		</Reference>
 		
 		<Reference Include="PlusLevelLoader">

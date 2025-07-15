@@ -1,12 +1,66 @@
 ﻿using MTM101BaldAPI;
+using MTM101BaldAPI.AssetTools;
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
+    partial class RecommendedCharsPlugin
+    {
+        // Like AssetLoader.SpritesFromSpritesheet, but based on sprite size and sprite count
+        internal static Sprite[] SplitSpriteSheet(Texture2D atlas, int spriteWidth, int spriteHeight, int totalSprites = 0, float pixelsPerUnit = 100f)
+        {
+            int horizontalTiles = atlas.width / spriteWidth;
+            int verticalTiles = atlas.height / spriteHeight;
+
+            if (totalSprites == 0)
+                totalSprites = horizontalTiles * verticalTiles;
+            Sprite[] array = new Sprite[totalSprites];
+
+            Vector2 center = Vector2.one / 2f;
+
+            int i = 0;
+            for (int y = verticalTiles - 1; y >= 0; y--)
+            {
+                for (int x = 0; x < horizontalTiles && i < totalSprites; x++)
+                {
+                    Sprite sprite = Sprite.Create(atlas, new Rect(x * spriteWidth, y * spriteHeight, spriteWidth, spriteHeight), center, pixelsPerUnit, 0u, SpriteMeshType.FullRect);
+                    sprite.name = atlas.name + "_" + i;
+                    array[i++] = sprite;
+                }
+            }
+            return array;
+        }
+
+        internal static X SwapComponentSimple<T, X>(T original) where T : MonoBehaviour where X : T
+        {
+            X val = original.gameObject.AddComponent<X>();
+
+            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (FieldInfo fieldInfo in fields)
+                fieldInfo.SetValue(val, fieldInfo.GetValue(original));
+
+            GameObject.DestroyImmediate(original);
+            return val;
+        }
+
+        internal static void AddAudioClipsToAssetMan(string path, string prefix)
+        {
+            string[] files = Directory.GetFiles(path, "*.wav");
+            for (int i = 0; i < files.Length; i++)
+            {
+                AudioClip aud = AssetLoader.AudioClipFromFile(files[i], AudioType.WAV);
+                AssetMan.Add(prefix + aud.name, aud);
+                aud.name = "RecChars_" + aud.name;
+            }
+        }
+    }
+
     public static class WeightedHelperExtensions
     {
         public static T Weighted<X, T>(this X selection, int weight) where T : WeightedSelection<X>, new()

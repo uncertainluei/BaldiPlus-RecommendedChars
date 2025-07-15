@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using brobowindowsmod;
+﻿using brobowindowsmod;
 using brobowindowsmod.NPCs;
 using brobowindowsmod.Patches;
+
+using System;
+using System.Collections.Generic;
+
 using HarmonyLib;
 using MTM101BaldAPI;
 using UnityEngine;
+using brobowindowsmod.ItemScripts;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Reflection;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
 {
@@ -22,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
 
     [ConditionalPatchMod(RecommendedCharsPlugin.FragileWindowsGuid)]
     [HarmonyPatch]
-    internal static class WindowDisplayFixPatch
+    internal static class FragileMiscPatches
     {
         // Window mask fix
         private static WindowObject _windowSet;
@@ -50,6 +55,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
                 return false;
             }
             return true;
+        }
+
+        // Fix Cup of Windows not applying forces to spawned windows
+        [HarmonyPatch(typeof(ITM_CupOfWindow), "dump"), HarmonyPrefix]
+        private static void AssignPmToCup(PlayerManager ___pmium, ref PlayerManager ___pm)
+        {
+            ___pm = ___pmium;
         }
     }
 
@@ -89,8 +101,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
         }
 
         [HarmonyPatch("LateUpdate"), HarmonyPrefix]
-        private static void LateUpdate(LittleWindowGuy __instance)
+        private static bool LateUpdate(LittleWindowGuy __instance)
         {
+            // Do not run LateUpdate before the hotspot's created
+            if (__instance.hotspot == null) return false;
+
             ExtWindowletVariant var = GetVariantFunction(__instance);
             if (__instance.pickedUp)
                 var?.HeldUpdate();
@@ -98,6 +113,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
                 var?.FlyingUpdate();
             else
                 var?.WanderUpdate();
+
+            return true;
         }
 
         [HarmonyPatch("Click"), HarmonyPrefix]

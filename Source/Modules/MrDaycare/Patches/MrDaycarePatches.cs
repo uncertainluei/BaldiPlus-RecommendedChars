@@ -1,8 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Game.Events;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
-using BaldisBasicsPlusAdvanced.Patches.Characters;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.Registers;
@@ -38,7 +34,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         ];
 
         [HarmonyPatch(typeof(ITM_PrincipalWhistle), "Use"), HarmonyPostfix]
-        private static void OnUseWhistle(PlayerManager pm)
+        private static void WhistleScold(PlayerManager pm)
         {
             if (!pm.ec.silent && !pm.ec.CellFromPosition(IntVector2.GetGridPosition(pm.transform.position)).Silent)
                 DaycareGuiltManager.GetInstance(pm).BreakRule("LoudSound", 1.5f, 0.5f);
@@ -72,12 +68,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         public static void OnItemUseSuccess(ItemManager itemMan, int slot)
         {
             ItemMetaData meta = itemMan.items[slot].GetMeta();
-            if (meta == null) return;
-            if (meta.tags.Contains("food") && !meta.tags.Contains("drink") && !meta.tags.Contains("recchars_daycare_exempt"))
+            if (meta == null || meta.tags.Contains("recchars_daycare_exempt")) return;
+
+            if (meta.tags.Contains("food") && !meta.tags.Contains("drink"))
             {
                 DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Eating", 0.8f, 0.25f);
                 return;
             }
+            if (meta.tags.Contains("recchars_daycare_throwable"))
+                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Throwing", 0.8f, 0.25f);
         }
 
         [HarmonyPatch(typeof(ItemManager), "UseItem"), HarmonyTranspiler]
@@ -107,34 +106,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 RecommendedCharsPlugin.Log.LogError("Transpiler \"MrDaycarePatches.CheckForItemUse\" wasn't properly applied!");
 
             yield break;
-        }
-    }
-
-    [ConditionalPatchMod(RecommendedCharsPlugin.AdvancedGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
-    [HarmonyPatch]
-    static class MrDaycareAdvancedPatches
-    {
-        [HarmonyPatch(typeof(VotingEvent.PrincipalController), "SetCheckingRoomMode"), HarmonyPrefix]
-        private static bool VotingEventCheck(bool value, Principal ___principal, ref NavigationState_PartyEvent ___state, RoomController ___room)
-        {
-            if (!value || ___principal == null || ___principal.Character != MrDaycare.charEnum) return true;
-
-            MrDaycare daycare = (MrDaycare)___principal;
-
-            daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
-            daycare.Navigator.Entity.SetBlinded(true);
-            ___state = new NavigationState_PartyEvent(daycare, int.MaxValue, ___room);
-            daycare.navigationStateMachine.ChangeState(___state);
-            return false;
-        }
-
-
-        [HarmonyPatch(typeof(MrDaycare), "ObservePlayer"), HarmonyPrefix]
-        private static bool MrDaycareIgnoreRules(PlayerManager player)
-        {
-            if (!VotingEvent.TopicIsActive<PrincipalIgnoresSomeRulesTopic>()) return true;
-            return !PrincipalObservePatch.allowedRulesWhenTopicActive.Contains(DaycareGuiltManager.GetInstance(player).RuleBreak);
         }
     }
 }

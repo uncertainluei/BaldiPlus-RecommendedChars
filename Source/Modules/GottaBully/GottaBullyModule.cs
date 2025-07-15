@@ -45,7 +45,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadGottaBully()
         {
-            GottaBully gottaBully = RecommendedCharsPlugin.CloneComponent<GottaSweep, GottaBully>(GameObject.Instantiate((GottaSweep)NPCMetaStorage.Instance.Get(Character.Sweep).value, MTM101BaldiDevAPI.prefabTransform));
+            GottaBully gottaBully = RecommendedCharsPlugin.SwapComponentSimple<GottaSweep, GottaBully>(GameObject.Instantiate((GottaSweep)NPCMetaStorage.Instance.Get(Character.Sweep).value, MTM101BaldiDevAPI.prefabTransform));
             gottaBully.name = "GottaBully";
 
             gottaBully.character = EnumExtensions.ExtendEnum<Character>("RecChars_GottaBully");

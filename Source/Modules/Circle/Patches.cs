@@ -25,6 +25,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             {
                 // Re-disable the animator for good measure
                 __instance.animator.enabled = false;
+                circle.Navigator.maxSpeed = circle.sadSpeed;
+                circle.Navigator.SetSpeed(circle.sadSpeed);
                 circle.sprite.sprite = circle.sprSad;
                 return;
             }

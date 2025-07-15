@@ -278,7 +278,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void AdvancedCompat()
         {
             ItemObject flaminPuffs = AssetMan.Get<ItemObject>("FlaminPuffsItem");
-            flaminPuffs.item = RecommendedCharsPlugin.CloneComponent<ITM_FlaminPuffs, ITM_FlaminPuffs_AdvancedCompat>((ITM_FlaminPuffs)flaminPuffs.item);
+            flaminPuffs.item = RecommendedCharsPlugin.SwapComponentSimple<ITM_FlaminPuffs, ITM_FlaminPuffs_AdvancedCompat>((ITM_FlaminPuffs)flaminPuffs.item);
 
             ApiManager.AddNewSymbolMachineWords(Info, "Monk", "Tone", "Chaos", "Meme", "Pear", "Weird", "Zeed", "Roy", "Oreo");
             ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_ManMemeSpawning", "Adv_Elv_Tip_RecChars_ManMemeCoin",

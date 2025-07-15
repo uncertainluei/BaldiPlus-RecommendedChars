@@ -87,7 +87,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadCircle()
         {
-            CircleNpc circle = RecommendedCharsPlugin.CloneComponent<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
+            CircleNpc circle = RecommendedCharsPlugin.SwapComponentSimple<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
             circle.name = "ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
@@ -121,8 +121,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ];
 
             // The default speed was 500 but this should flow better in-game
-            circle.normSpeed = 65f;
-            circle.runSpeed = 75f;
+            circle.normSpeed = 30f;
+            circle.runSpeed = 50f;
 
             circle.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("CircleTex/pri_circle"), "PST_PRI_RecChars_Circle1", "PST_PRI_RecChars_Circle2");
             circle.poster.textData[1].font = BaldiFonts.ComicSans18.FontAsset();
@@ -136,7 +136,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             circle.sprSad = sprites[1];
 
-            CircleJumprope jumprope = RecommendedCharsPlugin.CloneComponent<Jumprope, CircleJumprope>(GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform));
+            CircleJumprope jumprope = RecommendedCharsPlugin.SwapComponentSimple<Jumprope, CircleJumprope>(GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform));
             circle.jumpropePre = jumprope;
 
             jumprope.name = "ShapeWorld Circle_Jumprope";
@@ -145,9 +145,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CircleJumprope.ropeAnimation = new Dictionary<string, Sprite[]> { { "JumpRope", AssetLoader.SpritesFromSpritesheet(4, 4, 1f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CircleTex/CircleRainbow")) } };
             jumprope.ropeDelay = 0f;
             jumprope.ropeTime = 1f;
-            jumprope.maxJumps = 10;
-            jumprope.startVal = 100;
-            jumprope.penaltyVal = -10;
+            jumprope.maxJumps = 8;
+            jumprope.startVal = 64;
+            jumprope.penaltyVal = -8;
 
             AssetMan.Add("CircleJumprope", jumprope);
             AssetMan.Add("CircleNpc", circle);

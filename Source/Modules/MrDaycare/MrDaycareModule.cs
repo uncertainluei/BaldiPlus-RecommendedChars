@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using BaldisBasicsPlusAdvanced.API;
 
 using BepInEx.Configuration;
+using BepInEx.Bootstrap;
 
 using HarmonyLib;
 
@@ -15,11 +13,15 @@ using MTM101BaldAPI.Registers;
 using BaldiLevelEditor;
 using PlusLevelLoader;
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using BaldisBasicsPlusAdvanced.API;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 
@@ -271,7 +273,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.windowChance = 0.35f;
 
             DetentionRoomFunction detRoomFunction = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
-            DaycareRoomFunction dcRoomFunction = RecommendedCharsPlugin.CloneComponent<DetentionRoomFunction, DaycareRoomFunction>(GameObject.Instantiate(detRoomFunction, MTM101BaldiDevAPI.prefabTransform));
+            DaycareRoomFunction dcRoomFunction = RecommendedCharsPlugin.SwapComponentSimple<DetentionRoomFunction, DaycareRoomFunction>(GameObject.Instantiate(detRoomFunction, MTM101BaldiDevAPI.prefabTransform));
             dcRoomFunction.name = "DaycareRoomFunction";
             dcRoomFunction.gaugeSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/TimeoutIcon"), 25f);
             dcRoomFunction.animationsCompat = false;
@@ -374,18 +376,51 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
+            // Make Mr. Daycare scold the player for using throwing/shooting items
+            BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("MysteriousTeleporter"), advInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("TeleportationBomb"), advInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("CookedChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("RawChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
+
+            // Add new words and tips
             ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "house");
             ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Pie", "Adv_Elv_Tip_RecChars_DoorKey",
                 "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
-        private void LoadDaveWindowlet()
+        private void FragileWindowsCompat()
         {
+            // Make Mr. Daycare scold the player for using throwing/shooting items
+            BepInEx.PluginInfo fragileInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.FragileWindowsGuid];
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
+
+            // Dave Windowlet >u<
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(Plugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
             FragileWindowsCompatHelper.AddWindowlet<DaveWindowlet>("Dave", sprites[0], sprites[3], new(81/255f, 38/255f, 10/255f), 3);
             DaveWindowlet.sprLo = sprites[1];
             DaveWindowlet.sprHi = sprites[2];
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.EcoFriendlyGuid, LoadingEventOrder.Pre)]
+        private void EcoFriendlyCompat()
+        {
+            // Make Mr. Daycare scold the player for using throwing/shooting items
+            BepInEx.PluginInfo ecoInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.EcoFriendlyGuid];
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Wrench"), ecoInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Sibling"), ecoInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("OblongSlotNameThingy"), ecoInfo).tags.Add("recchars_daycare_throwable");
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.CrazyBabyGuid, LoadingEventOrder.Pre)]
+        private void CrazyBabyCompat()
+        {
+            // Make Mr. Daycare scold the player for using throwing/shooting items
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("BabyEye"), Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid])
+                .tags.Add("recchars_daycare_throwable");
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Post)]

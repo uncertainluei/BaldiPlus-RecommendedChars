@@ -19,10 +19,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
     internal static class LegacyEditorCompatHelper
     {
         // Modified version of the Editor's strip object method as it does not immediately destroy components
-        internal static GameObject GetStrippedObject(Component obj, bool stripColliders = false)
+        internal static GameObject GetStrippedCopy(Component obj, bool stripColliders = false)
         {
             GameObject gameObj = obj.gameObject;
-            GameObject newObj = UnityEngine.Object.Instantiate(gameObj,MTM101BaldiDevAPI.prefabTransform);
+            GameObject newObj = GameObject.Instantiate(gameObj, MTM101BaldiDevAPI.prefabTransform);
             newObj.GetComponentsInChildren<MonoBehaviour>().Do(delegate (MonoBehaviour x)
             {
                 if (x is not BillboardUpdater)
@@ -37,7 +37,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor
             return newObj;
         }
 
-        internal static void AddCharacterObject(string id, Component obj) => BaldiLevelEditorPlugin.characterObjects.Add(id, GetStrippedObject(obj, true));
+        internal static void AddCharacterObject(string id, Component obj) => BaldiLevelEditorPlugin.characterObjects.Add(id, GetStrippedCopy(obj, true));
         internal static void AddObject(string id, Component obj, Vector3 offset = default) => BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>(id, obj.gameObject, offset));
 
         internal static void AddToEditor<T>(this T tool, string cat) where T : EditorTool, IExtEditorTool
