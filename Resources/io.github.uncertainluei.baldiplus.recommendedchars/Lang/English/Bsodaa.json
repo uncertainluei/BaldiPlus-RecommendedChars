@@ -16,7 +16,10 @@
 	{ "key": "Sfx_RecChars_Bsodaa_Charging", "value": "*CHARGING SODA*" },
 	
 	{ "key": "Itm_RecChars_SmallDietBsoda", "value": "Diet BSODA Mini" },
+	{ "key": "Itm_RecChars_SmallBsoda", "value": "BSODA Mini" },
+	
 	{ "key": "Desc_RecChars_SmallDietBsoda", "value": "Diet BSODA Mini\nFor budgeting (and balancing) reasons, we have made Diet BSODA available\nin sip-sized cans! Now the healthier alternative is in smaller capacity for short bursts!" },
+	{ "key": "Desc_RecChars_SmallBsoda", "value": "BSODA Mini\nThe original fizzed-up BSODA in a sip-sized can!\nLeverage the slightly lower speed with the EXTRA fizz!" },
 	
 	{ "key": "Adv_Elv_Tip_RecChars_BsodaaHelper", "value": "You can grab up to three Diet BSODAs from the Bsodaa Helper if she sees you as faculty!" },
 	{ "key": "Adv_Elv_Tip_RecChars_BsodaaHelperSpray", "value": "The Bsodaa Helper doesn't like getting sprayed by (regular) BSODA. If that happens, she'll then have only Diet BSODA next floor!" }

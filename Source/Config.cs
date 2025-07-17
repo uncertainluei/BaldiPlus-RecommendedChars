@@ -59,7 +59,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Misc",
                 "NerfedMrDaycare",
                 true,
-                "Nerfs Mr. Daycare to be overall more manageable.");
+                "Nerfs Mr. Daycare's movement speed, guilt sensitivity and timeout times to be overall more manageable.");
             guaranteeSpawnChar = config.Bind(
                 "Misc",
                 "GuaranteeCharacterSpawn",

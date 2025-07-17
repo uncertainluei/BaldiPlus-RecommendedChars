@@ -378,10 +378,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
             BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("MysteriousTeleporter"), advInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("TeleportationBomb"), advInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("CookedChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("RawChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("MysteriousTeleporter"), advInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("TeleportationBomb"), advInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("CookedChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("RawChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
 
             // Add new words and tips
             ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "house");
@@ -394,9 +394,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
             BepInEx.PluginInfo fragileInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.FragileWindowsGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
 
             // Dave Windowlet >u<
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(Plugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
@@ -410,16 +410,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
             BepInEx.PluginInfo ecoInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.EcoFriendlyGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Wrench"), ecoInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("Sibling"), ecoInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("OblongSlotNameThingy"), ecoInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Wrench"), ecoInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Sibling"), ecoInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("OblongSlotNameThingy"), ecoInfo).tags.Add("recchars_daycare_throwable");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.CrazyBabyGuid, LoadingEventOrder.Pre)]
         private void CrazyBabyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.ExtendEnum<Items>("BabyEye"), Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid])
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("BabyEye"), Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid])
                 .tags.Add("recchars_daycare_throwable");
         }
 

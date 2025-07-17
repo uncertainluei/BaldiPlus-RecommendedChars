@@ -1,4 +1,7 @@
-﻿using BepInEx.Configuration;
+﻿using BaldisBasicsPlusAdvanced.API;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
+
+using BepInEx.Configuration;
 
 using HarmonyLib;
 
@@ -17,11 +20,11 @@ using System.IO;
 using System.Linq;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using BaldisBasicsPlusAdvanced.API;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+using BepInEx.Bootstrap;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -56,7 +59,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadMiniBsoda()
         {
-            ItemObject miniBsoda = new ItemBuilder(Info)
+            // Diet BSODA Mini
+            ItemObject miniDietBsoda = new ItemBuilder(Info)
             .SetNameAndDescription("Itm_RecChars_SmallDietBsoda", "Desc_RecChars_SmallDietBsoda")
             .SetEnum("RecChars_SmallDietBsoda")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
@@ -65,17 +69,41 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetGeneratorCost(40)
             .Build();
 
-            miniBsoda.name = "RecChars SmallDietBsoda";
+            miniDietBsoda.name = "RecChars SmallDietBsoda";
 
             ITM_BSODA miniBsodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.DietBsoda).value.item, MTM101BaldiDevAPI.prefabTransform);
             miniBsodaSpray.name = "Itm_SmallDietBsoda";
             miniBsodaSpray.spriteRenderer.transform.localScale = Vector3.one * 0.625f;
-            miniBsodaSpray.time = 1.5f;
+            miniBsodaSpray.time = 1.8f;
             miniBsodaSpray.speed = 26f;
+
+            miniDietBsoda.item = miniBsodaSpray;
+
+            AssetMan.Add("SmallDietBsodaItem", miniDietBsoda);
+
+
+            // BSODA Mini
+            ItemObject miniBsoda = new ItemBuilder(Info)
+            .SetNameAndDescription("Itm_RecChars_SmallBsoda", "Desc_RecChars_SmallBsoda")
+            .SetEnum("RecChars_SmallBsoda")
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
+            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallBsoda_Large"), 50f))
+            .SetShopPrice(320)
+            .SetGeneratorCost(55)
+            .Build();
+
+            miniDietBsoda.name = "RecChars SmallBsoda";
+
+            miniBsodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform);
+            miniBsodaSpray.name = "Itm_SmallBsoda";
+            miniBsodaSpray.spriteRenderer.transform.localScale = Vector3.one * 0.625f;
+            miniBsodaSpray.time = 18f;
+            miniBsodaSpray.speed = 26f;
+            miniBsodaSpray.gameObject.AddComponent<VanillaBsodaComponent>();
 
             miniBsoda.item = miniBsodaSpray;
 
-            AssetMan.Add("SmallDietBsodaItem", miniBsoda);
+            AssetMan.Add("SmallBsodaItem", miniBsoda);
         }
 
         private void LoadBsodaaHelper()
@@ -83,7 +111,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Essentially this other guy will not be like the below guy, as in she's a glorified structure rather than an
             // NPC.
 
-            GameObject helperObj = new GameObject("BsodaaHelper", typeof(BsodaaHelper), typeof(CapsuleCollider), typeof(PropagatedAudioManager));
+            GameObject helperObj = new("BsodaaHelper", typeof(BsodaaHelper), typeof(CapsuleCollider), typeof(PropagatedAudioManager));
             helperObj.transform.parent = MTM101BaldiDevAPI.prefabTransform;
             helperObj.transform.localPosition = Vector3.zero;
 
@@ -195,6 +223,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.navigator.accel = 10f;
             bsodaaGuy.navigator.speed = 14f;
             bsodaaGuy.navigator.maxSpeed = 14f;
+
+            bsodaaGuy.looker.layerMask = NPCMetaStorage.Instance.Get(Character.Principal).value.looker.layerMask;
 
             bsodaaGuy.animator = bsodaaGuy.gameObject.AddComponent<CustomSpriteAnimator>();
             bsodaaGuy.animator.spriteRenderer = bsodaaGuy.spriteRenderer[0];
@@ -423,6 +453,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.prefabAliases.Add("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject").gameObject);
 
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
+            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_smallbsoda", AssetMan.Get<ItemObject>("SmallBsodaItem"));
 
             RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("BsodaaRoomBlueprint");
             LevelLoaderCompatHelper.AddRoom(blueprint);
@@ -439,12 +470,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LegacyEditorCompatHelper.AddCharacterObject("recchars_bsodaa", AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
             LegacyEditorCompatHelper.AddObject("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject"), Vector3.up*5);
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
+            BaldiLevelEditorPlugin.itemObjects.Add("recchars_smallbsoda", AssetMan.Get<ItemObject>("SmallBsodaItem"));
 
             LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_bsodaaroom", "recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil");
 
             new ExtNpcTool("recchars_bsodaa", "BsodaaEditor/Npc_bsodaa").AddToEditor("characters");
             new ExtRoomObjTool("recchars_bsodaahelper", "BsodaaEditor/Npc_bsodaahelper", "recchars_bsodaaroom").AddToEditor("characters");
             new ExtItemTool("recchars_smalldietbsoda", "BsodaaEditor/Itm_smalldietbsoda").AddToEditor("items");
+            new ExtItemTool("recchars_smallbsoda", "BsodaaEditor/Itm_smallbsoda").AddToEditor("items");
             new ExtFloorTool("recchars_bsodaaroom", "BsodaaEditor/Floor_bsodaa").AddToEditor("halls");
         }
             
@@ -453,6 +486,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             ApiManager.AddNewSymbolMachineWords(Info, "BSODA");
             ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_BsodaaHelper", "Adv_Elv_Tip_RecChars_BsodaaHelperSpray");
+        }
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Post)]
+        private void AdvancedRecipes()
+        {
+            ItemObject smallBsoda = AssetMan.Get<ItemObject>("SmallBsodaItem");
+            ItemObject smallDietBsoda = AssetMan.Get<ItemObject>("SmallDietBsodaItem");
+
+            BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
+            List<FoodRecipeData> baseRecipes = ApiManager.GetAllKitchenStoveRecipesFrom(advInfo);
+            ApiManager.RemoveKitchenStoveRecipe(baseRecipes.First(x => x.RawFood[0].itemType.ToStringExtended() == "IceBoots"));
+
+            new FoodRecipeData(Info)
+                .SetRawFood(ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("IceBoots"), advInfo).value)
+                .SetCookedFood(smallDietBsoda, smallDietBsoda)
+                .RegisterRecipe();
+            new FoodRecipeData(Info)
+                .SetRawFood(smallBsoda)
+                .SetCookedFood(smallDietBsoda, smallDietBsoda)
+                .RegisterRecipe();
+            new FoodRecipeData(Info)
+                .SetRawFood(smallDietBsoda, smallDietBsoda)
+                .SetCookedFood(smallBsoda)
+                .RegisterRecipe();
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Final)]

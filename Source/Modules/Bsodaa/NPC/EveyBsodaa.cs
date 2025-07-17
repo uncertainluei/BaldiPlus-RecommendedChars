@@ -93,11 +93,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             RestockAction();
         }
 
-        public void Shoot(Transform target)
+        public void Shoot(Vector3 target)
         {
             EveyBsodaaSpray bsoda = Instantiate(projectilePre);
             bsoda.bsodaa = this;
-            bsoda.transform.rotation = Directions.DirFromVector3(target.position-transform.position, 45f).ToRotation();
+            bsoda.transform.rotation = Directions.DirFromVector3(target-transform.position, 45f).ToRotation();
             bsoda.transform.position = transform.position + bsoda.transform.forward * 2f;
 
             behaviorStateMachine.ChangeState(new EveyBsodaa_Statebase(this));
@@ -109,15 +109,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             audMan.FlushQueue(true);
             audMan.PlaySingle(audCharging);
             animator.Play("Charge", 1f);
-        }
-
-        public bool NpcInSight(NPC npc)
-        {
-            if (Navigator.Entity.Blinded)
-                return false;
-
-            looker.Raycast(npc.transform, Mathf.Min((transform.position - npc.transform.position).magnitude + npc.Navigator.Velocity.magnitude, looker.distance, npc.ec.MaxRaycast), out bool sighted);
-            return sighted;
         }
 
         private void RestockAction()
@@ -178,12 +169,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaa.animator.Play("Idle", 1f);
             ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
         }
-
-        public override void DestinationEmpty()
-        {
-            base.DestinationEmpty();
-            ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
-        }
     }
 
     public class EveyBsodaa_LeavingRoom(EveyBsodaa bsodaa, RoomController room) : EveyBsodaa_Wandering(bsodaa)
@@ -205,47 +190,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             base.InPlayerSight(player);
             npc.behaviorStateMachine.ChangeState(new EveyBsodaa_PreCharge(bsodaa, player));
         }
-
-        public override void Update()
-        {
-            base.Update();
-            foreach (NPC npc in npc.ec.npcs)
-            {
-                if (npc == bsodaa) continue;
-                if (bsodaa.NpcInSight(npc))
-                {
-                    npc.behaviorStateMachine.ChangeState(new EveyBsodaa_PreCharge(bsodaa, npc));
-                    return;
-                }
-            }
-        }
     }
 
-    public class EveyBsodaa_PreCharge : EveyBsodaa_Statebase
+    public class EveyBsodaa_PreCharge(EveyBsodaa bsodaa, PlayerManager target) : EveyBsodaa_Statebase(bsodaa)
     {
-        private readonly Transform targetTransform;
+        private readonly Transform targetTransform = target.transform;
 
         private readonly NPC targetNpc;
-        private readonly PlayerManager player;
-
-        private readonly Func<bool> InSight;
-        private EveyBsodaa_PreCharge(EveyBsodaa bsodaa, Transform target) : base(bsodaa)
-        {
-            targetTransform = target;
-        }
-        public EveyBsodaa_PreCharge(EveyBsodaa bsodaa, PlayerManager target) : this(bsodaa, target.transform)
-        {
-            player = target;
-            InSight = PlayerInSight;
-        }
-        public EveyBsodaa_PreCharge(EveyBsodaa bsodaa, NPC target) : this(bsodaa, target.transform)
-        {
-            targetNpc = target;
-            InSight = NpcInSight;
-        }
-
-        private bool PlayerInSight() => npc.looker.PlayerInSight(player);
-        private bool NpcInSight() => bsodaa.NpcInSight(targetNpc);
+        private readonly PlayerManager player = target;
 
         public override void Enter()
         {
@@ -256,7 +208,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override void DestinationEmpty()
         {
-            if (InSight())
+            if (npc.looker.PlayerInSight(player))
             {
                 base.DestinationEmpty();
                 npc.behaviorStateMachine.ChangeState(new EveyBsodaa_Charging(bsodaa, targetTransform, bsodaa.ChargeTime));
@@ -269,11 +221,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class EveyBsodaa_Charging(EveyBsodaa bsodaa, Transform target, float chargeTime) : EveyBsodaa_Statebase(bsodaa)
     {
         private readonly Transform targetTransform = target;
+        private Vector3 lastPos;
         private float timeLeft = chargeTime;
 
         public override void Enter()
         {
             base.Enter();
+            lastPos = targetTransform.position;
             bsodaa.Charge();
             ChangeNavigationState(new NavigationState_DoNothing(npc, 0));
         }
@@ -281,10 +235,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Update()
         {
             base.Update();
+
+            if (targetTransform != null)
+                lastPos = targetTransform.position;
+
             timeLeft -= Time.deltaTime * npc.TimeScale;
             if (timeLeft <= 0f)
             {
-                bsodaa.Shoot(targetTransform);
+                bsodaa.Shoot(lastPos);
                 npc.behaviorStateMachine.ChangeState(new EveyBsodaa_Statebase(bsodaa));
             }
         }

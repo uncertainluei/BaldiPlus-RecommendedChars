@@ -72,11 +72,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemsRare.AddModdedItem("PieItem", 25);
             ItemsRare.AddModdedItem("DoorKey", 20);
 
-            ItemObject smallBsoda = RecommendedCharsPlugin.AssetMan.Get<ItemObject>("SmallDietBsodaItem");
-            if (smallBsoda != null)
+            ItemObject smallDietBsoda = RecommendedCharsPlugin.AssetMan.Get<ItemObject>("SmallDietBsodaItem");
+            if (smallDietBsoda != null)
             {
                 ManMemeItemAction itemsSmallBsodas = new(2, 3, true);
-                itemsSmallBsodas.AddItem(smallBsoda, 1);
+                itemsSmallBsodas.AddItem(smallDietBsoda, 3);
+                itemsSmallBsodas.AddItem(RecommendedCharsPlugin.AssetMan.Get<ItemObject>("SmallBsodaItem"), 1);
                 AddToEvents(itemsSmallBsodas, 45);
             }
         }

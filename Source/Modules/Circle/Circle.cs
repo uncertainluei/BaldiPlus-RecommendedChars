@@ -59,7 +59,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             }
 
-            playtime.ec.MakeNoise(playtime.transform.position, noiseValue);
             jumps = 0;
             ropeDelay = 1.5f;
             playtime.JumpropeHit();

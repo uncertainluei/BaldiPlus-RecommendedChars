@@ -124,7 +124,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
             if (!__instance.pickedUp)
                 var?.Pickup(pem);
             else
+            {
+                DaycareGuiltManager.TryBreakRule(pem, "Throw", 1.6f, 0.25f);
                 var?.Throw(pem);
+            }
         }
 
         [HarmonyPatch("Boom"), HarmonyPrefix]
