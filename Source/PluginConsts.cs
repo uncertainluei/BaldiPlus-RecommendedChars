@@ -23,6 +23,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal const string EcoFriendlyGuid = "bigthink.ecofriendlymodpack.root";
         internal const string CrazyBabyGuid = "CrazyBabyAPI";
 
+        internal const string ConnectorGuid = "alexbw145.bbplus.apiconnector";
+
         // Others
         internal const string PineDebugGuid = "alexbw145.baldiplus.pinedebug";
         internal const string CharacterRadarGuid = "org.aestheticalz.baldi.characterradar";

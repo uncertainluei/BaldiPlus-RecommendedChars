@@ -28,7 +28,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LevelLoaderGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LegacyEditorGuid, BepInDependency.DependencyFlags.SoftDependency)]
+
+    // Make sure this loads BEFORE the mod does
+    [BepInDependency(ConnectorGuid, BepInDependency.DependencyFlags.SoftDependency)]
+
     [BepInDependency(FragileWindowsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(EcoFriendlyGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CrazyBabyGuid, BepInDependency.DependencyFlags.SoftDependency)]
 
     partial class RecommendedCharsPlugin : BaseUnityPlugin
     {
