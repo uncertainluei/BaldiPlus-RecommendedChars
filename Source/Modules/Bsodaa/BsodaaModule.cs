@@ -25,6 +25,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using BepInEx.Bootstrap;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -495,21 +496,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject smallDietBsoda = AssetMan.Get<ItemObject>("SmallDietBsodaItem");
 
             BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
-            List<FoodRecipeData> baseRecipes = ApiManager.GetAllKitchenStoveRecipesFrom(advInfo);
-            ApiManager.RemoveKitchenStoveRecipe(baseRecipes.First(x => x.RawFood[0].itemType.ToStringExtended() == "IceBoots"));
-
-            new FoodRecipeData(Info)
-                .SetRawFood(ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("IceBoots"), advInfo).value)
-                .SetCookedFood(smallDietBsoda, smallDietBsoda)
-                .RegisterRecipe();
-            new FoodRecipeData(Info)
-                .SetRawFood(smallBsoda)
-                .SetCookedFood(smallDietBsoda, smallDietBsoda)
-                .RegisterRecipe();
-            new FoodRecipeData(Info)
-                .SetRawFood(smallDietBsoda, smallDietBsoda)
-                .SetCookedFood(smallBsoda)
-                .RegisterRecipe();
+            
+            AdvancedCompatHelper.RemoveStoveRecipes(advInfo, (x, y) => (x.Length == 1 && x[0].itemType.ToStringExtended() == "IceBoots"));
+            AdvancedCompatHelper.AddStoveRecipe(Info, [ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("IceBoots"), advInfo).value], [smallDietBsoda, smallDietBsoda]);
+            AdvancedCompatHelper.AddStoveRecipe(Info, [smallBsoda], [smallDietBsoda, smallDietBsoda]);
+            AdvancedCompatHelper.AddStoveRecipe(Info, [smallDietBsoda, smallDietBsoda], [smallBsoda]);
         }
 
         [ModuleLoadEvent(LoadingEventOrder.Final)]

@@ -1,4 +1,5 @@
 ﻿using brobowindowsmod;
+using brobowindowsmod.ItemScripts;
 using brobowindowsmod.NPCs;
 using brobowindowsmod.Patches;
 
@@ -8,10 +9,6 @@ using System.Collections.Generic;
 using HarmonyLib;
 using MTM101BaldAPI;
 using UnityEngine;
-using brobowindowsmod.ItemScripts;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Reflection;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
 {
