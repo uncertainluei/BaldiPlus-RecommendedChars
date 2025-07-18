@@ -195,8 +195,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class EveyBsodaa_PreCharge(EveyBsodaa bsodaa, PlayerManager target) : EveyBsodaa_Statebase(bsodaa)
     {
         private readonly Transform targetTransform = target.transform;
-
-        private readonly NPC targetNpc;
         private readonly PlayerManager player = target;
 
         public override void Enter()

@@ -128,7 +128,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override PluginInfo pluginInfo => info;
 
         private const byte SaveVersion = 1;
-        internal Dictionary<string, object> savedValues;
 
         public override void OnCGMCreated(CoreGameManager cgm, bool savedGame)
         {

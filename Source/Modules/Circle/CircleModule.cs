@@ -123,6 +123,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // The default speed was 500 but this should flow better in-game
             circle.normSpeed = 30f;
             circle.runSpeed = 50f;
+            circle.initialCooldown = 25f;
 
             circle.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("CircleTex/pri_circle"), "PST_PRI_RecChars_Circle1", "PST_PRI_RecChars_Circle2");
             circle.poster.textData[1].font = BaldiFonts.ComicSans18.FontAsset();
