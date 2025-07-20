@@ -13,9 +13,10 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 
 # Dependencies
 
-### Required to run:
+### Required to run (and build):
 - [BepInEx v5.4.23.x](https://github.com/BepInEx/BepInEx/releases)
 - [Baldi's Basics Dev API](https://gamebanana.com/mods/383711)
+- [Baldi Dev API Connector (if running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
 
 ### Fully optional:
 - [Crispy+](https://gamebanana.com/mods/529314)

@@ -6,7 +6,7 @@
 		<AssemblyName>UncertainLuei.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>UncertainLuei.BaldiPlus.$(MSBuildProjectName)</RootNamespace>
 		
-		<Version>1.2.2.1</Version>
+		<Version>1.2.2.2</Version>
 		<FileVersion>$(Version)</FileVersion>
 		<ProductVersion>$(Version)</ProductVersion>
 		
@@ -64,6 +64,9 @@
 		</Reference>
 		<Reference Include="CRAZYBABYJUMPSCARE">
 			<HintPath>..\Dependencies\CRAZYBABYJUMPSCARE.dll</HintPath>
+		</Reference>
+		<Reference Include="BaldiAPIConnector" Publicize="true">
+			<HintPath>..\Dependencies\BaldiAPIConnector.dll</HintPath>
 		</Reference>
 		
 		<Reference Include="PlusLevelLoader">

@@ -24,6 +24,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UnityEngine;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
+using APIConnector;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -389,26 +390,55 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
+        private bool _connectorActive = false;
+        private bool _connectorErrored = false;
+
+        [ModuleCompatLoadEvent(RecommendedCharsPlugin.ConnectorGuid, LoadingEventOrder.Pre)]
+        private void CheckIfConnectorIsActive()
+        {
+            if (ConnectorBasicsPlugin.Connected)
+                _connectorActive = true;
+            else
+                ConnectorError();
+        }
+
+        private void ConnectorError()
+        {
+            if (!_connectorErrored)
+                RecommendedCharsPlugin.Log.LogError("Thinker API Connector wasn't loaded properly! Make sure you either reinstall the connector or disable Assembly Cache in BepInEx's config!");
+            _connectorErrored = true;
+        }
+
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
         private void FragileWindowsCompat()
         {
-            // Make Mr. Daycare scold the player for using throwing/shooting items
-            BepInEx.PluginInfo fragileInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.FragileWindowsGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
-
             // Dave Windowlet >u<
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(Plugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
             FragileWindowsCompatHelper.AddWindowlet<DaveWindowlet>("Dave", sprites[0], sprites[3], new(81/255f, 38/255f, 10/255f), 3);
             DaveWindowlet.sprLo = sprites[1];
             DaveWindowlet.sprHi = sprites[2];
+
+            // Make Mr. Daycare scold the player for using throwing/shooting items
+            if (!_connectorActive)
+            {
+                ConnectorError();
+                return;
+            }
+            BepInEx.PluginInfo fragileInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.FragileWindowsGuid];
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
         }
 
         [ModuleCompatLoadEvent(RecommendedCharsPlugin.EcoFriendlyGuid, LoadingEventOrder.Pre)]
         private void EcoFriendlyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
+            if (!_connectorActive)
+            {
+                ConnectorError();
+                return;
+            }
             BepInEx.PluginInfo ecoInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.EcoFriendlyGuid];
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Wrench"), ecoInfo).tags.Add("recchars_daycare_throwable");
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Sibling"), ecoInfo).tags.Add("recchars_daycare_throwable");
@@ -419,6 +449,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void CrazyBabyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
+            if (!_connectorActive)
+            {
+                ConnectorError();
+                return;
+            }
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("BabyEye"), Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid])
                 .tags.Add("recchars_daycare_throwable");
         }
