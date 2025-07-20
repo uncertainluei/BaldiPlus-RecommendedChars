@@ -157,7 +157,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 circle.normSpeed = 90f;
                 circle.runSpeed = 90f;
+                circle.sadSpeed = 90f;
                 circle.initialCooldown = 15f;
+                circle.successCooldown = 15f;
                 jumprope.maxJumps = 10;
                 jumprope.startVal = 43;
                 jumprope.penaltyVal = -5;
