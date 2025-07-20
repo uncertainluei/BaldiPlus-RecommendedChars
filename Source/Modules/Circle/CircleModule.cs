@@ -67,6 +67,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetGeneratorCost(45)
             .SetItemComponent<ITM_NerfGun>();
 
+            if (!RecommendedCharsConfig.nerfCircle.Value)
+                nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(50);
+
             ItemObject nerfItm = nerfGunBuilder.Build();
             nerfItm.name = "RecChars NerfGun2";
             nerfItm.item.name = "Itm_NerfGun2";
@@ -149,6 +152,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             jumprope.maxJumps = 8;
             jumprope.startVal = 64;
             jumprope.penaltyVal = -8;
+
+            if (!RecommendedCharsConfig.nerfCircle.Value)
+            {
+                circle.normSpeed = 90f;
+                circle.runSpeed = 90f;
+                circle.initialCooldown = 15f;
+                jumprope.maxJumps = 10;
+                jumprope.startVal = 43;
+                jumprope.penaltyVal = -5;
+            }
 
             AssetMan.Add("CircleJumprope", jumprope);
             AssetMan.Add("CircleNpc", circle);

@@ -215,7 +215,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             daycare.Navigator.speed = 36f;
             daycare.Navigator.maxSpeed = 36f;
-            if (RecommendedCharsConfig.nerfedMrDaycare.Value)
+            if (RecommendedCharsConfig.nerfMrDaycare.Value)
             {
                 daycare.Navigator.speed = 30f;
                 daycare.Navigator.maxSpeed = 30f;
