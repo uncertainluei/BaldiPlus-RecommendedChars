@@ -68,7 +68,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetItemComponent<ITM_NerfGun>();
 
             if (!RecommendedCharsConfig.nerfCircle.Value)
-                nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(50);
+                nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(75);
 
             ItemObject nerfItm = nerfGunBuilder.Build();
             nerfItm.name = "RecChars NerfGun2";
