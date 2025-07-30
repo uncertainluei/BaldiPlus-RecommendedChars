@@ -23,24 +23,30 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public sealed class Module_Circle : Module
+    [CaudexModule("TCMGBiMaE Circle"), CaudexModuleSaveTag("Mdl_Circle")]
+    [CaudexModuleConfig("Modules", "Circle",
+        "Adds Circle and Nerf Gun from TCMG's Basics in Mods and Edits.", true)]
+    public sealed class Module_Circle : RecCharsModule
     {
-        public override string Name => "TCMGB Circle";
+        protected override void Loaded()
+        {
+            // Load patches
+            Hooks.PatchAll(typeof(CirclePatches));
+            RecommendedCharsPlugin.PatchCompat(typeof(CircleMusicCompatPatch), RecommendedCharsPlugin.CustomMusicsGuid);
+        }
 
-        public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCircle;
-
-
-        [ModuleLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "NerfGun"), x => "NerfGun/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "Circle"), x => "CircleTex/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "NerfGun"), x => "NerfGun/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Circle"), x => "CircleTex/" + x.name);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "Circle"), "CircleAud/");
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Circle"), "CircleAud/");
 
             LoadNerfGun();
             LoadCircle();
@@ -50,7 +56,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadNerfGun()
         {
-            ItemMetaData nerfGunMeta = new(Info, [])
+            ItemMetaData nerfGunMeta = new(Plugin, [])
             {
                 flags = ItemFlags.MultipleUse
             };
@@ -58,7 +64,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Items nerfGunEnum = EnumExtensions.ExtendEnum<Items>("RecChars_NerfGun");
 
-            ItemBuilder nerfGunBuilder = new ItemBuilder(Info)
+            ItemBuilder nerfGunBuilder = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_NerfGun2", "Desc_RecChars_NerfGun")
             .SetEnum(nerfGunEnum)
             .SetMeta(nerfGunMeta)
@@ -167,18 +173,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             AssetMan.Add("CircleJumprope", jumprope);
             AssetMan.Add("CircleNpc", circle);
-            NPCMetadata circleMeta = new(Info, [circle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
+            NPCMetadata circleMeta = new(Plugin, [circle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
             GameObject.DestroyImmediate(AssetMan.Get<CircleJumprope>("CircleJumprope").GetComponent<GenericAnimationExtraComponent>());
             GameObject.DestroyImmediate(AssetMan.Get<CircleNpc>("CircleNpc").GetComponent<GenericAnimationExtraComponent>());
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", RecommendedCharsPlugin.AssetMan.Get<CircleNpc>("CircleNpc"));
@@ -186,10 +192,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.posters.Add("recchars_nerfgunposter", RecommendedCharsPlugin.AssetMan.Get<PosterObject>("NerfGunPoster"));
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Circle"), x => "CircleEditor/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Circle"), x => "CircleEditor/" + x.name);
 
             LegacyEditorCompatHelper.AddCharacterObject("recchars_circle", AssetMan.Get<CircleNpc>("CircleNpc"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
@@ -198,13 +204,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             new ExtItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun").AddToEditor("items");
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
-            ApiManager.AddNewSymbolMachineWords(Info, "TCMG", "edits", "round", "John", "shape", "world");
-            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Circle");
+            ApiManager.AddNewSymbolMachineWords(Plugin, "TCMG", "edits", "round", "John", "shape", "world");
+            ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_Circle");
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")

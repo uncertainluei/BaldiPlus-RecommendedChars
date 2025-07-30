@@ -7,6 +7,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         // DEPENDENCIES
 
+        internal const string CaudexLibGuid = "io.github.uncertain_luei.caudexlib";
+
         // Dev API
         internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
         // Other MTM101 mods

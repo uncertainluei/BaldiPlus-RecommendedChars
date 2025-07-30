@@ -13,30 +13,31 @@ using PlusLevelLoader;
 
 using System;
 using System.IO;
+
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.TextCore;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public sealed class Module_ArtsWithWires : Module
+    [CaudexModule("Arts with Wires"), CaudexModuleSaveTag("Mdl_ArtsWWires")]
+    [CaudexModuleConfig("Modules", "ArtsWWires",
+        "Adds Arts with Wires, based off the Arts and Crafters equivalent in Kinzo/Kracc's 1st Prize Mania and Playtime's Swapped Basics respectively.", true)]
+    public sealed class Module_ArtsWithWires : RecCharsModule
     {
-        public override string Name => "Arts with Wires";
 
-        public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleArtsWWires;
-
-        [ModuleLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "ArtsWWires"), x => "WiresTex/" + x.name);
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "ArtsWWires"), "WiresAud/");
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "ArtsWWires"), x => "WiresTex/" + x.name);
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "ArtsWWires"), "WiresAud/");
 
-            ArtsWithWires artsWithWires = new NPCBuilder<ArtsWithWires>(Info)
+            ArtsWithWires artsWithWires = new NPCBuilder<ArtsWithWires>(Plugin)
                 .SetName("ArtsWithWires")
                 .SetEnum("RecChars_ArtsWithWires")
                 .SetPoster(AssetMan.Get<Texture2D>("WiresTex/pri_wires"), "PST_PRI_RecChars_Wires1", "PST_PRI_RecChars_Wires2")
@@ -102,21 +103,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("ArtsWithWiresNpc", artsWithWires);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
-            AssetMan.Add("WiresEditor/Npc_artswithwires", AssetLoader.TextureFromMod(Plugin, "Textures", "Editor", "Npc_artswithwires.png"));
+            AssetMan.Add("WiresEditor/Npc_artswithwires", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Editor", "Npc_artswithwires.png"));
 
             BaldiLevelEditorPlugin.characterObjects.Add("recchars_artswithwires", BaldiLevelEditorPlugin.StripAllScripts(AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc").gameObject, true));
             new ExtNpcTool("recchars_artswithwires", "WiresEditor/Npc_artswithwires").AddToEditor("characters");
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
@@ -129,7 +131,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyCharacterWeight(Character.DrReflex, AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
                 return;
             }
 
@@ -139,7 +141,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.potentialNPCs.CopyCharacterWeight(Character.DrReflex, AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, AssetMan.Get<ArtsWithWires>("ArtsWithWiresNpc"));
                 }
                 else if (id == 1)
                 {

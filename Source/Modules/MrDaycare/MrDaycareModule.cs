@@ -18,36 +18,50 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
+using UncertainLuei.CaudexLib.Objects;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
+
 using APIConnector;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public sealed class Module_MrDaycare : Module
+    [CaudexModule("Mr. Daycare"), CaudexModuleSaveTag("Mdl_MrDaycare")]
+    [CaudexModuleConfig("Modules", "MrDaycare",
+        "Adds Mr. Daycare from Dave's House, as well the Pie and Door Key items.", true)]
+    public sealed class Module_MrDaycare : RecCharsModule
     {
-        public override string Name => "Mr. Daycare";
+        protected override void Loaded()
+        {
+            // Load patches
+            Hooks.PatchAll(typeof(MrDaycarePatches));
+            Hooks.PatchAll(typeof(DaycareRoomPatches));
+            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareAdvancedPatches), RecommendedCharsPlugin.AdvancedGuid);
+            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareCrazyBabyPatches), RecommendedCharsPlugin.CrazyBabyGuid);
+            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareEcoFriendlyPatches), RecommendedCharsPlugin.EcoFriendlyGuid);
+            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareFragilePatches), RecommendedCharsPlugin.FragileWindowsGuid);
+        }
 
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleMrDaycare;
-
-        public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-        public override Action<string, int, CustomLevelObject> LevelAddendAction => FloorAddendLvl;
-
-        [ModuleLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Room", "Daycare"), x => "DaycareRoom/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "Daycare"), x => "DaycareTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "Daycare"), x => "DaycareItm/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "Daycare"), x => "DaycareRoom/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Daycare"), x => "DaycareTex/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "Daycare"), x => "DaycareItm/" + x.name);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "Daycare"), "DaycareAud/");
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Daycare"), "DaycareAud/");
 
-            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
-            AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "PieSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
+            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
+            AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
 
             AssetMan.Add("DaycareRulesPoster", CreatePoster("DaycareRoom/pst_daycarerules", "DaycarePoster_Rules"));
             AssetMan.Add("DaycareInfoPoster", CreatePoster("DaycareRoom/pst_daycareinfo", "DaycarePoster_Info"));
@@ -63,7 +77,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void LoadItems()
         {
             // Pie
-            ItemObject pie = new ItemBuilder(Info)
+            ItemObject pie = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_Pie", "Desc_RecChars_Pie")
             .SetEnum("RecChars_Pie")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"])
@@ -103,13 +117,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Door Key
-            ItemMetaData doorKeyMeta = new(Info, []);
+            ItemMetaData doorKeyMeta = new(Plugin, []);
             doorKeyMeta.flags = ItemFlags.MultipleUse;
             doorKeyMeta.tags.AddRange(["key", "crmp_contraband"]);
 
             Items keyEnum = EnumExtensions.ExtendEnum<Items>("RecChars_DoorKey");
 
-            ItemBuilder keyBuilder = new ItemBuilder(Info)
+            ItemBuilder keyBuilder = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_DoorKey1", "Desc_RecChars_DoorKey")
             .SetEnum(keyEnum)
             .SetMeta(doorKeyMeta)
@@ -147,7 +161,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadMrDaycare()
         {
-            MrDaycare daycare = new NPCBuilder<MrDaycare>(Info)
+            MrDaycare daycare = new NPCBuilder<MrDaycare>(Plugin)
                 .SetName("MrDaycare")
                 .SetEnum("RecChars_MrDaycare")
                 .SetPoster(AssetMan.Get<Texture2D>("DaycareTex/pri_daycare"), "PST_PRI_RecChars_Daycare1", "PST_PRI_RecChars_Daycare2")
@@ -235,7 +249,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void CreateDaycareBlueprint()
         {
-            RoomBlueprint daycareRoom = new("Daycare", "RecChars_Daycare");
+            CaudexRoomBlueprint daycareRoom = new(Plugin, "Daycare", "RecChars_Daycare");
 
             DaycareDoorAssets.template = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Shut"));
             DaycareDoorAssets.locked = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Locked"));
@@ -244,9 +258,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             DaycareDoorAssets.mask.name = "DaycareDoor_Mask";
             DaycareDoorAssets.mask.SetMaskTexture(AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Mask"));
 
-            DaycareDoorAssets.open = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveOpen.wav"), "Sfx_Doors_StandardOpen", SoundType.Effect, Color.white);
-            DaycareDoorAssets.shut = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveShut.wav"), "Sfx_Doors_StandardShut", SoundType.Effect, Color.white);
-            DaycareDoorAssets.unlock = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Doors_DaveUnlock.wav"), "Sfx_Doors_StandardUnlock", SoundType.Effect, Color.white);
+            DaycareDoorAssets.open = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "Doors_DaveOpen.wav"), "Sfx_Doors_StandardOpen", SoundType.Effect, Color.white);
+            DaycareDoorAssets.shut = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "Doors_DaveShut.wav"), "Sfx_Doors_StandardShut", SoundType.Effect, Color.white);
+            DaycareDoorAssets.unlock = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "Doors_DaveUnlock.wav"), "Sfx_Doors_StandardUnlock", SoundType.Effect, Color.white);
 
             daycareRoom.texFloor = AssetMan.Get<Texture2D>("DaycareRoom/Daycare_Floor");
             daycareRoom.texWall = AssetMan.Get<Texture2D>("DaycareRoom/Daycare_Wall");
@@ -298,8 +312,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         private WeightedRoomAsset[] CreateDaycareRooms()
-        {            
-            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("DaycareBlueprint");
+        {
+            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("DaycareBlueprint");
 
             List<WeightedRoomAsset> rooms = [];
 
@@ -331,13 +345,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             return [.. rooms];
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
         private void EnableAnimationsCompat()
         {
             AssetMan.Get<DaycareRoomFunction>("DaycareRoomFunction").animationsCompat = true;
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", AssetMan.Get<MrDaycare>("MrDaycareNpc"));
@@ -345,7 +359,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
 
-            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("DaycareBlueprint");
+            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("DaycareBlueprint");
             LevelLoaderCompatHelper.AddRoom(blueprint);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycareflor", blueprint.texFloor);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycarewall", blueprint.texWall);
@@ -357,10 +371,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.posters.Add("recchars_daycareclock", AssetMan.Get<PosterObject>("DaycareClockPoster"));
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Daycare"), x => "DaycareEditor/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Daycare"), x => "DaycareEditor/" + x.name);
 
             LegacyEditorCompatHelper.AddCharacterObject("recchars_mrdaycare", AssetMan.Get<MrDaycare>("MrDaycareNpc"));
             BaldiLevelEditorPlugin.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
@@ -374,7 +388,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             new ExtFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare").AddToEditor("halls");
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
@@ -385,15 +399,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("RawChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
 
             // Add new words and tips
-            ApiManager.AddNewSymbolMachineWords(Info, "Moldy", "Dave", "house");
-            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_Pie", "Adv_Elv_Tip_RecChars_DoorKey",
+            ApiManager.AddNewSymbolMachineWords(Plugin, "Moldy", "Dave", "house");
+            ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_Pie", "Adv_Elv_Tip_RecChars_DoorKey",
                 "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
         private bool _connectorActive = false;
         private bool _connectorErrored = false;
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.ConnectorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.ConnectorGuid, LoadingEventOrder.Pre)]
         private void CheckIfConnectorIsActive()
         {
             if (ConnectorBasicsPlugin.Connected)
@@ -409,11 +423,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             _connectorErrored = true;
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
         private void FragileWindowsCompat()
         {
             // Dave Windowlet >u<
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(Plugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(BasePlugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
             FragileWindowsCompatHelper.AddWindowlet<DaveWindowlet>("Dave", sprites[0], sprites[3], new(81/255f, 38/255f, 10/255f), 3);
             DaveWindowlet.sprLo = sprites[1];
             DaveWindowlet.sprHi = sprites[2];
@@ -430,7 +444,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.EcoFriendlyGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.EcoFriendlyGuid, LoadingEventOrder.Pre)]
         private void EcoFriendlyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
@@ -445,7 +459,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("OblongSlotNameThingy"), ecoInfo).tags.Add("recchars_daycare_throwable");
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.CrazyBabyGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.CrazyBabyGuid, LoadingEventOrder.Pre)]
         private void CrazyBabyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
@@ -458,7 +472,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .tags.Add("recchars_daycare_throwable");
         }
 
-        [ModuleLoadEvent(LoadingEventOrder.Post)]
+        [CaudexLoadEvent(LoadingEventOrder.Post)]
         private void PostLoad()
         {
             // Add Mr. Daycare Rule Free Zones to everything except the Principal's office
@@ -493,6 +507,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             return poster;
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
@@ -507,7 +522,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyCharacterWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
                 return;
             }
 
@@ -520,7 +535,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.potentialNPCs.CopyCharacterWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
                 }
                 else if (id == 0)
                 {

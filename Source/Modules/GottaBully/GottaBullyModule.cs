@@ -20,24 +20,25 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Objects;
+using UncertainLuei.CaudexLib.Util.Extensions;
+using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public sealed class Module_GottaBully : Module
+    [CaudexModule("Gotta Bully"), CaudexModuleSaveTag("Mdl_GottaBully")]
+    [CaudexModuleConfig("Modules", "GottaBully",
+        "Adds Gotta Bully from Playtime's Swapped Basics.", true)]
+    public sealed class Module_GottaBully : RecCharsModule
     {
-        public override string Name => "Gotta Bully";
-
-        public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleGottaBully;
-
-        [ModuleLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Room", "SwapCloset"), x => "SwapCloset/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "GottaBully"), x => "GottaBullyTex/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "SwapCloset"), x => "SwapCloset/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "GottaBully"), x => "GottaBullyTex/" + x.name);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "GottaBully"), "GottaBullyAud/");
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "GottaBully"), "GottaBullyAud/");
 
             CreateSwapClosetBlueprint();
             LoadGottaBully();
@@ -76,13 +77,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.potentialRoomAssets = CreateSwapClosetRooms();
 
             AssetMan.Add("GottaBullyNpc", gottaBully);
-            NPCMetadata gottaBullyMeta = new(Info, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
+            NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(gottaBullyMeta);
         }
 
         private void CreateSwapClosetBlueprint()
         {
-            RoomBlueprint bullyRoom = new("SwappedCloset", "RecChars_SwappedCloset");
+            CaudexRoomBlueprint bullyRoom = new(Plugin, "SwappedCloset", "RecChars_SwappedCloset");
 
             bullyRoom.texFloor = AssetMan.Get<Texture2D>("SwapCloset/SwappedFloor");
             bullyRoom.texWall = AssetMan.Get<Texture2D>("SwapCloset/SwappedWall");
@@ -108,7 +109,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private WeightedRoomAsset[] CreateSwapClosetRooms()
         {
-            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("SwapClosetBlueprint");
+            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("SwapClosetBlueprint");
 
             List<WeightedRoomAsset> rooms = [];
 
@@ -186,28 +187,28 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             return [.. rooms];
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
             GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<GenericAnimationExtraComponent>());
             GameObject.DestroyImmediate(AssetMan.Get<GottaBully>("GottaBullyNpc").GetComponent<GottaSweepComponent>());
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", AssetMan.Get<GottaBully>("GottaBullyNpc"));
 
-            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("SwapClosetBlueprint");
+            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("SwapClosetBlueprint");
             LevelLoaderCompatHelper.AddRoom(blueprint, "recchars_swapcloset");
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_swapwall", blueprint.texWall);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_swapceil", blueprint.texCeil);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "GottaBully"), x => "GottaBullyEditor/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "GottaBully"), x => "GottaBullyEditor/" + x.name);
 
             LegacyEditorCompatHelper.AddCharacterObject("recchars_gottabully", AssetMan.Get<GottaBully>("GottaBullyNpc"));
             LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_swapcloset", "BlueCarpet", "recchars_swapwall", "recchars_swapceil");
@@ -216,13 +217,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             new ExtFloorTool("recchars_swapcloset", "GottaBullyEditor/Floor_swappedcloset").AddToEditor("halls");
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
             {
                 scene.MarkAsNeverUnload();
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                    scene.potentialNPCs.CopyCharacterWeight(Character.LookAt, AssetMan.Get<GottaBully>("GottaBullyNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.LookAt, AssetMan.Get<GottaBully>("GottaBullyNpc"));
                 else
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<GottaBully>("GottaBullyNpc"));
@@ -236,7 +238,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 scene.MarkAsNeverUnload();
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                    scene.potentialNPCs.CopyCharacterWeight(Character.LookAt, AssetMan.Get<GottaBully>("GottaBullyNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.LookAt, AssetMan.Get<GottaBully>("GottaBullyNpc"));
                 else if (id == 2)
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<GottaBully>("GottaBullyNpc"));

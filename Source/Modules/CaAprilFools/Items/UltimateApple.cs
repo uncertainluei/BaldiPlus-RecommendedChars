@@ -31,7 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class Baldi_UltimateApple : Baldi_Apple
     {
         public static Sprite[] ultiAppleSprites;
-        public static Items ultiAppleEnum;
+        public static Items ultiAppleEnum = (Items)(-1);
 
         private bool loopAnim = false;
         private bool frame = false;

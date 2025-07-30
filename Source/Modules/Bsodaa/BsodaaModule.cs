@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
@@ -26,28 +28,35 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UnityEngine;
 using BepInEx.Bootstrap;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Objects;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public sealed class Module_Bsodaa : Module
+    [CaudexModule("Eveyone's Bsodaa"), CaudexModuleSaveTag("Mdl_Bsodaa")]
+    [CaudexModuleConfig("Modules", "Bsodaa",
+        "Adds Baldi and Playtime from Eveything is Bsodaa, with their own room and mechanic.", true)]
+    public sealed class Module_Bsodaa : RecCharsModule
     {
-        public override string Name => "Eveyone's Bsodaa";
-
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleBsodaa;
-
-        public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-
         private readonly ModuleSaveSystem_Bsodaa saveSystem = new();
         public override ModuleSaveSystem SaveSystem => saveSystem;
 
-        [ModuleLoadEvent(LoadingEventOrder.Pre)]
+        protected override void Loaded()
+        {
+            // Load patches
+            Hooks.PatchAll(typeof(BsodaaSavePatches));
+            RecommendedCharsPlugin.PatchCompat(typeof(BsodaaHelperExpelBlacklist), RecommendedCharsPlugin.AdvancedGuid);
+        }
+
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Room", "Bsodaa"), x => "BsodaaRoom/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "Bsodaa"), x => "BsodaaTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "Bsodaa"), x => "BsodaaItm/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "Bsodaa"), x => "BsodaaRoom/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Bsodaa"), x => "BsodaaTex/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "Bsodaa"), x => "BsodaaItm/" + x.name);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(Plugin), "Audio", "Bsodaa"), "BsodaaAud/");
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Bsodaa"), "BsodaaAud/");
 
             LoadMiniBsoda();
             CreateBsodaaRoomBlueprint();
@@ -61,7 +70,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void LoadMiniBsoda()
         {
             // Diet BSODA Mini
-            ItemObject miniDietBsoda = new ItemBuilder(Info)
+            ItemObject miniDietBsoda = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_SmallDietBsoda", "Desc_RecChars_SmallDietBsoda")
             .SetEnum("RecChars_SmallDietBsoda")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
@@ -84,7 +93,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // BSODA Mini
-            ItemObject miniBsoda = new ItemBuilder(Info)
+            ItemObject miniBsoda = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_SmallBsoda", "Desc_RecChars_SmallBsoda")
             .SetEnum("RecChars_SmallBsoda")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
@@ -174,7 +183,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadEveyBsodaa()
         {
-            EveyBsodaa bsodaaGuy = new NPCBuilder<EveyBsodaa>(Info)
+            EveyBsodaa bsodaaGuy = new NPCBuilder<EveyBsodaa>(Plugin)
                 .SetName("Bsodaa")
                 .SetEnum("RecChars_Bsodaa")
                 .SetPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaa"), "PST_PRI_RecChars_Bsodaa1", "PST_PRI_RecChars_Bsodaa2")
@@ -188,7 +197,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             EveyBsodaa.charEnum = bsodaaGuy.Character;
 
-            Sprite[] sprites = RecommendedCharsPlugin.SplitSpriteSheet(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Idle"), 106, 256, 3, 32f);
+            Sprite[] sprites = CaudexAssetLoader.SplitSpriteSheet(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Idle"), 106, 256, 3, 32f);
 
             bsodaaGuy.spriteRenderer[0].transform.localPosition = Vector3.up * -1.08f;
             bsodaaGuy.spriteRenderer[0].sprite = sprites[0];
@@ -200,7 +209,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {"Upset", new Sprite[] { sprites[2] }},
             };
 
-            sprites = RecommendedCharsPlugin.SplitSpriteSheet(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Shoot"), 106, 256, 6, 32f);
+            sprites = CaudexAssetLoader.SplitSpriteSheet(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Shoot"), 106, 256, 6, 32f);
 
             EveyBsodaa.animations.Add("Charge",
             [
@@ -255,7 +264,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void CreateBsodaaRoomBlueprint()
         {
-            RoomBlueprint bsodaaRoom = new("BsodaaRoom", "RecChars_Bsodaa");
+            CaudexRoomBlueprint bsodaaRoom = new(Plugin, "BsodaaRoom", "RecChars_Bsodaa");
 
             bsodaaRoom.texFloor = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaCarpet");
             bsodaaRoom.texWall = AssetMan.Get<Texture2D>("BsodaaRoom/BsodaaWall");
@@ -292,7 +301,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private WeightedRoomAsset[] CreateBsodaaRoomAssets()
         {
-            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("BsodaaRoomBlueprint");
+            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("BsodaaRoomBlueprint");
             SodaMachine dietSodaMachine = Resources.FindObjectsOfTypeAll<SodaMachine>().First(x => x.name == "DietSodaMachine" && x.GetInstanceID() >= 0);
             BsodaaHelper helper = AssetMan.Get<BsodaaHelper>("BsodaaHelperObject");
 
@@ -447,7 +456,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             return [.. rooms];
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
@@ -456,17 +465,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
             PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_smallbsoda", AssetMan.Get<ItemObject>("SmallBsodaItem"));
 
-            RoomBlueprint blueprint = AssetMan.Get<RoomBlueprint>("BsodaaRoomBlueprint");
+            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("BsodaaRoomBlueprint");
             LevelLoaderCompatHelper.AddRoom(blueprint);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaaflor", blueprint.texFloor);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaawall", blueprint.texWall);
             PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_bsodaaceil", blueprint.texCeil);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "Bsodaa"), x => "BsodaaEditor/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Bsodaa"), x => "BsodaaEditor/" + x.name);
 
             LegacyEditorCompatHelper.AddCharacterObject("recchars_bsodaa", AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
             LegacyEditorCompatHelper.AddObject("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject"), Vector3.up*5);
@@ -482,14 +491,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             new ExtFloorTool("recchars_bsodaaroom", "BsodaaEditor/Floor_bsodaa").AddToEditor("halls");
         }
             
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
-            ApiManager.AddNewSymbolMachineWords(Info, "BSODA");
-            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_BsodaaHelper", "Adv_Elv_Tip_RecChars_BsodaaHelperSpray");
+            ApiManager.AddNewSymbolMachineWords(Plugin, "BSODA");
+            ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_BsodaaHelper", "Adv_Elv_Tip_RecChars_BsodaaHelperSpray");
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Post)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Post)]
         private void AdvancedRecipes()
         {
             ItemObject smallBsoda = AssetMan.Get<ItemObject>("SmallBsodaItem");
@@ -497,13 +506,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
             
-            AdvancedCompatHelper.RemoveStoveRecipes(advInfo, (x, y) => (x.Length == 1 && x[0].itemType.ToStringExtended() == "IceBoots"));
-            AdvancedCompatHelper.AddStoveRecipe(Info, [ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("IceBoots"), advInfo).value], [smallDietBsoda, smallDietBsoda]);
-            AdvancedCompatHelper.AddStoveRecipe(Info, [smallBsoda], [smallDietBsoda, smallDietBsoda]);
-            AdvancedCompatHelper.AddStoveRecipe(Info, [smallDietBsoda, smallDietBsoda], [smallBsoda]);
+            AdvancedCompatHelper.RemoveStoveRecipes(advInfo, (x, y) => x.Length == 1 && x[0].itemType.ToStringExtended() == "IceBoots");
+            AdvancedCompatHelper.AddStoveRecipe(Plugin, [ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("IceBoots"), advInfo).value], [smallDietBsoda, smallDietBsoda]);
+            AdvancedCompatHelper.AddStoveRecipe(Plugin, [smallBsoda], [smallDietBsoda, smallDietBsoda]);
+            AdvancedCompatHelper.AddStoveRecipe(Plugin, [smallDietBsoda, smallDietBsoda], [smallBsoda]);
         }
 
-        [ModuleLoadEvent(LoadingEventOrder.Final)]
+        [CaudexLoadEvent(LoadingEventOrder.Final)]
         private void IdentifyBaseBsodaSpray()
         {
             // Add a component to identify base BSODA sprays
@@ -512,6 +521,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsoda.MarkAsNeverUnload();
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
@@ -524,7 +534,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyCharacterWeight(Character.DrReflex, AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
                 return;
             }
 
@@ -534,7 +544,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.potentialNPCs.CopyCharacterWeight(Character.DrReflex, AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, AssetMan.Get<EveyBsodaa>("BsodaaNpc"));
                 }
                 else if (id == 1)
                 {

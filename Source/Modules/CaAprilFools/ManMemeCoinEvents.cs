@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using MTM101BaldAPI.Registers;
+using UncertainLuei.CaudexLib.Util.Extensions;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars

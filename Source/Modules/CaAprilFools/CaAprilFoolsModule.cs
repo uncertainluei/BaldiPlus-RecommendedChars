@@ -21,27 +21,25 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public sealed class Module_CaAprilFools : Module
+    [CaudexModule("CA April Fools"), CaudexModuleSaveTag("Mdl_CaAprilFools")]
+    [CaudexModuleConfig("Modules", "CaAprilFools",
+        "Adds a few features based on the April Fools updates from the Chaos Awakens Minecraft mod.", true)]
+    public sealed class Module_CaAprilFools : RecCharsModule
     {
-        public override string Name => "CA April Fools";
 
-        public override Action<string, int, SceneObject> FloorAddendAction => FloorAddend;
-        public override Action<string, int, CustomLevelObject> LevelAddendAction => FloorAddendLvl;
-
-        protected override ConfigEntry<bool> ConfigEntry => RecommendedCharsConfig.moduleCaAprilFools;
-
-        [ModuleLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Item", "CaAprilFools"), x => "CAItems/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Npc", "MMCoin"), x => "MMCoinTex/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "CaAprilFools"), x => "CAItems/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "MMCoin"), x => "MMCoinTex/" + x.name);
 
-            AssetMan.Add("Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(Plugin, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_CherryBsodaBoing", SoundType.Effect, Color.white));
+            AssetMan.Add("Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_CherryBsodaBoing", SoundType.Effect, Color.white));
 
             LoadItems();
             LoadManMemeCoinNpc();
@@ -53,7 +51,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void LoadItems()
         {
             // Flamin' Hot Cheepers
-            ItemObject puffs = new ItemBuilder(Info)
+            ItemObject puffs = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_FlaminPuffs", "Desc_RecChars_FlaminPuffs")
             .SetEnum("RecChars_FlaminPuffs")
             .SetMeta(ItemFlags.Persists, ["food", "recchars_daycare_exempt", "cann_hate", "adv_perfect", "adv_sm_potential_reward"])
@@ -76,7 +74,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Cherry BSODA
-            ItemObject cherryBsoda = new ItemBuilder(Info)
+            ItemObject cherryBsoda = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_CherryBsoda", "Desc_RecChars_CherryBsoda")
             .SetEnum("RecChars_CherryBsoda")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink", "adv_perfect", "adv_sm_potential_reward"])
@@ -135,7 +133,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Ultimate Apple
-            ItemObject ultiApple = new ItemBuilder(Info)
+            ItemObject ultiApple = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_UltimateApple", "Desc_RecChars_UltimateApple")
             .SetEnum("RecChars_UltimateApple")
             .SetMeta(ItemFlags.NoUses, ["food", "crmp_contraband", "adv_forbidden_present"])
@@ -154,14 +152,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Can of Mangles
-            ItemMetaData manglesMeta = new(Info, []);
+            ItemMetaData manglesMeta = new(Plugin, []);
             manglesMeta.flags = ItemFlags.MultipleUse;
             manglesMeta.tags.AddRange(["food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"]);
             // The Mangles would have this "homemade" flavor, thus you can feed that to Cann
 
             Items manglesEnum = EnumExtensions.ExtendEnum<Items>("RecChars_Mangles");
 
-            ItemBuilder manglesBuilder = new ItemBuilder(Info)
+            ItemBuilder manglesBuilder = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_Mangles1", "Desc_RecChars_Mangles")
             .SetEnum(manglesEnum)
             .SetMeta(manglesMeta)
@@ -198,7 +196,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadManMemeCoinNpc()
         {
-            ManMemeCoin coin = new NPCBuilder<ManMemeCoin>(Info)
+            ManMemeCoin coin = new NPCBuilder<ManMemeCoin>(Plugin)
                 .SetName("ManMemeCoin")
                 .SetEnum("RecChars_ManMemeCoin")
                 .SetPoster(AssetMan.Get<Texture2D>("MMCoinTex/pri_manmeme"), "PST_PRI_RecChars_ManMeme1", "PST_PRI_RecChars_ManMeme2")
@@ -211,7 +209,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             coin.looker.ignorePlayerVisibility = true;
 
-            Sprite[] sprites = RecommendedCharsPlugin.SplitSpriteSheet(AssetMan.Get<Texture2D>("MMCoinTex/ManMemeCoin"), 128, 128, 6, 25f);
+            Sprite[] sprites = CaudexAssetLoader.SplitSpriteSheet(AssetMan.Get<Texture2D>("MMCoinTex/ManMemeCoin"), 128, 128, 6, 25f);
 
             coin.spriteRenderer[0].transform.localPosition = Vector3.zero;
             coin.spriteRenderer[0].gameObject.AddComponent<PickupBob>();
@@ -237,7 +235,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("ManMemeCoinNpc", coin);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
             PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_manmemecoin", AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
@@ -250,10 +248,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PlusLevelLoaderPlugin.Instance.prefabAliases.Add("recchars_cherrysodamachine", AssetMan.Get<SodaMachine>("CherrySodaMachine").gameObject);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
         private void RegisterToLegacyEditor()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(Plugin, "*.png", "Textures", "Editor", "CaAprilFools"), x => "CAEditor/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "CaAprilFools"), x => "CAEditor/" + x.name);
 
             LegacyEditorCompatHelper.AddCharacterObject("recchars_manmemecoin", AssetMan.Get<ManMemeCoin>("ManMemeCoinNpc"));
 
@@ -274,18 +272,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             new ExtRotatableTool("recchars_cherrysodamachine", "CAEditor/Object_cherrysodamachine").AddToEditor("objects");
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
             ItemObject flaminPuffs = AssetMan.Get<ItemObject>("FlaminPuffsItem");
             flaminPuffs.item = RecommendedCharsPlugin.SwapComponentSimple<ITM_FlaminPuffs, ITM_FlaminPuffs_AdvancedCompat>((ITM_FlaminPuffs)flaminPuffs.item);
 
-            ApiManager.AddNewSymbolMachineWords(Info, "Monk", "Tone", "Chaos", "Meme", "Pear", "Weird", "Zeed", "Roy", "Oreo");
-            ApiManager.AddNewTips(Info, "Adv_Elv_Tip_RecChars_ManMemeSpawning", "Adv_Elv_Tip_RecChars_ManMemeCoin",
+            ApiManager.AddNewSymbolMachineWords(Plugin, "Monk", "Tone", "Chaos", "Meme", "Pear", "Weird", "Zeed", "Roy", "Oreo");
+            ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_ManMemeSpawning", "Adv_Elv_Tip_RecChars_ManMemeCoin",
                 "Adv_Elv_Tip_RecChars_FlaminPuffsWarmth", "Adv_Elv_Tip_RecChars_FlaminPuffsWindows",
                 "Adv_Elv_Tip_RecChars_CherryBsoda", "Adv_Elv_Tip_RecChars_UltimateApple");
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
@@ -316,6 +315,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int id, CustomLevelObject lvl)
         {
             if (title != "END" && (!title.StartsWith("F") || id < 1)) return;
@@ -341,7 +341,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        [ModuleLoadEvent(LoadingEventOrder.Final)]
+        [CaudexLoadEvent(LoadingEventOrder.Final)]
         private void PostLoad()
         {
             ManMemeCoinEvents.InitializePostEvents();
