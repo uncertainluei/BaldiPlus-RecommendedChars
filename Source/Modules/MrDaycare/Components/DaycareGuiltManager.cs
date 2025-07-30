@@ -20,7 +20,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public static void TryBreakRule(PlayerManager player, string rule, float linger, float sensitivity = 1f)
         {
-            GetInstance(player).BreakRule(rule, linger, sensitivity);
+            if (RecommendedCharsConfig.moduleMrDaycare.Value)
+                GetInstance(player).BreakRule(rule, linger, sensitivity);
         }
 
         private PlayerManager player;
