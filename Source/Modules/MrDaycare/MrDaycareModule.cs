@@ -117,46 +117,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Door Key
-            ItemMetaData doorKeyMeta = new(Plugin, []);
-            doorKeyMeta.flags = ItemFlags.MultipleUse;
-            doorKeyMeta.tags.AddRange(["key", "crmp_contraband"]);
-
-            Items keyEnum = EnumExtensions.ExtendEnum<Items>("RecChars_DoorKey");
-
-            ItemBuilder keyBuilder = new ItemBuilder(Plugin)
-            .SetNameAndDescription("Itm_RecChars_DoorKey1", "Desc_RecChars_DoorKey")
-            .SetEnum(keyEnum)
-            .SetMeta(doorKeyMeta)
+            ItemObject keyItemObject = new ItemBuilder(Plugin)
+            .SetNameAndDescription("Itm_RecChars_DoorKey", "Desc_RecChars_DoorKey")
+            .SetEnum("RecChars_DoorKey")
+            .SetMeta(ItemFlags.MultipleUse, ["key", "crmp_contraband"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/DoorKey_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/DoorKey_Large"), 50f))
             .SetShopPrice(750)
             .SetGeneratorCost(90)
-            .SetItemComponent<ITM_DoorKey>();
+            .SetItemComponent<ITM_DoorKey>()
+            .BuildAsMulti(3);
+            ((ITM_DoorKey)keyItemObject.item).layerMask = ((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DetentionKey).value.item).layerMask;
 
-            ItemObject keyItemObject = keyBuilder.Build();
-            keyItemObject.name = "RecChars DoorKey1";
-            ITM_DoorKey keyItm = (ITM_DoorKey)keyItemObject.item;
-            keyItm.name = "Itm_DoorKey1";
-            keyItm.layerMask = ((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DetentionKey).value.item).layerMask;
-
-            keyBuilder.SetNameAndDescription("Itm_RecChars_DoorKey2", "Desc_RecChars_DoorKey");
-            keyBuilder.SetItemComponent<ITM_DoorKey>(null);
-            ItemObject keyItemObject2 = keyBuilder.Build();
-            keyItemObject2.name = "RecChars DoorKey2";
-            keyItm = GameObject.Instantiate(keyItm, MTM101BaldiDevAPI.prefabTransform);
-            keyItemObject2.item = keyItm;
-            keyItm.name = "Itm_DoorKey2";
-            keyItm.nextStage = keyItemObject;
-
-            keyBuilder.SetNameAndDescription("Itm_RecChars_DoorKey3", "Desc_RecChars_DoorKey");
-            keyItemObject = keyItemObject2;
-            keyItemObject2 = keyBuilder.Build();
-            keyItemObject2.name = "RecChars DoorKey3";
-            keyItm = GameObject.Instantiate(keyItm, MTM101BaldiDevAPI.prefabTransform);
-            keyItemObject2.item = keyItm;
-            keyItm.name = "Itm_DoorKey3";
-            keyItm.nextStage = keyItemObject;
-
-            AssetMan.Add("DoorKeyItem", keyItemObject2);
+            AssetMan.Add("DoorKeyItem", keyItemObject);
         }
 
         private void LoadMrDaycare()

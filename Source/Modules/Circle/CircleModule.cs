@@ -56,18 +56,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadNerfGun()
         {
-            ItemMetaData nerfGunMeta = new(Plugin, [])
-            {
-                flags = ItemFlags.MultipleUse
-            };
-            nerfGunMeta.tags.AddRange(["adv_normal", "adv_sm_potential_reward"]);
-
-            Items nerfGunEnum = EnumExtensions.ExtendEnum<Items>("RecChars_NerfGun");
-
             ItemBuilder nerfGunBuilder = new ItemBuilder(Plugin)
-            .SetNameAndDescription("Itm_RecChars_NerfGun2", "Desc_RecChars_NerfGun")
-            .SetEnum(nerfGunEnum)
-            .SetMeta(nerfGunMeta)
+            .SetNameAndDescription("Itm_RecChars_NerfGun", "Desc_RecChars_NerfGun")
+            .SetEnum("RecChars_NerfGun")
+            .SetMeta(ItemFlags.MultipleUse, ["adv_normal", "adv_sm_potential_reward"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Large"), 50f))
             .SetShopPrice(450)
             .SetGeneratorCost(45)
@@ -76,22 +68,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!RecommendedCharsConfig.nerfCircle.Value)
                 nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(75);
 
-            ItemObject nerfItm = nerfGunBuilder.Build();
-            nerfItm.name = "RecChars NerfGun2";
-            nerfItm.item.name = "Itm_NerfGun2";
-            AssetMan.Add("NerfGunItem", nerfItm);
-
-            nerfGunBuilder.SetNameAndDescription("Itm_RecChars_NerfGun1", "Desc_RecChars_NerfGun");
-            ItemObject nerfItm1 = nerfGunBuilder.Build();
-            nerfItm1.name = "RecChars NerfGun1";
-            nerfItm1.item.name = "Itm_NerfGun1";
-            ((ITM_NerfGun)nerfItm.item).nextStage = nerfItm1;
+            nerfGunBuilder.BuildAsMulti(2);
 
             AssetMan.Add("NerfGunPoster", ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []));
             AssetMan.Get<PosterObject>("NerfGunPoster").name = "NerfGunPoster";
-
-            // Reverse itemObject list so the (2) variant is always selected first
-            nerfGunMeta.itemObjects = nerfGunMeta.itemObjects.Reverse().ToArray();
         }
 
         private void LoadCircle()

@@ -9,10 +9,8 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI;
 
 using BaldiLevelEditor;
-using PlusLevelFormat;
 using PlusLevelLoader;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -140,10 +138,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Large"), 50f))
             .SetShopPrice(2500)
             .SetGeneratorCost(100)
+            .SetItemComponent(ItemMetaStorage.Instance.FindByEnum(Items.Apple).value.item)
             .Build();
 
             ultiApple.name = "RecChars UltimateApple";
-            ultiApple.item = ItemMetaStorage.Instance.FindByEnum(Items.Apple).value.item;
 
             Baldi_UltimateApple.ultiAppleEnum = ultiApple.itemType;
             Baldi_UltimateApple.ultiAppleSprites = AssetLoader.SpritesFromSpritesheet(2, 1, 32f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CAItems/BaldiUltimateApple"));
@@ -152,46 +150,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
 
             // Can of Mangles
-            ItemMetaData manglesMeta = new(Plugin, []);
-            manglesMeta.flags = ItemFlags.MultipleUse;
-            manglesMeta.tags.AddRange(["food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"]);
+            ItemObject manglesItemObject = new ItemBuilder(Plugin)
+            .SetNameAndDescription("Itm_RecChars_Mangles", "Desc_RecChars_Mangles")
+            .SetEnum("RecChars_Mangles")
             // The Mangles would have this "homemade" flavor, thus you can feed that to Cann
-
-            Items manglesEnum = EnumExtensions.ExtendEnum<Items>("RecChars_Mangles");
-
-            ItemBuilder manglesBuilder = new ItemBuilder(Plugin)
-            .SetNameAndDescription("Itm_RecChars_Mangles1", "Desc_RecChars_Mangles")
-            .SetEnum(manglesEnum)
-            .SetMeta(manglesMeta)
+            .SetMeta(ItemFlags.MultipleUse, ["food", "recchars_daycare_exempt", "adv_good", "adv_sm_potential_reward"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/Mangles_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/Mangles_Large"), 50f))
             .SetShopPrice(500)
             .SetGeneratorCost(60)
-            .SetItemComponent<ITM_Mangles>();
+            .SetItemComponent<ITM_Mangles>()
+            .BuildAsMulti(3);
+            ((ITM_Mangles)manglesItemObject.item).audEat = audEat;
 
-            ItemObject manglesItemObject = manglesBuilder.Build();
-            manglesItemObject.name = "RecChars Mangles1";
-            ITM_Mangles manglesItm = (ITM_Mangles)manglesItemObject.item;
-            manglesItm.name = "Itm_Mangles1";
-            manglesItm.audEat = audEat;
-
-            manglesBuilder.SetNameAndDescription("Itm_RecChars_Mangles2", "Desc_RecChars_Mangles");
-            ItemObject manglesItemObject2 = manglesBuilder.Build();
-            manglesItemObject2.name = "RecChars Mangles2";
-            manglesItm = (ITM_Mangles)manglesItemObject2.item;
-            manglesItm.name = "Itm_Mangles2";
-            manglesItm.audEat = audEat;
-            manglesItm.nextStage = manglesItemObject;
-
-            manglesBuilder.SetNameAndDescription("Itm_RecChars_Mangles3", "Desc_RecChars_Mangles");
-            manglesItemObject = manglesItemObject2;
-            manglesItemObject2 = manglesBuilder.Build();
-            manglesItemObject2.name = "RecChars Mangles3";
-            manglesItm = (ITM_Mangles)manglesItemObject2.item;
-            manglesItm.name = "Itm_Mangles3";
-            manglesItm.audEat = audEat;
-            manglesItm.nextStage = manglesItemObject;
-
-            AssetMan.Add("ManglesItem", manglesItemObject2);
+            AssetMan.Add("ManglesItem", manglesItemObject);
         }
 
         private void LoadManMemeCoinNpc()

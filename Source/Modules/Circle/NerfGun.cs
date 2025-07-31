@@ -2,8 +2,6 @@
 {
     class ITM_NerfGun : Item
     {
-        public ItemObject nextStage;
-
         public override bool Use(PlayerManager pm)
         {
             Destroy(gameObject);
@@ -21,11 +19,6 @@
             }
             if (fail) return false;
 
-            if (nextStage)
-            {
-                pm.itm.SetItem(nextStage, pm.itm.selectedItem);
-                return false;
-            }
             return true;
         }
     }

@@ -4,9 +4,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public class ITM_DoorKey : Item
     {
-        public ItemObject nextStage;
         public LayerMaskObject layerMask;
-
         internal static Items[] keyEnums;
 
         private RaycastHit _hit;
@@ -25,12 +23,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {
                     if (!itemAcceptor.ItemFits(itm)) continue;
                     itemAcceptor.InsertItem(pm, pm.ec);
-
-                    if (nextStage)
-                    {
-                        pm.itm.SetItem(nextStage, pm.itm.selectedItem);
-                        return false;
-                    }
                     return true;
                 }
             }
