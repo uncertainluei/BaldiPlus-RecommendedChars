@@ -68,8 +68,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!RecommendedCharsConfig.nerfCircle.Value)
                 nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(75);
 
-            nerfGunBuilder.BuildAsMulti(2);
-
+            AssetMan.Add("NerfGunItem", nerfGunBuilder.BuildAsMulti(2));
             AssetMan.Add("NerfGunPoster", ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []));
             AssetMan.Get<PosterObject>("NerfGunPoster").name = "NerfGunPoster";
         }

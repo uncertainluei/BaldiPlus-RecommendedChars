@@ -17,6 +17,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
 using UnityEngine;
 
@@ -54,6 +55,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             Plugin = this;
             Log = Logger;
+
+            this.SetAssetsDirectory("uncertainluei", "recommendedchars");
 
             // Read the config values and remove disabled modules
             RecommendedCharsConfig.BindConfig(Config);
@@ -128,6 +131,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ((RecCharsModule)module).SaveSystem?.Reset();
         }
 
+        public override bool TagsReady() => modulesInit;
         public override string[] GenerateTags()
         {
             if (!modulesInit) return [];
