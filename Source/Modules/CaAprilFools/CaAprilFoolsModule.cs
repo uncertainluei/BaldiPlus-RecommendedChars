@@ -25,9 +25,9 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("CA April Fools"), CaudexModuleSaveTag("Mdl_CaAprilFools")]
-    [CaudexModuleConfig("Modules", "CaAprilFools",
-        "Adds a few features based on the April Fools updates from the Chaos Awakens Minecraft mod.", true)]
+    //[CaudexModule("CA April Fools"), CaudexModuleSaveTag("Mdl_CaAprilFools")]
+    //[CaudexModuleConfig("Modules", "CaAprilFools",
+    //    "Adds a few features based on the April Fools updates from the Chaos Awakens Minecraft mod.", true)]
     public sealed class Module_CaAprilFools : RecCharsModule
     {
 
@@ -128,26 +128,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             };
 
             AssetMan.Add("CherrySodaMachine", sodaMachine);
-
-
-            // Ultimate Apple
-            ItemObject ultiApple = new ItemBuilder(Plugin)
-            .SetNameAndDescription("Itm_RecChars_UltimateApple", "Desc_RecChars_UltimateApple")
-            .SetEnum("RecChars_UltimateApple")
-            .SetMeta(ItemFlags.NoUses, ["food", "crmp_contraband", "adv_forbidden_present"])
-            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CAItems/UltimateApple_Large"), 50f))
-            .SetShopPrice(2500)
-            .SetGeneratorCost(100)
-            .SetItemComponent(ItemMetaStorage.Instance.FindByEnum(Items.Apple).value.item)
-            .Build();
-
-            ultiApple.name = "RecChars UltimateApple";
-
-            Baldi_UltimateApple.ultiAppleEnum = ultiApple.itemType;
-            Baldi_UltimateApple.ultiAppleSprites = AssetLoader.SpritesFromSpritesheet(2, 1, 32f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CAItems/BaldiUltimateApple"));
-
-            AssetMan.Add("UltimateAppleItem", ultiApple);
-
 
             // Can of Mangles
             ItemObject manglesItemObject = new ItemBuilder(Plugin)
