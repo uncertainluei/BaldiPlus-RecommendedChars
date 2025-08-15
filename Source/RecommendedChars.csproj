@@ -37,60 +37,60 @@
 
 	<ItemGroup>
 		<Reference Include="Assembly-CSharp" Publicize="true">
-			<HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
+			<HintPath>../Dependencies/Assembly-CSharp.dll</HintPath>
 		</Reference>
 		<Reference Include="UncertainLuei.CaudexLib">
-			<HintPath>..\Dependencies\UncertainLuei.CaudexLib.dll</HintPath>
+			<HintPath>../Dependencies/UncertainLuei.CaudexLib.dll</HintPath>
 		</Reference>
 
 		<Reference Include="PineDebug">
-			<HintPath>..\Dependencies\PineDebug.dll</HintPath>
+			<HintPath>../Dependencies/PineDebug.dll</HintPath>
 		</Reference>
 		<Reference Include="AnalogFeelings.CharacterRadar" Publicize="true">
-			<HintPath>..\Dependencies\AnalogFeelings.CharacterRadar.dll</HintPath>
+			<HintPath>../Dependencies/AnalogFeelings.CharacterRadar.dll</HintPath>
 		</Reference>
 		<Reference Include="BBPlusCustomMusics" Publicize="true">
-			<HintPath>..\Dependencies\BBPlusCustomMusics.dll</HintPath>
+			<HintPath>../Dependencies/BBPlusCustomMusics.dll</HintPath>
 		</Reference>
 		<Reference Include="BBPlusAnimations" Publicize="true">
-			<HintPath>..\Dependencies\BBPlusAnimations.dll</HintPath>
+			<HintPath>../Dependencies/BBPlusAnimations.dll</HintPath>
 		</Reference>
 		<Reference Include="BaldisBasicsPlusAdvanced" Publicize="true">
-			<HintPath>..\Dependencies\BaldisBasicsPlusAdvanced.dll</HintPath>
+			<HintPath>../Dependencies/BaldisBasicsPlusAdvanced.dll</HintPath>
 		</Reference>
 		
 		<Reference Include="brobowindowsmod" Publicize="true">
-			<HintPath>..\Dependencies\brobowindowsmod.dll</HintPath>
+			<HintPath>../Dependencies/brobowindowsmod.dll</HintPath>
 		</Reference>
 		<Reference Include="BigThinkersEcoFriendlyPack">
-			<HintPath>..\Dependencies\BigThinkersEcoFriendlyPack.dll</HintPath>
+			<HintPath>../Dependencies/BigThinkersEcoFriendlyPack.dll</HintPath>
 		</Reference>
 		<Reference Include="CRAZYBABYJUMPSCARE">
-			<HintPath>..\Dependencies\CRAZYBABYJUMPSCARE.dll</HintPath>
+			<HintPath>../Dependencies/CRAZYBABYJUMPSCARE.dll</HintPath>
 		</Reference>
 		<Reference Include="BaldiAPIConnector" Publicize="true">
-			<HintPath>..\Dependencies\BaldiAPIConnector.dll</HintPath>
+			<HintPath>../Dependencies/BaldiAPIConnector.dll</HintPath>
 		</Reference>
 		
 		<Reference Include="PlusLevelLoader">
-			<HintPath>..\Dependencies\PlusLevelLoader.dll</HintPath>
+			<HintPath>../Dependencies/PlusLevelLoader.dll</HintPath>
 		</Reference>
 		<Reference Include="PlusLevelFormat">
-			<HintPath>..\Dependencies\PlusLevelFormat.dll</HintPath>
+			<HintPath>../Dependencies/PlusLevelFormat.dll</HintPath>
 		</Reference>
 		<Reference Include="BaldiLevelEditor">
-			<HintPath>..\Dependencies\BaldiLevelEditor.dll</HintPath>
+			<HintPath>../Dependencies/BaldiLevelEditor.dll</HintPath>
 		</Reference>
 		
 		<Reference Include="MTM101BaldAPI">
-			<HintPath>..\Dependencies\MTM101BaldAPI.dll</HintPath>
+			<HintPath>../Dependencies/MTM101BaldAPI.dll</HintPath>
 		</Reference>
 
 		<Reference Include="UnityEngine.UI">
-			<HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
+			<HintPath>../Dependencies/UnityEngine.UI.dll</HintPath>
 		</Reference>
 		<Reference Include="Unity.TextMeshPro">
-			<HintPath>..\Dependencies\Unity.TextMeshPro.dll</HintPath>
+			<HintPath>../Dependencies/Unity.TextMeshPro.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 </Project>

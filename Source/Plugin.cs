@@ -16,6 +16,8 @@ using System.Linq;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util.Extensions;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -56,11 +58,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Read the config values and remove disabled modules
             RecommendedCharsConfig.BindConfig(Config);
 
-            /*
             RecommendedCharsSaveGameIO saveGameSystem = new(Info);
             ModdedSaveGame.AddSaveHandler(saveGameSystem);
             ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
-            */
+            QueuedActions.QueueAction(() =>
+            {
+                saveGameSystem.modulesInit = true;
+                ModdedFileManager.Instance.RegenerateTags();
+            });
 
             // Load localization files
             AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);
@@ -88,76 +93,82 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    //public class RecommendedCharsSaveGameIO(PluginInfo info) : ModdedSaveGameIOBinary
-    //{
-    //    private readonly PluginInfo info = info;
-    //    public override PluginInfo pluginInfo => info;
+    public class RecommendedCharsSaveGameIO(PluginInfo info) : ModdedSaveGameIOBinary
+    {
+        private readonly PluginInfo info = info;
+        public override PluginInfo pluginInfo => info;
+        internal bool modulesInit = false;
 
-    //    private const byte SaveVersion = 1;
+        private const byte SaveVersion = 1;
 
-    //    public override void OnCGMCreated(CoreGameManager cgm, bool savedGame)
-    //    {
-    //        foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
-    //            module.SaveSystem?.CoreGameManCreated(cgm, savedGame);
-    //    }
+        public override void OnCGMCreated(CoreGameManager cgm, bool savedGame)
+        {
+            foreach (AbstractCaudexModule module in info.GetActiveCaudexModules())
+                ((RecCharsModule)module).SaveSystem?.CoreGameManCreated(cgm, savedGame);
+        }
 
-    //    public override void Load(BinaryReader reader)
-    //    {
-    //        byte ver = reader.ReadByte();
-    //        if (ver == 0) return;
-    //        foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
-    //            module.SaveSystem?.Load(reader);
-    //    }
+        public override void Load(BinaryReader reader)
+        {
+            byte ver = reader.ReadByte();
+            if (ver == 0) return;
+            foreach (AbstractCaudexModule module in info.GetActiveCaudexModules())
+                ((RecCharsModule)module).SaveSystem?.Load(reader);
+        }
 
-    //    public override void Save(BinaryWriter writer)
-    //    {
-    //        writer.Write(SaveVersion);
-    //        foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
-    //            module.SaveSystem?.Save(writer);
-    //    }
+        public override void Save(BinaryWriter writer)
+        {
+            writer.Write(SaveVersion);
+            foreach (AbstractCaudexModule module in info.GetActiveCaudexModules())
+                ((RecCharsModule)module).SaveSystem?.Save(writer);
+        }
 
-    //    public override void Reset()
-    //    {
-    //        foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
-    //            module.SaveSystem?.Reset();
-    //    }
+        public override void Reset()
+        {
+            foreach (AbstractCaudexModule module in info.GetActiveCaudexModules())
+                ((RecCharsModule)module).SaveSystem?.Reset();
+        }
 
-    //    public override string[] GenerateTags()
-    //    {
-    //        List<string> tags = [];
+        public override string[] GenerateTags()
+        {
+            if (!modulesInit) return [];
+
+            List<string> tags = [];
             
-    //        foreach (Module module in RecommendedCharsPlugin.Plugin.Modules)
-    //            tags.Add(module.Name);
-    //        if (tags.Count > 0 && RecommendedCharsConfig.guaranteeSpawnChar.Value)
-    //            tags.Add("GuaranteedSpawn");
+            foreach (string module in info.GetActiveCaudexModuleTags())
+                tags.Add(module);
+            if (tags.Count > 0 && RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                tags.Add("GuaranteedSpawn");
 
-    //        return [.. tags];
-    //    }
+            return [.. tags];
+        }
 
-    //    public override string DisplayTags(string[] tags)
-    //    {
-    //        string display = "<b>Modules:</b> ";
+        public override string DisplayTags(string[] tags)
+        {
+            if (tags == null || tags.Length == 0)
+                return "No save tags.";
 
-    //        bool addComma = false;
-    //        byte entryCount = 0;
+            string display = "<b>Modules:</b> ";
 
-    //        foreach (string tag in tags)
-    //        {
-    //            if (tag == "GuaranteedSpawn")
-    //            {
-    //                display = "<b>Guaranteed Character Spawns</b>\n" + display;
-    //                break;
-    //            }
+            bool addComma = false;
+            byte entryCount = 0;
 
-    //            if (addComma)
-    //                display += "," + (entryCount % 3 == 0 ? "\n" : " ");
+            foreach (string tag in tags)
+            {
+                if (tag == "GuaranteedSpawn")
+                {
+                    display = "<b>Guaranteed Character Spawns</b>\n" + display;
+                    break;
+                }
 
-    //            addComma = true;
-    //            entryCount++;
+                if (addComma)
+                    display += "," + (entryCount % 3 == 0 ? "\n" : " ");
 
-    //            display += tag;
-    //        }
-    //        return display;
-    //    }
-    //}
+                addComma = true;
+                entryCount++;
+
+                display += tag;
+            }
+            return display;
+        }
+    }
 }
