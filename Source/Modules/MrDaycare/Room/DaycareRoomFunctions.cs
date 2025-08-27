@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UncertainLuei.CaudexLib.Registers;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public class DaycareRoomFunction : DetentionRoomFunction
     {
-        private static event Action OnNotebookCollect;
-        public static void NotebookCollected() => OnNotebookCollect?.Invoke();
-
         public bool Inactive { get; private set; } = true;
 
         public bool animationsCompat;
@@ -26,16 +23,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Inactive = true;
             setupInProgress = true;
-            OnNotebookCollect += SetupRequirement;
-            OnNotebookCollect += NotebookCheck;
+            CaudexEvents.OnNotebookCollect += SetupRequirement;
+            CaudexEvents.OnNotebookCollect += NotebookCheck;
         }
 
         private void OnDestroy()
         {
             if (Inactive)
-                OnNotebookCollect -= NotebookCheck;
+                CaudexEvents.OnNotebookCollect -= NotebookCheck;
             if (setupInProgress)
-                OnNotebookCollect -= SetupRequirement;
+                CaudexEvents.OnNotebookCollect -= SetupRequirement;
         }
 
         public override void OnGenerationFinished()
@@ -67,7 +64,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void SetupRequirement()
         {
             setupInProgress = false;
-            OnNotebookCollect -= SetupRequirement;
+            CaudexEvents.OnNotebookCollect -= SetupRequirement;
 
             NotebookRequirement = Mathf.RoundToInt(BaseGameManager.Instance.NotebookTotal * 0.5f + 0.1f);
             if (BaseGameManager.Instance.NotebookTotal < 5)
@@ -142,7 +139,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Activate()
         {
             Inactive = false;
-            OnNotebookCollect -= NotebookCheck;
+            CaudexEvents.OnNotebookCollect -= NotebookCheck;
 
             int doorCount = room.doors.Count;
             for (int i = 0; i < doorCount; i++)

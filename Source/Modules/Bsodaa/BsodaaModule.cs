@@ -31,6 +31,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Util.Extensions;
+using UncertainLuei.CaudexLib.Registers;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -63,8 +64,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadBsodaaHelper();
             LoadEveyBsodaa();
 
-            LevelGeneratorEventPatch.OnNpcAdd += AddBsodaaHelpers;
-            //LevelGeneratorEventPatch.OnGeneratorCompletion += RemoveBsodaaHelpers;
+            CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddBsodaaHelpers);
         }
 
         private void LoadMiniBsoda()

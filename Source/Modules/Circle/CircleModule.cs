@@ -25,6 +25,7 @@ using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
+using UncertainLuei.CaudexLib.Registers;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -51,7 +52,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadNerfGun();
             LoadCircle();
 
-            LevelGeneratorEventPatch.OnNpcAdd += AddItemsToLevel;
+            CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddItemsToLevel);
         }
 
         private void LoadNerfGun()

@@ -76,8 +76,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadingEvents.RegisterOnAssetsLoaded(Info, GrabBaseAssets(), LoadingEventOrder.Pre);
 
             Hooks = new(ModGuid);
-            Hooks.PatchAll(typeof(LevelGeneratorEventPatch));
-
             PatchCompat(typeof(PineDebugNpcIconPatch), PineDebugGuid);
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
             PatchCompat(typeof(LegacyEditorCompatHelper), LegacyEditorGuid);

@@ -55,7 +55,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             bool success = false;
             for (int i = pm.jumpropes.Count - 1; i >= 0; i--)
             {
-                if (!(pm.jumpropes[i] is CircleJumprope))
+                if (pm.jumpropes[i] is not CircleJumprope)
                 {
                     success = true;
                     pm.jumpropes[i].End(false);

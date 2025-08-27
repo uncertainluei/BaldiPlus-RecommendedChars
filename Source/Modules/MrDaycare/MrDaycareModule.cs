@@ -32,6 +32,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UnityEngine;
 
 using APIConnector;
+using UncertainLuei.CaudexLib.Registers;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -46,7 +47,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Hooks.PatchAll(typeof(MrDaycarePatches));
             Hooks.PatchAll(typeof(DaycareRoomPatches));
             RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareAdvancedPatches), RecommendedCharsPlugin.AdvancedGuid);
-            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareCrazyBabyPatches), RecommendedCharsPlugin.CrazyBabyGuid);
             RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareEcoFriendlyPatches), RecommendedCharsPlugin.EcoFriendlyGuid);
             RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareFragilePatches), RecommendedCharsPlugin.FragileWindowsGuid);
         }
@@ -71,7 +71,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadItems();
             LoadMrDaycare();
 
-            LevelGeneratorEventPatch.OnNpcAdd += AddPosterToLevel;
+            CaudexEvents.OnItemUse += SetGuiltForItems;
+            CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddPosterToLevel);
         }
 
         private void LoadItems()
@@ -534,6 +535,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == MrDaycare.charEnum) == null) return;
 
             gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
+        }
+
+        private static void SetGuiltForItems(ItemManager itemMan, ItemObject itm)
+        {
+            ItemMetaData meta = itm.GetMeta();
+            if (meta == null || meta.tags.Contains("recchars_daycare_exempt")) return;
+
+            if (meta.tags.Contains("food") && !meta.tags.Contains("drink"))
+            {
+                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Eating", 0.8f, 0.25f);
+                return;
+            }
+            if (meta.tags.Contains("recchars_daycare_throwable"))
+            {
+                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Throwing", 0.8f, 0.25f);
+                return;
+            }
+            if (meta.tags.Contains("recchars_daycare_loud") &&
+                !itemMan.pm.ec.silent &&
+                !itemMan.pm.ec.CellFromPosition(IntVector2.GetGridPosition(itemMan.transform.position)).Silent)
+            {
+                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("LoudSound", 1.5f, 0.5f);
+                return;
+            }
         }
     }
 }

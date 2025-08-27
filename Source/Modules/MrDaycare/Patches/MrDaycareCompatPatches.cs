@@ -57,22 +57,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     {
         [HarmonyPatch(typeof(CannonWindowHotspot), "Clicked"), HarmonyPrefix]
         private static void GlassCannonScold(int playerNumber)
-        {
-            DaycareGuiltManager.GetInstance(CoreGameManager.Instance.GetPlayer(playerNumber)).BreakRule("Throwing", 0.8f, 0.25f);
-        }
-
-        [HarmonyPatch(typeof(ITM_WindowBlaster), "Use"), HarmonyPostfix]
-        private static void MultiUseItemScold(PlayerManager pm)
-        {
-            DaycareGuiltManager.GetInstance(pm).BreakRule("Throwing", 0.8f, 0.25f);
-        }
-
-        [HarmonyPatch(typeof(ITM_LittleWhistleGuy), "Use"), HarmonyPostfix]
-        private static void WindowWhistleScold(PlayerManager pm)
-        {
-            if (!pm.ec.silent && !pm.ec.CellFromPosition(IntVector2.GetGridPosition(pm.transform.position)).Silent)
-                DaycareGuiltManager.GetInstance(pm).BreakRule("LoudSound", 1.5f, 0.5f);
-        }
+            => DaycareGuiltManager.GetInstance(CoreGameManager.Instance.GetPlayer(playerNumber)).BreakRule("Throwing", 0.8f, 0.25f);
     }
 
     [ConditionalPatchMod(RecommendedCharsPlugin.EcoFriendlyGuid)]
@@ -80,28 +65,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     [HarmonyPatch]
     static class MrDaycareEcoFriendlyPatches
     {
-        [HarmonyPatch(typeof(ITM_BBGun), "Use"), HarmonyPostfix]
-        private static void MultiUseItemScold(PlayerManager pm)
-        {
-            DaycareGuiltManager.GetInstance(pm).BreakRule("Throwing", 0.8f, 0.25f);
-        }
-
         [HarmonyPatch(typeof(CheeseStand), "EatCheese"), HarmonyPostfix]
         private static void CheeseStandScold(PlayerManager pm)
-        {
-            DaycareGuiltManager.GetInstance(pm).BreakRule("Eating", 1.2f, 0.25f);
-        }
-    }
-
-    [ConditionalPatchMod(RecommendedCharsPlugin.CrazyBabyGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
-    [HarmonyPatch]
-    static class MrDaycareCrazyBabyPatches
-    {
-        [HarmonyPatch(typeof(DonutGun), "Use"), HarmonyPostfix]
-        private static void MultiUseItemScold(PlayerManager pm)
-        {
-            DaycareGuiltManager.GetInstance(pm).BreakRule("Throwing", 0.8f, 0.25f);
-        }
+            => DaycareGuiltManager.GetInstance(pm).BreakRule("Eating", 1.2f, 0.25f);
     }
 }
