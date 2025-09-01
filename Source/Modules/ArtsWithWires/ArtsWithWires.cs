@@ -223,12 +223,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public override void OnStateTriggerEnter(Collider other)
+        public override void OnStateTriggerEnter(Collider other, bool canCollide)
         {
-            base.OnStateTriggerEnter(other);
+            base.OnStateTriggerEnter(other, canCollide);
             if (other.CompareTag("Player") && other.transform == player.transform)
             {
-                if (!player.plm.Entity.resistAddend)
+                if (canCollide && !player.plm.Entity.resistAddend)
                     npc.behaviorStateMachine.ChangeState(new ArtsWithWires_Grabbing(wires, player));
                 else
                     npc.behaviorStateMachine.ChangeState(new ArtsWithWires_Distancing(wires, player, chaseTime));
@@ -248,13 +248,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
         }
 
-        public override void OnStateTriggerEnter(Collider other)
+        public override void OnStateTriggerEnter(Collider other, bool canCollide)
         {
         }
 
-        public override void OnStateTriggerExit(Collider other)
+        public override void OnStateTriggerExit(Collider other, bool canCollide)
         {
-            base.OnStateTriggerExit(other);
+            base.OnStateTriggerExit(other, canCollide);
             // Revert back to 
             if (other.CompareTag("Player") && other.transform == player.transform)
                 npc.behaviorStateMachine.ChangeState(new ArtsWithWires_Chasing(wires, player, chaseTime));

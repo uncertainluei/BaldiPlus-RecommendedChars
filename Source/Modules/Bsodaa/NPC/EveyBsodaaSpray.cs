@@ -30,9 +30,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 BsodaFinished(false);
         }
 
-        public new void EntityTriggerEnter(Collider other)
+        public new void EntityTriggerEnter(Collider other, bool canCollide)
         {
-            if (launching) return;
+            if (!canCollide && launching) return;
             if (!other.isTrigger && other.gameObject.layer == 1)
             {
                 if (!finished)
@@ -51,12 +51,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public new void EntityTriggerExit(Collider other)
+        public new void EntityTriggerExit(Collider other, bool canCollide)
         {
             if (other.transform == bsodaa.transform)
                 launching = false;
 
-            if (other.TryGetComponent(out Entity entity)) 
+            if (canCollide && other.TryGetComponent(out Entity entity)) 
             {
                 entity.ExternalActivity.moveMods.Remove(moveMod);
                 activityMods.Remove(entity.ExternalActivity);

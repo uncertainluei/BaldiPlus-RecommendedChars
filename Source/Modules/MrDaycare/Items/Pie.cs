@@ -46,9 +46,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private ActivityModifier actMod;
         private Entity looker;
-        public void EntityTriggerEnter(Collider other)
+        public void EntityTriggerEnter(Collider other, bool canCollide)
         {
-            if (!flying || !other.isTrigger || !other.CompareTag("NPC")) return;
+            if (!canCollide || !flying || !other.isTrigger || !other.CompareTag("NPC")) return;
 
             actMod = other.GetComponent<ActivityModifier>();
             looker = other.GetComponent<Entity>();
@@ -107,10 +107,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Destroy(gameObject);
         }
 
-        public void EntityTriggerExit(Collider other)
+        public void EntityTriggerExit(Collider other, bool canCollide)
         {
         }
-        public void EntityTriggerStay(Collider other)
+        public void EntityTriggerStay(Collider other, bool canCollide)
         {
         }
     }

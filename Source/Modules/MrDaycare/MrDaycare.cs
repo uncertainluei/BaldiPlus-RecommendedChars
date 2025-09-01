@@ -94,11 +94,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public void SendToTimeout()
+        public void SendToTimeout(bool canCollide)
         {
-            targetedPlayer.Teleport(ec.RealRoomMid(daycareRoom));
             DaycareGuiltManager.GetInstance(targetedPlayer).ClearGuilt();
-            transform.position = targetedPlayer.transform.position + targetedPlayer.transform.forward * 10f;
+            if (canCollide)
+            {
+                targetedPlayer.Teleport(ec.RealRoomMid(daycareRoom));
+                Navigator.Entity.Teleport(targetedPlayer.transform.position + targetedPlayer.transform.forward * 10f);
+            }
+            else
+            {
+                Navigator.Entity.Teleport(ec.RealRoomMid(daycareRoom));
+                DaycareGuiltManager.GetInstance(targetedPlayer).BreakRule("DaycareEscaping", lockTimes[detentionLevel], 0.25f);
+            }            
             daycareFunction.Activate(lockTimes[detentionLevel], ec);
 
             audMan.QueueAudio(audDetention);
@@ -111,10 +119,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new MrDaycare_Timeout(this));
         }
 
-        public void SendToTimeout(NPC npc)
+        public void SendToTimeout(NPC npc, bool canCollide)
         {
-            npc.transform.position = daycareRoom.RandomEntitySafeCellNoGarbage().FloorWorldPosition + Vector3.up * 9f;
-            npc.SentToDetention();
+            if (canCollide)
+            {
+                npc.transform.position = daycareRoom.RandomEntitySafeCellNoGarbage().FloorWorldPosition + Vector3.up * 9f;
+                npc.SentToDetention();
+            }
+            Navigator.Entity.Teleport(daycareRoom.RandomEntitySafeCellNoGarbage().FloorWorldPosition + Vector3.up * 5f);
         }
     }
 
@@ -213,10 +225,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public override void OnStateTriggerStay(Collider other)
+        public override void OnStateTriggerStay(Collider other, bool canCollide)
         {
             if (other.CompareTag("Player") && other.transform == player.transform)
-                daycare.SendToTimeout();
+                daycare.SendToTimeout(canCollide);
         }
     }
 
@@ -229,7 +241,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
         }
 
-        public override void OnStateTriggerStay(Collider other)
+        public override void OnStateTriggerStay(Collider other, bool canCollide)
         {
             if (other.transform == targetedNpc.transform)
             {

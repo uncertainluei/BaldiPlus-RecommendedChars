@@ -82,9 +82,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class GottaBully_BullyingTime(GottaBully gottaBully) : GottaSweep_SweepingTime(gottaBully, gottaBully)
     {
-        public override void OnStateTriggerEnter(Collider other)
+        public override void OnStateTriggerEnter(Collider other, bool canCollide)
         {
-            base.OnStateTriggerEnter(other);
+            base.OnStateTriggerEnter(other, canCollide);
 
             if (other.isTrigger && other.GetComponent<Principal>() != null)
             {
