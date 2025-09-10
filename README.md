@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
-![Version](https://img.shields.io/badge/version-1.2.2.2-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.11-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-8.2.0.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![Version](https://img.shields.io/badge/version-1.3-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
+![BB+ version](https://img.shields.io/badge/bb+-0.12-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.1-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-9.0-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
@@ -16,9 +16,9 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 ### Required to run (and build):
 - [BepInEx v5.4.23.x](https://github.com/BepInEx/BepInEx/releases)
 - [Baldi's Basics Dev API](https://gamebanana.com/mods/383711)
-- [Baldi Dev API Connector (if running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
 
 ### Fully optional:
+- [Baldi Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
 - [Crispy+](https://gamebanana.com/mods/529314)
 
 ### Functional (optional to run, required to build):
@@ -34,7 +34,7 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 - [Epic Entertainment Pack](https://gamebanana.com/mods/546336)
 
 # Build Instructions
-This is for building the mod's .DLL and .PDB, which should be found at the `RecommendedChars/bin/Debug*/netstandard2.0/` directory.
+This is for building the mod's .DLL and .PDB, which should be found at the `Source/bin/Debug*/netstandard2.0/` directory.
 
 \*`Release` if built with the *Release* configuration
 
@@ -44,6 +44,6 @@ Run `RecommendedChars.sln` in Visual Studio as a project. Building should then b
 ### Terminal
 Make sure you have the [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed. Open your terminal on the cloned/downloaded repository's directory, and execute:
 
-`dotnet build .\RecommendedChars.sln`
+`dotnet build`
 
 This will build to the *Debug* configuration by default, append `-c Release` if you want to built it with the *Release* configuration.
