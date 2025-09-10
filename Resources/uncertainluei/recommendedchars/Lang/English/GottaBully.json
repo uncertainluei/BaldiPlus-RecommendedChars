@@ -1,9 +1,0 @@
-{
-  "items": [
-	{ "key": "PST_PRI_RecChars_GBully1", "value": "Gotta Bully" },
-	{ "key": "PST_PRI_RecChars_GBully2", "value": "It's A Bully's magnum opus! With Baldi's help, their newest experiment was a success, it makes bullying 10 times easier!" },
-
-	{ "key": "Vfx_RecChars_GBully_Intro", "value": "Looks like it's *bullying* time!" },
-	{ "key": "Vfx_RecChars_GBully_Sweep", "value": "Gotta, *bully bully bully*!" }
-  ]
-}

@@ -1,0 +1,17 @@
+{
+	// Gotta Bully
+	"PST_PRI_RecChars_GBully1": "Gotta Bully",
+	"PST_PRI_RecChars_GBully2": "It's A Bully's magnum opus! With Baldi's help, their newest experiment was a success, making bullying ten times easier!",
+
+	"Vfx_RecChars_GBully_Intro": "Looks like it's *bullying* time!",
+	"Vfx_RecChars_GBully_Sweep": "Gotta, *bully bully bully*!",
+
+	// Arts with Wires
+	"PST_PRI_RecChars_Wires1": "Arts with Wires",
+	"PST_PRI_RecChars_Wires2": "A robotic puppet made of spare parts that came to life after being struck by a lightening bolt!\nDon't let it grab ya, though...!",
+
+	"Sfx_RecChars_Wires_Intro": "*ROBOTIC STATIC*",
+	"Sfx_RecChars_Wires_Loop": "*ROBOTIC STATIC*",
+
+	"Hud_RecChars_WiresInstructions": "Oh noes! You've been grabbed!\nMash {0}!"
+}

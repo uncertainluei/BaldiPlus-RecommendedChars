@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
@@ -32,11 +31,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(CharacterRadarGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LevelLoaderGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(LegacyEditorGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(LevelStudioGuid, BepInDependency.DependencyFlags.SoftDependency)]
 
-    // Make sure this loads BEFORE the mod does
     [BepInDependency(ConnectorGuid, BepInDependency.DependencyFlags.SoftDependency)]
-
     [BepInDependency(FragileWindowsGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(EcoFriendlyGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CrazyBabyGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -47,6 +44,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal const string ModName = "Recommended Characters Pack";
 
         internal static readonly AssetManager AssetMan = new();
+        internal static readonly AssetManager ObjMan = new();
+
         internal static RecommendedCharsPlugin Plugin { get; private set; }
         internal static ManualLogSource Log { get; private set; }
         internal static Harmony Hooks { get; private set; }
@@ -78,7 +77,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Hooks = new(ModGuid);
             PatchCompat(typeof(PineDebugNpcIconPatch), PineDebugGuid);
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
-            PatchCompat(typeof(LegacyEditorCompatHelper), LegacyEditorGuid);
             PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
             PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
         }

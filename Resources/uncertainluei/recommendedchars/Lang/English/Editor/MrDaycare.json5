@@ -1,0 +1,29 @@
+{
+    // Mr. Daycare
+    "Ed_Tool_npc_recchars_daycare_og_Title": "Mr. Daycare (Unnerfed)",
+	"Ed_Tool_npc_recchars_daycare_og_Desc": "Mr. Daycare with behavior more on par with the request.",
+
+	"Ed_Poster_Title_recchars_pri_daycare": "Mr. Daycare's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_daycare": "Mr. Daycare's poster in the office.",
+
+	// Daycare
+	"Ed_Tool_room_recchars_daycare_Title": "Daycare",
+	"Ed_Tool_room_recchars_daycare_Desc": "Mr. Daycare's office. Locked until a certain amount of notebooks is collected.",
+
+	"Ed_Tool_window_recchars_daycare_Title": "Daycare Window",
+	"Ed_Tool_window_recchars_daycare_Desc":	"A dark Classic window. No actual visible frame included.",
+
+	"Ed_Tool_light_recchars_daycare_Title": "Daycare Ceiling Light",
+	"Ed_Tool_light_recchars_daycare_Desc":	"The possible cause on why electricity bills were high for Dave's house at some point.",
+
+	"Ed_Poster_Title_recchars_daycareinfo": "Daycare Information",
+	"Ed_Poster_Desc_recchars_daycareinfo": "Half-outdated information regarding the Daycare.",
+	"Ed_Poster_Title_recchars_daycarerules": "Daycare Rules",
+	"Ed_Poster_Desc_recchars_daycarerules": "Remember to also follow these (when Mr. Daycare's active)!",
+	"Ed_Poster_Title_recchars_daycareclock": "Daycare Clock",
+	"Ed_Poster_Desc_recchars_daycareclock": "Tic, toc!\nTic, toc!",
+
+	// Items
+	"Ed_Tool_item_recchars_pie_Desc": "Throw it at any NPC to temporarily blind them.",
+	"Ed_Tool_item_recchars_doorkey_Desc": "Can be used to open locked standard doors and Shape Locks."
+}

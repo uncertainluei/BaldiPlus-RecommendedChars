@@ -12,7 +12,6 @@ using HarmonyLib;
 using MTM101BaldAPI;
 
 using System.Linq;
-using CRAZYBABYJUMPSCARE;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {

@@ -10,15 +10,11 @@ using MTM101BaldAPI.UI;
 
 using BBPlusAnimations.Components;
 
-using BaldiLevelEditor;
-using PlusLevelLoader;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
@@ -26,6 +22,8 @@ using BaldisBasicsPlusAdvanced.API;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
 using UncertainLuei.CaudexLib.Registers;
+using PlusStudioLevelLoader;
+using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -34,8 +32,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Circle and Nerf Gun from TCMG's Basics in Mods and Edits.", true)]
     public sealed class Module_Circle : RecCharsModule
     {
-        protected override void Loaded()
+        protected override void Initialized()
         {
+            // Load texture and audio assets
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "NerfGun"), x => "NerfGun/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Circle"), x => "CircleTex/" + x.name);
+
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Circle"), "CircleAud/");
+
+            // Load localization
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Circle.json5");
+
             // Load patches
             Hooks.PatchAll(typeof(CirclePatches));
             RecommendedCharsPlugin.PatchCompat(typeof(CircleMusicCompatPatch), RecommendedCharsPlugin.CustomMusicsGuid);
@@ -44,11 +51,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "NerfGun"), x => "NerfGun/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Circle"), x => "CircleTex/" + x.name);
-
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Circle"), "CircleAud/");
-
             LoadNerfGun();
             LoadCircle();
 
@@ -139,55 +141,69 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             jumprope.startVal = 64;
             jumprope.penaltyVal = -8;
 
+            ObjMan.Add("Npc_Circle_Nerfed", circle);
+            ObjMan.Add("Comp_CircleJumprope_Nerfed", jumprope);
+            
+            CircleNpc unnerfedCircle = GameObject.Instantiate(circle, MTM101BaldiDevAPI.prefabTransform);
+            unnerfedCircle.name = "ShapeWorld Circle Unnerfed";
+
+            unnerfedCircle.normSpeed = 90f;
+            unnerfedCircle.runSpeed = 90f;
+            unnerfedCircle.sadSpeed = 90f;
+            unnerfedCircle.initialCooldown = 15f;
+            unnerfedCircle.successCooldown = 15f;
+
+            CircleJumprope unnerfedJumprope = GameObject.Instantiate(jumprope, MTM101BaldiDevAPI.prefabTransform);
+            unnerfedJumprope.name = "ShapeWorld Circle_Jumprope Unnerfed";
+
+            unnerfedCircle.jumpropePre = unnerfedJumprope;
+            unnerfedJumprope.maxJumps = 10;
+            unnerfedJumprope.startVal = 43;
+            unnerfedJumprope.penaltyVal = -5;
+
+            ObjMan.Add("Npc_Circle_Unnerfed", unnerfedCircle);
+            ObjMan.Add("Comp_CircleJumprope_Unnerfed", unnerfedJumprope);
+
             if (!RecommendedCharsConfig.nerfCircle.Value)
             {
-                circle.normSpeed = 90f;
-                circle.runSpeed = 90f;
-                circle.sadSpeed = 90f;
-                circle.initialCooldown = 15f;
-                circle.successCooldown = 15f;
-                jumprope.maxJumps = 10;
-                jumprope.startVal = 43;
-                jumprope.penaltyVal = -5;
+                ObjMan.Add("Npc_Circle", unnerfedCircle);
+                ObjMan.Add("Comp_CircleJumprope", unnerfedJumprope);
+            }
+            else
+            {
+                ObjMan.Add("Npc_Circle", circle);
+                ObjMan.Add("Comp_CircleJumprope", jumprope);
             }
 
-            AssetMan.Add("CircleJumprope", jumprope);
-            AssetMan.Add("CircleNpc", circle);
-            NPCMetadata circleMeta = new(Plugin, [circle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
+            NPCMetadata circleMeta = new(Plugin, [circle, unnerfedCircle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
-            GameObject.DestroyImmediate(AssetMan.Get<CircleJumprope>("CircleJumprope").GetComponent<GenericAnimationExtraComponent>());
-            GameObject.DestroyImmediate(AssetMan.Get<CircleNpc>("CircleNpc").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc_Circle_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
+            
+            GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Nerfed").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
-            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", RecommendedCharsPlugin.AssetMan.Get<CircleNpc>("CircleNpc"));
-            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", RecommendedCharsPlugin.AssetMan.Get<ItemObject>("NerfGunItem"));
-            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_nerfgunposter", RecommendedCharsPlugin.AssetMan.Get<PosterObject>("NerfGunPoster"));
-        }
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed"));
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle_og", ObjMan.Get<CircleNpc>("Npc_Circle_Unnerfed"));
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
-        private void RegisterToLegacyEditor()
-        {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Circle"), x => "CircleEditor/" + x.name);
-
-            LegacyEditorCompatHelper.AddCharacterObject("recchars_circle", AssetMan.Get<CircleNpc>("CircleNpc"));
-            BaldiLevelEditorPlugin.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
-
-            new ExtNpcTool("recchars_circle", "CircleEditor/Npc_circle").AddToEditor("characters");
-            new ExtItemTool("recchars_nerfgun", "CircleEditor/Itm_nerfgun").AddToEditor("items");
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed").Poster);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_nerfgun_hint", AssetMan.Get<PosterObject>("NerfGunPoster"));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
-            ApiManager.AddNewSymbolMachineWords(Plugin, "TCMG", "edits", "round", "John", "shape", "world");
+            ApiManager.AddNewSymbolMachineWords(Plugin, "TCMG", "edits", "round", "John", "shape");
             ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_Circle");
         }
 
@@ -210,7 +226,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     case 0:
                         // A 1 in 1000 chance is kinda impossible to predict so instead it's pretty low weight, also if you have guaranteed spawns it only spawns on F2
                         if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                            scene.potentialNPCs.Add(AssetMan.Get<CircleNpc>("CircleNpc").Weighted(3));
+                            scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc_Circle").Weighted(3));
                         return;
                     case 1:
                         AddToNpcs(scene, 75);
@@ -226,10 +242,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
             if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                scene.potentialNPCs.Add(AssetMan.Get<CircleNpc>("CircleNpc").Weighted(weight));
+                scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc_Circle").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {
-                scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<CircleNpc>("CircleNpc"));
+                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<CircleNpc>("Npc_Circle"));
                 scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
             }
         }

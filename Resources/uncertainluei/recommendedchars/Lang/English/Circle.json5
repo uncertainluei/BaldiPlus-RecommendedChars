@@ -1,0 +1,25 @@
+{
+	// Mister Circle John himself
+	"PST_PRI_RecChars_Circle1": "Circle",
+	"PST_PRI_RecChars_Circle2": "i bet you\nwon't get\nthe\nreference.",
+	
+	"Mfx_RecChars_JingleBells": "*Jingle Bells*",
+	
+	"Vfx_RecChars_Circle_LetsPlay": "Let's play!",
+	"Vfx_RecChars_Circle_Go": "Go!",
+	"Vfx_RecChars_Circle_Oops": "Try agAIn!",
+	"Vfx_RecChars_Circle_Congrats": "Wow, you're awesome! Let's play another time!",
+	"Vfx_RecChars_Circle_Sad": "OH! I guess I'll play with you later...",
+	"Vfx_RecChars_Circle_Random": "?!?!?!?!?!?", // if anyone can decipher what he says in those two voicelines, tell me ASAP
+	
+	"Hud_RecChars_CircleRope_Start": "LETS PLAY!",
+	"Hud_RecChars_CircleRope_Continue": "SHAPE WORLD",
+	"Hud_RecChars_CircleRope_Fail": "OOPS!",
+	
+	// Nerf Gun
+	"Itm_RecChars_NerfGun": "Nerf Gun",
+	"Desc_RecChars_NerfGun": "Nerf Gun\nAn amazing toy with zero safety concerns whatsoever!\nFor legal reasons, you can only squirt water at rainbows with this.",
+
+	// Advanced Edition 'Tip'
+	"Adv_Elv_Tip_RecChars_Circle": "Recommended Characters Pack was initially supposed to be a one-off mod featuring TCMGBiMaE's Circle!"
+}

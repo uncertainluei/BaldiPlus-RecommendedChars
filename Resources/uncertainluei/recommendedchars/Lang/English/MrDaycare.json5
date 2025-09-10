@@ -1,0 +1,37 @@
+{
+	// Mr. Daycare
+	"PST_PRI_RecChars_Daycare1": "Mr. Daycare",
+	"PST_PRI_RecChars_Daycare2": "\"Hey there! I'm Mr. Daycare!\"\nMr. Daycare is the man who runs the daycare! He's very good at keeping things in order!",
+  
+	"Vfx_RecChars_Daycare_Timeout": "You'll be sitting in the timeout corner for",
+	"Vfx_RecChars_Daycare_Seconds": "seconds.",
+	"Vfx_RecChars_Daycare_30": "30",
+	"Vfx_RecChars_Daycare_60": "60",
+	"Vfx_RecChars_Daycare_100": "100",
+	"Vfx_RecChars_Daycare_200": "200",
+	"Vfx_RecChars_Daycare_500": "500",
+	"Vfx_RecChars_Daycare_3161": "3161",
+	
+	"Vfx_RecChars_Daycare_NoRunning": "Do not run inside the hallway!",
+	"Vfx_RecChars_Daycare_NoDrinking": "Do not consume beverages inside the hallway!",
+	"Vfx_RecChars_Daycare_NoEating": "Do not eat food inside the hallway!",
+	"Vfx_RecChars_Daycare_NoThrowing": "Do not throw things at faculty members inside the hallway!",
+	"Vfx_RecChars_Daycare_NoEscaping": "Do not leave the timeout corner without my permission inside the hallway!",
+	"Vfx_RecChars_Daycare_NoLoudSound": "Do not make loud sounds in the hallway!",
+  
+	// Pie
+	"Itm_RecChars_Pie": "Pie",
+	"Desc_RecChars_Pie": "Pie\nOne of Dave's countless home-baked pies! While you could eat it,\nit's more fun to throw these towards unsuspecting victims!",
+
+	"Sfx_RecChars_PieSplat": "*SPLAT!*",
+
+	// Door Key
+	"Itm_RecChars_DoorKey": "Door Key",
+	"Desc_RecChars_DoorKey": "Door Key\nThe end-all-be-all solution to unlocking all (non-swinging) doors!\nIt is also quite sturdy for its use case...",
+	
+	// Advanced Edition Tips
+	"Adv_Elv_Tip_RecChars_MrDaycareExceptions": "Mr. Daycare doesn't scold you for entering faculty-only rooms, escaping detention or being in school after-hours!",
+	"Adv_Elv_Tip_RecChars_MrDaycareEarly": "Mr. Daycare will activate early if you enter the Daycare before you get the required notebook count.",
+	"Adv_Elv_Tip_RecChars_Pie": "Throw a pie at a character to temporarily obstruct their vision!",
+	"Adv_Elv_Tip_RecChars_DoorKey": "The Door Key can be used to unlock regular locked doors as well as shape key doors!"
+}

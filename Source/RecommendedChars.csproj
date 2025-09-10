@@ -65,21 +65,18 @@
 		<Reference Include="BigThinkersEcoFriendlyPack">
 			<HintPath>../Dependencies/BigThinkersEcoFriendlyPack.dll</HintPath>
 		</Reference>
-		<Reference Include="CRAZYBABYJUMPSCARE">
-			<HintPath>../Dependencies/CRAZYBABYJUMPSCARE.dll</HintPath>
-		</Reference>
 		<Reference Include="BaldiAPIConnector" Publicize="true">
 			<HintPath>../Dependencies/BaldiAPIConnector.dll</HintPath>
 		</Reference>
 		
-		<Reference Include="PlusLevelLoader">
-			<HintPath>../Dependencies/PlusLevelLoader.dll</HintPath>
+		<Reference Include="PlusStudioLevelLoader">
+			<HintPath>../Dependencies/PlusStudioLevelLoader.dll</HintPath>
 		</Reference>
-		<Reference Include="PlusLevelFormat">
-			<HintPath>../Dependencies/PlusLevelFormat.dll</HintPath>
+		<Reference Include="PlusStudioLevelFormat">
+			<HintPath>../Dependencies/PlusStudioLevelFormat.dll</HintPath>
 		</Reference>
-		<Reference Include="BaldiLevelEditor">
-			<HintPath>../Dependencies/BaldiLevelEditor.dll</HintPath>
+		<Reference Include="PlusLevelStudio">
+			<HintPath>../Dependencies/PlusLevelStudio.dll</HintPath>
 		</Reference>
 		
 		<Reference Include="MTM101BaldAPI">

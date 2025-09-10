@@ -1,0 +1,16 @@
+{
+    // Circle
+    "Ed_Tool_npc_recchars_circle_Desc": "Also dubbed as \"Circle John\". Brought into the Super Schoolhouse from Shape World, and is a Playtime clone.",
+
+	"Ed_Tool_npc_recchars_circle_og_Title": "Circle (Unnerfed)",
+	"Ed_Tool_npc_recchars_circle_og_Desc": "The original unnerfed Circle.\nFor the die-hard old TCMG fans or borderline masochists.",
+
+	"Ed_Poster_Title_recchars_pri_circle": "Circle's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_circle": "Circle's absolutely uninformative poster in the office.",
+
+    // Nerf Gun
+	"Ed_Tool_item_recchars_nerfgun_Desc": "Ends Circle's jump rope game prematurely. That's it.",
+
+	"Ed_Poster_Title_recchars_nerfgun_hint": "Nerf Gun Hint",
+	"Ed_Poster_Desc_recchars_nerfgun_hint": "More of an advertisement than anything."
+}

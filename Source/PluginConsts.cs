@@ -12,8 +12,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal const string ApiGuid = "mtm101.rulerp.bbplus.baldidevapi";
         // Other MTM101 mods
         internal const string CrispyPlusGuid = "mtm101.rulerp.baldiplus.crispyplus";
-        internal const string LevelLoaderGuid = "mtm101.rulerp.baldiplus.levelloader";
-        internal const string LegacyEditorGuid = "mtm101.rulerp.baldiplus.leveleditor";
+        internal const string LevelStudioGuid = "mtm101.rulerp.baldiplus.levelstudio";
+        internal const string LevelLoaderGuid = "mtm101.rulerp.baldiplus.levelstudioloader";
 
         // PixelGuy mods
         internal const string CustomMusicsGuid = "pixelguy.pixelmodding.baldiplus.custommusics";

@@ -1,4 +1,4 @@
-﻿using PlusLevelLoader;
+﻿using PlusStudioLevelLoader;
 using UncertainLuei.CaudexLib.Objects;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader
@@ -10,7 +10,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader
         {
             RoomSettings settings = new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats, blueprint.mapMaterial);
             settings.container = blueprint.functionContainer;
-            PlusLevelLoaderPlugin.Instance.roomSettings.Add(id, settings);
+            LevelLoaderPlugin.Instance.roomSettings.Add(id, settings);
         }
     }
 }

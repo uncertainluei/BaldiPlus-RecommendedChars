@@ -12,7 +12,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public bool animationsCompat;
         private bool setupInProgress = false;
 
-        private readonly List<MrDaycare> mrDaycares = new List<MrDaycare>();
+        private readonly List<MrDaycare> mrDaycares = [];
 
         public override void Initialize(RoomController room)
         {

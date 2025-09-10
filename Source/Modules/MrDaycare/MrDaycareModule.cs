@@ -10,9 +10,6 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using BaldiLevelEditor;
-using PlusLevelLoader;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +21,6 @@ using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
 using UncertainLuei.CaudexLib.Objects;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LegacyEditor;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
@@ -33,6 +29,7 @@ using UnityEngine;
 
 using APIConnector;
 using UncertainLuei.CaudexLib.Registers;
+using PlusStudioLevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -41,8 +38,21 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Mr. Daycare from Dave's House, as well the Pie and Door Key items.", true)]
     public sealed class Module_MrDaycare : RecCharsModule
     {
-        protected override void Loaded()
+        protected override void Initialized()
         {
+            // Load texture and audio assets
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "Daycare"), x => "DaycareRoom/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Daycare"), x => "DaycareTex/" + x.name);
+            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "Daycare"), x => "DaycareItm/" + x.name);
+
+            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Daycare"), "DaycareAud/");
+
+            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
+            AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
+
+            // Load localization
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "MrDaycare.json5");
+
             // Load patches
             Hooks.PatchAll(typeof(MrDaycarePatches));
             Hooks.PatchAll(typeof(DaycareRoomPatches));
@@ -54,15 +64,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "Daycare"), x => "DaycareRoom/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Daycare"), x => "DaycareTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "Daycare"), x => "DaycareItm/" + x.name);
-
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Daycare"), "DaycareAud/");
-
-            AssetMan.Add("PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
-            AssetMan.Add("PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
-
+            // Create posters
             AssetMan.Add("DaycareRulesPoster", CreatePoster("DaycareRoom/pst_daycarerules", "DaycarePoster_Rules"));
             AssetMan.Add("DaycareInfoPoster", CreatePoster("DaycareRoom/pst_daycareinfo", "DaycarePoster_Info"));
             AssetMan.Add("DaycareClockPoster", CreatePoster("DaycareRoom/pst_daycareclock", "DaycarePoster_Clock"));
@@ -203,21 +205,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             daycare.Navigator.speed = 36f;
             daycare.Navigator.maxSpeed = 36f;
-            if (RecommendedCharsConfig.nerfMrDaycare.Value)
-            {
-                daycare.Navigator.speed = 30f;
-                daycare.Navigator.maxSpeed = 30f;
-                daycare.maxTimeoutLevel = 1;
-                daycare.ruleSensitivityMul = 1;
-            }
-
             daycare.Navigator.passableObstacles = principle.Navigator.passableObstacles;
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
+
+            MrDaycare unnerfedDaycare = GameObject.Instantiate(daycare, MTM101BaldiDevAPI.prefabTransform);
+            unnerfedDaycare.name = "MrDaycare Unnerfed";
+            ObjMan.Add("Npc_MrDaycare_Unnerfed", unnerfedDaycare);
+
+            daycare.Navigator.speed = 30f;
+            daycare.Navigator.maxSpeed = 30f;
+            daycare.maxTimeoutLevel = 1;
+            daycare.ruleSensitivityMul = 1;
+            ObjMan.Add("Npc_MrDaycare_Nerfed", daycare);
 
             PineDebugNpcIconPatch.icons.Add(daycare.Character, AssetMan.Get<Texture2D>("DaycareTex/BorderDaycare"));
             CharacterRadarColorPatch.colors.Add(daycare.Character, daycare.audMan.subtitleColor);
 
-            AssetMan.Add("MrDaycareNpc", daycare);
+            ObjMan.Add("Npc_MrDaycare", RecommendedCharsConfig.nerfMrDaycare.Value ? daycare : unnerfedDaycare);
         }
 
         private void CreateDaycareBlueprint()
@@ -327,38 +331,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
         private void RegisterToLevelLoader()
         {
-            PlusLevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", ObjMan.Get<MrDaycare>("Npc_MrDaycare_Nerfed"));
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", ObjMan.Get<MrDaycare>("Npc_MrDaycare_Unnerfed"));
 
-            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
-            PlusLevelLoaderPlugin.Instance.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
 
             CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("DaycareBlueprint");
             LevelLoaderCompatHelper.AddRoom(blueprint);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycareflor", blueprint.texFloor);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycarewall", blueprint.texWall);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("recchars_daycareceil", blueprint.texCeil);
-            PlusLevelLoaderPlugin.Instance.windowObjects.Add("recchars_daycarewindow", blueprint.windowSet);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycareflor", blueprint.texFloor);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycarewall", blueprint.texWall);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycareceil", blueprint.texCeil);
+            LevelLoaderPlugin.Instance.windowObjects.Add("recchars_daycare", blueprint.windowSet);
+            LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_daycare", blueprint.lightObj);
 
-            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_daycareinfo", AssetMan.Get<PosterObject>("DaycareInfoPoster"));
-            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_daycarerules", AssetMan.Get<PosterObject>("DaycareRulesPoster"));
-            PlusLevelLoaderPlugin.Instance.posters.Add("recchars_daycareclock", AssetMan.Get<PosterObject>("DaycareClockPoster"));
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LegacyEditorGuid, LoadingEventOrder.Pre)]
-        private void RegisterToLegacyEditor()
-        {
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Daycare"), x => "DaycareEditor/" + x.name);
-
-            LegacyEditorCompatHelper.AddCharacterObject("recchars_mrdaycare", AssetMan.Get<MrDaycare>("MrDaycareNpc"));
-            BaldiLevelEditorPlugin.itemObjects.Add("recchars_pie", AssetMan.Get<ItemObject>("PieItem"));
-            BaldiLevelEditorPlugin.itemObjects.Add("recchars_doorkey", AssetMan.Get<ItemObject>("DoorKeyItem"));
-
-            LegacyEditorCompatHelper.AddRoomDefaultTextures("recchars_daycare", "recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil");
-
-            new ExtRoomNpcTool("recchars_mrdaycare", "DaycareEditor/Npc_mrdaycare", "recchars_daycare").AddToEditor("characters");
-            new ExtItemTool("recchars_pie", "DaycareEditor/Itm_pie").AddToEditor("items");
-            new ExtItemTool("recchars_doorkey", "DaycareEditor/Itm_doorkey").AddToEditor("items");
-            new ExtFloorTool("recchars_daycare", "DaycareEditor/Floor_daycare").AddToEditor("halls");
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_daycare", ObjMan.Get<MrDaycare>("Npc_MrDaycare").Poster);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycareinfo", AssetMan.Get<PosterObject>("DaycareInfoPoster"));
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycarerules", AssetMan.Get<PosterObject>("DaycareRulesPoster"));
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycareclock", AssetMan.Get<PosterObject>("DaycareClockPoster"));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -491,11 +481,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
                 return;
             }
 
@@ -508,11 +498,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
                 }
                 else if (id == 0)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(AssetMan.Get<MrDaycare>("MrDaycareNpc"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
             }
