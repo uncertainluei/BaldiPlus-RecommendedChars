@@ -9,30 +9,33 @@ using System.Reflection.Emit;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Circle")]
     [HarmonyPatch]
     static class CirclePatches
     {
-        [HarmonyAfter(RecommendedCharsPlugin.AnimationsGuid)]
         [HarmonyPatch(typeof(Playtime), "EndJumprope"), HarmonyPostfix]
         private static void EndJumprope(Playtime __instance, bool won)
+        {
+            if (!won || __instance.Character != CircleNpc.charEnum) return;
+
+            // If you win the jump rope game, then his cooldown is instead 50 seconds
+            CircleNpc circle = (CircleNpc)__instance;
+            if (circle.behaviorStateMachine.currentState is Playtime_Cooldown cooldown)
+                cooldown.time = circle.successCooldown;
+        }
+
+        [HarmonyAfter(RecommendedCharsPlugin.AnimationsGuid)]
+        [HarmonyPatch(typeof(Playtime), "BecomeSad"), HarmonyPostfix]
+        private static void BecomeSad(Playtime __instance)
         {
             if (__instance.Character != CircleNpc.charEnum) return;
 
             CircleNpc circle = (CircleNpc)__instance;
 
-            if (!won)
-            {
-                // Re-disable the animator for good measure
-                __instance.animator.enabled = false;
-                circle.Navigator.maxSpeed = circle.sadSpeed;
-                circle.Navigator.SetSpeed(circle.sadSpeed);
-                circle.sprite.sprite = circle.sprSad;
-                return;
-            }
-            // If you win the jump rope game, then his cooldown is instead 50 seconds
-            if (circle.behaviorStateMachine.currentState is Playtime_Cooldown cooldown)
-                cooldown.time = circle.successCooldown;
+            // Re-disable the animator for good measure
+            __instance.animator.enabled = false;
+            circle.Navigator.maxSpeed = circle.sadSpeed;
+            circle.Navigator.SetSpeed(circle.sadSpeed);
+            circle.sprite.sprite = circle.sprSad;
         }
 
         [HarmonyAfter(RecommendedCharsPlugin.AnimationsGuid)]
@@ -108,8 +111,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.CustomMusicsGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Circle")]
     [HarmonyPatch(typeof(BBPlusCustomMusics.Patches.PlaytimeDingOverridePatch), "PlaytimeDingOverride")]
     static class CircleMusicCompatPatch
     {

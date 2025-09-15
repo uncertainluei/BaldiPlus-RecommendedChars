@@ -22,7 +22,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
         }
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.FragileWindowsGuid)]
     [HarmonyPatch]
     internal static class FragileMiscPatches
     {
@@ -62,7 +61,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
         }
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.FragileWindowsGuid)]
     [HarmonyPatch(typeof(LittleWindowGuy))]
     internal static class WindowletVariantPatches
     {

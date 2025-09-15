@@ -71,9 +71,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!RecommendedCharsConfig.nerfCircle.Value)
                 nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(75);
 
-            AssetMan.Add("NerfGunItem", nerfGunBuilder.BuildAsMulti(2));
-            AssetMan.Add("NerfGunPoster", ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []));
-            AssetMan.Get<PosterObject>("NerfGunPoster").name = "NerfGunPoster";
+            ItemObject nerfGun = nerfGunBuilder.BuildAsMulti(2);
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", nerfGun);
+            AssetMan.Add("NerfGunItem", nerfGun);
+
+            PosterObject nerfGunHint = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []);
+            nerfGunHint.name = "NerfGunPoster";
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_nerfgun_hint", nerfGunHint);
+            AssetMan.Add("NerfGunPoster", nerfGunHint);
         }
 
         private void LoadCircle()
@@ -175,6 +180,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjMan.Add("Comp_CircleJumprope", jumprope);
             }
 
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", circle);
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle_og", unnerfedCircle);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_circle", circle.Poster);
             NPCMetadata circleMeta = new(Plugin, [circle, unnerfedCircle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
         }
@@ -187,17 +195,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             
             GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Nerfed").GetComponent<GenericAnimationExtraComponent>());
             GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
-        private void RegisterToLevelLoader()
-        {
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed"));
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle_og", ObjMan.Get<CircleNpc>("Npc_Circle_Unnerfed"));
-
-            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", AssetMan.Get<ItemObject>("NerfGunItem"));
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed").Poster);
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_nerfgun_hint", AssetMan.Get<PosterObject>("NerfGunPoster"));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

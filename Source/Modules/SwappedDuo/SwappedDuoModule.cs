@@ -102,6 +102,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             gottaBully.potentialRoomAssets = CreateSwapClosetRooms();
 
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", gottaBully);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gbully", gottaBully.Poster);
             ObjMan.Add("Npc_GottaBully", gottaBully);
             NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(gottaBullyMeta);
@@ -122,12 +124,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bullyRoom.color = new(198/255f, 136/255f, 91/255f);
 
             List<WeightedPosterObject> bullyRoomPoster =
-            [
-                ObjMan.Get<PosterObject>("Pst_Sub2Tapliasmy").Weighted(100)
-            ];
+            [ObjMan.Get<PosterObject>("Pst_Sub2Tapliasmy").Weighted(100)];
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_sub2tapliasmy", bullyRoomPoster[0].selection);
             bullyRoom.posterChance = 0.25f;
             bullyRoom.posters = bullyRoomPoster;
 
+            LevelLoaderCompatHelper.AddRoom(bullyRoom, "recchars_swapcloset");
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapflor", bullyRoom.texFloor);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapwall", bullyRoom.texWall);
             AssetMan.Add("SwapClosetBlueprint", bullyRoom);
         }
 
@@ -276,23 +280,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             artsWithWires.gamePrefab.needle.sizeDelta = new Vector2(8f, 24f);
             artsWithWires.gamePrefab.needle.name = "Meter_Needle";
 
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", artsWithWires);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_wires", artsWithWires.Poster);
             ObjMan.Add("Npc_ArtsWithWires", artsWithWires);
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
-        private void RegisterToLevelLoader()
-        {
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", ObjMan.Get<GottaBully>("Npc_GottaBully"));
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
-
-            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("SwapClosetBlueprint");
-            LevelLoaderCompatHelper.AddRoom(blueprint, "recchars_swapcloset");
-            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapflor", blueprint.texFloor);
-            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapwall", blueprint.texWall);
-
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gbully", ObjMan.Get<GottaBully>("Npc_GottaBully").Poster);
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_wires", ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires").Poster);
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_sub2tapliasmy", ObjMan.Get<PosterObject>("Pst_Sub2Tapliasmy"));
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]

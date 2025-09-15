@@ -52,8 +52,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
                 new PosterTool("recchars_pri_gbully"),
-                new PosterTool("recchars_pri_wires")
-                //new PosterTool("recchars_sub2tapliasmy")
+                new PosterTool("recchars_pri_wires"),
+                new PosterTool("recchars_sub2tapliasmy")
             ]);
         }
     }

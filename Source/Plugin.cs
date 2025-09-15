@@ -23,6 +23,7 @@ using UnityEngine;
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid)]
+    [BepInDependency(LevelLoaderGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(PineDebugGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -30,9 +31,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CharacterRadarGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(LevelLoaderGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LevelStudioGuid, BepInDependency.DependencyFlags.SoftDependency)]
-
+    
     [BepInDependency(ConnectorGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(FragileWindowsGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(EcoFriendlyGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -70,10 +70,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             });
 
             // Load localization files
-            AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);
+            //AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);
 
             LoadingEvents.RegisterOnAssetsLoaded(Info, GrabBaseAssets(), LoadingEventOrder.Pre);
 
+            // Register built-in patches
             Hooks = new(ModGuid);
             PatchCompat(typeof(PineDebugNpcIconPatch), PineDebugGuid);
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
@@ -89,6 +90,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Material[] materials = [.. Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0)];
             AssetMan.Add("BillboardMaterial", materials.First(x => x.name == "SpriteStandard_Billboard"));
             AssetMan.Add("NoBillboardMaterial", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
+            // Sound objects
+            AssetMan.Add("Sfx/Silence", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Silence" && x.GetInstanceID() >= 0));
         }
     }
 

@@ -3,7 +3,6 @@ using MTM101BaldAPI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
     [HarmonyPatch]
     class DaycareRoomPatches
     {

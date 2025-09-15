@@ -1,0 +1,14 @@
+{
+	"PST_PRI_RecChars_SecAward1": "2nd Award",
+	"PST_PRI_RecChars_SecAward2": "Won 2st Award at the Scie<s>nce</s>\n<b>Hold up!</b>\nWho snuck this thing in? Make sure you don't touch it!",
+
+	"Vfx_RecChars_SecAward_Spot1": "let's have fun!", // as in a regular context. if you thought there were sensual/romantic implications, you're sick
+	"Vfx_RecChars_SecAward_Spot2": "yay!",
+
+	"Vfx_RecChars_SecAward_Lose1": "oh no!",
+	"Vfx_RecChars_SecAward_Lose2": "where is my friend?",
+
+	"Vfx_RecChars_SecAward_Broken": "oh NO I'm broken!",
+
+	"Sfx_RecChars_SecAward_Stun": "*Electrical stun*"
+}

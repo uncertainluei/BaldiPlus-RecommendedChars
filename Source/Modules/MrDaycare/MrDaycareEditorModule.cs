@@ -28,6 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             AssetMan.Add("EditorSpr/Room_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/room_daycare"), 1f));
             AssetMan.Add("EditorSpr/Window_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/window_daycare"), 1f));
             AssetMan.Add("EditorSpr/Light_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/light_daycare"), 1f));
+            AssetMan.Add("EditorSpr/Poster_DaycareClock", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/poster_daycareclock"), 1f));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "MrDaycare.json5");
@@ -72,7 +73,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
                 new PosterTool("recchars_pri_daycare"),
                 new PosterTool("recchars_daycareinfo"),
                 new PosterTool("recchars_daycarerules"),
-                new PosterTool("recchars_daycareclock")
+                new PosterTool("recchars_daycareclock", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareClock"))
             ]);
         }
     }

@@ -3,20 +3,15 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Patches.Characters;
 
-using brobowindowsmod.ItemScripts;
 using brobowindowsmod;
-
 using ecopack;
 
 using HarmonyLib;
-using MTM101BaldAPI;
 
 using System.Linq;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchMod(RecommendedCharsPlugin.AdvancedGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
     [HarmonyPatch]
     static class MrDaycareAdvancedPatches
     {
@@ -49,8 +44,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.FragileWindowsGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
     [HarmonyPatch]
     static class MrDaycareFragilePatches
     {
@@ -59,8 +52,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
             => DaycareGuiltManager.GetInstance(CoreGameManager.Instance.GetPlayer(playerNumber)).BreakRule("Throwing", 0.8f, 0.25f);
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.EcoFriendlyGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
     [HarmonyPatch]
     static class MrDaycareEcoFriendlyPatches
     {

@@ -17,6 +17,9 @@
 	"Ed_Tool_room_recchars_bsodaaroom_Title": "Bsodaa's Room",
 	"Ed_Tool_room_recchars_bsodaaroom_Desc": "A defacto BSODA supply room, with the Bsodaa Helper supplying said soda. Supply is also determined by its available vending machines.",
 
+	"Ed_Tool_light_recchars_bsodaa_Title": "Bsodaa Flourescent Light",
+	"Ed_Tool_light_recchars_bsodaa_Desc": "The regular flourescent light but with a BSODA coat of paint.",
+
 	// BSODA Mini and Diet BSODA Mini
 	"Ed_Tool_item_recchars_smallbsoda_Desc": "Pushes away entities. Lasts 18 seconds and travels ~13% slower compared to its original size.",
 	"Ed_Tool_item_recchars_smalldietbsoda_Desc": "Pushes away entities. Lasts 1.8 seconds and travels ~13% slower compared to its original size."

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Bsodaa")]
     [HarmonyPatch]
     static class BsodaaSavePatches
     {
@@ -24,8 +23,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.AdvancedGuid)]
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "Bsodaa")]
     [HarmonyPatch(typeof(BaldisBasicsPlusAdvanced.Patches.UI.Elevator.ElevatorExpelHammerPatch), "GetPotentialCharacters")]
     static class BsodaaHelperExpelBlacklist
     {

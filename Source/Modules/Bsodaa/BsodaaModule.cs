@@ -69,6 +69,31 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadMiniBsoda()
         {
+            // BSODA Mini
+            ItemObject miniBsoda = new ItemBuilder(Plugin)
+            .SetNameAndDescription("Itm_RecChars_SmallBsoda", "Desc_RecChars_SmallBsoda")
+            .SetEnum("RecChars_SmallBsoda")
+            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
+            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallBsoda_Large"), 50f))
+            .SetShopPrice(320)
+            .SetGeneratorCost(55)
+            .Build();
+
+            miniBsoda.name = "RecChars SmallBsoda";
+
+            ITM_BSODA miniBsodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform);
+            miniBsodaSpray.name = "Itm_SmallBsoda";
+            miniBsodaSpray.spriteRenderer.transform.localScale = Vector3.one * 0.625f;
+            miniBsodaSpray.time = 18f;
+            miniBsodaSpray.speed = 26f;
+            miniBsodaSpray.gameObject.AddComponent<VanillaBsodaComponent>();
+
+            miniBsoda.item = miniBsodaSpray;
+
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smallbsoda", miniBsoda);
+            AssetMan.Add("SmallBsodaItem", miniBsoda);
+
+
             // Diet BSODA Mini
             ItemObject miniDietBsoda = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_SmallDietBsoda", "Desc_RecChars_SmallDietBsoda")
@@ -81,7 +106,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             miniDietBsoda.name = "RecChars SmallDietBsoda";
 
-            ITM_BSODA miniBsodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.DietBsoda).value.item, MTM101BaldiDevAPI.prefabTransform);
+            miniBsodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.DietBsoda).value.item, MTM101BaldiDevAPI.prefabTransform);
             miniBsodaSpray.name = "Itm_SmallDietBsoda";
             miniBsodaSpray.spriteRenderer.transform.localScale = Vector3.one * 0.625f;
             miniBsodaSpray.time = 1.8f;
@@ -89,31 +114,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             miniDietBsoda.item = miniBsodaSpray;
 
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", miniDietBsoda);
             AssetMan.Add("SmallDietBsodaItem", miniDietBsoda);
-
-
-            // BSODA Mini
-            ItemObject miniBsoda = new ItemBuilder(Plugin)
-            .SetNameAndDescription("Itm_RecChars_SmallBsoda", "Desc_RecChars_SmallBsoda")
-            .SetEnum("RecChars_SmallBsoda")
-            .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "drink"])
-            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallBsoda_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaItm/SmallBsoda_Large"), 50f))
-            .SetShopPrice(320)
-            .SetGeneratorCost(55)
-            .Build();
-
-            miniDietBsoda.name = "RecChars SmallBsoda";
-
-            miniBsodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform);
-            miniBsodaSpray.name = "Itm_SmallBsoda";
-            miniBsodaSpray.spriteRenderer.transform.localScale = Vector3.one * 0.625f;
-            miniBsodaSpray.time = 18f;
-            miniBsodaSpray.speed = 26f;
-            miniBsodaSpray.gameObject.AddComponent<VanillaBsodaComponent>();
-
-            miniBsoda.item = miniBsodaSpray;
-
-            AssetMan.Add("SmallBsodaItem", miniBsoda);
         }
 
         private void LoadBsodaaHelper()
@@ -169,11 +171,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             collider.center = Vector3.down;
 
             AssetMan.Add("BsodaaHelperObject", helper);
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper", helper.gameObject);
 
             helper = GameObject.Instantiate(helper,MTM101BaldiDevAPI.prefabTransform);
             helper.name = "BsodaaHelper Diet";
             helper.forceDietMode = true;
             AssetMan.Add("BsodaaHelperObjectDiet", helper);
+
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper_diet", helper.gameObject);
 
             // Dummy NPC for Principal's Office poster
             GameObject helperNpcObj = new("BsodaaHelperDummyNpc");
@@ -182,7 +187,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             dummy.ignorePlayerOnSpawn = true;
             dummy.potentialRoomAssets = [];
             dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "PST_PRI_RecChars_BsodaaHelper1", "PST_PRI_RecChars_BsodaaHelper2");
-
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaahelper", dummy.Poster);
+            
             AssetMan.Add("BsodaaHelperPoster", dummy);
         }
 
@@ -264,6 +270,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.projectilePre.time = 10f;
             bsodaaGuy.projectilePre.name = "Bsodaa_Spray";
 
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
             ObjMan.Add("Npc_Bsodaa", bsodaaGuy);
         }
 
@@ -301,6 +309,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 roomFunction.GetComponent<BsodaaRoomFunction>()
             ];
 
+            LevelLoaderCompatHelper.AddRoom(bsodaaRoom);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaflor", bsodaaRoom.texFloor);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaawall", bsodaaRoom.texWall);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaceil", bsodaaRoom.texCeil);
+            LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_bsodaa", bsodaaRoom.lightObj);
             AssetMan.Add("BsodaaRoomBlueprint", bsodaaRoom);
         }
 
@@ -459,27 +472,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ];
 
             return [.. rooms];
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelLoaderGuid, LoadingEventOrder.Pre)]
-        private void RegisterToLevelLoader()
-        {
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", ObjMan.Get<EveyBsodaa>("Npc_Bsodaa"));
-            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper", AssetMan.Get<BsodaaHelper>("BsodaaHelperObject").gameObject);
-            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper_diet", AssetMan.Get<BsodaaHelper>("BsodaaHelperObjectDiet").gameObject);
-
-            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smallbsoda", AssetMan.Get<ItemObject>("SmallBsodaItem"));
-            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", AssetMan.Get<ItemObject>("SmallDietBsodaItem"));
-
-            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("BsodaaRoomBlueprint");
-            LevelLoaderCompatHelper.AddRoom(blueprint);
-            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaflor", blueprint.texFloor);
-            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaawall", blueprint.texWall);
-            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaceil", blueprint.texCeil);
-            LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_bsodaa", blueprint.lightObj);
-
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", ObjMan.Get<EveyBsodaa>("Npc_Bsodaa").Poster);
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaahelper", AssetMan.Get<NPC>("BsodaaHelperPoster").Poster);
         }
             
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

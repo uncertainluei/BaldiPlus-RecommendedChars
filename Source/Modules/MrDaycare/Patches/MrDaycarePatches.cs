@@ -13,7 +13,6 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchConfig(RecommendedCharsPlugin.ModGuid, "Modules", "MrDaycare")]
     [HarmonyPatch]
     static class MrDaycarePatches
     {    

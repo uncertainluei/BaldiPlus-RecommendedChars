@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    [ConditionalPatchMod(RecommendedCharsPlugin.CharacterRadarGuid)]
     [HarmonyPatch(typeof(CharacterRadar.Hooks.NpcHooks), "AwakePostfix")]
     static class CharacterRadarColorPatch
     {
@@ -21,7 +20,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [ConditionalPatchMod(RecommendedCharsPlugin.PineDebugGuid)]
     [HarmonyPatch(typeof(PineDebug.PineDebugManager), "InitAssets")]
     static class PineDebugNpcIconPatch
     {

@@ -7,6 +7,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static ConfigEntry<bool> nerfCircle;
         internal static ConfigEntry<bool> nerfMrDaycare;
         internal static ConfigEntry<bool> intendedWiresBehavior;
+        internal static ConfigEntry<bool> intendedGifter;
 
         internal static ConfigEntry<bool> guaranteeSpawnChar;
 
@@ -14,21 +15,26 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static void BindConfig(ConfigFile config)
         {
             nerfCircle = config.Bind(
-                "Nerfs",
+                "Behaviors",
                 "Circle",
                 true,
                 "Nerfs Circle's speed and max jump count, increases his cooldowns, and makes the Nerf Gun cheaper and more common.");
             nerfMrDaycare = config.Bind(
-                "Nerfs",
+                "Behaviors",
                 "MrDaycare",
                 true,
                 "Nerfs Mr. Daycare's movement speed, guilt sensitivity and timeout times to be overall more manageable.");
-
             intendedWiresBehavior = config.Bind(
-                "Misc",
+                "Behaviors",
                 "IntendedWiresBehavior",
                 true,
-                "Arts with Wires will not reset their stare time when the player stops looking at it.");
+                "Arts with Wires will not reset their stare time when the player stops looking at them.");
+            intendedGifter = config.Bind(
+                "Behaviors",
+                "IntendedGifter",
+                false,
+                "LOLdi's Gifter will behave almost exactly like his iteration from LOLdi's Public Alpha (Gifttany from BBRMS).");
+
             guaranteeSpawnChar = config.Bind(
                 "Misc",
                 "GuaranteeCharacterSpawn",

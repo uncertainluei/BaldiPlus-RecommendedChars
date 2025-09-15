@@ -199,32 +199,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer(daycare, player)
     {
-        private int currentNoiseVal = 0;
-
-        public override void DestinationEmpty()
-        {
-            base.DestinationEmpty();
-            currentNoiseVal = 0;
-        }
-
-        public override void PlayerInSight(PlayerManager player)
-        {
-            base.PlayerInSight(player);
-            if (this.player == player)
-                currentNoiseVal = 0;
-        }
-
-        public override void Hear(GameObject source, Vector3 position, int value)
-        {
-            base.Hear(source, position, value);
-            if (!npc.looker.PlayerInSight(player) && currentNoiseVal <= value)
-            {
-                currentNoiseVal = value;
-                ChangeNavigationState(targetState);
-                targetState.UpdatePosition(position);
-            }
-        }
-
         public override void OnStateTriggerStay(Collider other, bool canCollide)
         {
             if (other.CompareTag("Player") && other.transform == player.transform)
@@ -245,7 +219,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (other.transform == targetedNpc.transform)
             {
-                daycare.SendToTimeout(npc);
+                daycare.SendToTimeout(npc, canCollide);
                 daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
             }
         }

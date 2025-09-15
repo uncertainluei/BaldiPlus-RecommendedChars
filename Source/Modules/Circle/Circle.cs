@@ -70,6 +70,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             countTmp.text = $"{jumps}/{LocalizationManager.Instance.GetLocalizedText(failKey)}";
         }
 
+        private new void Update()
+        {
+            base.Update();
+            if (playtime == null)
+                Destroy();
+        }
+
         private IEnumerator CircleRopeTimer()
         {
             while (jumps < maxJumps)
