@@ -1,0 +1,12 @@
+{
+	"Ed_Tool_item_recchars_lunchbox_2_Title": "Lunch Box (2)",
+	"Ed_Tool_item_recchars_lunchbox_3_Title": "Lunch Box (3)",
+	"Ed_Tool_item_recchars_lunchbox_4_Title": "Lunch Box (4)",
+
+	"Ed_Tool_item_recchars_lunchbox_2_Desc": "Contains <b>two</b> random food items.",
+	"Ed_Tool_item_recchars_lunchbox_3_Desc": "Contains <b>three</b> random food items.",
+	"Ed_Tool_item_recchars_lunchbox_4_Desc": "Contains <b>four</b> random food items.",
+
+	"Ed_Tool_item_recchars_lunchbox_random_Title": "Lunch Box (Random)",
+	"Ed_Tool_item_recchars_lunchbox_random_Desc": "Contains random amounts of random food items.\nSpecifically for placement in Cafeteria room layouts."
+}

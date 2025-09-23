@@ -43,7 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Used for dictating what room is closest
             dijkstraMap = new DijkstraMap(ec, PathType.Nav, int.MaxValue, transform);
 
-            behaviorStateMachine.ChangeState(new EveyBsodaa_Statebase(this));
+            behaviorStateMachine.ChangeState(new EveyBsodaa_StateBase(this));
         }
 
         private void Start()
@@ -100,7 +100,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsoda.transform.rotation = Directions.DirFromVector3(target-transform.position, 45f).ToRotation();
             bsoda.transform.position = transform.position + bsoda.transform.forward * 2f;
 
-            behaviorStateMachine.ChangeState(new EveyBsodaa_Statebase(this));
+            behaviorStateMachine.ChangeState(new EveyBsodaa_StateBase(this));
             animator.Play("Shoot", 1f);
         }
 
@@ -156,12 +156,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_Statebase(EveyBsodaa bsodaa) : NpcState(bsodaa)
+    public class EveyBsodaa_StateBase(EveyBsodaa bsodaa) : NpcState(bsodaa)
     {
         protected readonly EveyBsodaa bsodaa = bsodaa;
     }
 
-    public class EveyBsodaa_Wandering(EveyBsodaa bsodaa) : EveyBsodaa_Statebase(bsodaa)
+    public class EveyBsodaa_Wandering(EveyBsodaa bsodaa) : EveyBsodaa_StateBase(bsodaa)
     {
         public override void Enter()
         {
@@ -192,7 +192,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_PreCharge(EveyBsodaa bsodaa, PlayerManager target) : EveyBsodaa_Statebase(bsodaa)
+    public class EveyBsodaa_PreCharge(EveyBsodaa bsodaa, PlayerManager target) : EveyBsodaa_StateBase(bsodaa)
     {
         private readonly Transform targetTransform = target.transform;
         private readonly PlayerManager player = target;
@@ -216,7 +216,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_Charging(EveyBsodaa bsodaa, Transform target, float chargeTime) : EveyBsodaa_Statebase(bsodaa)
+    public class EveyBsodaa_Charging(EveyBsodaa bsodaa, Transform target, float chargeTime) : EveyBsodaa_StateBase(bsodaa)
     {
         private readonly Transform targetTransform = target;
         private Vector3 lastPos;
@@ -241,12 +241,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (timeLeft <= 0f)
             {
                 bsodaa.Shoot(lastPos);
-                npc.behaviorStateMachine.ChangeState(new EveyBsodaa_Statebase(bsodaa));
+                npc.behaviorStateMachine.ChangeState(new EveyBsodaa_StateBase(bsodaa));
             }
         }
     }
 
-    public class EveyBsodaa_EmptyHanded(EveyBsodaa bsodaa) : EveyBsodaa_Statebase(bsodaa)
+    public class EveyBsodaa_EmptyHanded(EveyBsodaa bsodaa) : EveyBsodaa_StateBase(bsodaa)
     {
         public override void DestinationEmpty()
         {
@@ -269,7 +269,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class EveyBsodaa_AttemptRestock : EveyBsodaa_Statebase
+    public class EveyBsodaa_AttemptRestock : EveyBsodaa_StateBase
     {
         private readonly BsodaaRoomFunction bsodaaRoom;
         private Vector3 targetLocation;

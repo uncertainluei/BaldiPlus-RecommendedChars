@@ -83,24 +83,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ArtsWithWires_StateBase : NpcState
+    public class ArtsWithWires_StateBase(ArtsWithWires wires) : NpcState(wires)
     {
-        protected readonly ArtsWithWires wires;
-
-        public ArtsWithWires_StateBase(ArtsWithWires wires) :
-            base(wires)
-        {
-            this.wires = wires;
-        }
+        protected readonly ArtsWithWires wires = wires;
     }
 
-    public class ArtsWithWires_Wandering : ArtsWithWires_StateBase
+    public class ArtsWithWires_Wandering(ArtsWithWires wires) : ArtsWithWires_StateBase(wires)
     {
-        public ArtsWithWires_Wandering(ArtsWithWires wires) :
-            base(wires)
-        {
-        }
-
         public override void Enter()
         {
             base.Enter();

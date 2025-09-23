@@ -1,14 +1,14 @@
 {
 	// Blue, Guy
 	"PST_PRI_RecChars_BlueGuy1": "Blue, Guy",
-	"PST_PRI_RecChars_BlueGuy2": "Gee, what kind of figure is that? He seems to be <color=blue>BLUE</color>! Maybe don't stare at him if you don't wanna see <color=blue>BLUE</color>!",
+	"PST_PRI_RecChars_BlueGuy2": "Gee, what kind of figure is that?\nHe seems to be <color=blue>BLUE</color>!\nMaybe don't stare at him if you don't wanna see <color=blue>BLUE</color>!",
 
 	"Vfx_RecChars_BlueGuy_Intro": "*YELLING!!*",
 	"Vfx_RecChars_BlueGuy_Loop": "*YELLING!!*",
 
 	// Gifter
 	"PST_PRI_RecChars_Gifter1": "Gifter",
-	"PST_PRI_RecChars_Gifter2": "This guy likes to give gifts to the kids, and will ask anyone for one once approched! Watch out, he might be unknowingly carrying a bizarre surprise!",
+	"PST_PRI_RecChars_Gifter2": "This kid likes to give out gifts and will politely ask beforehand!\nBeware, he isn't aware on what's inside the gifts themselves!",
 
 	"Vfx_RecChars_Gifter_Idle": "lolololololololololololololololol",
 	"Vfx_RecChars_Gifter_Gift1": "Take this. This is your gift!",
@@ -18,6 +18,8 @@
 	"Vfx_RecChars_Gifter_GiftLeft1": "Oh, alright! Maybe someone else might take it!",
 	"Vfx_RecChars_Gifter_GiftLeft2": "Alright, then!",
 	"Vfx_RecChars_Gifter_GiftLeft2_1": "I'll leave it here in case you want to open it later!",
+	"Vfx_RecChars_Gifter_Shocked": "Oh no! Not again!",
+	"Vfx_RecChars_Gifter_Sorry": "I'm very sorry! I promise that won't happen again!",
 
 	"Sfx_RecChars_GiftUnwrap": "*UNWRAPPING*",
 	"Sfx_RecChars_BombFuse": "*SSssSSss....*"

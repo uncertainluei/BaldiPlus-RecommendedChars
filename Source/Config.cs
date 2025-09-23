@@ -32,7 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             intendedGifter = config.Bind(
                 "Behaviors",
                 "IntendedGifter",
-                false,
+                true,
                 "LOLdi's Gifter will behave almost exactly like his iteration from LOLdi's Public Alpha (Gifttany from BBRMS).");
 
             guaranteeSpawnChar = config.Bind(

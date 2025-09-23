@@ -38,6 +38,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             => newTitleKey = title;
     }
 
+    internal class ExtItemTool(string id, Sprite spr) : ItemTool(id, spr)
+    {
+        protected string newTitleKey;
+        public override string titleKey => newTitleKey.IsNullOrWhiteSpace() ? base.titleKey : newTitleKey;
+
+        public ExtItemTool(string id, Sprite spr, string title) : this(id, spr)
+            => newTitleKey = title;
+    }
+
     internal class ExtRoomNpcTool(string id, Sprite spr, params string[] rooms) : ExtNpcTool(id, spr)
     {
         public ExtRoomNpcTool(string id, Sprite spr, string desc, string[] rooms) : this(id, spr, rooms)
@@ -53,4 +62,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             return allowedRoomIds.Contains(EditorController.Instance.levelData.RoomFromPos(pos, forEditor: true).roomType);
         }
     }
+    
 }
