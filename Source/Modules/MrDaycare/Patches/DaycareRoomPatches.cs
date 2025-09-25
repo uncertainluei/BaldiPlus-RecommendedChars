@@ -10,13 +10,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPostfix]
         private static void NotebookGateItemFits(StandardDoor __instance, ref bool __result)
         {
-            if (__instance is DaycareStandardDoor daycareDoor && daycareDoor.IsNotebookGate)
+            if (__instance is DaycareNotebookDoor daycareDoor && daycareDoor.IsNotebookGate)
                 __result = false;
         }
 
         [HarmonyPatch(typeof(StandardDoor), "InsertItem")]
         [HarmonyPatch(typeof(StandardDoor), "OpenTimedWithKey")]
         [HarmonyPrefix]
-        private static bool NotebookGateTryOpen(StandardDoor __instance) => !(__instance is DaycareStandardDoor daycareDoor) || !daycareDoor.IsNotebookGate;
+        private static bool NotebookGateTryOpen(StandardDoor __instance) => !(__instance is DaycareNotebookDoor daycareDoor) || !daycareDoor.IsNotebookGate;
     }
 }

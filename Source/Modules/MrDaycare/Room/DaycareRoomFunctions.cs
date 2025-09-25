@@ -5,88 +5,64 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public class DaycareRoomFunction : DetentionRoomFunction
+    public class MrDaycareHolderFunction : RoomFunction
     {
-        public bool Inactive { get; private set; } = true;
-
-        public bool animationsCompat;
-        private bool setupInProgress = false;
-
         private readonly List<MrDaycare> mrDaycares = [];
+        public bool Unlocked {get; private set;} = false;
 
-        public override void Initialize(RoomController room)
+        public void FixedUpdate()
         {
-            base.Initialize(room);
+            if (Unlocked)
+                return;
 
-            // Remove room from Principal's Offices
-            room.ec.offices.Remove(room);
-
-            Inactive = true;
-            setupInProgress = true;
-            CaudexEvents.OnNotebookCollect += SetupRequirement;
-            CaudexEvents.OnNotebookCollect += NotebookCheck;
-        }
-
-        private void OnDestroy()
-        {
-            if (Inactive)
-                CaudexEvents.OnNotebookCollect -= NotebookCheck;
-            if (setupInProgress)
-                CaudexEvents.OnNotebookCollect -= SetupRequirement;
-        }
-
-        public override void OnGenerationFinished()
-        {
-            base.OnGenerationFinished();
-            DaycareStandardDoor daycareDoor; 
-            for (int i = 0; i < room.doors.Count; i++)
+            foreach (Door door in room.doors)
             {
-                if (room.doors[i] == null) continue;
-                if (room.doors[i] is DaycareStandardDoor) continue;
-                if (room.doors[i] is StandardDoor standardDoor)
-                {
-                    if (animationsCompat)
-                        RemoveDoorAnimComponent(standardDoor);
-
-                    daycareDoor = RecommendedCharsPlugin.SwapComponentSimple<StandardDoor, DaycareStandardDoor>(standardDoor);
-                    daycareDoor.Setup(room);
-                    room.doors[i] = daycareDoor;
-                }
+                if (door == null || door.locked)
+                    continue;
+                    
+                Unlock();
+                return;
             }
-        }
-
-        private void RemoveDoorAnimComponent(StandardDoor door)
-        {
-            DestroyImmediate(door.GetComponent<BBPlusAnimations.Components.StandardDoorExtraMaterials>());
-        }
-
-        public int NotebookRequirement { get; private set; } 
-        private void SetupRequirement()
-        {
-            setupInProgress = false;
-            CaudexEvents.OnNotebookCollect -= SetupRequirement;
-
-            NotebookRequirement = Mathf.RoundToInt(BaseGameManager.Instance.NotebookTotal * 0.5f + 0.1f);
-            if (BaseGameManager.Instance.NotebookTotal < 5)
-                NotebookRequirement = BaseGameManager.Instance.NotebookTotal - 1;
-
-            DaycareStandardDoor daycareDoor;
-            int doorCount = room.doors.Count;
-            for (int i = 0; i < doorCount; i++)
-                if (room.doors[i].TryGetComponent(out daycareDoor))
-                    daycareDoor.SetMaterial(NotebookRequirement);
         }
 
         public override void OnPlayerEnter(PlayerManager player)
         {
             base.OnPlayerEnter(player);
-            if (Inactive) // Force-activate if player gets through while inactive
-                Activate();
+            if (!Unlocked) // Force-activate if player gets through while inactive
+                Unlock();
         }
 
         public void AssignMrDaycare(MrDaycare daycare)
+            => mrDaycares.Add(daycare);
+
+        public bool ContainsMrDaycare(MrDaycare daycare)
+            => mrDaycares.Contains(daycare);
+
+        private void Unlock()
         {
-            mrDaycares.Add(daycare);
+            Unlocked = true;
+            foreach (MrDaycare daycare in mrDaycares)
+                daycare.Activate();
+        }
+    }
+
+    [RequireComponent(typeof(MrDaycareHolderFunction))]
+    public class DaycareTimeoutRoomFunction : DetentionRoomFunction
+    {
+        public MrDaycareHolderFunction DaycareHolder {get; private set;}
+
+        public override void Initialize(RoomController room)
+        {
+            base.Initialize(room);
+            DaycareHolder = GetComponent<MrDaycareHolderFunction>();
+
+            // Remove room from Principal's Offices
+            room.ec.offices.Remove(room);
+        }
+
+        private void RemoveDoorAnimComponent(StandardDoor door)
+        {
+            DestroyImmediate(door.GetComponent<BBPlusAnimations.Components.StandardDoorExtraMaterials>());
         }
 
         private bool _active;
@@ -113,7 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!_active) return;
             active = true;
 
-            if (npc is MrDaycare daycare && mrDaycares.Contains(daycare))
+            if (npc is MrDaycare daycare && DaycareHolder.ContainsMrDaycare(daycare))
                 LockNearestDoor(npc);
         }
         public override void OnNpcExit(NPC npc)
@@ -126,28 +102,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!_active) return;
             active = true;
 
-            if (npc is MrDaycare daycare && mrDaycares.Contains(daycare))
+            if (npc is MrDaycare daycare && DaycareHolder.ContainsMrDaycare(daycare))
                 LockNearestDoor(npc);
-        }
-
-        private void NotebookCheck()
-        {
-            if (BaseGameManager.Instance.FoundNotebooks >= NotebookRequirement)
-               Activate();
-        }
-
-        private void Activate()
-        {
-            Inactive = false;
-            CaudexEvents.OnNotebookCollect -= NotebookCheck;
-
-            int doorCount = room.doors.Count;
-            for (int i = 0; i < doorCount; i++)
-                if (room.doors[i] is DaycareStandardDoor daycareDoor && daycareDoor.IsNotebookGate)
-                    daycareDoor.UnlockNotebookGate();
-
-            foreach (MrDaycare daycare in mrDaycares)
-                daycare.Activate();
         }
     }
 

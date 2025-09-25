@@ -50,11 +50,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolsToCategory(mode, "npcs", [
-                new NPCTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Npc_Bsodaa")),
-                new BsodaaHelperObjTool("recchars_bsodaahelper", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper"), "recchars_bsodaaroom"),
-                new BsodaaHelperObjTool("recchars_bsodaahelper_diet", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper_Diet"), "recchars_bsodaaroom")
-            ]);
+            EditorInterfaceModes.AddToolToCategory(mode, "npcs",
+                new NPCTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Npc_Bsodaa")));
+            EditorInterfaceModes.AddToolToCategory(mode, mode.id == "rooms" ? "objects" : "npcs",
+                new BsodaaHelperObjTool("recchars_bsodaahelper", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper"), "recchars_bsodaaroom"));
+            EditorInterfaceModes.AddToolToCategory(mode, "npcs", 
+                new BsodaaHelperObjTool("recchars_bsodaahelper_diet", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper_Diet"), "recchars_bsodaaroom"));
+
             EditorInterfaceModes.AddToolsToCategory(mode, "items", [
                 new ItemTool("recchars_smallbsoda"),
                 new ItemTool("recchars_smalldietbsoda")

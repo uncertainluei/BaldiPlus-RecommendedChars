@@ -48,7 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private Entity looker;
         public void EntityTriggerEnter(Collider other, bool canCollide)
         {
-            if (!canCollide || !flying || !other.isTrigger || !other.CompareTag("NPC")) return;
+            if (!flying || !other.isTrigger || !other.CompareTag("NPC")) return;
 
             actMod = other.GetComponent<ActivityModifier>();
             looker = other.GetComponent<Entity>();

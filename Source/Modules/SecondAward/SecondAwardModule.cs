@@ -1,29 +1,19 @@
-using BepInEx.Configuration;
 using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.Components;
-using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
-using MTM101BaldAPI.UI;
 
-using BBPlusAnimations.Components;
+using PlusStudioLevelLoader;
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UnityEngine;
-using BaldisBasicsPlusAdvanced.API;
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util.Extensions;
-using UncertainLuei.CaudexLib.Registers;
-using PlusStudioLevelLoader;
-using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {

@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
 ![Version](https://img.shields.io/badge/version-1.3-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.12-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.1-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-9.0-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![BB+ version](https://img.shields.io/badge/bb+-0.12.1-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.1-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-9.0-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
@@ -20,6 +20,7 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 ### Fully optional:
 - [Baldi Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
 - [Crispy+](https://gamebanana.com/mods/529314)
+- [Epic Entertainment Pack](https://gamebanana.com/mods/546336)
 
 ### Functional (optional to run, required to build):
 - [PineDebug](https://gamebanana.com/mods/542418)
@@ -31,7 +32,6 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 - [Level Loading System](https://gamebanana.com/mods/508477)
 - [Fragile Windows](https://gamebanana.com/mods/512880)
 - [Eco Friendly](https://gamebanana.com/mods/606391)
-- [Epic Entertainment Pack](https://gamebanana.com/mods/546336)
 
 # Build Instructions
 This is for building the mod's .DLL and .PDB, which should be found at the `Source/bin/Debug*/netstandard2.0/` directory.

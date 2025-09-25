@@ -44,6 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class BlueGuy_Wander(BlueGuy bluGuy) : BlueGuy_StateBase(bluGuy)
     {
         private float lookTime = 0f;
+        private float timeTillLastLook = 0f;
 
         private bool onCooldown = false;
         private float coolDown = 0f;
@@ -68,6 +69,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!onCooldown)
             {
                 lookTime += Time.deltaTime * npc.TimeScale;
+                timeTillLastLook = 0.25f;
                 if (lookTime > blueGuy.lookSensitivity)
                     npc.behaviorStateMachine.ChangeState(new BlueGuy_Chasing(blueGuy, player,blueGuy.chaseTime));
             }
@@ -87,7 +89,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 coolDown -= Time.deltaTime * npc.TimeScale;
                 if (coolDown <= 0f)
                     onCooldown = false;
+                return;
             }
+
+            if (timeTillLastLook > 0f)
+            {
+                timeTillLastLook -= Time.deltaTime * npc.TimeScale;
+                if (timeTillLastLook <= 0f)
+                    lookTime = 0f;
+            }
+            
         }
     }
 
@@ -142,7 +153,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             if (targetPlayer != currentPlayer || player == currentPlayer)
             {
-                Debug.LogError("HI!");
                 currentPlayer = player;
                 ChangeNavigationState(targetState);
                 targetState.UpdatePosition(player.transform.position);

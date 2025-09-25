@@ -29,6 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             AssetMan.Add("EditorSpr/Window_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/window_daycare"), 1f));
             AssetMan.Add("EditorSpr/Light_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/light_daycare"), 1f));
             AssetMan.Add("EditorSpr/Poster_DaycareClock", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/poster_daycareclock"), 1f));
+            AssetMan.Add("EditorSpr/Door_BookGate", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/door_bookgate"), 1f));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "MrDaycare.json5");
@@ -43,6 +44,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             LevelStudioCompatHelper.AddRoomDefaultTextures("recchars_daycare", "recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil");
             EditorInterface.AddWindow("recchars_daycare", LevelLoaderPlugin.Instance.windowObjects["recchars_daycare"]);
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"]);
+
+            EditorInterface.AddDoor<DoorDisplay>("recchars_bookgate", DoorIngameStatus.AlwaysDoor, DaycareDoorAssets.mask, new Material[] { DaycareDoorAssets.template.shut, DaycareDoorAssets.template.shut });
 
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
@@ -65,8 +68,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms",
                 new RoomTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Room_Daycare")));
-            EditorInterfaceModes.AddToolToCategory(mode, "doors",
-                new WindowTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Window_Daycare")));
+            EditorInterfaceModes.AddToolsToCategory(mode, "doors", [
+                new DoorTool("recchars_bookgate", AssetMan.Get<Sprite>("EditorSpr/Door_BookGate")),
+                new WindowTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Window_Daycare"))
+            ]);
             EditorInterfaceModes.AddToolToCategory(mode, "lights",
                 new LightTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Light_Daycare")));
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [

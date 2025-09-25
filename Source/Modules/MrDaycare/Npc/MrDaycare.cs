@@ -36,7 +36,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public SoundObject audSeconds;
 
         private RoomController daycareRoom;
-        private DaycareRoomFunction daycareFunction;
+        private DaycareTimeoutRoomFunction daycareFunction;
 
 
         public override void Initialize()
@@ -58,8 +58,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             }
 
-            daycareFunction.AssignMrDaycare(this);
-            if (!daycareFunction.Inactive) // Free the guy if they spawn after collecting the required quota
+            daycareFunction.DaycareHolder.AssignMrDaycare(this);
+            if (daycareFunction.DaycareHolder.Unlocked) // Free the guy if they spawn after collecting the required quota
                 Activate();
         }
 

@@ -6,9 +6,12 @@
 	"Ed_Poster_Title_recchars_pri_daycare": "Mr. Daycare's Office Poster",
 	"Ed_Poster_Desc_recchars_pri_daycare": "Mr. Daycare's poster in the office.",
 
-	// Daycare
+	// Daycare (Room)
 	"Ed_Tool_room_recchars_daycare_Title": "Daycare",
-	"Ed_Tool_room_recchars_daycare_Desc": "Mr. Daycare's office. Locked until a certain amount of notebooks is collected.",
+	"Ed_Tool_room_recchars_daycare_Desc": "Mr. Daycare's office. Will make him stationary until the room is deemed unlocked",
+
+	"Ed_Tool_door_recchars_bookgate_Title": "Daycare Notebook Door",
+	"Ed_Tool_door_recchars_bookgate_Desc": "Is locked until x/2+0.1 (rounded) notebooks is collected.\nx -> Total notebook count.",
 
 	"Ed_Tool_window_recchars_daycare_Title": "Daycare Window",
 	"Ed_Tool_window_recchars_daycare_Desc":	"A dark Classic window. No actual visible frame included.",

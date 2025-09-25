@@ -1,12 +1,19 @@
-﻿using MTM101BaldAPI;
+﻿using HarmonyLib;
+
+using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
+
 using PlusStudioLevelLoader;
+
 using System.IO;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
+
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -28,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("StatusSpr/BlueGuyFog", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BluTex/BlueGuyFogIcon"), 1));
             ObjMan.Add<Fog>("Fog/BlueGuyFog", new() { color = Color.blue, maxDist = 15, startDist = 5, strength = 1, priority = 16});
 
-            AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.wav"), "", SoundType.Effect, Color.white, 0f));
+            AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.wav"), "Sfx_RecChars_GiftUnwrap", SoundType.Effect, Color.white));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Loldi.json5");
@@ -107,13 +114,37 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gifter.sprSad = sprites[3];
 
             gifter.audMan = gifter.GetComponent<AudioManager>();
-            gifter.audMan.subtitleColor = new(177/255f, 100/255f, 65/255f);
+            gifter.audMan.subtitleColor = new(80/255f, 154/255f, 205/255f);
 
             CharacterRadarColorPatch.colors.Add(gifter.character, gifter.audMan.subtitleColor);
 
-            gifter.audHumbling = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Idle"), "Vfx_RecChars_Gifter_Idle", SoundType.Voice, gifter.audMan.subtitleColor);
+            gifter.audHumming = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Idle"), "Vfx_RecChars_Gifter_Idle", SoundType.Voice, gifter.audMan.subtitleColor);
             gifter.audShocked = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Shocked"), "Vfx_RecChars_Gifter_Shocked", SoundType.Voice, gifter.audMan.subtitleColor);
             gifter.audSorry = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Sorry"), "Vfx_RecChars_Gifter_Sorry", SoundType.Voice, gifter.audMan.subtitleColor);
+
+            gifter.audGift =
+            [
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Gift1"), "Vfx_RecChars_Gifter_Gift1", SoundType.Voice, gifter.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Gift2"), "Vfx_RecChars_Gifter_Gift2", SoundType.Voice, gifter.audMan.subtitleColor)
+            ];
+            gifter.audOpened =
+            [
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_GiftOpened1"), "Vfx_RecChars_Gifter_GiftOpened1", SoundType.Voice, gifter.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_GiftOpened2"), "Vfx_RecChars_Gifter_GiftOpened2", SoundType.Voice, gifter.audMan.subtitleColor)
+            ];
+            gifter.audLeft =
+            [
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_GiftLeft1"), "Vfx_RecChars_Gifter_GiftLeft1", SoundType.Voice, gifter.audMan.subtitleColor),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_GiftLeft2"), "Vfx_RecChars_Gifter_GiftLeft2", SoundType.Voice, gifter.audMan.subtitleColor)
+            ];
+            gifter.audLeft[1].additionalKeys =
+            [
+                new()
+                {
+                    key = "Vfx_RecChars_Gifter_GiftLeft2_1",
+                    time = 1.393f
+                }
+            ];
 
             gifter.Navigator.speed = 22;
             gifter.Navigator.maxSpeed = 22;
@@ -127,39 +158,33 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            // if (title == "END")
-            // {
-            //     scene.MarkAsNeverUnload();
-            //     scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
-            //     scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(25));
+            if (title == "END")
+            {
+                scene.MarkAsNeverUnload();
+                AddToNpcs(ObjMan.Get<BlueGuy>("Npc_BlueGuy"), scene, 90, true);
+                AddToNpcs(ObjMan.Get<Gifter>("Npc_Gifter"), scene, 125, true);
+                return;
+            }
 
-            //     if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
-            //     {
-            //         scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
-            //         scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
-            //     }
-            //     else
-            //         scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
-            //     return;
-            // }
+            if (title.StartsWith("F"))
+            {
+                scene.MarkAsNeverUnload();
 
-            // if (title.StartsWith("F"))
-            // {
-            //     scene.MarkAsNeverUnload();
-            //     scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
-            //     if (id > 0)
-            //         scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(25));
+                AddToNpcs(ObjMan.Get<Gifter>("Npc_Gifter"), scene, 125, false);
+                if (id > 0)
+                    AddToNpcs(ObjMan.Get<BlueGuy>("Npc_BlueGuy"), scene, id > 1 ? 100 : 45, false, 1);
+            }
+        }
 
-            //     if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-            //     {
-            //         scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
-            //     }
-            //     else if (id == 0)
-            //     {
-            //         scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
-            //         scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
-            //     }
-            // }
+        private void AddToNpcs(NPC npc, SceneObject scene, int weight, bool endless, int firstNo = 0)
+        {
+            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                scene.potentialNPCs.Add(npc.Weighted(weight));
+            else if (endless || scene.levelNo == firstNo)
+            {
+                scene.forcedNpcs = scene.forcedNpcs.AddToArray(npc);
+                scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
+            }
         }
     }
 }

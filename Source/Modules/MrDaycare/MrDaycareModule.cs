@@ -272,7 +272,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexRoomBlueprint daycareRoom = new(Plugin, "Daycare", "RecChars_Daycare");
 
             DaycareDoorAssets.template = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Shut"));
-            DaycareDoorAssets.locked = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Locked"));
+            DaycareDoorAssets.locked = ObjectCreators.CreateDoorDataObject("DaycareDoor_Locked", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Locked"));
 
             DaycareDoorAssets.mask = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First().mask[0]);
             DaycareDoorAssets.mask.name = "DaycareDoor_Mask";
@@ -287,7 +287,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.texCeil = AssetMan.Get<Texture2D>("DaycareRoom/Daycare_Ceiling");
             daycareRoom.keepTextures = true;
 
-            daycareRoom.doorMats = DaycareDoorAssets.template;
+            daycareRoom.doorMats = ObjectCreators.CreateDoorDataObject("DaycareStandardDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveStandardDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveStandardDoor_Shut"));
 
             daycareRoom.lightObj = GameObject.Instantiate(((DrReflex)NPCMetaStorage.Instance.Get(Character.DrReflex).value).potentialRoomAssets[0].selection.lightPre, MTM101BaldiDevAPI.prefabTransform);
             daycareRoom.lightObj.name = "DaycareLight";
@@ -303,22 +303,42 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             daycareRoom.posterChance = 0.1f;
 
-            daycareRoom.windowSet = ObjectCreators.CreateWindowObject("Daycare_Window", AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow"), AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow_Broken"), AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow_Mask"));
+            daycareRoom.windowSet = ObjectCreators.CreateWindowObject("Daycare_Window",
+                AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow"),
+                AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow_Broken"),
+                AssetMan.Get<Texture2D>("DaycareRoom/DaycareWindow_Mask"));
             daycareRoom.windowSet.mask.name = "DaycareWindow_Mask";
             daycareRoom.windowChance = 0.35f;
 
-            DetentionRoomFunction detRoomFunction = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
-            DaycareRoomFunction dcRoomFunction = RecommendedCharsPlugin.SwapComponentSimple<DetentionRoomFunction, DaycareRoomFunction>(GameObject.Instantiate(detRoomFunction, MTM101BaldiDevAPI.prefabTransform));
-            dcRoomFunction.name = "DaycareRoomFunction";
-            dcRoomFunction.gaugeSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/TimeoutIcon"), 25f);
-            dcRoomFunction.animationsCompat = false;
-            AssetMan.Add("DaycareRoomFunction", dcRoomFunction);
+            DaycareNotebookDoor daycareDoor = RecommendedCharsPlugin.SwapComponentSimple<StandardDoor, DaycareNotebookDoor>
+                (GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform));
+            daycareDoor.name = "DaycareNotebookDoor";
+            daycareDoor.mask[0] = DaycareDoorAssets.mask;
+            daycareDoor.mask[1] = DaycareDoorAssets.mask;
+            daycareDoor.audDoorOpen = DaycareDoorAssets.open;
+            daycareDoor.audDoorShut = DaycareDoorAssets.shut;
+            daycareDoor.audDoorUnlock = DaycareDoorAssets.unlock;
+            LevelLoaderPlugin.Instance.doorPrefabs.Add("recchars_bookgate", daycareDoor);
 
-            daycareRoom.functionContainer = dcRoomFunction.GetComponent<RoomFunctionContainer>();
+            DetentionRoomFunction detRoomFunction = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
+            detRoomFunction = GameObject.Instantiate(detRoomFunction, MTM101BaldiDevAPI.prefabTransform);
+            detRoomFunction.name = "DaycareRoomFunction";
+
+            daycareRoom.functionContainer = detRoomFunction.GetComponent<RoomFunctionContainer>();
+
             GameObject.DestroyImmediate(daycareRoom.functionContainer.GetComponent<CharacterPostersRoomFunction>());
             GameObject.DestroyImmediate(daycareRoom.functionContainer.GetComponent<RuleFreeZone>());
-            GameObject.DestroyImmediate(daycareRoom.functionContainer.GetComponent<CoverRoomFunction>());
-            daycareRoom.functionContainer.functions = [dcRoomFunction];
+            GameObject.DestroyImmediate(daycareRoom.functionContainer.GetComponent<CoverRoomFunction>()); // this won't house character posters so this is irrelevant
+
+            daycareRoom.functionContainer.functions.Clear();
+            daycareRoom.functionContainer.AddDoorAssigner(daycareDoor);
+            daycareRoom.functionContainer.AddFunction<MrDaycareHolderFunction>();
+            
+            DaycareTimeoutRoomFunction dcRoomFunction = RecommendedCharsPlugin.SwapComponentSimple<DetentionRoomFunction, DaycareTimeoutRoomFunction>(detRoomFunction);
+            dcRoomFunction.gaugeSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/TimeoutIcon"), 25f);
+            AssetMan.Add("DaycareRoomFunction", dcRoomFunction);
+
+            daycareRoom.functionContainer.AddFunction(dcRoomFunction);
 
             DaycareRuleFreeZone ruleFreeZone = daycareRoom.functionContainer.AddFunction<DaycareRuleFreeZone>();
             ruleFreeZone.excludeEscaping = false;
@@ -346,7 +366,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
         private void EnableAnimationsCompat()
         {
-            AssetMan.Get<DaycareRoomFunction>("DaycareRoomFunction").animationsCompat = true;
+            //AssetMan.Get<DaycareTimeoutRoomFunction>("DaycareRoomFunction").animationsCompat = true;
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -365,25 +385,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
-        private bool _connectorActive = false;
-        private bool _connectorErrored = false;
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.ConnectorGuid, LoadingEventOrder.Pre)]
-        private void CheckIfConnectorIsActive()
-        {
-            if (ConnectorBasicsPlugin.Connected)
-                _connectorActive = true;
-            else
-                ConnectorError();
-        }
-
-        private void ConnectorError()
-        {
-            if (!_connectorErrored)
-                RecommendedCharsPlugin.Log.LogError("Thinker API Connector wasn't loaded properly! Make sure you either reinstall the connector or disable Assembly Cache in BepInEx's config!");
-            _connectorErrored = true;
-        }
-
         [CaudexLoadEventMod(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
         private void FragileWindowsCompat()
         {
@@ -394,11 +395,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             DaveWindowlet.sprHi = sprites[2];
 
             // Make Mr. Daycare scold the player for using throwing/shooting items
-            if (!_connectorActive)
-            {
-                ConnectorError();
-                return;
-            }
             BepInEx.PluginInfo fragileInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.FragileWindowsGuid];
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
@@ -409,11 +405,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void EcoFriendlyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
-            if (!_connectorActive)
-            {
-                ConnectorError();
-                return;
-            }
             BepInEx.PluginInfo ecoInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.EcoFriendlyGuid];
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Wrench"), ecoInfo).tags.Add("recchars_daycare_throwable");
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Sibling"), ecoInfo).tags.Add("recchars_daycare_throwable");
@@ -424,11 +415,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void CrazyBabyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
-            if (!_connectorActive)
-            {
-                ConnectorError();
-                return;
-            }
             ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("BabyEye"), Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid])
                 .tags.Add("recchars_daycare_throwable");
         }

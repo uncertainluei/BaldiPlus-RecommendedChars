@@ -65,9 +65,6 @@
 		<Reference Include="BigThinkersEcoFriendlyPack">
 			<HintPath>../Dependencies/BigThinkersEcoFriendlyPack.dll</HintPath>
 		</Reference>
-		<Reference Include="BaldiAPIConnector" Publicize="true">
-			<HintPath>../Dependencies/BaldiAPIConnector.dll</HintPath>
-		</Reference>
 		
 		<Reference Include="PlusStudioLevelLoader">
 			<HintPath>../Dependencies/PlusStudioLevelLoader.dll</HintPath>
