@@ -187,7 +187,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             NPCMetaStorage.Instance.Add(circleMeta);
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
             GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed").GetComponent<GenericAnimationExtraComponent>());
@@ -197,13 +197,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
         }
 
-        [ModuleCompatLoadEvent(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
             ApiManager.AddNewSymbolMachineWords(Plugin, "TCMG", "edits", "round", "John", "shape");
             ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_Circle");
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (title == "END")
