@@ -4,13 +4,14 @@ using MTM101BaldAPI.Registers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
 using PlusLevelStudio.Editor;
+using PlusStudioLevelLoader;
 
 using UnityEngine;
 
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
+
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
-using PlusStudioLevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 {
@@ -20,7 +21,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Daycare"), x => "EditorTex/Daycare/" + x.name);
+            AddTexturesToAssetMan("EditorTex/Daycare/", ["Textures", "Editor", "Daycare"]);
             
             AssetMan.Add("EditorSpr/Npc_MrDaycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/npc_mrdaycare"), 1f));
             AssetMan.Add("EditorSpr/Npc_MrDaycare_Og", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/npc_mrdaycare_og"), 1f));
@@ -45,7 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             EditorInterface.AddWindow("recchars_daycare", LevelLoaderPlugin.Instance.windowObjects["recchars_daycare"]);
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"]);
 
-            EditorInterface.AddDoor<DoorDisplay>("recchars_bookgate", DoorIngameStatus.AlwaysDoor, DaycareDoorAssets.mask, new Material[] { DaycareDoorAssets.template.shut, DaycareDoorAssets.template.shut });
+            EditorInterface.AddDoor<DoorDisplay>("recchars_bookgate", DoorIngameStatus.AlwaysDoor, DaycareDoorAssets.mask, [DaycareDoorAssets.template.shut, DaycareDoorAssets.template.shut]);
 
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }

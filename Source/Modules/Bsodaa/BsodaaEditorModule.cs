@@ -21,7 +21,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Bsodaa"), x => "EditorTex/Bsodaa/" + x.name);
+            AddTexturesToAssetMan("EditorTex/Bsodaa/", ["Textures", "Editor", "Bsodaa"]);
             
             AssetMan.Add("EditorSpr/Npc_Bsodaa", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Bsodaa/npc_bsodaa"), 1f));
 

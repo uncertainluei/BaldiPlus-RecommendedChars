@@ -29,7 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "LunchBox"), x => "LunchTex/" + x.name);
+            AddTexturesToAssetMan("LunchTex/", ["Textures", "Item", "LunchBox"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "LunchBox.json5");

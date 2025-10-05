@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "LunchBox"), x => "EditorTex/LunchBox/" + x.name);
+            AddTexturesToAssetMan("EditorTex/LunchBox/", ["Textures", "Editor", "LunchBox"]);
             
             AssetMan.Add("EditorSpr/Item_LunchBox_Random", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/LunchBox/item_lunchbox_random"), 1f));
             AssetMan.Add("EditorSpr/Item_LunchBox_2", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/LunchBox/item_lunchbox_2"), 1f));

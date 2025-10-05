@@ -25,8 +25,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "SecondAward"), x => "AwaTex/" + x.name);
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "SecondAward"), "AwaAud/");
+            AddTexturesToAssetMan("AwaTex/", ["Textures", "Npc", "SecondAward"]);
+            AddAudioToAssetMan("AwaAud/", ["Audio", "SecondAward"]);
 
             AssetMan.Add("StatusSpr/ElectricalStun", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("AwaTex/2AwStunIcon"), 25));
 

@@ -1,0 +1,22 @@
+{
+	// Info
+	"Txt_RecChars_InvalidTags": "No save tags!",
+	"Txt_RecChars_Modules": "Modules:",
+
+	"Txt_RecChars_InvalidVersion": "Unrecognized target version!",
+	"Txt_RecChars_Version_0": "v1.1-v1.2.2.3",
+	"Txt_RecChars_Version_1": "v1.3+",
+
+	// Module Names
+	"Mdl_Bsodaa": "Eveyone's Bsodaa",
+	"Mdl_Circle": "TCMGBiMaE Circle",
+	"Mdl_LockSock": "Locks and Bolts",
+	"Mdl_Loldi": "LOLdi Exchanges",
+	"Mdl_LunchBox": "Lunch Box",
+	"Mdl_MrDaycare": "Mr. Daycare",
+	"Mdl_SecondAward": "2nd Award",
+	"Mdl_SwappedDuo": "Swapped Duo",
+
+	// Other config tags
+	"Conf_RecChars_GuaranteedSpawn": "Guaranteed Character Spawns"
+}

@@ -70,7 +70,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             });
 
             // Load localization files
-            //AssetLoader.LoadLocalizationFolder(Path.Combine(AssetLoader.GetModPath(this), "Lang", "English"), Language.English);
+            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "SaveTags.json5");
 
             LoadingEvents.RegisterOnAssetsLoaded(Info, GrabBaseAssets(), LoadingEventOrder.Pre);
 
@@ -80,6 +80,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
             PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
             PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
+
+            MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
         }
 
         private IEnumerator GrabBaseAssets()
@@ -102,6 +104,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal bool modulesInit = false;
 
         private const byte SaveVersion = 1;
+        private const byte TagVersion = 1;
 
         public override void OnCGMCreated(CoreGameManager cgm, bool savedGame)
         {
@@ -137,6 +140,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             List<string> tags = [];
             
+            tags.Add("Version_"+TagVersion);
             foreach (string module in info.GetActiveCaudexModuleTags())
                 tags.Add(module);
             if (tags.Count > 0 && RecommendedCharsConfig.guaranteeSpawnChar.Value)
@@ -148,19 +152,31 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override string DisplayTags(string[] tags)
         {
             if (tags == null || tags.Length == 0)
-                return "No save tags.";
+                return "Txt_RecChars_InvalidTags".Localize();
 
-            string display = "<b>Modules:</b> ";
+            int i = 0;
+            byte versionNumber = 0;
+
+            if (tags[0].StartsWith("Version_"))
+            {
+                versionNumber = byte.TryParse(tags[0].Substring(8), out byte newNumber) ? newNumber : byte.MaxValue;
+                i++;
+            }
+            string display = $"<b>{("Txt_RecChars_Version_"+versionNumber).Localize("Txt_RecChars_InvalidVersion".Localize())}</b>";
+            if (TagVersion != versionNumber)
+                display = "<color=red>" + display + "</color>";
+            
+            display += $"\n<b>{"Txt_RecChars_Modules".Localize()}</b> ";
 
             bool addComma = false;
             byte entryCount = 0;
 
-            foreach (string tag in tags)
+            for (; i < tags.Length; i++)
             {
-                if (tag == "GuaranteedSpawn")
+                if (tags[i] == "GuaranteedSpawn")
                 {
-                    display = "<b>Guaranteed Character Spawns</b>\n" + display;
-                    break;
+                    display = $"<b>{"Conf_RecChars_GuaranteedSpawn".Localize()}</b>\n" + display;
+                    continue;
                 }
 
                 if (addComma)
@@ -169,7 +185,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 addComma = true;
                 entryCount++;
 
-                display += tag;
+                display += tags[i].Localize();
             }
             return display;
         }

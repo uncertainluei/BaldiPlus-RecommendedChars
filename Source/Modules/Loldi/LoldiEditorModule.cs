@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Loldi"), x => "EditorTex/Loldi/" + x.name);
+            AddTexturesToAssetMan("EditorTex/Loldi/", ["Textures", "Editor", "Loldi"]);
             
             AssetMan.Add("EditorSpr/Npc_Gifter", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Loldi/npc_gifter"), 1f));
             AssetMan.Add("EditorSpr/Npc_Gifttanynt", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Loldi/npc_gifttanynt"), 1f));
@@ -45,9 +45,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         {
             EditorInterfaceModes.AddToolsToCategory(mode, "npcs", [
                 new NPCTool("recchars_blueguy", AssetMan.Get<Sprite>("StatusSpr/BlueGuyFog")),
-                new NPCTool("recchars_gifter", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifter")),
-                new ExtNpcTool("recchars_gifttanynt", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifttanynt"),
-                    "Ed_Tool_npc_recchars_gifttanynt_Title", "Ed_Tool_npc_recchars_gifttanynt_Desc")
+                //new NPCTool("recchars_gifter", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifter")),
+                //new ExtNpcTool("recchars_gifttanynt", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifttanynt"),
+                    //"Ed_Tool_npc_recchars_gifttanynt_Title", "Ed_Tool_npc_recchars_gifttanynt_Desc")
+
+                new NPCTool("recchars_gifttanynt", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifter"))
             ]);
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
                 new PosterTool("recchars_pri_blueguy"),

@@ -28,16 +28,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             GameObject.DestroyImmediate(original);
             return val;
         }
-
-        internal static void AddAudioClipsToAssetMan(string path, string prefix)
-        {
-            string[] files = Directory.GetFiles(path, "*.wav");
-            for (int i = 0; i < files.Length; i++)
-            {
-                AudioClip aud = AssetLoader.AudioClipFromFile(files[i], AudioType.WAV);
-                AssetMan.Add(prefix + aud.name, aud);
-                aud.name = "RecChars_" + aud.name;
-            }
-        }
     }
 }

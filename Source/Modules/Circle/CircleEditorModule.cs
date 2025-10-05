@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "Circle"), x => "EditorTex/Circle/" + x.name);
+            AddTexturesToAssetMan("EditorTex/Circle/", ["Textures", "Editor", "Circle"]);
             
             AssetMan.Add("EditorSpr/Npc_Circle", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Circle/npc_circle"), 1f));
             AssetMan.Add("EditorSpr/Npc_Circle_Og", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Circle/npc_circle_og"), 1f));

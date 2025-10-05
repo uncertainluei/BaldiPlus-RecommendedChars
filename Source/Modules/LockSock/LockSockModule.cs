@@ -25,7 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "LockSock"), x => "LSockTex/" + x.name);
+            AddTexturesToAssetMan("LSockTex/", ["Textures", "Npc", "LockSock"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "LockSock.json5");

@@ -35,10 +35,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "NerfGun"), x => "NerfGun/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Circle"), x => "CircleTex/" + x.name);
+            AddTexturesToAssetMan("NerfGun/", ["Textures", "Item", "NerfGun"]);
+            AddTexturesToAssetMan("CircleTex/", ["Textures", "Npc", "Circle"]);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Circle"), "CircleAud/");
+            AddAudioToAssetMan("CircleAud/", ["Audio", "Circle"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Circle.json5");

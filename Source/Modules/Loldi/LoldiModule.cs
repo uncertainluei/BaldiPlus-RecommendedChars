@@ -26,11 +26,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "BlueGuy"), x => "BluTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Gifter"), x => "GifterTex/" + x.name);
+            AddTexturesToAssetMan("BluTex/", ["Textures", "Npc", "BlueGuy"]);
+            AddTexturesToAssetMan("GifterTex/", ["Textures", "Npc", "Gifter"]);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "BlueGuy"), "BluAud/");
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Gifter"), "GifterAud/");
+            AddAudioToAssetMan("BluAud/", ["Audio", "BlueGuy"]);
+            AddAudioToAssetMan("GifterAud/", ["Audio", "Gifter"]);
 
             AssetMan.Add("StatusSpr/BlueGuyFog", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BluTex/BlueGuyFogIcon"), 1));
             ObjMan.Add<Fog>("Fog/BlueGuyFog", new() { color = Color.blue, maxDist = 15, startDist = 5, strength = 1, priority = 16});
@@ -117,6 +117,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gifter.audMan.subtitleColor = new(80/255f, 154/255f, 205/255f);
 
             CharacterRadarColorPatch.colors.Add(gifter.character, gifter.audMan.subtitleColor);
+
+            LookAtGuy theTest = (LookAtGuy)NPCMetaStorage.Instance.Get(Character.LookAt).value;
+            gifter.explosionPre = theTest.explosionPrefab;
 
             gifter.audHumming = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Idle"), "Vfx_RecChars_Gifter_Idle", SoundType.Voice, gifter.audMan.subtitleColor);
             gifter.audShocked = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GifterAud/Gft_Shocked"), "Vfx_RecChars_Gifter_Shocked", SoundType.Voice, gifter.audMan.subtitleColor);

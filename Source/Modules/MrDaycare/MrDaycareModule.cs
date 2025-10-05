@@ -27,7 +27,6 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 
-using APIConnector;
 using UncertainLuei.CaudexLib.Registers;
 using PlusStudioLevelLoader;
 using PlusStudioLevelFormat;
@@ -42,11 +41,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "Daycare"), x => "DaycareRoom/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Daycare"), x => "DaycareTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "Daycare"), x => "DaycareItm/" + x.name);
-
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Daycare"), "DaycareAud/");
+            AddTexturesToAssetMan("DaycareTex/", ["Textures", "Npc", "Daycare"]);
+            AddTexturesToAssetMan("DaycareItm/", ["Textures", "Item", "Daycare"]);
+            AddTexturesToAssetMan("DaycareRoom/", ["Textures", "Room", "Daycare"]);
+            AddAudioToAssetMan("DaycareAud/", ["Audio", "Daycare"]);
 
             AssetMan.Add("Sfx/PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
             AssetMan.Add("Sfx/PieSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
@@ -211,11 +209,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
 
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_daycare", daycare.Poster);
-
-            daycare.potentialRoomAssets = RoomAssetsFromDirectory(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Layouts", "Daycare"),
-                50, 50, 50, 100, 100, 50);
-            if (daycare.potentialRoomAssets == null || daycare.potentialRoomAssets.Length == 0)
-                throw new Exception("No room assets found in the directory!");
+            daycare.potentialRoomAssets = RoomAssetsFromDirectory("Daycare");
 
             MrDaycare unnerfedDaycare = GameObject.Instantiate(daycare, MTM101BaldiDevAPI.prefabTransform);
             unnerfedDaycare.name = "MrDaycare Unnerfed";
@@ -234,38 +228,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", unnerfedDaycare);
             ObjMan.Add("Npc_MrDaycare", RecommendedCharsConfig.nerfMrDaycare.Value ? daycare : unnerfedDaycare);
         }
-
-        private WeightedRoomAsset[] RoomAssetsFromDirectory(string dir, params int[] weights)
-        {
-            if (weights == null || weights.Length == 0)
-                weights = [100];
-
-            int idx = 0;
-            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("DaycareBlueprint");
-            List<WeightedRoomAsset> rooms = [];
-
-            foreach (string file in Directory.GetFiles(dir, "*.rbpl"))
-            {
-                BinaryReader reader = new(File.OpenRead(file));
-                BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
-                reader.Close();
-
-                ExtendedRoomAsset asset = LevelImporter.CreateRoomAsset(formatAsset);
-                asset.roomFunctionContainer = blueprint.functionContainer;
-                asset.lightPre = blueprint.lightObj;
-                asset.windowObject = blueprint.windowSet;
-                asset.windowChance = blueprint.windowChance;
-                asset.posters = blueprint.posters;
-                asset.posterChance = blueprint.posterChance;
-                asset.mapMaterial = blueprint.mapMaterial; //MTM...
-                asset.name = blueprint.name+"_"+Path.GetFileNameWithoutExtension(file);
-                ((ScriptableObject)asset).name = "Room_"+asset.name;
-
-                rooms.Add(asset.Weighted(weights[Math.Min(idx,weights.Length-1)]));
-                idx++;
-            }
-            return rooms.ToArray();
-        } 
 
         private void CreateDaycareBlueprint()
         {
@@ -447,12 +409,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ITM_DoorKey.keyEnums = [.. keyItems];
         }
 
-        private PosterObject CreatePoster(string path, string name)
-        {
-            PosterObject poster = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>(path), []);
-            poster.name = name;
-            return poster;
-        }
+        
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)

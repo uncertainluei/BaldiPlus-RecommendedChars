@@ -43,10 +43,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "Bsodaa"), x => "BsodaaRoom/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "Bsodaa"), x => "BsodaaTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Item", "Bsodaa"), x => "BsodaaItm/" + x.name);
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "Bsodaa"), "BsodaaAud/");
+            AddTexturesToAssetMan("BsodaaTex/", ["Textures", "Npc", "Bsodaa"]);
+            AddTexturesToAssetMan("BsodaaItm/", ["Textures", "Item", "Bsodaa"]);
+            AddTexturesToAssetMan("BsodaaRoom/", ["Textures", "Room", "Bsodaa"]);
+            AddAudioToAssetMan("BsodaaAud/", ["Audio", "Bsodaa"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Bsodaa.json5");
@@ -200,7 +200,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaa"), "PST_PRI_RecChars_Bsodaa1", "PST_PRI_RecChars_Bsodaa2")
                 .AddMetaFlag(NPCFlags.Standard)
                 .SetMetaTags(["lower_balloon_frenzy_priority", "adv_exclusion_hammer_immunity"])
-                .AddPotentialRoomAssets(CreateBsodaaRoomAssets())
+                .AddPotentialRoomAssets()
                 .AddLooker()
                 .AddTrigger()
                 .IgnorePlayerOnSpawn()
@@ -272,6 +272,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
+
+            bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory("Bsodaa",
+                150, 50, 50, 50, 25);
             ObjMan.Add("Npc_Bsodaa", bsodaaGuy);
         }
 
@@ -315,163 +318,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaceil", bsodaaRoom.texCeil);
             LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_bsodaa", bsodaaRoom.lightObj);
             AssetMan.Add("BsodaaRoomBlueprint", bsodaaRoom);
-        }
-
-        private WeightedRoomAsset[] CreateBsodaaRoomAssets()
-        {
-            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("BsodaaRoomBlueprint");
-            SodaMachine dietSodaMachine = Resources.FindObjectsOfTypeAll<SodaMachine>().First(x => x.name == "DietSodaMachine" && x.GetInstanceID() >= 0);
-            BsodaaHelper helper = AssetMan.Get<BsodaaHelper>("BsodaaHelperObject");
-
-            List<WeightedRoomAsset> rooms = [];
-
-            RoomAsset newRoom = blueprint.CreateAsset("Sugary0");
-            rooms.Add(newRoom.Weighted(150));
-            newRoom.cells =
-            [
-                RoomAssetHelper.Cell(0,0,12),
-                RoomAssetHelper.Cell(1,0,4),
-                RoomAssetHelper.Cell(2,0,6),
-                RoomAssetHelper.Cell(0,1,9),
-                RoomAssetHelper.Cell(1,1,0),
-                RoomAssetHelper.Cell(2,1,3),
-                RoomAssetHelper.Cell(1,2,11)
-            ];
-            newRoom.standardLightCells = [new(1, 1)];
-            newRoom.potentialDoorPositions =
-            [
-                new(0,0),
-                new(1,0),
-                new(2,0)
-            ];
-            newRoom.entitySafeCells =
-            [
-                new(1,0),
-                new(1,1)
-            ];
-            newRoom.blockedWallCells =
-            [
-                new(0,1),
-                new(2,1)
-            ];
-            newRoom.basicObjects =
-            [
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(5f,0f,15f), 0f),
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(25f,0f,15f), 0f),
-                RoomAssetHelper.ObjectPlacement(helper, new Vector3(15f,5f,25f), 0f)
-            ];
-
-            // "Thumbs Up" shape
-            newRoom = blueprint.CreateAsset("Luei0");
-            rooms.Add(newRoom.Weighted(50));
-            newRoom.cells =
-            [
-                RoomAssetHelper.Cell(0,0,12),
-                RoomAssetHelper.Cell(1,0,4),
-                RoomAssetHelper.Cell(2,0,6),
-                RoomAssetHelper.Cell(0,1,8),
-                RoomAssetHelper.Cell(1,1,1),
-                RoomAssetHelper.Cell(2,1,3),
-                RoomAssetHelper.Cell(0,2,11)
-            ];
-            newRoom.standardLightCells = [new(1, 1)];
-            newRoom.potentialDoorPositions =
-            [
-                new(0,0),
-                new(1,0),
-                new(2,1)
-            ];
-            newRoom.entitySafeCells =
-            [
-                new(1,0),
-                new(1,1)
-            ];
-            newRoom.blockedWallCells =
-            [
-                new(2,0),
-                new(1,1)
-            ];
-            newRoom.basicObjects =
-            [
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(15f,0f,15f), 0f),
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(25f,0f,5f), 90f),
-                RoomAssetHelper.ObjectPlacement(helper, new Vector3(5f,5f,25f), 0f)
-            ];
-
-            // Based on B-Side Skid's idea
-            newRoom = blueprint.CreateAsset("Luei1");
-            rooms.Add(newRoom.Weighted(50));
-            newRoom.cells =
-            [
-                RoomAssetHelper.Cell(0,0,13),
-                RoomAssetHelper.Cell(1,0,4),
-                RoomAssetHelper.Cell(2,0,4),
-                RoomAssetHelper.Cell(3,0,4),
-                RoomAssetHelper.Cell(4,0,7),
-                RoomAssetHelper.Cell(1,1,9),
-                RoomAssetHelper.Cell(2,1,0),
-                RoomAssetHelper.Cell(3,1,3),
-                RoomAssetHelper.Cell(2,2,11)
-            ];
-            newRoom.standardLightCells = [new(2, 1)];
-            newRoom.potentialDoorPositions =
-            [
-                new(2,0),
-                new(1,1),
-                new(3,1)
-            ];
-            newRoom.entitySafeCells =
-            [
-                new(2,0),
-                new(2,1)
-            ];
-            newRoom.blockedWallCells =
-            [
-                new(0,0),
-                new(4,0)
-            ];
-            newRoom.basicObjects =
-            [
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(5f,0f,5f), -90f),
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(45f,0f,5f), 90f),
-                RoomAssetHelper.ObjectPlacement(helper, new Vector3(25f,5f,25f), 0f)
-            ];
-
-            // "Staircase" shape
-            newRoom = blueprint.CreateAsset("Luei2");
-            rooms.Add(newRoom.Weighted(50));
-            newRoom.cells =
-            [
-                RoomAssetHelper.Cell(0,0,12),
-                RoomAssetHelper.Cell(1,0,4),
-                RoomAssetHelper.Cell(2,0,7),
-
-                RoomAssetHelper.Cell(0,1,8),
-                RoomAssetHelper.Cell(1,1,3),
-
-                RoomAssetHelper.Cell(0,2,11)
-            ];
-            newRoom.standardLightCells = [new(1, 1)];
-            newRoom.potentialDoorPositions =
-            [
-                new(0,0),
-                new(1,0),
-                new(0,1)
-            ];
-            newRoom.entitySafeCells = [new(0,0)];
-            newRoom.blockedWallCells =
-            [
-                new(2,0),
-                new(0,2)
-            ];
-            newRoom.basicObjects =
-            [
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(5f,0f,25f), 90f),
-                RoomAssetHelper.ObjectPlacement(dietSodaMachine, new Vector3(25f,0f,5f), 0f),
-                RoomAssetHelper.ObjectPlacement(helper, new Vector3(15f,5f,15f), 0f)
-            ];
-
-            return [.. rooms];
         }
             
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]

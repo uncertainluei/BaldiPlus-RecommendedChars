@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         protected override void Initialized()
         {
             // Load texture assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Editor", "SwappedDuo"), x => "EditorTex/SwappedDuo/" + x.name);
+            AddTexturesToAssetMan("EditorTex/SwappedDuo/", ["Textures", "Editor", "SwappedDuo"]);
             
             AssetMan.Add("EditorSpr/Npc_GottaBully", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/SwappedDuo/npc_gottabully"), 1f));
             AssetMan.Add("EditorSpr/Npc_ArtsWithWires", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/SwappedDuo/npc_artswithwires"), 1f));

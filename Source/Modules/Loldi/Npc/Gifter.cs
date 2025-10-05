@@ -15,7 +15,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public SoundObject audHumming, audShocked, audSorry, audThrow;
         public SoundObject[] audGift, audOpened, audLeft;
 
+        public ItemMetaData[] items;
         public ItemObject item;
+
+        public QuickExplosion explosionPre;
 
         public float OriginalSpeed {get; private set;}
 
@@ -37,7 +40,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public bool DefectiveGift {get; private set;}
 
         public Vector2 valueRange = new(0,25);
-        private ItemMetaData[] items;
 
         public void RerollGift(bool forceNonDefective = false)
         {
@@ -77,9 +79,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (giftCooldown <= 0f)
                 {
                     OnCooldown = false;
+                    sprite.color = Color.white;
                     sprite.sprite = sprGift;
                 }
             }
+        }
+
+        public void Explode()
+        {
+            Instantiate(explosionPre, sprite.transform).transform.localPosition += Vector3.forward * 0.025f;
+            sprite.color = Color.gray;
+            sprite.sprite = sprSad;
         }
     }
 
@@ -130,7 +140,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Enter();
             npc.Navigator.maxSpeed = 0f;
-            npc.Navigator.Entity.AddForce(new Force(npc.transform.position-player.transform.position, 10f, -45f));
+            npc.Navigator.Entity.AddForce(new Force(npc.transform.position-player.transform.position, 7f, -35f));
             gifter.audMan.FlushQueue(true);
             gifter.audMan.PlaySingle(gifter.audGift[Random.Range(0,gifter.audGift.Length)]);
 
@@ -153,8 +163,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             yield return new WaitWhile(() => gifter.audMan.QueuedAudioIsPlaying);
             if (gifter.DefectiveGift)
             {
-                gifter.sprite.sprite = gifter.sprSad;
                 gifter.audMan.PlaySingle(gifter.audShocked);
+                yield return new WaitForSecondsNPCTimescale(npc, 1.25f);
+                gifter.Explode();
                 yield return new WaitWhile(() => gifter.audMan.QueuedAudioIsPlaying);
                 gifter.audMan.PlaySingle(gifter.audSorry);
             }

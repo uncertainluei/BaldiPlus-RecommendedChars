@@ -36,12 +36,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Room", "SwapCloset"), x => "SwapCloset/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "GottaBully"), x => "GottaBullyTex/" + x.name);
-            AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", "Textures", "Npc", "ArtsWWires"), x => "WiresTex/" + x.name);
+            AddTexturesToAssetMan("SwapCloset/", ["Textures", "Room", "SwapCloset"]);
+            AddTexturesToAssetMan("GottaBullyTex/", ["Textures", "Npc", "GottaBully"]);
+            AddTexturesToAssetMan("WiresTex/", ["Textures", "Npc", "ArtsWWires"]);
 
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "ArtsWWires"), "WiresAud/");
-            RecommendedCharsPlugin.AddAudioClipsToAssetMan(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Audio", "GottaBully"), "GottaBullyAud/");
+            AddAudioToAssetMan("GottaBullyAud/", ["Audio", "GottaBully"]);
+            AddAudioToAssetMan("WiresAud/", ["Audio", "ArtsWWires"]);
             
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "SwappedDuo.json5");
