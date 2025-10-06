@@ -70,6 +70,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             StartCoroutine(ProperlyUnlockDoor(this));
         }
 
+        public override void LockTimed(float time)
+        {
+            if (!IsNotebookGate)
+                base.LockTimed(time);
+        }
+
         public override void Lock(bool cancelTimer)
         {
             base.Lock(cancelTimer);
@@ -79,8 +85,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override void Unlock()
         {
-            base.Unlock();
-            SetMaterial();
+            if (!IsNotebookGate)
+            {
+                base.Unlock();
+                SetMaterial();
+            }
         }
 
         private static IEnumerator ProperlyUnlockDoor(StandardDoor door)

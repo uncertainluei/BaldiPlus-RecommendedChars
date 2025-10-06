@@ -39,6 +39,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        private void Load()
+        {
+            LoadLunchBoxItem();
+
+            RoomAsset cafeteria = Resources.FindObjectsOfTypeAll<RoomAsset>().First(x => x.GetInstanceID() >= 0 && x.roomFunctionContainer != null && x.roomFunctionContainer.name.StartsWith("Cafeteria"));
+            CaudexRoomBlueprint cafeBlueprint = new(Plugin, "Cafeteria_LunchBox", cafeteria);
+            newCafeterias = RoomAssetsFromDirectory(cafeBlueprint, "Cafeteria");
+        }
+        private WeightedRoomAsset[] newCafeterias;
+
         private void LoadLunchBoxItem()
         {
             CaudexMultiItemObject lunchBox = new ItemBuilder(Plugin)
@@ -114,14 +124,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
-        private void FloorAddendLvl(string title, CustomLevelObject lvl)
+        private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
             if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/LunchBox", GenerationStageFlags.Addend))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/LunchBox", GenerationStageFlags.Addend);
-
-            if (title != "END" && !title.StartsWith("F"))
-                return;
             
             lvl.potentialItems = lvl.potentialItems.AddRangeToArray([
                 ObjMan.Get<ItemObject>("Itm_LunchBox_2").Weighted(4),
@@ -132,27 +139,46 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         // This is done in Finalizer to reduce cafeteria room weights to make space for potential new ones
         [CaudexGenModEvent(GenerationModType.Finalizer)]
-        private void FloorFinalizerLvl(string title, CustomLevelObject lvl)
+        private void FloorFinalizerLvl(string title, int num, CustomLevelObject lvl)
         {
             if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/LunchBox", GenerationStageFlags.Finalizer))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/LunchBox", GenerationStageFlags.Finalizer);
 
-            if (title != "END" && !title.StartsWith("F"))
-                return;
-
             List<WeightedRoomAsset> specialRooms = lvl.potentialSpecialRooms.ToList(),
                 cafeterias = [];
+
+            int totalWeight = 0, totalCount = 0;
             for (int i = 0; i < specialRooms.Count; i++)
             {
-                if (specialRooms[i].selection.roomFunctionContainer != null &&
-                    specialRooms[i].selection.roomFunctionContainer.name.Contains("Cafeteria"))
-                {
-                    cafeterias.Add(specialRooms[i]);
-                    specialRooms.RemoveAt(i);
-                    i--;
-                }
+                if (specialRooms[i].selection.roomFunctionContainer == null ||
+                    !specialRooms[i].selection.roomFunctionContainer.name.StartsWith("Cafeteria"))
+                    continue;
+
+                totalWeight += specialRooms[i].weight;
+                totalCount++;
+                cafeterias.Add(specialRooms[i]);
+                specialRooms.RemoveAt(i);
+                i--;
             }
+            if (totalWeight == 0)
+                return;
+
+            int additionalWeight = totalWeight/5, weightPerCafe = additionalWeight/newCafeterias.Length;
+            additionalWeight = weightPerCafe * newCafeterias.Length;
+            totalWeight = -additionalWeight/totalCount;
+
+            foreach (WeightedRoomAsset cafeteria in cafeterias)
+                cafeteria.weight = totalWeight;
+
+            // Take off remainder for the last one
+            cafeterias[totalCount-1].weight -= additionalWeight%totalCount;
+
+            foreach (WeightedRoomAsset cafeteria in newCafeterias)
+                cafeterias.Add(cafeteria.selection.Weighted(weightPerCafe)); // Add the new cafeterias
+
+            specialRooms.AddRange(cafeterias);
+            lvl.potentialSpecialRooms = specialRooms.ToArray();
         }
     }
 }

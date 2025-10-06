@@ -76,6 +76,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Register built-in patches
             Hooks = new(ModGuid);
+            Hooks.PatchAll(typeof(LevelGeneratorPatches));
             PatchCompat(typeof(PineDebugNpcIconPatch), PineDebugGuid);
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
             PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);

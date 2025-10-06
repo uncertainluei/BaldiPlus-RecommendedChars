@@ -100,10 +100,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_Intro"), "Vfx_RecChars_GBully_Intro", SoundType.Voice, gottaBully.audMan.subtitleColor);
             gottaBully.audSweep = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_GottaBully"), "Vfx_RecChars_GBully_Sweep", SoundType.Voice, gottaBully.audMan.subtitleColor);
 
-            gottaBully.potentialRoomAssets = CreateSwapClosetRooms();
-
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", gottaBully);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gbully", gottaBully.Poster);
+
+            gottaBully.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_SwapCloset"), "SwapCloset");
+
             ObjMan.Add("Npc_GottaBully", gottaBully);
             NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(gottaBullyMeta);
@@ -132,87 +133,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderCompatHelper.AddRoom(bullyRoom, "recchars_swapcloset");
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapflor", bullyRoom.texFloor);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapwall", bullyRoom.texWall);
-            AssetMan.Add("SwapClosetBlueprint", bullyRoom);
-        }
-
-        private WeightedRoomAsset[] CreateSwapClosetRooms()
-        {
-            CaudexRoomBlueprint blueprint = AssetMan.Get<CaudexRoomBlueprint>("SwapClosetBlueprint");
-
-            List<WeightedRoomAsset> rooms = [];
-
-            RoomAsset newRoom = blueprint.CreateAsset("Sugary0");
-            rooms.Add(newRoom.Weighted(100));
-            newRoom.cells = RoomAssetHelper.CellRect(2, 2);
-            newRoom.standardLightCells = [new(0, 0)];
-            newRoom.potentialDoorPositions =
-            [
-                new(0, 0),
-                new(1, 0)
-            ];
-            newRoom.entitySafeCells =
-            [
-                new(0, 1),
-                new(1, 1)
-            ];
-
-            newRoom = blueprint.CreateAsset("Sugary1");
-            rooms.Add(newRoom.Weighted(100));
-            newRoom.cells = RoomAssetHelper.CellRect(1, 4);
-            newRoom.standardLightCells = [new(0, 1)];
-            newRoom.potentialDoorPositions =
-            [
-                new(0, 0),
-                new(0, 3)
-            ];
-            newRoom.entitySafeCells =
-            [
-                new(0, 1),
-                new(0, 2)
-            ];
-
-            // Turn
-            newRoom = blueprint.CreateAsset("Luei0");
-            rooms.Add(newRoom.Weighted(100));
-            newRoom.cells =
-            [
-                RoomAssetHelper.Cell(0, 0, 13),
-                RoomAssetHelper.Cell(1, 0, 6),
-                RoomAssetHelper.Cell(1, 1, 11),
-            ];
-            newRoom.standardLightCells = [new(1, 0)];
-            newRoom.potentialDoorPositions =
-            [
-                new(0, 0),
-                new(1, 1)
-            ];
-            newRoom.entitySafeCells = [new(1, 0)];
-
-            // "Plus" shape
-            newRoom = blueprint.CreateAsset("Luei1");
-            rooms.Add(newRoom.Weighted(100));
-            newRoom.cells =
-            [
-                RoomAssetHelper.Cell(1, 0, 14),
-
-                RoomAssetHelper.Cell(0, 1, 13),
-                RoomAssetHelper.Cell(1, 1, 0),
-                RoomAssetHelper.Cell(2, 1, 7),
-
-                RoomAssetHelper.Cell(1, 2, 11),
-
-            ];
-            newRoom.standardLightCells = [new(1, 1)];
-            newRoom.potentialDoorPositions =
-            [
-                new(1, 0),
-                new(0, 1),
-                new(2, 1),
-                new(1, 2)
-            ];
-            newRoom.entitySafeCells = [new(1, 1)];
-
-            return [.. rooms];
+            ObjMan.Add("Room_SwapCloset", bullyRoom);
         }
 
         private void LoadArtsWithWires()

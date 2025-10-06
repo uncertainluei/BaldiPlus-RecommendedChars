@@ -1,7 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
-
-using BepInEx.Configuration;
+using BepInEx.Bootstrap;
 
 using HarmonyLib;
 
@@ -11,24 +9,23 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI;
 using MTM101BaldAPI.Components;
 
-using System;
+using PlusStudioLevelLoader;
+
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
-using UnityEngine;
-using BepInEx.Bootstrap;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
-using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Objects;
-using UncertainLuei.CaudexLib.Util.Extensions;
 using UncertainLuei.CaudexLib.Registers;
-using PlusStudioLevelLoader;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
+
+using UnityEngine;
+
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -91,7 +88,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             miniBsoda.item = miniBsodaSpray;
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smallbsoda", miniBsoda);
-            AssetMan.Add("SmallBsodaItem", miniBsoda);
+            ObjMan.Add("Itm_BsodaMini", miniBsoda);
 
 
             // Diet BSODA Mini
@@ -115,7 +112,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             miniDietBsoda.item = miniBsodaSpray;
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", miniDietBsoda);
-            AssetMan.Add("SmallDietBsodaItem", miniDietBsoda);
+            ObjMan.Add("Itm_DietBsodaMini", miniDietBsoda);
         }
 
         private void LoadBsodaaHelper()
@@ -162,7 +159,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             helper.itmBsoda = ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value;
             helper.itmDietBsoda = ItemMetaStorage.Instance.FindByEnum(Items.DietBsoda).value;
-            helper.itmSmallBsoda = AssetMan.Get<ItemObject>("SmallDietBsodaItem");
+            helper.itmSmallBsoda = ObjMan.Get<ItemObject>("Itm_DietBsodaMini");
 
             CapsuleCollider collider = helper.GetComponent<CapsuleCollider>();
             collider.isTrigger = true;
@@ -170,13 +167,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             collider.radius = 0.4f;
             collider.center = Vector3.down;
 
-            AssetMan.Add("BsodaaHelperObject", helper);
+            ObjMan.Add("Npc_BsodaaHelper", helper);
             LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper", helper.gameObject);
 
             helper = GameObject.Instantiate(helper,MTM101BaldiDevAPI.prefabTransform);
             helper.name = "BsodaaHelper Diet";
             helper.forceDietMode = true;
-            AssetMan.Add("BsodaaHelperObjectDiet", helper);
+            ObjMan.Add("Npc_BsodaaHelper_Diet", helper);
 
             LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper_diet", helper.gameObject);
 
@@ -189,7 +186,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "PST_PRI_RecChars_BsodaaHelper1", "PST_PRI_RecChars_BsodaaHelper2");
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaahelper", dummy.Poster);
             
-            AssetMan.Add("BsodaaHelperPoster", dummy);
+            ObjMan.Add("Npc_BsodaaHelperDummy", dummy);
         }
 
         private void LoadEveyBsodaa()
@@ -273,7 +270,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
 
-            bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory("Bsodaa",
+            bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_Bsodaa"), "Bsodaa",
                 150, 50, 50, 50, 25);
             ObjMan.Add("Npc_Bsodaa", bsodaaGuy);
         }
@@ -317,7 +314,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaawall", bsodaaRoom.texWall);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaceil", bsodaaRoom.texCeil);
             LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_bsodaa", bsodaaRoom.lightObj);
-            AssetMan.Add("BsodaaRoomBlueprint", bsodaaRoom);
+            ObjMan.Add("Room_Bsodaa", bsodaaRoom);
         }
             
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -330,8 +327,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Post)]
         private void AdvancedRecipes()
         {
-            ItemObject smallBsoda = AssetMan.Get<ItemObject>("SmallBsodaItem");
-            ItemObject smallDietBsoda = AssetMan.Get<ItemObject>("SmallDietBsodaItem");
+            ItemObject smallBsoda = ObjMan.Get<ItemObject>("Itm_BsodaMini");
+            ItemObject smallDietBsoda = ObjMan.Get<ItemObject>("Itm_DietBsodaMini");
 
             BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
             
@@ -384,29 +381,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
         private void AddBsodaaHelpers(LevelGenerator gen)
         {
-            NPC helperDummy = RecommendedCharsPlugin.AssetMan.Get<NPC>("BsodaaHelperPoster");
+            NPC helperDummy = ObjMan.Get<NPC>("Npc_BsodaaHelperDummy");
             int bsodaas = gen.Ec.npcsToSpawn.Where(x => x != null && x.Character == EveyBsodaa.charEnum).ToArray().Length;
             for (int i = 0; i < bsodaas; i++)
                 gen.Ec.npcsToSpawn.Add(helperDummy);
         }
-
-        /* The dummy NPC already despawns itself upon spawning, so this isn't necessary 
-        private void RemoveBsodaaHelpers(LevelGenerator gen)
-        {
-            NPC helperDummy = RecommendedCharsPlugin.AssetMan.Get<NPC>("BsodaaHelperPoster");
-            List<Cell> npcSpawnTiles = new List<Cell>(gen.Ec.npcSpawnTile);
-            bool changesFound = false;
-
-            for (int i = gen.Ec.npcsToSpawn.Count - 1; i >= 0; i--)
-            {
-                if (gen.Ec.npcsToSpawn[i] != helperDummy) continue;
-
-                changesFound = true;
-                gen.Ec.npcsToSpawn.RemoveAt(i);
-                npcSpawnTiles.RemoveAt(i);
-            }
-            if (changesFound)
-                gen.Ec.npcSpawnTile = npcSpawnTiles.ToArray();
-        } */
     }
 }

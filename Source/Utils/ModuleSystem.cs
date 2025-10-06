@@ -78,6 +78,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     asset.posters = blueprint.posters;
                     asset.posterChance = blueprint.posterChance;
                     asset.mapMaterial = blueprint.mapMaterial;
+                    asset.basicSwaps = blueprint.objectSwaps;
                     asset.name = blueprint.name+"_"+Path.GetFileNameWithoutExtension(file);
                 }
                 else

@@ -17,6 +17,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(StandardDoor), "InsertItem")]
         [HarmonyPatch(typeof(StandardDoor), "OpenTimedWithKey")]
         [HarmonyPrefix]
-        private static bool NotebookGateTryOpen(StandardDoor __instance) => !(__instance is DaycareNotebookDoor daycareDoor) || !daycareDoor.IsNotebookGate;
+        private static bool NotebookGateTryOpen(StandardDoor __instance) => __instance is not DaycareNotebookDoor daycareDoor || !daycareDoor.IsNotebookGate;
     }
 }

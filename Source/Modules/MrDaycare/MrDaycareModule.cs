@@ -1,6 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
+using BBPlusAnimations.Components;
 
-using BepInEx.Configuration;
 using BepInEx.Bootstrap;
 
 using HarmonyLib;
@@ -10,16 +10,14 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
+using UncertainLuei.CaudexLib.Objects;
+using UncertainLuei.CaudexLib.Registers;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
-using UncertainLuei.CaudexLib.Objects;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
@@ -27,9 +25,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 
-using UncertainLuei.CaudexLib.Registers;
 using PlusStudioLevelLoader;
-using PlusStudioLevelFormat;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -116,7 +112,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             GameObject.DestroyImmediate(gumClone);
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_pie", pie);
-            AssetMan.Add("PieItem", pie);
+            ObjMan.Add("Itm_Pie", pie);
 
 
             // Door Key
@@ -132,7 +128,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ((ITM_DoorKey)keyItemObject.item).layerMask = ((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DetentionKey).value.item).layerMask;
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_doorkey", keyItemObject);
-            AssetMan.Add("DoorKeyItem", keyItemObject);
+            ObjMan.Add("Itm_DoorKey", keyItemObject);
         }
 
         private void LoadMrDaycare()
@@ -209,7 +205,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
 
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_daycare", daycare.Poster);
-            daycare.potentialRoomAssets = RoomAssetsFromDirectory("Daycare");
+            daycare.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_Daycare"), "Daycare");
 
             MrDaycare unnerfedDaycare = GameObject.Instantiate(daycare, MTM101BaldiDevAPI.prefabTransform);
             unnerfedDaycare.name = "MrDaycare Unnerfed";
@@ -281,6 +277,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareDoor.audDoorShut = DaycareDoorAssets.shut;
             daycareDoor.audDoorUnlock = DaycareDoorAssets.unlock;
             LevelLoaderPlugin.Instance.doorPrefabs.Add("recchars_bookgate", daycareDoor);
+            ObjMan.Add("Door_Daycare", daycareDoor);
 
             DetentionRoomFunction detRoomFunction = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
             detRoomFunction = GameObject.Instantiate(detRoomFunction, MTM101BaldiDevAPI.prefabTransform);
@@ -298,7 +295,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             
             DaycareTimeoutRoomFunction dcRoomFunction = RecommendedCharsPlugin.SwapComponentSimple<DetentionRoomFunction, DaycareTimeoutRoomFunction>(detRoomFunction);
             dcRoomFunction.gaugeSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/TimeoutIcon"), 25f);
-            AssetMan.Add("DaycareRoomFunction", dcRoomFunction);
 
             daycareRoom.functionContainer.AddFunction(dcRoomFunction);
 
@@ -322,13 +318,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycarerules", AssetMan.Get<PosterObject>("DaycareRulesPoster"));
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycareclock", AssetMan.Get<PosterObject>("DaycareClockPoster"));
 
-            AssetMan.Add("DaycareBlueprint", daycareRoom);
+            ObjMan.Add("Room_Daycare", daycareRoom);
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
         private void EnableAnimationsCompat()
         {
-            //AssetMan.Get<DaycareTimeoutRoomFunction>("DaycareRoomFunction").animationsCompat = true;
+            GameObject.DestroyImmediate(ObjMan.Get<DaycareNotebookDoor>("Door_Daycare").GetComponent<StandardDoorExtraMaterials>());
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -358,9 +354,29 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Make Mr. Daycare scold the player for using throwing/shooting items
             BepInEx.PluginInfo fragileInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.FragileWindowsGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Stone"), fragileInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("ShardSoda"), fragileInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Marble"), fragileInfo).tags.Add("recchars_daycare_throwable");
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.GetAllFromMod(fragileInfo))
+            {
+                switch (meta.value.itemType.ToStringExtended())
+                {
+                case "ShardSoda":
+                    meta.tags.Add("food");
+                    meta.tags.Add("drink");
+                    meta.tags.Add("recchars_daycare_throwable");
+                    break;
+                case "Stone":
+                case "Marble":
+                    meta.tags.Add("caudex:always_trigger_event");
+                    meta.tags.Add("recchars_daycare_throwable");
+                    break;
+                case "WindowBlaster1":
+                case "WindowBlaster2":
+                case "WindowBlaster3":
+                case "WindowBlaster4":
+                case "WindowBlaster5":
+                    meta.tags.Add("recchars_daycare_throwable");
+                    break;
+                }
+            }
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.EcoFriendlyGuid, LoadingEventOrder.Pre)]
@@ -368,17 +384,43 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
             BepInEx.PluginInfo ecoInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.EcoFriendlyGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Wrench"), ecoInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("Sibling"), ecoInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("OblongSlotNameThingy"), ecoInfo).tags.Add("recchars_daycare_throwable");
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.GetAllFromMod(ecoInfo))
+            {
+                switch (meta.value.itemType.ToStringExtended())
+                {
+                case "Wrench":
+                case "Sibling":
+                case "OblongSlotNameThingy":
+                case "BBGun_1":
+                case "BBGun_2":
+                case "BBGun_3":
+                case "BBGun_4":
+                    meta.tags.Add("recchars_daycare_throwable");
+                    break;
+                }
+            }
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.CrazyBabyGuid, LoadingEventOrder.Pre)]
         private void CrazyBabyCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("BabyEye"), Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid])
-                .tags.Add("recchars_daycare_throwable");
+            BepInEx.PluginInfo crazyBabyInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.CrazyBabyGuid];
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.GetAllFromMod(crazyBabyInfo))
+            {
+                switch (meta.value.itemType.ToStringExtended())
+                {
+                case "BabyEye":
+                case "DonutGun6":
+                case "DonutGun5":
+                case "DonutGun4":
+                case "DonutGun3":
+                case "DonutGun2":
+                case "DonutGun1":
+                    meta.tags.Add("recchars_daycare_throwable");
+                    break;
+                }
+            }
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Post)]
@@ -417,8 +459,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title == "END")
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(25));
+                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm_Pie").Weighted(50));
+                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm_DoorKey").Weighted(25));
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -433,9 +475,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(50));
+                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm_Pie").Weighted(50));
                 if (id > 0)
-                    scene.shopItems = scene.shopItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(25));
+                    scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm_DoorKey").Weighted(25));
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
@@ -457,9 +499,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             if (title == "END" || title.StartsWith("F"))
             {
-                lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("PieItem").Weighted(25));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_Pie").Weighted(25));
                 if (title == "END" || id > 0)
-                    lvl.potentialItems = lvl.potentialItems.AddToArray(AssetMan.Get<ItemObject>("DoorKeyItem").Weighted(10));
+                    lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_DoorKey").Weighted(10));
                 return;
             }
         }

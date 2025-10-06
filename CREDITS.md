@@ -43,7 +43,7 @@
   - [*Gifter's gift* unwrapping sound effect](Resources/uncertainluei/recommendedchars/Audio/Sfx/GiftUnwrap.wav), originally [`WrappingPaper2 unwrap_home_Jan2012.aif`](https://freesound.org/s/140895/) by [jgeralyn](https://freesound.org/people/jgeralyn/) (License: [Attribution 3.0](https://creativecommons.org/licenses/by/3.0/)), cut and edited by me (uncertain_luei)
 
 - Base Level Studio UI assets made by [MissingTextureMan101](https://gamebanana.com/members/1665049), modified for use for the mod's [Level Studio UI textures](Resources/uncertainluei/recommendedchars/Textures/Editor).
-  
+
 ## Requests
 - [**VerySugaryGoon**](https://gamebanana.com/members/2720722) - [Circle](https://gamebanana.com/requests/59865), [Gotta Bully and Arts with Wires](https://gamebanana.com/requests/75363), [Mr. Daycare and Eveyone's Bsodaa](https://gamebanana.com/requests/75637)
 - [**Guymaker**](https://gamebanana.com/members/2507383) - [2nd Award](https://gamebanana.com/requests/75616)
@@ -55,4 +55,5 @@
 - [**MissingTextureMan101**](https://gamebanana.com/members/1665049)
 - [**Mr. Sasha**](https://gamebanana.com/members/2489058)
 - [**B-Side Skid**](https://gamebanana.com/members/1879552) - Idea for one of the Bsodaa Room layouts, Daycare room layouts
-- [**Paulor94**](https://gamebanana.com/members/1663195) - Gifftany implementation seen in [BBRMS](https://gamebanana.com/mods/138967), used as reference for Gifter's alternate AI
+- [**antoniofigo**](https://gamebanana.com/members/3460113) - Small Daycare layout and Lunch Box cafeteria layouts
+- [**Paulor94**](https://gamebanana.com/members/1663195) - Gifftany implementation seen in [BBRMS](https://gamebanana.com/mods/138967), used as reference for Gifter's AI

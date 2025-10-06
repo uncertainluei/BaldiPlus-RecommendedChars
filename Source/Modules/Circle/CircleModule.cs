@@ -73,12 +73,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             ItemObject nerfGun = nerfGunBuilder.BuildAsMulti(2);
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", nerfGun);
-            AssetMan.Add("NerfGunItem", nerfGun);
+            ObjMan.Add("Itm_NerfGun", nerfGun);
 
             PosterObject nerfGunHint = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []);
             nerfGunHint.name = "NerfGunPoster";
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_nerfgun_hint", nerfGunHint);
-            AssetMan.Add("NerfGunPoster", nerfGunHint);
+            ObjMan.Add("Pst_NerfGunHint", nerfGunHint);
         }
 
         private void LoadCircle()
@@ -232,7 +232,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         AddToNpcs(scene, 100);
                         break;
                 }
-                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 50 });
+                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm_NerfGun"), weight = 50 });
             }
         }
 
@@ -255,14 +255,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             SceneObjectMetadata meta = SceneObjectMetaStorage.Instance.Get(gen.scene);
             if (meta == null || !meta.tags.Contains("endless") || gen.scene.levelTitle != "END")
             {
-                gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(75));
-                gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(25));
+                gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst_NerfGunHint").Weighted(75));
+                gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_NerfGun").Weighted(25));
                 return;
             }
 
-            gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("NerfGunPoster").Weighted(100));
-            gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(AssetMan.Get<ItemObject>("NerfGunItem").Weighted(50));
-            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = AssetMan.Get<ItemObject>("NerfGunItem"), weight = 50 });
+            gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst_NerfGunHint").Weighted(100));
+            gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_NerfGun").Weighted(50));
+            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm_NerfGun"), weight = 50 });
         }
     }
 }
