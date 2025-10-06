@@ -15,21 +15,21 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 
 ### Required to run (and build):
 - [BepInEx v5.4.23.x](https://github.com/BepInEx/BepInEx/releases)
-- [Baldi's Basics Dev API](https://gamebanana.com/mods/383711)
+- [Dev API](https://gamebanana.com/mods/383711)
+- [Level Loader System](https://gamebanana.com/mods/617565)
 
 ### Fully optional:
-- [Baldi Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
+- [Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
 - [Crispy+](https://gamebanana.com/mods/529314)
 - [Epic Entertainment Pack](https://gamebanana.com/mods/546336)
 
 ### Functional (optional to run, required to build):
 - [PineDebug](https://gamebanana.com/mods/542418)
 - [Character Radar](https://gamebanana.com/mods/321209)
-- [BB+ Custom Musics](https://gamebanana.com/mods/527812)
-- [BB+ Animations](https://gamebanana.com/mods/503644)
+- [Custom Musics](https://gamebanana.com/mods/527812)
+- [Animations](https://gamebanana.com/mods/503644)
 - [Advanced Edition](https://gamebanana.com/mods/504169)
-- [Legacy Level Editor](https://gamebanana.com/wips/84160)
-- [Level Loading System](https://gamebanana.com/mods/508477)
+- [Level Studio](https://gamebanana.com/mods/617567)
 - [Fragile Windows](https://gamebanana.com/mods/512880)
 - [Eco Friendly](https://gamebanana.com/mods/606391)
 
