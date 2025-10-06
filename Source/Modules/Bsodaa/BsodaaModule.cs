@@ -271,7 +271,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
 
             bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_Bsodaa"), "Bsodaa",
-                150, 50, 50, 50, 25);
+                50, 50, 50, 25, 25, 25, 25, 150);
             ObjMan.Add("Npc_Bsodaa", bsodaaGuy);
         }
 
