@@ -60,7 +60,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             this.SetAssetsDirectory("uncertainluei", "recommendedchars");
             // Gotta make it clear because MANY people are messing this up. You do not need to be a rocket scientist to properly install this mod.
-            if (Directory.Exists(AssetLoader.GetModPath(this)))
+            if (!Directory.Exists(AssetLoader.GetModPath(this)))
             {
                 CaudexLibPlugin.CauseDelayedCrash(Info, new Exception("Subfolder \"uncertainluei/recommendedchars\" was not found in the Modded folder! Make sure you install the mod's files properly!"));
                 return;
