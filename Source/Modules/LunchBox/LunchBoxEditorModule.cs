@@ -2,7 +2,6 @@
 using MTM101BaldAPI.Registers;
 
 using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
 using PlusLevelStudio.Editor;
 
 using UnityEngine;
@@ -10,7 +9,6 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
-using PlusStudioLevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 {

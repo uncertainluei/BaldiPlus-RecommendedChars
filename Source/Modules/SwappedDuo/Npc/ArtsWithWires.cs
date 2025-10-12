@@ -11,18 +11,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         public SpriteRenderer sprite;
 
-        public Sprite sprNormal;
-        public Sprite sprAngry;
+        public Sprite sprNormal, sprAngry;
 
         public AudioManager audMan;
-        public SoundObject audIntro;
-        public SoundObject audLoop;
+        public SoundObject audIntro, audLoop;
 
         public GrabbingGame gamePrefab;
 
-        public float wanderSpeed = 26f;
-        public float chargeSpeed = 30f;
-        public float grip = 55f;
+        public float wanderSpeed = 26f, chargeSpeed = 30f, grip = 55f;
 
         public bool stareStacks;
         public float stareTime;
@@ -244,7 +240,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void OnStateTriggerExit(Collider other, bool canCollide)
         {
             base.OnStateTriggerExit(other, canCollide);
-            // Revert back to 
+            // Revert back to chase state once outside the player's hitbox
             if (other.CompareTag("Player") && other.transform == player.transform)
                 npc.behaviorStateMachine.ChangeState(new ArtsWithWires_Chasing(wires, player, chaseTime));
         }
@@ -261,6 +257,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Enter()
         {
             base.Enter();
+
             game = Object.Instantiate(wires.gamePrefab);
             game.player = player;
             game.wires = wires;
@@ -288,15 +285,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class ArtsWithWires_Fleeing : ArtsWithWires_Wandering
+    public class ArtsWithWires_Fleeing(ArtsWithWires wires, PlayerManager player) : ArtsWithWires_Wandering(wires)
     {
-        private readonly PlayerManager player;
-
-        public ArtsWithWires_Fleeing(ArtsWithWires wires, PlayerManager player) :
-            base(wires)
-        {
-            this.player = player;
-        }
+        private readonly PlayerManager player = player;
 
         public override void Enter()
         {
@@ -341,13 +332,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public RectTransform needle;
 
-        private const float needleXMin = -65f;
-        private const float needleXLength = 130f;
+        private const float needleXMin = -65f, needleXLength = 130f;
         private Vector3 needlePosition;
 
-        private float grabState = 50f;
-        private float grabHit = 15f;
-        private float grabMax = 100f;
+        private float grabState = 50f, grabHit = 15f, grabMax = 100f;
 
         private void Start()
         {
@@ -356,6 +344,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 playerGrabbingGames = player.gameObject.AddComponent<GrabbingGameContainer>();
                 playerGrabbingGames.pm = player;
+            }
+            if (RecommendedCharsConfig.onlyOneNpcActivity.Value)
+            {
+                // Interrupt Playtime/Circle's minigame
+                foreach (Jumprope jumprope in player.jumpropes)
+                    jumprope.End(false);
+
+                foreach (GrabbingGame game in playerGrabbingGames.grabbingGames)
+                    game.End(false);
             }
             playerGrabbingGames.grabbingGames.Add(this);
 

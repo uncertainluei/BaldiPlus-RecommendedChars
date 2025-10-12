@@ -5,7 +5,6 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-
 using UnityEngine;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;

@@ -1,9 +1,9 @@
 ﻿using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Logging;
 
 using HarmonyLib;
 
-using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
@@ -13,11 +13,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+using UncertainLuei.CaudexLib;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
+
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -56,6 +59,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Log = Logger;
 
             this.SetAssetsDirectory("uncertainluei", "recommendedchars");
+            // Gotta make it clear because MANY people are messing this up. You do not need to be a rocket scientist to properly install this mod.
+            if (Directory.Exists(AssetLoader.GetModPath(this)))
+            {
+                CaudexLibPlugin.CauseDelayedCrash(Info, new Exception("Subfolder \"uncertainluei/recommendedchars\" was not found in the Modded folder! Make sure you install the mod's files properly!"));
+                return;
+            }
 
             // Read the config values and remove disabled modules
             RecommendedCharsConfig.BindConfig(Config);
@@ -77,12 +86,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Register built-in patches
             Hooks = new(ModGuid);
             Hooks.PatchAll(typeof(LevelGeneratorPatches));
+            Hooks.PatchAll(typeof(NoNpcActivityChaosPatches));
             PatchCompat(typeof(PineDebugNpcIconPatch), PineDebugGuid);
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
             PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
             PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
 
             //MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
+        }
+
+        internal static void PatchCompat(Type type, string guid)
+        {
+            if (Chainloader.PluginInfos.ContainsKey(guid))
+                Hooks.PatchAll(type);
         }
 
         private IEnumerator GrabBaseAssets()

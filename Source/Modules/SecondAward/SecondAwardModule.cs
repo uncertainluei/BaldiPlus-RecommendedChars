@@ -40,7 +40,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void LoadSecondAward()
         {
-            SecondAward secondAward = RecommendedCharsPlugin.SwapComponentSimple<FirstPrize, SecondAward>(GameObject.Instantiate((FirstPrize)NPCMetaStorage.Instance.Get(Character.Prize).value, MTM101BaldiDevAPI.prefabTransform));
+            SecondAward secondAward = SwapComponentSimple<FirstPrize, SecondAward>(GameObject.Instantiate((FirstPrize)NPCMetaStorage.Instance.Get(Character.Prize).value, MTM101BaldiDevAPI.prefabTransform));
             secondAward.name = "Second Award";
 
             SecondAward.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_SecondAward");

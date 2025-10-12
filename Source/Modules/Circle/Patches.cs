@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 
-using MTM101BaldAPI;
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;

@@ -1,6 +1,4 @@
 ﻿using HarmonyLib;
-using MTM101BaldAPI;
-using System.Collections.Generic;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
@@ -20,15 +18,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 ModuleSaveSystem_Bsodaa.Instance.helperDietMode = true;
 
             ModuleSaveSystem_Bsodaa.Instance.helperExhausted = false;
-        }
-    }
-
-    [HarmonyPatch(typeof(BaldisBasicsPlusAdvanced.Patches.UI.Elevator.ElevatorExpelHammerPatch), "GetPotentialCharacters")]
-    static class BsodaaHelperExpelBlacklist
-    {
-        private static void Postfix(ref List<NPC> __result)
-        {
-            __result.RemoveAll(x => x is BsodaaHelperDummyNpc);
         }
     }
 }

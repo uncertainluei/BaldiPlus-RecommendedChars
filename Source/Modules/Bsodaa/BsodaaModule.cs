@@ -50,7 +50,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Load patches
             Hooks.PatchAll(typeof(BsodaaSavePatches));
-            RecommendedCharsPlugin.PatchCompat(typeof(BsodaaHelperExpelBlacklist), RecommendedCharsPlugin.AdvancedGuid);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -262,7 +261,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Happy2"), "Vfx_RecChars_Bsodaa_Happy2", SoundType.Voice, bsodaaGuy.audMan.subtitleColor)
             ];
 
-            bsodaaGuy.projectilePre = RecommendedCharsPlugin.SwapComponentSimple<ITM_BSODA, EveyBsodaaSpray>(GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform));
+            bsodaaGuy.projectilePre = SwapComponentSimple<ITM_BSODA, EveyBsodaaSpray>(GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform));
             bsodaaGuy.projectilePre.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Spray"), 8f);
             bsodaaGuy.projectilePre.time = 10f;
             bsodaaGuy.projectilePre.name = "Bsodaa_Spray";

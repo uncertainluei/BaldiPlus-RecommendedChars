@@ -6,17 +6,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public class ITM_Pie : Item, IEntityTrigger
     {
-        public GameObject flyingSprite;
-        public GameObject groundedSprite;
+        public GameObject flyingSprite, splatSprite;
         public Material noBillboardMat;
         public Entity entity;
 
         public AudioManager audMan;
-        public SoundObject audThrow;
-        public SoundObject audSplat;
+        public SoundObject audThrow, audSplat;
 
-        private float speed = 30f;
-        private float setTime = 15f;
+        private float speed = 30f, setTime = 15f;
         private bool flying = true;
 
         private EnvironmentController ec;
@@ -54,7 +51,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             looker = other.GetComponent<Entity>();
             flying = false;
             flyingSprite.SetActive(false);
-            groundedSprite.SetActive(true);
+            splatSprite.SetActive(true);
             looker.SetBlinded(true);
             actMod.moveMods.Add(moveMod);
             StartCoroutine(NpcHitTimer(setTime));
@@ -73,9 +70,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 transform.rotation = Quaternion.LookRotation(hit.normal * -1f, Vector3.up);
                 transform.position = hit.point;
                 flyingSprite.SetActive(false);
-                groundedSprite.SetActive(true);
-                groundedSprite.GetComponent<SpriteRenderer>().sharedMaterial = noBillboardMat;
-                groundedSprite.transform.localPosition = Vector3.forward * 0.8f;
+                splatSprite.SetActive(true);
+                splatSprite.GetComponent<SpriteRenderer>().sharedMaterial = noBillboardMat;
+                splatSprite.transform.localPosition = Vector3.forward * 0.8f;
                 StartCoroutine(WallHitTimer(setTime));
                 audMan.FlushQueue(true);
                 audMan.PlaySingle(audSplat);

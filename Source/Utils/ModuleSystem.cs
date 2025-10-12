@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
@@ -89,6 +90,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 idx++;
             }
             return rooms.ToArray();
+        }
+
+        protected X SwapComponentSimple<T, X>(T original) where T : MonoBehaviour where X : T
+        {
+            X val = original.gameObject.AddComponent<X>();
+
+            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (FieldInfo fieldInfo in fields)
+                fieldInfo.SetValue(val, fieldInfo.GetValue(original));
+
+            GameObject.DestroyImmediate(original);
+            return val;
         }
     }
 

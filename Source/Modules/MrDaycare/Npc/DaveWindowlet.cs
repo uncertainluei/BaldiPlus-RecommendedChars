@@ -89,7 +89,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
         public override void Throw(PlayerManager player) => DisableEvents();
         public override bool Shatter()
         {
-            Windowlet.ec.MakeNoise(transform.position, 120);
             DisableEvents();
             return true;
         }

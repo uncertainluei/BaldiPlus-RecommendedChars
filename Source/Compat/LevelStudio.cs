@@ -1,17 +1,13 @@
 ﻿using BepInEx;
-using HarmonyLib;
-using MonoMod.Utils;
 
-using MTM101BaldAPI;
-using MTM101BaldAPI.AssetTools;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
@@ -54,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
         public ExtRoomNpcTool(string id, Sprite spr, string title, string desc, string[] rooms) : this(id, spr, desc, rooms)
             => newTitleKey = title;
 
-        private string[] allowedRoomIds = rooms;
+        private readonly string[] allowedRoomIds = rooms;
 
         public override bool ValidLocation(IntVector2 pos)
         {

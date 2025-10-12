@@ -103,9 +103,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             thrownPieSprite.name = "Pie_Thrown";
             pieUse.flyingSprite.GetComponent<SpriteRenderer>().sprite = thrownPieSprite;
 
-            pieUse.groundedSprite = gumClone.groundedSprite;
-            pieUse.groundedSprite.transform.localPosition = Vector3.back * -0.1f;
-            pieUse.groundedSprite.GetComponent<SpriteRenderer>().sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/PieSplat"), 10f);
+            pieUse.splatSprite = gumClone.groundedSprite;
+            pieUse.splatSprite.transform.localPosition = Vector3.back * -0.1f;
+            pieUse.splatSprite.GetComponent<SpriteRenderer>().sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareItm/PieSplat"), 10f);
 
             pieUse.noBillboardMat = AssetMan.Get<Material>("NoBillboardMaterial");
 
@@ -268,7 +268,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.windowSet.mask.name = "DaycareWindow_Mask";
             daycareRoom.windowChance = 0.35f;
 
-            DaycareNotebookDoor daycareDoor = RecommendedCharsPlugin.SwapComponentSimple<StandardDoor, DaycareNotebookDoor>
+            DaycareNotebookDoor daycareDoor = SwapComponentSimple<StandardDoor, DaycareNotebookDoor>
                 (GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform));
             daycareDoor.name = "DaycareNotebookDoor";
             daycareDoor.mask[0] = DaycareDoorAssets.mask;
@@ -293,7 +293,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.functionContainer.AddDoorAssigner(daycareDoor);
             daycareRoom.functionContainer.AddFunction<MrDaycareHolderFunction>();
             
-            DaycareTimeoutRoomFunction dcRoomFunction = RecommendedCharsPlugin.SwapComponentSimple<DetentionRoomFunction, DaycareTimeoutRoomFunction>(detRoomFunction);
+            DaycareTimeoutRoomFunction dcRoomFunction = SwapComponentSimple<DetentionRoomFunction, DaycareTimeoutRoomFunction>(detRoomFunction);
             dcRoomFunction.gaugeSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/TimeoutIcon"), 25f);
 
             daycareRoom.functionContainer.AddFunction(dcRoomFunction);

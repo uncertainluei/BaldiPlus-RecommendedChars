@@ -83,7 +83,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadCircle()
         {
-            CircleNpc circle = RecommendedCharsPlugin.SwapComponentSimple<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
+            CircleNpc circle = SwapComponentSimple<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
             circle.name = "ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
@@ -133,7 +133,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             circle.sprSad = sprites[1];
 
-            CircleJumprope jumprope = RecommendedCharsPlugin.SwapComponentSimple<Jumprope, CircleJumprope>(GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform));
+            CircleJumprope jumprope = SwapComponentSimple<Jumprope, CircleJumprope>(GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform));
             circle.jumpropePre = jumprope;
 
             jumprope.name = "ShapeWorld Circle_Jumprope";

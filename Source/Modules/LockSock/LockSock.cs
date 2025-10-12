@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using MTM101BaldAPI;
 using UnityEngine;
 
@@ -55,9 +56,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public bool ShouldInspectDoor(Door door)
         {
-            if (door == null || doorQueue.Contains(door) ||
-                door.locked || Random.value >= doorLockChance)
-                return false;
+            if (door == null || door.locked) return false;
+            if (doorQueue.Contains(door)) return false;
+            if (door is LockdownDoor || (door is SwingDoor swingDoor && !swingDoor.acceptsLockItem)) return false;
+            if (Random.value >= doorLockChance) return false;
 
             if (doorQueue.Count == maxDoorQueueSize)
                 doorQueue.RemoveAt(0);

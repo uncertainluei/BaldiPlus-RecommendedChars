@@ -10,7 +10,6 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
-using PlusStudioLevelLoader;
 using System.Linq;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
