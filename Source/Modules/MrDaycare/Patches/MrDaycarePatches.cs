@@ -38,9 +38,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
             foreach (PlayerManager player in __instance.Players)
             {
-                if (player == null) continue;
+                if (player == null || player.ec != __instance || player.dijkstraMap == null) continue;
 
-                if (player.dijkstraMap.Value(IntVector2.GetGridPosition(position)) < _lowestDist)
+                IntVector2 gridPos = IntVector2.GetGridPosition(position);
+                if (gridPos.x < 0 || gridPos.x >= player.dijkstraMap.size.x ||
+                    gridPos.z < 0 || gridPos.z >= player.dijkstraMap.size.z)
+                    continue;
+
+                if (player.dijkstraMap.Value(gridPos) < _lowestDist)
                 {
                     _lowestDist = player.dijkstraMap.Value(IntVector2.GetGridPosition(position));
                     _player = player;
