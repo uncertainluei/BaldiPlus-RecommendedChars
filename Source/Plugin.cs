@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid)]
+    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.1.0.2")]
     [BepInDependency(LevelLoaderGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
