@@ -43,6 +43,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Unlocked = true;
             foreach (MrDaycare daycare in mrDaycares)
                 daycare.Activate();
+            foreach (Door door in room.doors)
+            {
+                if (door != null && door is DaycareNotebookDoor daycareDoor && daycareDoor.IsNotebookGate)
+                    daycareDoor.UnlockNotebookGate();
+            }
         }
     }
 

@@ -32,7 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(MrDaycare), "ObservePlayer"), HarmonyPrefix]
         private static bool MrDaycareIgnoreRules(PlayerManager player)
         {
-            if (!VotingEvent.TopicIsActive<PrincipalIgnoresSomeRulesTopic>()) return true;
+            if (!VotingEvent.IsTopicActive<PrincipalIgnoresSomeRulesTopic>()) return true;
             return !PrincipalObservePatch.allowedRulesWhenTopicActive.Contains(DaycareGuiltManager.GetInstance(player).RuleBreak);
         }
 

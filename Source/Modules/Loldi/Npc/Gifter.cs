@@ -29,8 +29,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             items = ItemMetaStorage.Instance.All()
             .Where(x => !x.flags.HasFlag(ItemFlags.InstantUse) && !x.flags.HasFlag(ItemFlags.NoUses)
-                && x.value.itemType.ToStringExtended() != "WPB" && !x.tags.Contains("lost_item")
-                && !x.tags.Contains("shape_key") && !x.tags.Contains("shop_dummy")
+                && !x.flags.HasFlag(ItemFlags.Unobtainable) && x.value.itemType.ToStringExtended() != "WPB"
+                && !x.tags.Contains("lost_item") && !x.tags.Contains("shape_key") && !x.tags.Contains("shop_dummy")
                 && !x.tags.Contains("recchars_gifter_blacklist")).ToArray();
 
             RerollGift();        
