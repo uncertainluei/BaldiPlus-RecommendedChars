@@ -230,11 +230,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 new(sprites[3], 0.125f),
                 new(sprites[2], 0.125f),
                 new(sprites[1], 0.125f),
-                new(sprites[0], 0f)
+                new(sprites[0], 0.125f)
             ]));
             bsodaaGuy.animator.AddAnimation("Shoot", new([
                 new(sprites[5], 0.375f),
-                new(bsodaaGuy.spriteRenderer[0].sprite, 0f)
+                new(bsodaaGuy.spriteRenderer[0].sprite, 0.125f)
             ]));
 
             bsodaaGuy.audMan = bsodaaGuy.GetComponent<AudioManager>();
