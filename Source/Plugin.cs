@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.1.0.2")]
+    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.1.1")]
     [BepInDependency(LevelLoaderGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -69,18 +69,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Read the config values and remove disabled modules
             RecommendedCharsConfig.BindConfig(Config);
 
-            RecommendedCharsSaveGameIO saveGameSystem = new(Info);
-            ModdedSaveGame.AddSaveHandler(saveGameSystem);
-            ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
-            QueuedActions.QueueAction(() =>
-            {
-                saveGameSystem.modulesInit = true;
-                ModdedFileManager.Instance.RegenerateTags();
-            });
-
-            // Load localization files
+            // Register base assets
             CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "SaveTags.json5");
-
             LoadingEvents.RegisterOnAssetsLoaded(Info, GrabBaseAssets(), LoadingEventOrder.Pre);
 
             // Register built-in patches
@@ -91,6 +81,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
             PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
             PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
+
+            CaudexModuleLoader.LoadAllModules(this);
+            RecommendedCharsSaveGameIO saveGameSystem = new(Info);
+            ModdedSaveGame.AddSaveHandler(saveGameSystem);
+            ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
 
             //MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
         }
@@ -118,7 +113,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         private readonly PluginInfo info = info;
         public override PluginInfo pluginInfo => info;
-        internal bool modulesInit = false;
 
         private const byte SaveVersion = 1;
         private const byte TagVersion = 1;
@@ -150,11 +144,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ((RecCharsModule)module).SaveSystem?.Reset();
         }
 
-        public override bool TagsReady() => modulesInit;
         public override string[] GenerateTags()
         {
-            if (!modulesInit) return [];
-
             List<string> tags = [];
             
             tags.Add("Version_"+TagVersion);

@@ -41,7 +41,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             EditorBasicObject helperVisual = EditorInterface.AddObjectVisual("recchars_bsodaahelper", ObjMan.Get<BsodaaHelper>("Npc_BsodaaHelper").gameObject, true);
             LevelStudioPlugin.Instance.basicObjectDisplays.Add("recchars_bsodaahelper_diet", helperVisual);
 
-            LevelStudioCompatHelper.AddRoomDefaultTextures("recchars_bsodaaroom", "recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil");
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_bsodaaroom", new("recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"));
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"]);
 
             EditorInterfaceModes.AddModeCallback(AddContentToMode);

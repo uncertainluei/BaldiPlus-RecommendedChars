@@ -9,6 +9,7 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
+using PlusLevelStudio.Editor.Tools;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 {
@@ -36,14 +37,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolsToCategory(mode, "items", [
-                new ExtItemTool("recchars_lunchbox_random", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_Random"),
-                    "Ed_Tool_item_recchars_lunchbox_random_Title"),
-                new ExtItemTool("recchars_lunchbox_2", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_2"),
-                    "Ed_Tool_item_recchars_lunchbox_2_Title"),
-                new ExtItemTool("recchars_lunchbox_3", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_3"),
-                    "Ed_Tool_item_recchars_lunchbox_3_Title"),
-                new ExtItemTool("recchars_lunchbox_4", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_4"),
-                    "Ed_Tool_item_recchars_lunchbox_4_Title"),
+                new ItemTool("recchars_lunchbox_random", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_Random"), false),
+                new ItemTool("recchars_lunchbox_2", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_2"), false),
+                new ItemTool("recchars_lunchbox_3", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_3"), false),
+                new ItemTool("recchars_lunchbox_4", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_4"), false)
             ]);
         }
     }

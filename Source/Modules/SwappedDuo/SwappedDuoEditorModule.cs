@@ -34,7 +34,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         {
             EditorInterface.AddNPCVisual("recchars_gottabully", ObjMan.Get<GottaBully>("Npc_GottaBully"));
             EditorInterface.AddNPCVisual("recchars_artswithwires", ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
-            LevelStudioCompatHelper.AddRoomDefaultTextures("recchars_swapcloset", "recchars_swapflor", "recchars_swapwall", "BlueCarpet");
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_swapcloset", new("recchars_swapflor", "recchars_swapwall", "BlueCarpet"));
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_swapflor", "recchars_swapwall"]);
 
             EditorInterfaceModes.AddModeCallback(AddContentToMode);

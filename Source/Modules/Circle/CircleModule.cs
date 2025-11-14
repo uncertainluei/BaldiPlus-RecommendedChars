@@ -24,6 +24,7 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 using UncertainLuei.CaudexLib.Registers;
 using PlusStudioLevelLoader;
 using UncertainLuei.CaudexLib.Util;
+using MTM101BaldAPI.Components.Animation;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -137,9 +138,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             circle.jumpropePre = jumprope;
 
             jumprope.name = "ShapeWorld Circle_Jumprope";
-            jumprope.ropeAnimator = jumprope.animator.gameObject.AddComponent<CustomSpriteAnimator>();
-            jumprope.ropeAnimator.spriteRenderer = jumprope.ropeAnimator.GetComponentInChildren<SpriteRenderer>();
-            CircleJumprope.ropeAnimation = new Dictionary<string, Sprite[]> { { "JumpRope", AssetLoader.SpritesFromSpritesheet(4, 4, 1f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CircleTex/CircleRainbow")) } };
+            jumprope.ropeAnimator = jumprope.animator.gameObject.AddComponent<CustomSpriteRendererAnimator>();
+            jumprope.ropeAnimator.renderer = jumprope.ropeAnimator.GetComponentInChildren<SpriteRenderer>();
+            // thank you serialization but you still stink
+            jumprope.ropeAnimator.AddAnimation("JumpRope", new(15, AssetLoader.SpritesFromSpritesheet(4, 4, 1f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CircleTex/CircleRainbow"))));
+
             jumprope.ropeDelay = 0f;
             jumprope.ropeTime = 1f;
             jumprope.maxJumps = 8;

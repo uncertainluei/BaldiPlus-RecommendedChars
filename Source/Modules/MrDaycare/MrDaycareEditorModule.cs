@@ -42,7 +42,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             EditorInterface.AddNPCVisual("recchars_mrdaycare", ObjMan.Get<MrDaycare>("Npc_MrDaycare_Nerfed"));
             LevelStudioPlugin.Instance.npcDisplays.Add("recchars_mrdaycare_og", LevelStudioPlugin.Instance.npcDisplays["recchars_mrdaycare"]);
 
-            LevelStudioCompatHelper.AddRoomDefaultTextures("recchars_daycare", "recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil");
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_daycare", new("recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"));
             EditorInterface.AddWindow("recchars_daycare", LevelLoaderPlugin.Instance.windowObjects["recchars_daycare"]);
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"]);
 

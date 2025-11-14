@@ -13,11 +13,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
     internal static class LevelStudioCompatHelper
     {
-        internal static void AddRoomDefaultTextures(string id, string florTex, string wallTex, string ceilTex)
+        /*internal static void AddRoomDefaultTextures(string id, string florTex, string wallTex, string ceilTex)
         {
             EditorLevelData.AddDefaultTextureAction((Dictionary<string, TextureContainer> texs) =>
                 texs.Add(id, new(florTex, wallTex, ceilTex)));
-        }
+        }*/
     }
 
     internal class ExtNpcTool(string id, Sprite spr) : NPCTool(id, spr)
@@ -31,15 +31,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
         public ExtNpcTool(string id, Sprite spr, string desc) : this(id, spr)
             => newDescKey = desc;
         public ExtNpcTool(string id, Sprite spr, string title, string desc) : this(id, spr, desc)
-            => newTitleKey = title;
-    }
-
-    internal class ExtItemTool(string id, Sprite spr) : ItemTool(id, spr)
-    {
-        protected string newTitleKey;
-        public override string titleKey => newTitleKey.IsNullOrWhiteSpace() ? base.titleKey : newTitleKey;
-
-        public ExtItemTool(string id, Sprite spr, string title) : this(id, spr)
             => newTitleKey = title;
     }
 

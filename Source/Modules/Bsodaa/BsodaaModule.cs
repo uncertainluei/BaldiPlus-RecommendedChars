@@ -25,6 +25,7 @@ using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UnityEngine;
+using MTM101BaldAPI.Components.Animation;
 
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -209,42 +210,32 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.spriteRenderer[0].transform.localPosition = Vector3.up * -1.08f;
             bsodaaGuy.spriteRenderer[0].sprite = sprites[0];
 
-            EveyBsodaa.animations = new Dictionary<string, Sprite[]>()
-            {
-                {"Idle", new Sprite[] { sprites[0] }},
-                {"Happy", new Sprite[] { sprites[1] }},
-                {"Upset", new Sprite[] { sprites[2] }},
-            };
-
-            sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Shoot"), 106, 256, 32f, 6);
-
-            EveyBsodaa.animations.Add("Charge",
-            [
-                sprites[4],
-                sprites[4],
-                sprites[4],
-                sprites[4],
-                sprites[3],
-                sprites[2],
-                sprites[1],
-                sprites[0]
-            ]);
-            EveyBsodaa.animations.Add("Shoot",
-            [
-                sprites[5],
-                sprites[5],
-                sprites[5],
-                bsodaaGuy.spriteRenderer[0].sprite
-            ]);
-
             bsodaaGuy.navigator.accel = 10f;
             bsodaaGuy.navigator.speed = 14f;
             bsodaaGuy.navigator.maxSpeed = 14f;
 
             bsodaaGuy.looker.layerMask = NPCMetaStorage.Instance.Get(Character.Principal).value.looker.layerMask;
 
-            bsodaaGuy.animator = bsodaaGuy.gameObject.AddComponent<CustomSpriteAnimator>();
-            bsodaaGuy.animator.spriteRenderer = bsodaaGuy.spriteRenderer[0];
+            bsodaaGuy.animator = bsodaaGuy.gameObject.AddComponent<CustomSpriteRendererAnimator>();
+            bsodaaGuy.animator.renderer = bsodaaGuy.spriteRenderer[0];
+
+            bsodaaGuy.animator.AddAnimation("Idle", new(8, [sprites[0]]));
+            bsodaaGuy.animator.AddAnimation("Happy", new(8, [sprites[1]]));
+            bsodaaGuy.animator.AddAnimation("Upset", new(8, [sprites[2]]));
+
+            sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Shoot"), 106, 256, 32f, 6);
+
+            bsodaaGuy.animator.AddAnimation("Charge", new([
+                new(sprites[4], 0.5f),
+                new(sprites[3], 0.125f),
+                new(sprites[2], 0.125f),
+                new(sprites[1], 0.125f),
+                new(sprites[0], 0f)
+            ]));
+            bsodaaGuy.animator.AddAnimation("Shoot", new([
+                new(sprites[5], 0.375f),
+                new(bsodaaGuy.spriteRenderer[0].sprite, 0f)
+            ]));
 
             bsodaaGuy.audMan = bsodaaGuy.GetComponent<AudioManager>();
             bsodaaGuy.audMan.subtitleColor = new Color(3f/255f, 36f/255f, 1f);

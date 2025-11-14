@@ -1,5 +1,5 @@
 ﻿using MTM101BaldAPI.Components;
-
+using MTM101BaldAPI.Components.Animation;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,8 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private const string continueKey = "Hud_RecChars_CircleRope_Continue";
         private const string failKey = "Hud_RecChars_CircleRope_Fail";
 
-        internal static Dictionary<string, Sprite[]> ropeAnimation;
-        public CustomSpriteAnimator ropeAnimator;
+        public CustomSpriteRendererAnimator ropeAnimator;
 
         private new void Start()
         {
@@ -38,8 +37,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             animator.enabled = false;
 
             ropeDelay = 0f;
-            ropeAnimator.PopulateAnimations(ropeAnimation, 15);
-
             countTmp.text = $"{jumps}/{LocalizationManager.Instance.GetLocalizedText(startKey)}";
             StartCoroutine(CircleRopeTimer());
         }

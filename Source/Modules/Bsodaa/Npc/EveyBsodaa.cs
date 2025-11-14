@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using MTM101BaldAPI;
-using MTM101BaldAPI.Components;
-
+using MTM101BaldAPI.Components.Animation;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -11,12 +9,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class EveyBsodaa : NPC
     {
         internal static Character charEnum = (Character)(-1);
-        internal static Dictionary<string, Sprite[]> animations;
 
         public float normalSpeed;
         public float restockSpeed = 24f;
 
-        public CustomSpriteAnimator animator;
+        public CustomSpriteRendererAnimator animator;
 
         public AudioManager audMan;
         public EveyBsodaaSpray projectilePre;
@@ -36,8 +33,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             base.Initialize();
 
             normalSpeed = Navigator.maxSpeed;
-
-            animator.PopulateAnimations(animations, 8);
             animator.Play("Idle",1f);
 
             // Used for dictating what room is closest

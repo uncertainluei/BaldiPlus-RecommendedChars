@@ -28,17 +28,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
         private static int _lowestDist;
         private static PlayerManager _player;
-        [HarmonyPatch(typeof(EnvironmentController), "MakeNoise", typeof(GameObject), typeof(Vector3), typeof(int)), HarmonyPostfix]
-        private static void OnNoiseMade(EnvironmentController __instance, Vector3 position, int value)
+        [HarmonyPatch(typeof(BaseGameManager), "NoiseMade", typeof(EnvironmentController), typeof(Vector3), typeof(int)), HarmonyPostfix]
+        private static void OnNoiseMade(EnvironmentController ec, Vector3 position, int value)
         {
-            if (__instance.silent || __instance.CellFromPosition(IntVector2.GetGridPosition(position)).Silent || value < 70) return;
+            if (ec.silent || ec.CellFromPosition(IntVector2.GetGridPosition(position)).Silent || value < 70) return;
 
             _lowestDist = Mathf.RoundToInt(0.045f*value);
             _player = null;
 
-            foreach (PlayerManager player in __instance.Players)
+            foreach (PlayerManager player in ec.Players)
             {
-                if (player == null || player.ec != __instance || player.dijkstraMap == null) continue;
+                if (player == null || player.ec != ec || player.dijkstraMap == null) continue;
 
                 IntVector2 gridPos = IntVector2.GetGridPosition(position);
                 if (gridPos.x < 0 || gridPos.x >= player.dijkstraMap.size.x ||
