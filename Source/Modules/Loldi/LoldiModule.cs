@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("LOLdi Exchanges"), CaudexModuleSaveTag("Mdl_Loldi")]
+    //[CaudexModule("LOLdi Exchanges"), CaudexModuleSaveTag("Mdl_Loldi")]
     [CaudexModuleConfig("Modules", "Loldi",
         "Adds \"Blue, Guy\" and Gifter from LOLdi's Basics.", true)]
     public sealed class Module_Loldi : RecCharsModule

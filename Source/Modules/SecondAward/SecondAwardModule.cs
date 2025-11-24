@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("2nd Award"), CaudexModuleSaveTag("Mdl_SecondAward")]
+    //[CaudexModule("2nd Award"), CaudexModuleSaveTag("Mdl_SecondAward")]
     [CaudexModuleConfig("Modules", "SecondAward",
         "Adds 2nd Award. It's 1st Prize, but slow and stuns characters.", true)]
     public sealed class Module_SecondAward : RecCharsModule

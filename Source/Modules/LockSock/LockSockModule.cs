@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("Locks and Bolts"), CaudexModuleSaveTag("Mdl_LockSock")]
+    //[CaudexModule("Locks and Bolts"), CaudexModuleSaveTag("Mdl_LockSock")]
     [CaudexModuleConfig("Modules", "LockSock",
         "Adds a padlock sockpuppet.", true)]
     public sealed class Module_LockSock : RecCharsModule

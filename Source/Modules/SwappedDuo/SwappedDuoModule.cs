@@ -28,7 +28,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("Swapped Duo"), CaudexModuleSaveTag("Mdl_SwappedDuo")]
+    //[CaudexModule("Swapped Duo"), CaudexModuleSaveTag("Mdl_SwappedDuo")]
     [CaudexModuleConfig("Modules", "SwappedDuo",
         "Adds Gotta Bully and Arts with Wires from Playtime's Swapped Basics (and 1st Prize's Mania respectively).", true)]
     public sealed class Module_SwappedDuo : RecCharsModule

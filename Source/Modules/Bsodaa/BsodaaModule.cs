@@ -30,7 +30,7 @@ using MTM101BaldAPI.Components.Animation;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("Eveyone's Bsodaa"), CaudexModuleSaveTag("Mdl_Bsodaa")]
+    //[CaudexModule("Eveyone's Bsodaa"), CaudexModuleSaveTag("Mdl_Bsodaa")]
     [CaudexModuleConfig("Modules", "Bsodaa",
         "Adds Baldi and Playtime from Eveything is Bsodaa, with their own room and mechanic.", true)]
     public sealed class Module_Bsodaa : RecCharsModule
