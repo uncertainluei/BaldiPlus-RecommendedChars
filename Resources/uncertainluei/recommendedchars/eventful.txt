@@ -1,0 +1,81 @@
+Since Plus modding became a big thing, I've noticed that random events don't often get much focus. Sure, there's some, but in the grand scheme of things, other kinds of content like characters get WAY more attention.
+
+So, like any other insane person, I'm devoting an entire Plus mod request to several random events! (and then like a maniac i decided to include two npcs as well)
+
+THE EVENTS
+
+Crawlspace
+
+While the event is active, several tiles of floor will fall open. Walking over one of these results in you falling into the (incredibly dark) crawlspace under the level, slowing you (and any NPCs down there with you) down by x0.5. The crawlspace is one big, uninterrupted square, ending at the farthest corners of the level. While in the crawlspace, other open floor tiles will be visible, and walking under one will get you sent back up into the main area of the schoolhouse. If the event ends while you're still in the crawlspace, the tile above you will immediately fall open, unless you're under an area of the map with nothing in it. Begins occurring on Floor 3 and above. More likely to occur on Maintenance floors.
+
+Character Confusion
+
+For the duration of the event, every character will have their sprite swapped with someone else's, like that one setting in the Baldi's Basics Classic Mod Menu. Their caption colors are also swapped. Their sounds and methods of movement remain the same, however. Begins occurring on Floor 3, more likely to occur on a Laboratory floor. (note: the dr. reflex icons are for when a character swaps with dr. reflex, since not everyone has sprites for opening their hands. also, dr. reflex should only be able to swap with other characters with 360 views. ALSO, despite the announcement voiceline for this being spoken by principal, baldi should still appear in the tv.)
+
+Stormy Night
+
+Basically the setting in the BBC Mod Menu of the same name. When the event starts, the global light level lowers enough that tiles at regular light levels are just barely light enough that they aren't considered dark enough to hide in. Most of the sounds throughout the school are drowned out by rain ambience. Every once in a while, thunder will strike, briefly illuminating the entire school and playing a thunderclap sound shortly after. There is only a one second cooldown between each strike, but the gap between them can last up to 20 seconds. Can occur on any floor.
+
+Food Fight
+
+When the event begins, all of the food from Pic-Quick-Nic begins spawning on the floor. When any NPC and/or the player walks into this food, it begins hovering in front of them. If you left-click with food in hand, it gets thrown directly in front of you, having a specific effect on its target depending on the kind of food, though all food pushes its target back slightly. NPCs throw food the moment they see anyone else. Full list of food effects:
+
+-Apple: Immobilizes its target for five seconds
+
+-Baldi popsicle: Blinds the target
+
+-Can of beans: Covers its target in beans, having the same effect as Beans' gum
+
+-BSODA: Releases BSODA spray upon hitting the target
+
+-Burger: Reduces the target's speed (from the player's perspective, time speeds up)
+
+-Chicken leg: Squishes the target
+
+-Cookie: Increases the target's speed (from the player's perspective, time slows down)
+
+-Chocolate roll: Reduces the target's hitbox size
+
+-S'more: Increases the target's speed (from the player's perspective, their stamina greatly increases)
+
+-Strawberries: Nothing happens
+
+-Pickles: Shatter and create a spot on the floor where grounded entities are slowed down on
+
+-Milk carton: Teleports its target somewhere random
+
+-Bananas: Target acts as if they slipped on a 'Nana Peel
+
+-Pizza (only the six-slice variant shows up): Ricochets off the target and lands back on the floor in front of the person who threw it
+
+-Hot dog (only the three-combo hot dog shows up): Inverts the target's movements
+
+-Bomb: Explodes and pushes the target further backwards than the other foods
+
+Note that if Gotta Sweep comes into contact with any food, it vanishes instantly. Can ONLY occur on Floor 3, and is way more likely to occur if a cafeteria is present on the floor.
+
+THE NPCS
+
+Evil Maintenance Machine
+"A powerful machine designed to perform maintenance on areas in need! Unfortunately, it seems to cause more messes than it does fix them."
+IMPORTANT: This NPC doesn't have a specific floor that it starts spawning on. It has the chance to start appearing on any maintenance floor.
+Roams around at half of Arts and Crafters' idle speed when not charging. Every 30-60 seconds, it starts dropping random non-character entities behind it. After another 30-60 seconds, it realizes there's a mess behind it and goes back through to clean it all up, deleting any entities still there.
+
+Carter
+"This student always keeps forgetting his most important items! Maybe you can help find them?"
+(description copied from his scratch project of origin) carter will wander randomly around the hallways until he bumps into the player, in which he will offer them a hint as to where his lost item is. if the player finds it and successfully returns it to carter, he will give them 30 you thought points. however, if the player uses his item or if [another NPC] steals it, carter will get angry. once he is, he will teleport and appear in front of the player and all sounds will mute if the player looks backwards and forth. after a random amount of seconds, he starts screeching, which will attract baldi to his location. if he arrives, then carter will stop and wander away to cool down. (note: to distinguish carter's item from regular items of the same kind, Carter's items just have "Carter's" added to them (e.g. "Carter's BSODA"), except for the Principal's Whistle and Baldi's Least Favorite Tape, which are called "Carter's Whistle" and "Carter's Favorite Tape" respectively. also he begins spawning on floor 3)
+for further information regarding carter (including a mockup of his mechanic) refer to his project of origin: https://scratch.mit.edu/projects/978057524/
+
+THEYWILLNEVERFINDME.PNG
+just appears around the school as a poster lmao
+
+CREDITSSSSSSSS
+baldilover2310 (Edmunson2460 on gamebanana) recorded the announcement voicelines (except for the character confusion event, I recorded that one)
+elsqued (hudmaceachern on gamebanana) was responsible for everything Carter-related
+The custom student pose in the thumbnail was created using HaDerpo's student model.
+Sounds for the Stormy Night event were taken from freesound.org. The following sounds were used:
+-Rain Loop by qubodup
+-Thunderclap_8(Eq,MS,dns).wav by newlocknew
+-MS_Thunderclap Davos Laret.wav by Thomas Bruderer
+-VOC_230618-2270_FR_Thunderstorm_over_suburbs_with_loud_thunderclap.wav by kevp888
+-Thunderclap.wav by Jambozal
