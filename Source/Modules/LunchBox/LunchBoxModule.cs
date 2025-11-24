@@ -81,7 +81,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject lunchBoxRandomDummy = ScriptableObject.CreateInstance<ItemObject>();
             lunchBoxRandomDummy.name = "LunchBoxRandomDummy";
             lunchBoxRandomDummy.itemType = ITM_LunchBox.randomDummyEnum;
-            lunchBoxRandomDummy.nameKey = lunchBoxRandomDummy.descKey = "Desc_Nothing";
+            lunchBoxRandomDummy.nameKey = lunchBox.nameKey;
+            lunchBoxRandomDummy.descKey = "Desc_Nothing";
             lunchBoxRandomDummy.itemSpriteLarge = lunchBox.itemSpriteLarge;
             lunchBoxRandomDummy.itemSpriteSmall = lunchBox.itemSpriteSmall;
             lunchBoxRandomDummy.item = ItemMetaStorage.Instance.FindByEnum(Items.Apple).value.item;

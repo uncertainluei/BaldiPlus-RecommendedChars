@@ -7,7 +7,6 @@ using PlusLevelStudio.Editor;
 using UnityEngine;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
 using PlusLevelStudio.Editor.Tools;
 
@@ -32,7 +31,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
-            => EditorInterfaceModes.AddModeCallback(AddContentToMode);
+        {
+            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_lunchbox_random");
+            EditorInterfaceModes.AddModeCallback(AddContentToMode);
+        }
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {

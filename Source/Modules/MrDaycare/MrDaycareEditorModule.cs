@@ -48,6 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 
             EditorInterface.AddDoor<DoorDisplay>("recchars_bookgate", DoorIngameStatus.AlwaysDoor, DaycareDoorAssets.mask, [DaycareDoorAssets.template.shut, DaycareDoorAssets.template.shut]);
 
+            LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_pie", "recchars_doorkey"]);
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 

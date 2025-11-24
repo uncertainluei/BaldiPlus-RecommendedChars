@@ -6,8 +6,6 @@ using MTM101BaldAPI.Registers;
 
 using PlusStudioLevelLoader;
 
-using System.IO;
-
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;

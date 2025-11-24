@@ -18,7 +18,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(VotingEvent.PrincipalController), "SetCheckingRoomMode"), HarmonyPrefix]
         private static bool VotingEventCheck(bool value, Principal ___principal, ref NavigationState_PartyEvent ___state, RoomController ___room)
         {
-            if (!value || ___principal == null || ___principal.Character != MrDaycare.charEnum) return true;
+            if (!value || !___principal || ___principal.Character != MrDaycare.charEnum) return true;
 
             MrDaycare daycare = (MrDaycare)___principal;
 

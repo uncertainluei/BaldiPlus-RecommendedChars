@@ -363,11 +363,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     meta.tags.Add("drink");
                     meta.tags.Add("recchars_daycare_throwable");
                     break;
-                case "Stone":
                 case "Marble":
                     meta.tags.Add("caudex:always_trigger_event");
                     meta.tags.Add("recchars_daycare_throwable");
                     break;
+                case "Stone":
                 case "WindowBlaster1":
                 case "WindowBlaster2":
                 case "WindowBlaster3":
@@ -434,15 +434,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (!ruleFreeZone.TryGetComponent(out container))
                     continue;
 
-                if (container.functions.FirstOrDefault(x => x is DaycareRuleFreeZone) == null && // Does not already have a DaycareRuleFreeZone
-                    container.functions.FirstOrDefault(x => x is DetentionRoomFunction) == null) // Is not a Principal's office
-                    container.functions.Add(container.gameObject.AddComponent<DaycareRuleFreeZone>()); // Make Mr. Daycare ignore rule breaks
+                if (!container.functions.FirstOrDefault(x => x is DaycareRuleFreeZone) && // Does not already have a DaycareRuleFreeZone
+                    !container.functions.FirstOrDefault(x => x is DetentionRoomFunction)) // Is not a Principal's office
+                    container.AddFunction<DaycareRuleFreeZone>(); // Make Mr. Daycare ignore rule breaks
             }
 
-            List<Items> keyItems =
-            [
-                Items.DetentionKey
-            ];
+            List<Items> keyItems = [Items.DetentionKey];
             foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAllWithTags(false, "shape_key"))
             {
                 if (!keyItems.Contains(meta.id))
@@ -450,8 +447,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
             ITM_DoorKey.keyEnums = [.. keyItems];
         }
-
-        
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
@@ -491,6 +486,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int id, CustomLevelObject lvl)
         {
             if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/MrDaycare", GenerationStageFlags.Addend))

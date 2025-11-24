@@ -44,6 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_bsodaaroom", new("recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"));
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"]);
 
+            LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_smallbsoda", "recchars_smalldietbsoda"]);
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 

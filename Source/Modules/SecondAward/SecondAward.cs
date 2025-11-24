@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UncertainLuei.CaudexLib.Components;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -11,9 +11,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public float stunTime = 8f;
 
         public void Stunned()
-        {
-            audMan.PlaySingle(audBroken);
-        }
+            => audMan.PlaySingle(audBroken);
 
         public void StunSound()
             => audMan.PlaySingle(audBang);

@@ -31,14 +31,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(BaseGameManager), "NoiseMade", typeof(EnvironmentController), typeof(Vector3), typeof(int)), HarmonyPostfix]
         private static void OnNoiseMade(EnvironmentController ec, Vector3 position, int value)
         {
-            if (ec.silent || ec.CellFromPosition(IntVector2.GetGridPosition(position)).Silent || value < 70) return;
+            if (value < 70)
+                return;
 
             _lowestDist = Mathf.RoundToInt(0.045f*value);
             _player = null;
 
             foreach (PlayerManager player in ec.Players)
             {
-                if (player == null || player.ec != ec || player.dijkstraMap == null) continue;
+                if (!player || player.ec != ec || player.dijkstraMap == null || ec.CellFromPosition(player.transform.position).silent) continue;
 
                 IntVector2 gridPos = IntVector2.GetGridPosition(position);
                 if (gridPos.x < 0 || gridPos.x >= player.dijkstraMap.size.x ||

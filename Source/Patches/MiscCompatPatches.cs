@@ -12,7 +12,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
         private static bool Prefix(NPC __0)
         {
-            if (__0.Navigator == null || __0.Navigator.Entity == null) return false;
+            if (!__0.Navigator || !__0.Navigator.Entity) return false;
             if (!colors.ContainsKey(__0.character)) return true;
 
             BaseGameManager.Instance.Ec.map.AddArrow(__0.Navigator.Entity, colors[__0.character]);

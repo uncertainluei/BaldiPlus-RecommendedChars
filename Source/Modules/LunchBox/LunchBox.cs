@@ -7,8 +7,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         private static readonly Dictionary<int, ITM_LunchBox> instances = [];
 
-        internal static Items itemEnum = (Items)(-1);
-        internal static Items randomDummyEnum = (Items)(-1);
+        internal static Items itemEnum = (Items)(-1), randomDummyEnum = (Items)(-1);
         internal static WeightedItemObject[] weightedItems; 
 
         public WeightedItemObject[] possibleFoodItems;
@@ -20,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (!instances.ContainsKey(pm.playerNumber))
                 instances.Add(pm.playerNumber, this);
-            else if (instances[pm.playerNumber] == null)
+            else if (!instances[pm.playerNumber])
                 instances[pm.playerNumber] = this;
             else if (instances[pm.playerNumber] != this)
             {

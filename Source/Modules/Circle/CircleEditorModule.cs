@@ -34,6 +34,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             EditorInterface.AddNPCVisual("recchars_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed"));
             LevelStudioPlugin.Instance.npcDisplays.Add("recchars_circle_og", LevelStudioPlugin.Instance.npcDisplays["recchars_circle"]);
 
+            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_nerfgun");
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 

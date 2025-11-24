@@ -1,5 +1,5 @@
 using System.Collections;
-using HarmonyLib;
+using UncertainLuei.CaudexLib.Components;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars

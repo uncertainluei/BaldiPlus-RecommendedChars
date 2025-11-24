@@ -1,9 +1,6 @@
 ﻿using HarmonyLib;
 
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
 
 using UnityEngine;
 
@@ -12,7 +9,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     [HarmonyPatch]
     static class LunchBoxPatches
     {
-        private static int[] priceVariations = [-150, -50, 0, 50, 150];
+        private static readonly int[] priceVariations = [-150, -50, 0, 50, 150];
 
         [HarmonyPatch(typeof(StoreRoomFunction), "Restock"), HarmonyPostfix]
         private static void RandomizeLunchBoxPrice(SceneObject ___storeData, List<Pickup> ___pickups, PriceTag[] ___tag)
