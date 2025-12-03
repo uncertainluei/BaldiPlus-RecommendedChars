@@ -143,7 +143,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
 
             private void OnDestroy()
             {
-                // Remove current windowling from the dictionary once destroyed
+                // Remove current windowlet from the dictionary once destroyed
                 if (variants.ContainsKey(windowlet))
                     variants.Remove(windowlet);
             }

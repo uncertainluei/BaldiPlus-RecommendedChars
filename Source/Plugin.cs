@@ -41,7 +41,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(EcoFriendlyGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CrazyBabyGuid, BepInDependency.DependencyFlags.SoftDependency)]
 
-    partial class RecommendedCharsPlugin : BaseUnityPlugin
+    public partial class RecommendedCharsPlugin : BaseUnityPlugin
     {
         internal const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
         internal const string ModName = "Recommended Characters Pack";
@@ -115,7 +115,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override PluginInfo pluginInfo => info;
 
         private const byte SaveVersion = 1;
-        private const byte TagVersion = 1;
+        private const byte TagVersion = 2;
 
         public override void OnCGMCreated(CoreGameManager cgm, bool savedGame)
         {

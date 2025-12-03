@@ -2,7 +2,7 @@
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    partial class RecommendedCharsPlugin : BaseUnityPlugin
+    public partial class RecommendedCharsPlugin : BaseUnityPlugin
     {
         // DEPENDENCIES
 

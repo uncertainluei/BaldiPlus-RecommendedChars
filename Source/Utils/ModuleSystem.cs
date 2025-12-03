@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
@@ -25,17 +24,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public virtual ModuleSaveSystem SaveSystem => null;
 
-        protected PosterObject CreatePoster(string path, string name)
+        protected static PosterObject CreatePoster(string path, string name)
         {
             PosterObject poster = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>(path), []);
             poster.name = name;
             return poster;
         }
 
-        protected void AddTexturesToAssetMan(string prefix, string[] paths)
+        protected static void AddTexturesToAssetMan(string prefix, string[] paths)
             => AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", paths), x => prefix+x.name);
 
-        protected void AddAudioToAssetMan(string prefix, string[] paths)
+        protected static void AddAudioToAssetMan(string prefix, string[] paths)
         {
             string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(BasePlugin), Path.Combine(paths)), "*.wav");
             for (int i = 0; i < files.Length; i++)
@@ -46,16 +45,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        protected WeightedRoomAsset[] RoomAssetsFromDirectory(string dir, params int[] weights)
+        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(string dir, params int[] weights)
             => RoomAssetsFromDirectory(null, dir, weights);
 
-        protected WeightedRoomAsset[] RoomAssetsFromDirectory(string dir)
+        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(string dir)
             => RoomAssetsFromDirectory(dir, 100);
 
-        protected WeightedRoomAsset[] RoomAssetsFromDirectory(CaudexRoomBlueprint blueprint, string dir)
+        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(CaudexRoomBlueprint blueprint, string dir)
             => RoomAssetsFromDirectory(blueprint, dir, 100);
 
-        protected WeightedRoomAsset[] RoomAssetsFromDirectory(CaudexRoomBlueprint blueprint, string dir, params int[] weights)
+        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(CaudexRoomBlueprint blueprint, string dir, params int[] weights)
         {
             if (weights == null || weights.Length == 0)
                 weights = [100];
@@ -92,29 +91,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             return rooms.ToArray();
         }
 
-        protected X SwapComponentSimple<T, X>(T original) where T : MonoBehaviour where X : T
-        {
-            X val = original.gameObject.AddComponent<X>();
-
-            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            foreach (FieldInfo fieldInfo in fields)
-                fieldInfo.SetValue(val, fieldInfo.GetValue(original));
-
-            GameObject.DestroyImmediate(original);
-            return val;
-        }
+        protected static X SwapComponentSimple<T, X>(T original) where T : MonoBehaviour where X : T
+            => original.gameObject.SwapComponent<T, X>(original, false);
     }
 
-    public abstract class RecCharsEditorSubModule<T> : RecCharsModule where T : RecCharsModule 
+    public abstract class RecCharsSubModule<T> : RecCharsModule where T : RecCharsModule 
     {
         private bool targetLoaded;
 
         protected override void Loaded()
         {
             targetLoaded = false;
-            if (!Chainloader.PluginInfos.ContainsKey(RecommendedCharsPlugin.LevelStudioGuid))
-                return;
-
             Type targetType = typeof(T);
             AbstractCaudexModule[] mods = Info.Plugin.GetActiveCaudexModules();
             if (mods.FirstOrDefault(x => x != null && x.GetType() == targetType) == null)

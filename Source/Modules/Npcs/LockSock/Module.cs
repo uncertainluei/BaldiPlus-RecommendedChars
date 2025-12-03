@@ -17,10 +17,10 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    //[CaudexModule("Locks and Bolts"), CaudexModuleSaveTag("Mdl_LockSock")]
+    [CaudexModule("Locks and Bolts"), CaudexModuleSaveTag("Mdl_LockSock")]
     [CaudexModuleConfig("Modules", "LockSock",
         "Adds a padlock sockpuppet.", true)]
-    public sealed class Module_LockSock : RecCharsModule
+    public sealed partial class Module_LockSock : RecCharsModule
     {
         protected override void Initialized()
         {
@@ -43,7 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .AddTrigger()
                 .Build();
 
-            PineDebugNpcIconPatch.icons.Add(lockSock.character, AssetMan.Get<Texture2D>("LSockTex/BorderLockSock"));
+            //PineDebugNpcIconPatch.icons.Add(lockSock.character, AssetMan.Get<Texture2D>("LSockTex/BorderLockSock"));
 
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("LSockTex/LockSockSprites"));
 

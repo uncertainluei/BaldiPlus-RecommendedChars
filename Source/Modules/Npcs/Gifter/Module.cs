@@ -16,23 +16,16 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    //[CaudexModule("LOLdi Exchanges"), CaudexModuleSaveTag("Mdl_Loldi")]
-    [CaudexModuleConfig("Modules", "Loldi",
-        "Adds \"Blue, Guy\" and Gifter from LOLdi's Basics.", true)]
-    public sealed class Module_Loldi : RecCharsModule
+    [CaudexModule("Gifter"), CaudexModuleSaveTag("Mdl_Gifter")]
+    [CaudexModuleConfig("Modules", "Gifter",
+        "Adds Gifter from LOLdi's Basics Public Alpha.", true)]
+    public sealed partial class Module_Gifter : RecCharsModule
     {
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("BluTex/", ["Textures", "Npc", "BlueGuy"]);
             AddTexturesToAssetMan("GifterTex/", ["Textures", "Npc", "Gifter"]);
-
-            AddAudioToAssetMan("BluAud/", ["Audio", "BlueGuy"]);
-            AddAudioToAssetMan("GifterAud/", ["Audio", "Gifter"]);
-
-            AssetMan.Add("StatusSpr/BlueGuyFog", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BluTex/BlueGuyFogIcon"), 1));
-            ObjMan.Add<Fog>("Fog/BlueGuyFog", new() { color = Color.blue, maxDist = 15, startDist = 5, strength = 1, priority = 16});
-
+            AddAudioToAssetMan("GifterAud/", ["Audio", "Npc", "Gifter"]);
             AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.wav"), "Sfx_RecChars_GiftUnwrap", SoundType.Effect, Color.white));
 
             // Load localization
@@ -40,52 +33,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
-        private void Load()
-        {
-            LoadBlueGuy();
-            LoadGifter();
-        }
-
-        private void LoadBlueGuy()
-        {
-            BlueGuy bluGuy = new NPCBuilder<BlueGuy>(Plugin)
-                .SetName("BlueGuy")
-                .SetEnum("RecChars_BlueGuy")
-                .SetPoster(AssetMan.Get<Texture2D>("BluTex/pri_blue"), "PST_PRI_RecChars_BlueGuy1", "PST_PRI_RecChars_BlueGuy2")
-                .AddMetaFlag(NPCFlags.Standard)
-                .SetMetaTags(["student"])
-                .AddLooker()
-                .AddTrigger()
-                .SetWanderEnterRooms()
-                .Build();
-
-
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("BluTex/BlueGuySprites"));
-
-            bluGuy.sprite = bluGuy.spriteRenderer[0];
-            bluGuy.sprite.transform.localPosition = Vector3.zero;
-
-            bluGuy.sprite.sprite = sprites[0];
-            bluGuy.sprNormal = sprites[0];
-            bluGuy.sprAngry = sprites[1];
-
-            bluGuy.audMan = bluGuy.GetComponent<AudioManager>();
-            bluGuy.audMan.subtitleColor = new(36/255f, 72/255f, 145/255f);
-
-            PineDebugNpcIconPatch.icons.Add(bluGuy.character, AssetMan.Get<Texture2D>("BluTex/BorderBlueGuy"));
-            CharacterRadarColorPatch.colors.Add(bluGuy.character, bluGuy.audMan.subtitleColor);
-
-            bluGuy.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Intro"), "Vfx_RecChars_BlueGuy_Intro", SoundType.Effect, bluGuy.audMan.subtitleColor);
-            bluGuy.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Loop"), "Vfx_RecChars_BlueGuy_Loop", SoundType.Effect, bluGuy.audMan.subtitleColor);
-
-            bluGuy.Navigator.speed = 45;
-            bluGuy.Navigator.maxSpeed = 45;
-
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_blueguy", bluGuy);
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_blueguy", bluGuy.Poster);
-            ObjMan.Add("Npc_BlueGuy", bluGuy);
-        }
-
         private void LoadGifter()
         {
             Gifter gifter = new NPCBuilder<Gifter>(Plugin)
@@ -99,7 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetWanderEnterRooms()
                 .Build();
 
-            PineDebugNpcIconPatch.icons.Add(gifter.character, AssetMan.Get<Texture2D>("GifterTex/BorderGifter"));
+            //PineDebugNpcIconPatch.icons.Add(gifter.character, AssetMan.Get<Texture2D>("GifterTex/BorderGifter"));
 
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 2, 42f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("GifterTex/Gifter_Sheet"));
 
@@ -159,21 +106,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (title == "END" || title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(ObjMan.Get<BlueGuy>("Npc_BlueGuy"), scene, 90, true);
-                AddToNpcs(ObjMan.Get<Gifter>("Npc_Gifter"), scene, 125, true);
-                return;
-            }
-
-            if (title.StartsWith("F"))
-            {
-                scene.MarkAsNeverUnload();
-
-                AddToNpcs(ObjMan.Get<Gifter>("Npc_Gifter"), scene, 125, false);
-                if (id > 0)
-                    AddToNpcs(ObjMan.Get<BlueGuy>("Npc_BlueGuy"), scene, id > 1 ? 100 : 45, false, 1);
+                AddToNpcs(ObjMan.Get<Gifter>("Npc_Gifter"), scene, 125, title == "END");
             }
         }
 

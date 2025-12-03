@@ -16,7 +16,7 @@ using UncertainLuei.CaudexLib.Util;
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 {
     [CaudexModule("Mr. Daycare (Editor)")]
-    public sealed class EditorCompat_MrDaycare : RecCharsEditorSubModule<Module_MrDaycare>
+    public sealed class EditorCompat_MrDaycare : RecCharsSubModule<Module_MrDaycare>
     {
         protected override void Initialized()
         {

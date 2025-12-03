@@ -15,16 +15,16 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    //[CaudexModule("2nd Award"), CaudexModuleSaveTag("Mdl_SecondAward")]
+    [CaudexModule("2nd Award"), CaudexModuleSaveTag("Mdl_SecondAward")]
     [CaudexModuleConfig("Modules", "SecondAward",
         "Adds 2nd Award. It's 1st Prize, but slow and stuns characters.", true)]
-    public sealed class Module_SecondAward : RecCharsModule
+    public sealed partial class Module_SecondAward : RecCharsModule
     {
         protected override void Initialized()
         {
             // Load texture and audio assets
             AddTexturesToAssetMan("AwaTex/", ["Textures", "Npc", "SecondAward"]);
-            AddAudioToAssetMan("AwaAud/", ["Audio", "SecondAward"]);
+            AddAudioToAssetMan("AwaAud/", ["Audio", "Npc", "SecondAward"]);
 
             AssetMan.Add("StatusSpr/ElectricalStun", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("AwaTex/2AwStunIcon"), 25));
 
@@ -54,7 +54,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             secondAward.spriteRenderer[0].sprite = rotationMap.spriteSheet[0];
             secondAward.spriteRenderer[0].GetComponent<AnimatedSpriteRotator>().spriteMap = [rotationMap];
 
-            PineDebugNpcIconPatch.icons.Add(SecondAward.charEnum, AssetMan.Get<Texture2D>("AwaTex/BorderSecondAward"));
+            //PineDebugNpcIconPatch.icons.Add(SecondAward.charEnum, AssetMan.Get<Texture2D>("AwaTex/BorderSecondAward"));
 
             // Subtitle/Radar color
             secondAward.audMan.subtitleColor = secondAward.motorAudMan.subtitleColor = new(219/255f, 159/255f, 86/255f);

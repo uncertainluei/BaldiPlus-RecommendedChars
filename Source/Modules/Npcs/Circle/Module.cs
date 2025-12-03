@@ -28,10 +28,10 @@ using MTM101BaldAPI.Components.Animation;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    //[CaudexModule("TCMGBiMaE Circle"), CaudexModuleSaveTag("Mdl_Circle")]
+    [CaudexModule("TCMGBiMaE Circle"), CaudexModuleSaveTag("Mdl_Circle")]
     [CaudexModuleConfig("Modules", "Circle",
         "Adds Circle and Nerf Gun from TCMG's Basics in Mods and Edits.", true)]
-    public sealed class Module_Circle : RecCharsModule
+    public sealed partial class Module_Circle : RecCharsModule
     {
         protected override void Initialized()
         {
@@ -39,7 +39,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddTexturesToAssetMan("NerfGun/", ["Textures", "Item", "NerfGun"]);
             AddTexturesToAssetMan("CircleTex/", ["Textures", "Npc", "Circle"]);
 
-            AddAudioToAssetMan("CircleAud/", ["Audio", "Circle"]);
+            AddAudioToAssetMan("CircleAud/", ["Audio", "Npc", "Circle"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Circle.json5");
@@ -88,7 +88,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             circle.name = "ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
-            PineDebugNpcIconPatch.icons.Add(CircleNpc.charEnum, AssetMan.Get<Texture2D>("CircleTex/BorderCircle"));
+            //PineDebugNpcIconPatch.icons.Add(CircleNpc.charEnum, AssetMan.Get<Texture2D>("CircleTex/BorderCircle"));
 
             circle.character = CircleNpc.charEnum;
             circle.looker.npc = circle;

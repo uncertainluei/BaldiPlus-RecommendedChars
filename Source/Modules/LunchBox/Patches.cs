@@ -19,8 +19,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
             for (int i = 0; i < ___pickups.Count; i++)
             {
-                if (___pickups[i] == null ||
-                    ___pickups[i].item.itemType != ITM_LunchBox.itemEnum)
+                if (___pickups[i] == null) continue;
+
+                if (___pickups[i].item.itemType == ITM_LunchBox.randomDummyEnum)
+                {
+                    ___pickups[i].item = WeightedItemObject.RandomSelection(ITM_LunchBox.weightedItems);
+                    ___pickups[i].itemSprite.sprite = ___pickups[i].item.itemSpriteLarge;
+                }
+
+                if (___pickups[i].item.itemType != ITM_LunchBox.itemEnum)
                     continue;
 
                 ___pickups[i].price += priceVariations[Random.Range(0,5)];

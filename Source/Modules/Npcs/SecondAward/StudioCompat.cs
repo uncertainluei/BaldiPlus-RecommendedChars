@@ -10,21 +10,21 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
+namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("2nd Award (Editor)")]
-    public sealed class EditorCompat_SecondAward : RecCharsEditorSubModule<Module_SecondAward>
+    public partial class Module_SecondAward : RecCharsModule
     {
-        protected override void Initialized()
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
+        private static void InitializeStudioCompat()
         {
             // Load texture asset
-            AssetMan.Add("EditorSpr/Npc_SecondAward", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Editor", "npc_secondaward.png"));
+            AssetMan.Add("EditorSpr/Npc_SecondAward", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "SecondAward.png"));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "SecondAward.json5");
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_secondaward", ObjMan.Get<SecondAward>("Npc_SecondAward"));

@@ -15,7 +15,7 @@ using System.Linq;
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
 {
     [CaudexModule("Eveyone's Bsodaa (Editor)")]
-    public sealed class EditorCompat_Bsodaa : RecCharsEditorSubModule<Module_Bsodaa>
+    public sealed class EditorCompat_Bsodaa : RecCharsSubModule<Module_Bsodaa>
     {
         protected override void Initialized()
         {

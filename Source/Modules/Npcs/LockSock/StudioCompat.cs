@@ -10,15 +10,15 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
+namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("Door Lock Sock (Editor)")]
-    public sealed class EditorCompat_LockSock : RecCharsEditorSubModule<Module_LockSock>
+    public partial class Module_LockSock : RecCharsModule
     {
-        protected override void Initialized()
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
+        private static void InitializeStudioCompat()
         {
             // Load texture asset
-            AssetMan.Add("EditorSpr/Npc_LockSock", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Editor", "npc_locksock.png"));
+            AssetMan.Add("EditorSpr/Npc_LockSock", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "LockSock.png"));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "LockSock.json5");

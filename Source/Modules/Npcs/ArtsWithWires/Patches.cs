@@ -1,9 +1,8 @@
 ﻿using HarmonyLib;
-using MTM101BaldAPI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
-    static class SwappedDuoPatches
+    static class ArtsWithWiresPatches
     {
         [HarmonyPatch(typeof(ITM_Scissors), "Use")]
         [HarmonyPostfix]

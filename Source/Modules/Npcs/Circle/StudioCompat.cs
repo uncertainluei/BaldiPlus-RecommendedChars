@@ -11,18 +11,16 @@ using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
+namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("TCMGBiMaE Circle (Editor)")]
-    public sealed class EditorCompat_Circle : RecCharsEditorSubModule<Module_Circle>
+    public partial class Module_Circle : RecCharsModule
     {
-        protected override void Initialized()
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
+        private static void InitializeStudioCompat()
         {
             // Load texture assets
-            AddTexturesToAssetMan("EditorTex/Circle/", ["Textures", "Editor", "Circle"]);
-            
-            AssetMan.Add("EditorSpr/Npc_Circle", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Circle/npc_circle"), 1f));
-            AssetMan.Add("EditorSpr/Npc_Circle_Og", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Circle/npc_circle_og"), 1f));
+            AssetMan.Add("EditorSpr/Npc_Circle", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Circle.png"));
+            AssetMan.Add("EditorSpr/Npc_Circle_Og", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Circle_Unnerfed.png"));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "Circle.json5");

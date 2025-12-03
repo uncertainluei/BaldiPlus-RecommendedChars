@@ -10,20 +10,18 @@ using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 using PlusLevelStudio.Editor.Tools;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
+namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("Lunch Box (Editor)")]
-    public sealed class EditorCompat_LunchBox : RecCharsEditorSubModule<Module_LunchBox>
+    public partial class Module_LunchBox : RecCharsModule
     {
-        protected override void Initialized()
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
+        private static void InitializeStudioCompat()
         {
             // Load texture assets
-            AddTexturesToAssetMan("EditorTex/LunchBox/", ["Textures", "Editor", "LunchBox"]);
-            
-            AssetMan.Add("EditorSpr/Item_LunchBox_Random", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/LunchBox/item_lunchbox_random"), 1f));
-            AssetMan.Add("EditorSpr/Item_LunchBox_2", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/LunchBox/item_lunchbox_2"), 1f));
-            AssetMan.Add("EditorSpr/Item_LunchBox_3", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/LunchBox/item_lunchbox_3"), 1f));
-            AssetMan.Add("EditorSpr/Item_LunchBox_4", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/LunchBox/item_lunchbox_4"), 1f));
+            AssetMan.Add("EditorSpr/Item_LunchBox_Random", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_Random.png"));
+            AssetMan.Add("EditorSpr/Item_LunchBox_2", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_2.png"));
+            AssetMan.Add("EditorSpr/Item_LunchBox_3", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_3.png"));
+            AssetMan.Add("EditorSpr/Item_LunchBox_4", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_4.png"));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "LunchBox.json5");
