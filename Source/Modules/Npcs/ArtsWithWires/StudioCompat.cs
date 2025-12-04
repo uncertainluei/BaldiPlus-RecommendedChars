@@ -35,10 +35,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
                 new NPCTool("recchars_artswithwires", AssetMan.Get<Sprite>("EditorSpr/Npc_ArtsWithWires")));
-
-            EditorInterfaceModes.AddToolToCategory(mode, "rooms",
-                new RoomTool("recchars_swapcloset", AssetMan.Get<Sprite>("EditorSpr/Room_SwapCloset")));
-
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
                 new PosterTool("recchars_pri_wires"));
         }
