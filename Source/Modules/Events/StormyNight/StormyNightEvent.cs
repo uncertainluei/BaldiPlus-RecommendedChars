@@ -20,14 +20,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator stormTimer, endTransitionTimer;
 
-        private float lightLevel, darkLightLevel = 0.12f,
-            minBrightLevel = 0.5f, darkBrightLevel = 0.15f;
+        private float lightLevel, darkLightLevel = 0.15f,
+            minBrightLevel = 0.5f, darkBrightLevel = 0.10f;
 
 
         public override void Initialize(EnvironmentController controller, System.Random rng)
         {
             base.Initialize(controller, rng);
-            lightmapModifier = new(UpdateLightMap, -10);
+            lightmapModifier = new(ChangeLightLevel, -10);
             lighting = LightmapModHolder.GetInstance(ec);
             transitionActive = false;
         }
@@ -64,7 +64,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void End()
         {
             base.End();
-
+            endTransitionTimer = EndTransition();
+            StartCoroutine(endTransitionTimer);
         }
 
         private IEnumerator StormTimer()
@@ -85,7 +86,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             yield return new WaitForSecondsEnvironmentTimescale(ec, 0.2f);
 
-            while (true)
+            while (true)    
             {
                 audMan.PlaySingle(audThunder[Random.Range(0,audThunder.Length-1)]);
                 lightLevel = 3f;
@@ -110,37 +111,54 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Shader.SetGlobalTexture("_Skybox", lastSky);
 
-            float sign = Mathf.Sign(lightLevel) * 2f;
+            float sign = Mathf.Sign(lightLevel);
             while (audMan.volumeMultiplier > 0f && Mathf.Abs(lightLevel) < 1f)
             {
-                if (Mathf.Abs(lightLevel) < 0.9f)
+                if (Mathf.Abs(lightLevel) < 1f)
                 {
-                    lightLevel -= sign * Time.deltaTime * ec.EnvironmentTimeScale;
+                    lightLevel += sign * Time.deltaTime * ec.EnvironmentTimeScale;
                     lighting.ForceUpdateLightmap();
 
-                    if (Mathf.Abs(lightLevel) > 0.95f) lightLevel = 1f;  
+                    if (Mathf.Abs(lightLevel) > 0.95f) lightLevel = 1f;
                 }
-                audMan.volumeMultiplier = Mathf.Max(0f, audMan.volumeMultiplier + Time.deltaTime * ec.EnvironmentTimeScale);
+                audMan.volumeMultiplier = Mathf.Max(0f, audMan.volumeMultiplier - Time.deltaTime * ec.EnvironmentTimeScale);
                 audMan.UpdateAudioDeviceVolume();
                 yield return null;
             }
+            audMan.FlushQueue(true);
 
             hasModifier = false;
             lighting.Remove(lightmapModifier);
         }
 
-        private float _level;
-        private void UpdateLightMap(ref Color color)
+        private float _level, _modLevel;
+        private void ChangeLightLevel(ref Color color)
         {
-            _level = Mathf.Max(color.r, color.g, color.b);
-            color *= lightLevel;
-
-            if (_level > minBrightLevel)
+            byte idx = 0;
+            _level = float.MinValue;
+            for (byte i = 0; i < 3; i++)
             {
-                color.r = Mathf.Max(darkBrightLevel, color.r);
-                color.g = Mathf.Max(darkBrightLevel, color.g);
-                color.b = Mathf.Max(darkBrightLevel, color.b);
+                if (color[i] >= _level)
+                {
+                    _level = color[i];
+                    idx = i;
+                }
             }
+
+            _modLevel = _level * lightLevel;
+            if (lightLevel > 1f)
+            {
+                // Try to not wash out the color if possible
+                color *= Mathf.Min(1, _modLevel)/_level;
+                return;
+            }
+            if (_level > minBrightLevel && _modLevel < darkBrightLevel)
+            {
+                color *= darkBrightLevel/_level;
+                return;
+            }
+
+            color *= lightLevel;
         }
     }
 }

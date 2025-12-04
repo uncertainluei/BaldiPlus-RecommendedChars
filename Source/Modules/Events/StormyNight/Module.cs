@@ -10,6 +10,7 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 
 using PlusStudioLevelLoader;
 using PlusLevelStudio;
+using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -26,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("Skybox/NightStandard", AssetLoader.CubemapFromMod(BasePlugin, "Textures", "Environment", "Skybox", "Cubemap_NightStandard.png"));
 
             // Load localization
-            //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "LunchBox.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Event", "StormyNight.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
