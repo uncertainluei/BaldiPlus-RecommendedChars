@@ -7,7 +7,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public class StormyNightEvent : RandomEvent
     {
-        public AudioManager audMan;
+        public AudioManager audMan, rainAudMan;
         public SoundObject audRain;
         public SoundObject[] audThunder;
 
@@ -44,11 +44,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 lastSky = (Cubemap)Shader.GetGlobalTexture("_Skybox");
                 Shader.SetGlobalTexture("_Skybox", nightSkybox);
-                lightLevel = 1f;
 
-                audMan.volumeMultiplier = 0f;
-                audMan.UpdateAudioDeviceVolume();
-                audMan.QueueAudio(audRain);
+                rainAudMan.volumeMultiplier = 0f;
+                rainAudMan.UpdateAudioDeviceVolume();
+                rainAudMan.QueueAudio(audRain);
             }
 
             if (!hasModifier)
@@ -70,7 +69,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator StormTimer()
         {
-            transitionActive = true;
+            /*transitionActive = true;
             while (audMan.volumeMultiplier < 1f && lightLevel > darkLightLevel)
             {
                 if (lightLevel > darkLightLevel)
@@ -78,13 +77,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     lightLevel = Mathf.Max(lightLevel - 0.5f * Time.deltaTime * ec.EnvironmentTimeScale, darkLightLevel);
                     lighting.ForceUpdateLightmap();
                 }
-                audMan.volumeMultiplier = Mathf.Min(1f, audMan.volumeMultiplier + Time.deltaTime * ec.EnvironmentTimeScale);
-                audMan.UpdateAudioDeviceVolume();
+                
                 yield return null;
             }
             transitionActive = false;
 
-            yield return new WaitForSecondsEnvironmentTimescale(ec, 0.2f);
+            yield return new WaitForSecondsEnvironmentTimescale(ec, 0.2f);*/
 
             while (true)    
             {
@@ -93,6 +91,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 transitionActive = true;
                 while (lightLevel > darkLightLevel)
                 {
+                    if (rainAudMan.volumeMultiplier < 1f)
+                    {
+                        rainAudMan.volumeMultiplier = Mathf.Min(1f, rainAudMan.volumeMultiplier + Time.deltaTime * ec.EnvironmentTimeScale);
+                        rainAudMan.UpdateAudioDeviceVolume();
+                    }
+
                     lightLevel = Mathf.Max(lightLevel - 3f * Time.deltaTime * ec.EnvironmentTimeScale, darkLightLevel);
                     lighting.ForceUpdateLightmap();
                     yield return null;
@@ -112,7 +116,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Shader.SetGlobalTexture("_Skybox", lastSky);
 
             float sign = Mathf.Sign(lightLevel);
-            while (audMan.volumeMultiplier > 0f && Mathf.Abs(lightLevel) < 1f)
+            while (rainAudMan.volumeMultiplier > 0f && Mathf.Abs(lightLevel) < 1f)
             {
                 if (Mathf.Abs(lightLevel) < 1f)
                 {
@@ -121,11 +125,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                     if (Mathf.Abs(lightLevel) > 0.95f) lightLevel = 1f;
                 }
-                audMan.volumeMultiplier = Mathf.Max(0f, audMan.volumeMultiplier - Time.deltaTime * ec.EnvironmentTimeScale);
-                audMan.UpdateAudioDeviceVolume();
+                rainAudMan.volumeMultiplier = Mathf.Max(0f, rainAudMan.volumeMultiplier - Time.deltaTime * ec.EnvironmentTimeScale);
+                rainAudMan.UpdateAudioDeviceVolume();
                 yield return null;
             }
-            audMan.FlushQueue(true);
+            rainAudMan.FlushQueue(true);
 
             hasModifier = false;
             lighting.Remove(lightmapModifier);

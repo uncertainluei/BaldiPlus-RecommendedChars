@@ -43,17 +43,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             stormEvent.audMan = stormEvent.gameObject.AddComponent<AudioManager>();
             stormEvent.audMan.audioDevice = stormEvent.gameObject.AddComponent<AudioSource>();
-            stormEvent.audMan.loop = true;
-            stormEvent.audMan.loopOnStart = true;
-            stormEvent.audMan.maintainLoop = true;
+
+            stormEvent.rainAudMan = stormEvent.gameObject.AddComponent<AudioManager>();
+            stormEvent.rainAudMan.audioDevice = stormEvent.gameObject.AddComponent<AudioSource>();
+            stormEvent.rainAudMan.loop = true;
+            stormEvent.rainAudMan.loopOnStart = true;
+            stormEvent.rainAudMan.maintainLoop = true;
 
             stormEvent.audRain = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/StormLoop"), "Sfx_RecChars_StormyNight_RainLoop", SoundType.Effect, Color.white, 0);
             stormEvent.audThunder =
             [
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap1"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white, 0),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap2"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white, 0),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap3"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white, 0),
-                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap4"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white, 0)
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap1"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap2"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap3"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("EvtAud/StormyNight/Thunderclap4"), "Sfx_RecChars_StormyNight_Thunder", SoundType.Effect, Color.white)
             ];
 
             stormEvent.nightSkybox = AssetMan.Get<Cubemap>("Skybox/NightStandard");
