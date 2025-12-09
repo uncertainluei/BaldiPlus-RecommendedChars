@@ -25,6 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
 
             base.Begin();
+            _instance = this;
 
             List<NPC> npcs = new(ec.Npcs);
             npcs.RemoveAll(x => !x || x.spriteRenderer == null || x.spriteRenderer.Length == 0 || !x.spriteRenderer[0] ||
@@ -69,7 +70,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void End()
         {
             base.End();
-
             if (_instance != this)
             {
                 Destroy(gameObject);
@@ -103,7 +103,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public virtual void SwapSprites()
         {
             for (int i = 0; i < Npc.spriteRenderer.Length; i++)
-                if (Npc.spriteRenderer[i].transform.parent == SpriteParent)
+                if (Npc.spriteRenderer[i] && Npc.spriteRenderer[i].transform.parent == SpriteParent)
                     Npc.spriteRenderer[i].transform.SetParent(ToSwap.SpriteParent, false);
         }
 
@@ -111,7 +111,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             enabled = false;
             for (int i = 0; i < Npc.spriteRenderer.Length; i++)
-                if (Npc.spriteRenderer[i].transform.parent == ToSwap.SpriteParent)
+                if (Npc.spriteRenderer[i] && Npc.spriteRenderer[i].transform.parent == ToSwap.SpriteParent)
                     Npc.spriteRenderer[i].transform.SetParent(SpriteParent, false);
         }
 
