@@ -58,7 +58,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Subtitle/Radar color
             secondAward.audMan.subtitleColor = secondAward.motorAudMan.subtitleColor = new(219/255f, 159/255f, 86/255f);
-            secondAward.audMan.overrideSubtitleColor = false;
             CharacterRadarColorPatch.colors.Add(SecondAward.charEnum, secondAward.audMan.subtitleColor);
 
             secondAward.wanderSpeed = 24;
@@ -78,7 +77,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("AwaAud/2A_Lose2"), "Vfx_RecChars_SecAward_Lose2", SoundType.Voice, secondAward.audMan.subtitleColor)
             ];
             secondAward.audHug = secondAward.audRand = [AssetMan.Get<SoundObject>("Sfx/Silence")];
-            secondAward.audBang = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("AwaAud/2A_Stun"), "Sfx_RecChars_SecAward_Stun", SoundType.Voice, Color.white);
+            secondAward.audBang = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("AwaAud/2A_Stun"), "Sfx_RecChars_SecAward_Stun", SoundType.Effect, Color.white);
             secondAward.audBroken = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("AwaAud/2A_Broken"), "Vfx_RecChars_SecAward_Broken", SoundType.Voice, secondAward.audMan.subtitleColor);
 
             // Office Poster

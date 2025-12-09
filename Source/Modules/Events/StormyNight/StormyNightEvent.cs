@@ -138,14 +138,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private float _level, _modLevel;
         private void ChangeLightLevel(ref Color color)
         {
-            byte idx = 0;
             _level = float.MinValue;
             for (byte i = 0; i < 3; i++)
             {
                 if (color[i] >= _level)
                 {
                     _level = color[i];
-                    idx = i;
                 }
             }
 
