@@ -39,7 +39,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Load texture and audio assets
             AddTexturesToAssetMan("DaycareTex/", ["Textures", "Npc", "Daycare"]);
             AddTexturesToAssetMan("DaycareRoom/", ["Textures", "Environment", "Room", "Daycare"]);
-            AddTexturesToAssetMan("DaycarePoster/", ["Textures", "Environment", "Room", "Daycare"]);
+            AddTexturesToAssetMan("DaycarePoster/", ["Textures", "Environment", "Poster", "Daycare"]);
             AddAudioToAssetMan("DaycareAud/", ["Audio", "Npc", "Daycare"]);
 
             // Load localization
