@@ -23,7 +23,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Load audio assets
             AddAudioToAssetMan("EvtAud/StormyNight/", ["Audio", "Event", "StormyNight"]);
-            AssetMan.Add("EvtAud/StormyNightAnnouncement", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_StormyNight.wav"), "Vfx_Baldi_Event_StormyNight", SoundType.Voice, Color.green));
+
+            SoundObject theAnnouncement = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_StormyNight.wav"), "Vfx_Baldi_Event_RecChars_StormyNight_0", SoundType.Voice, Color.green);
+            theAnnouncement.additionalKeys =
+            [
+                new() {key = "Vfx_Baldi_Event_RecChars_StormyNight_1", time = 2.93f},
+                new() {key = "Vfx_Baldi_Event_RecChars_StormyNight_2", time = 5.73f}
+            ];
+            AssetMan.Add("EvtAud/StormyNightAnnouncement", theAnnouncement);
+            
             AssetMan.Add("Skybox/NightStandard", AssetLoader.CubemapFromMod(BasePlugin, "Textures", "Environment", "Skybox", "Cubemap_NightStandard.png"));
 
             // Load localization
@@ -80,9 +88,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Load texture assets
             AssetMan.Add("EditorSpr/Event_StormyNight", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Event", "StormyNight.png"));
-
-            // Load localization
-            //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "LunchBox.json5");
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
