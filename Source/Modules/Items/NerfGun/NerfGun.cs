@@ -1,6 +1,6 @@
 ﻿namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    class ITM_NerfGun : Item
+    public class ITM_NerfGun : Item
     {
         public override bool Use(PlayerManager pm)
         {
