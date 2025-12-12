@@ -31,8 +31,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             EditorInterface.AddNPCVisual("recchars_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed"));
             LevelStudioPlugin.Instance.npcDisplays.Add("recchars_circle_og", LevelStudioPlugin.Instance.npcDisplays["recchars_circle"]);
-
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_nerfgun");
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 
@@ -44,11 +42,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 new ExtNpcTool("recchars_circle_og", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle_Og"),
                     "Ed_Tool_npc_recchars_circle_og_Title", "Ed_Tool_npc_recchars_circle_og_Desc")
             ]);
-            EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_nerfgun"));
-            EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
-                new PosterTool("recchars_pri_circle"),
-                new PosterTool("recchars_nerfgun_hint")
-            ]);
+            EditorInterfaceModes.AddToolToCategory(mode, "posters",
+                new PosterTool("recchars_pri_circle"));
         }
     }
 }

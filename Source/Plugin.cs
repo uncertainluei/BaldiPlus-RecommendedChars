@@ -3,7 +3,7 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 
 using HarmonyLib;
-
+using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.1.1")]
+    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.2")]
     [BepInDependency(LevelLoaderGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -46,8 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal const string ModGuid = "io.github.uncertainluei.baldiplus.recommendedchars";
         internal const string ModName = "Recommended Characters Pack";
 
-        internal static readonly AssetManager AssetMan = new();
-        internal static readonly AssetManager ObjMan = new();
+        internal static readonly AssetManager AssetMan = new(), ObjMan = new();
 
         internal static RecommendedCharsPlugin Plugin { get; private set; }
         internal static ManualLogSource Log { get; private set; }
@@ -59,19 +58,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Log = Logger;
 
             this.SetAssetsDirectory("uncertainluei", "recommendedchars");
-            // Gotta make it clear because MANY people are messing this up. You do not need to be a rocket scientist to properly install this mod.
+            // Basic check in case the assets folder isn't installed correctly
             if (!Directory.Exists(AssetLoader.GetModPath(this)))
             {
-                CaudexLibPlugin.CauseDelayedCrash(Info, new Exception("Subfolder \"uncertainluei/recommendedchars\" was not found in the Modded folder! Make sure you install the mod's files properly!"));
+                CaudexLibPlugin.CauseDelayedCrash(Info, new Exception("Subfolder \"uncertainluei/recommendedchars\" was not found in the Modded folder! If using the BB+ Mod Manager, then download the mod manually!"));
                 return;
             }
 
             // Read the config values and remove disabled modules
             RecommendedCharsConfig.BindConfig(Config);
 
-            // Register base assets
-            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "SaveTags.json5");
-            LoadingEvents.RegisterOnAssetsLoaded(Info, GrabBaseAssets(), LoadingEventOrder.Pre);
+            // Register base/generic assets
+            LoadGenericLocalization();
+            LoadingEvents.RegisterOnAssetsLoaded(Info, RegisterEssentialAssets(), LoadingEventOrder.Pre);
 
             // Register built-in patches
             Hooks = new(ModGuid);
@@ -96,16 +95,38 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 Hooks.PatchAll(type);
         }
 
-        private IEnumerator GrabBaseAssets()
+        private void LoadGenericLocalization()
         {
-            yield return 1;
+            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Items.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Ui.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "SaveTags.json5");
+
+            // I could've made dummy modules for this but I'd rather spare y'all the drama and just do it here
+            if (Chainloader.PluginInfos.ContainsKey(LevelStudioGuid))
+            {
+                CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Events.json5");
+                CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Items.json5");
+                CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Posters.json5");
+            }
+            if (Chainloader.PluginInfos.ContainsKey(AdvancedGuid))
+                CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "AdvancedTips.json5");
+        }
+
+        private IEnumerator RegisterEssentialAssets()
+        {
+            yield return 2;
             yield return "Grabbing base assets";
+            
             // Sprite materials
             Material[] materials = [.. Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0)];
             AssetMan.Add("BillboardMaterial", materials.First(x => x.name == "SpriteStandard_Billboard"));
             AssetMan.Add("NoBillboardMaterial", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
+            
             // Sound objects
             AssetMan.Add("Sfx/Silence", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Silence" && x.GetInstanceID() >= 0));
+
+            yield return "Loading generic sounds";
+            AssetMan.Add("Sfx/FoodSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
         }
     }
 

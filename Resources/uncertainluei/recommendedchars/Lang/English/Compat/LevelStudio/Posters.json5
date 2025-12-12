@@ -1,0 +1,48 @@
+{
+    // Office posters
+    "Ed_Poster_Title_recchars_pri_wires": "Arts w. Wires's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_wires": "Arts with Wires's poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_blueguy": "Blue, Guy's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_blueguy": "Blue, Guy's poster in the office.",
+
+    "Ed_Poster_Title_recchars_pri_bsodaa": "Bsodaa's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_bsodaa": "Eveyone's Bsodaa's poster in the office.\n(It doesn't make sense!)",
+
+	"Ed_Poster_Title_recchars_pri_bsodaahelper": "Bsodaa Helper's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_bsodaahelper": "Bsodaa Helper's poster in the office.",
+
+    "Ed_Poster_Title_recchars_pri_circle": "Circle's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_circle": "Circle's absolutely uninformative poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_daycare": "Mr. Daycare's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_daycare": "Mr. Daycare's poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_gifter": "Gifter's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_gifter": "Gifter's poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_gbully": "Gotta Bully's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_gbully": "Gotta Bully's poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_locksock": "Locks n' Bolts's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_locksock": "Locks and Bolts's poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_secaward": "2nd Award's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_secaward": "Second Award's poster in the office.\n\"Second\", \"2nd\" or <i>\"2st\"</i>?\n Make up your mind, Programmer!",
+
+    // Item hints (if you can call them that)
+    "Ed_Poster_Title_recchars_nerfgun_hint": "Nerf Gun Hint",
+	"Ed_Poster_Desc_recchars_nerfgun_hint": "More of an advertisement than anything.",
+
+	// Daycare (Room) posters
+	"Ed_Poster_Title_recchars_daycareinfo": "Daycare Information",
+	"Ed_Poster_Desc_recchars_daycareinfo": "Half-outdated information regarding the Daycare.",
+	"Ed_Poster_Title_recchars_daycarerules": "Daycare Rules",
+	"Ed_Poster_Desc_recchars_daycarerules": "Remember to also follow these (when Mr. Daycare's active)!",
+	"Ed_Poster_Title_recchars_daycareclock": "Daycare Clock",
+	"Ed_Poster_Desc_recchars_daycareclock": "Tic, toc!\nTic, toc!",
+
+	// Swap Closet posters
+    "Ed_Poster_Title_recchars_sub2tapliasmy": "\"Sub to Tapliasmy\" Board",
+	"Ed_Poster_Desc_recchars_sub2tapliasmy": "Shameless self promotion."
+}

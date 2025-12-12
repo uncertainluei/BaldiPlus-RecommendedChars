@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using MTM101BaldAPI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {

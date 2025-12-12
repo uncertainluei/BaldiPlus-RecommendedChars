@@ -1,0 +1,15 @@
+{
+    // Bsodaa Helper
+    "Ed_Tool_object_recchars_bsodaahelper_Title": "Bsodaa Helper",
+	"Ed_Tool_object_recchars_bsodaahelper_Desc": "Can be used by faculty members to refill their Diet BSODA. Can be sprayed by a regular BSODA for 2 extra sodas.",
+
+	"Ed_Tool_object_recchars_bsodaahelper_diet_Title": "Bsodaa Helper (Diet)",
+	"Ed_Tool_object_recchars_bsodaahelper_diet_Desc": "Ditto, but will instead drop two Diet BSODAs if sprayed.",
+
+	// Bsodaa's Room
+	"Ed_Tool_room_recchars_bsodaaroom_Title": "Bsodaa's Room",
+	"Ed_Tool_room_recchars_bsodaaroom_Desc": "A defacto BSODA supply room, with the Bsodaa Helper supplying said soda. Supply is also determined by its available vending machines.",
+
+	"Ed_Tool_light_recchars_bsodaa_Title": "Bsodaa Flourescent Light",
+	"Ed_Tool_light_recchars_bsodaa_Desc": "The regular flourescent light but with a BSODA coat of paint.",
+}

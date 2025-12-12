@@ -1,0 +1,11 @@
+{
+    // Gifter
+    "Ed_Tool_npc_recchars_gifttanynt_Title": "Gifter (Original)",
+	"Ed_Tool_npc_recchars_gifttanynt_Desc": "Gifter with the AI seen in LOLdi's Public Alpha (originally Gifttany from BBRMS).",
+
+	"Ed_Tool_object_recchars_gift_Title": "Gifter's Gift",
+	"Ed_Tool_object_recchars_gift_Desc": "A gift that can be opened by anyone. Contains a random item.",
+
+	"Ed_Tool_object_recchars_giftbomb_Title": "Gifter's Gift (Bomb)",
+	"Ed_Tool_object_recchars_giftbomb_Desc": "A gift that contains a bomb. Go figure!"
+}

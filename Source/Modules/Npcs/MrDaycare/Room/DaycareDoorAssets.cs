@@ -15,7 +15,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static StandardDoorMats locked;
 
         internal static Material mask;
-        private static readonly Dictionary<int, StandardDoorMats> materials = new Dictionary<int, StandardDoorMats>();
+        private static readonly Dictionary<int, StandardDoorMats> materials = [];
 
         private static PosterObject dummyPoster;
 
@@ -28,9 +28,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 dummyPoster = PosterObject.CreateInstance<PosterObject>();
                 dummyPoster.name = "MrDaycare_DummyPoster";
-                dummyPoster.textData = new PosterTextData[]
-                {
-                    new PosterTextData()
+                dummyPoster.textData =
+                [
+                    new()
                     {
                         alignment = TextAlignmentOptions.Center,
                         color = Color.white,
@@ -38,20 +38,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         font = BaldiFonts.ComicSans36.FontAsset(),
                         position = new IntVector2(32, 64)
                     }
-                };
+                ];
             }
 
             StandardDoorMats material = GameObject.Instantiate(template);
-            material.name = template.name + "_" + num;
+            material.name = template.name+"_"+num;
 
             dummyPoster.textData[0].textKey = num.ToString();
 
             material.shut = new Material(template.shut);
-            material.shut.name = template.shut.name + "_" + num;
+            material.shut.name = template.shut.name+"_"+num;
 
             dummyPoster.baseTexture = (Texture2D)template.shut.mainTexture;
             material.shut.mainTexture = BaseGameManager.Instance.ec.TextTextureGenerator.GenerateTextTexture(dummyPoster);
-            material.shut.mainTexture.name = template.shut.name + "_" + num;
+            material.shut.mainTexture.name = template.shut.name+"_"+num;
 
             materials.Add(num, material);
             return material;

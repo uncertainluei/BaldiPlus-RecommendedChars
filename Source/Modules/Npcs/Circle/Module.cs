@@ -1,18 +1,12 @@
-﻿using BepInEx.Configuration;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.Components;
-using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
 using BBPlusAnimations.Components;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
@@ -21,7 +15,6 @@ using UnityEngine;
 using BaldisBasicsPlusAdvanced.API;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
-using UncertainLuei.CaudexLib.Registers;
 using PlusStudioLevelLoader;
 using UncertainLuei.CaudexLib.Util;
 using MTM101BaldAPI.Components.Animation;
@@ -36,9 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("NerfGun/", ["Textures", "Item", "NerfGun"]);
             AddTexturesToAssetMan("CircleTex/", ["Textures", "Npc", "Circle"]);
-
             AddAudioToAssetMan("CircleAud/", ["Audio", "Npc", "Circle"]);
 
             // Load localization
@@ -50,38 +41,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
-        private void Load()
-        {
-            LoadNerfGun();
-            LoadCircle();
-
-            CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddItemsToLevel);
-        }
-
-        private void LoadNerfGun()
-        {
-            ItemBuilder nerfGunBuilder = new ItemBuilder(Plugin)
-            .SetNameAndDescription("Itm_RecChars_NerfGun", "Desc_RecChars_NerfGun")
-            .SetEnum("RecChars_NerfGun")
-            .SetMeta(ItemFlags.MultipleUse, ["adv_normal", "adv_sm_potential_reward"])
-            .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NerfGun/NerfGun_Large"), 50f))
-            .SetShopPrice(450)
-            .SetGeneratorCost(45)
-            .SetItemComponent<ITM_NerfGun>();
-
-            if (!RecommendedCharsConfig.nerfCircle.Value)
-                nerfGunBuilder.SetShopPrice(500).SetGeneratorCost(75);
-
-            ItemObject nerfGun = nerfGunBuilder.BuildAsMulti(2);
-            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", nerfGun);
-            ObjMan.Add("Itm_NerfGun", nerfGun);
-
-            PosterObject nerfGunHint = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGun/hnt_nerfgun"), []);
-            nerfGunHint.name = "NerfGunPoster";
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_nerfgun_hint", nerfGunHint);
-            ObjMan.Add("Pst_NerfGunHint", nerfGunHint);
-        }
-
         private void LoadCircle()
         {
             CircleNpc circle = SwapComponentSimple<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
@@ -117,7 +76,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("CircleAud/Circle_Random2"), "Vfx_RecChars_Circle_Random", SoundType.Voice, circle.audMan.subtitleColor)
             ];
 
-            // The default speed was 500 but this should flow better in-game
             circle.normSpeed = 30f;
             circle.runSpeed = 50f;
             circle.initialCooldown = 25f;
@@ -155,6 +113,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CircleNpc unnerfedCircle = GameObject.Instantiate(circle, MTM101BaldiDevAPI.prefabTransform);
             unnerfedCircle.name = "ShapeWorld Circle Unnerfed";
 
+            // The original speed in TCMG's Basics was 500 but this should flow better in-game
             unnerfedCircle.normSpeed = 90f;
             unnerfedCircle.runSpeed = 90f;
             unnerfedCircle.sadSpeed = 90f;
@@ -216,7 +175,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 AddToNpcs(scene, 100, true);
                 return;
             }
-
             if (title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
@@ -235,7 +193,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         AddToNpcs(scene, 100);
                         break;
                 }
-                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm_NerfGun"), weight = 50 });
             }
         }
 
@@ -248,24 +205,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<CircleNpc>("Npc_Circle"));
                 scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
             }
-        }
-
-        private void AddItemsToLevel(LevelGenerator gen)
-        {
-            if (gen.scene == null) return;
-            if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == CircleNpc.charEnum) == null) return;
-
-            SceneObjectMetadata meta = SceneObjectMetaStorage.Instance.Get(gen.scene);
-            if (meta == null || !meta.tags.Contains("endless") || gen.scene.levelTitle != "END")
-            {
-                gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst_NerfGunHint").Weighted(75));
-                gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_NerfGun").Weighted(25));
-                return;
-            }
-
-            gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst_NerfGunHint").Weighted(100));
-            gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_NerfGun").Weighted(50));
-            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm_NerfGun"), weight = 50 });
         }
     }
 }

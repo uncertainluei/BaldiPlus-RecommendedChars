@@ -1,0 +1,26 @@
+{
+    // BSODA Mini and Diet BSODA Mini
+    "Ed_Tool_item_recchars_smallbsoda_Desc": "Pushes away entities. Lasts 18 seconds and travels ~13% slower compared to its original size.",
+	"Ed_Tool_item_recchars_smalldietbsoda_Desc": "Pushes away entities. Lasts 1.8 seconds and travels ~13% slower compared to its original size.",
+
+	// Door Key
+    "Ed_Tool_item_recchars_doorkey_Desc": "Can be used to open locked standard doors and Shape Locks.\nCan be used 3 times.",
+
+    // Lunch Box
+    "Ed_Tool_item_recchars_lunchbox_2_Title": "Lunch Box (2)",
+	"Ed_Tool_item_recchars_lunchbox_3_Title": "Lunch Box (3)",
+	"Ed_Tool_item_recchars_lunchbox_4_Title": "Lunch Box (4)",
+
+	"Ed_Tool_item_recchars_lunchbox_2_Desc": "Contains <b>two</b> random food items.",
+	"Ed_Tool_item_recchars_lunchbox_3_Desc": "Contains <b>three</b> random food items.",
+	"Ed_Tool_item_recchars_lunchbox_4_Desc": "Contains <b>four</b> random food items.",
+
+	"Ed_Tool_item_recchars_lunchbox_random_Title": "Lunch Box (Random)",
+	"Ed_Tool_item_recchars_lunchbox_random_Desc": "Contains random amounts of random food items.\nSpecifically for placement in Cafeteria room layouts.",
+
+	// Nerf Gun
+    "Ed_Tool_item_recchars_nerfgun_Desc": "Ends Circle's jump rope game prematurely.\nCan be used 2 times.",
+
+    // Pie
+    "Ed_Tool_item_recchars_pie_Desc": "Throw it at any NPC to temporarily obstruct their vision."
+}

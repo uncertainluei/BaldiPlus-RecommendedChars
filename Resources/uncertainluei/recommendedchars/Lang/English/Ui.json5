@@ -1,0 +1,9 @@
+{
+    // Circle's jump rope game
+    "Hud_RecChars_CircleRope_Start": "LETS PLAY!",
+	"Hud_RecChars_CircleRope_Continue": "SHAPE WORLD",
+	"Hud_RecChars_CircleRope_Fail": "OOPS!",
+
+    // Arts with Wires grabbing 'game'
+    "Hud_RecChars_WiresInstructions": "Oh noes! You've been grabbed!\nMash {0}!"
+}

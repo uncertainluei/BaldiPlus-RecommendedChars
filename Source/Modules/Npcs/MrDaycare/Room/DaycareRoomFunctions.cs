@@ -65,11 +65,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             room.ec.offices.Remove(room);
         }
 
-        private void RemoveDoorAnimComponent(StandardDoor door)
-        {
-            DestroyImmediate(door.GetComponent<BBPlusAnimations.Components.StandardDoorExtraMaterials>());
-        }
-
         private bool _active;
         public override void OnPlayerExit(PlayerManager player)
         {

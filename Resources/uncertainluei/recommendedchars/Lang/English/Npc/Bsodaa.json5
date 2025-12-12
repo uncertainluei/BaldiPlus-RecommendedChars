@@ -1,0 +1,19 @@
+{
+	// Eveyone's Bsodaa
+	"PST_PRI_RecChars_Bsodaa1": "Eveyone's Bsodaa",
+	"PST_PRI_RecChars_Bsodaa2": "The inventor of BSODA himself!\nWatch out, or he'll spray you with it!\nHe might not talk, but his actions speak louder!",
+
+	"Vfx_RecChars_Bsodaa_Happy1": "What fun!",
+	"Vfx_RecChars_Bsodaa_Happy2": "WOOOOOAAAAAH!",
+	"Vfx_RecChars_Bsodaa_Thanks": "Thanks!",
+
+	"Sfx_RecChars_Bsodaa_Charging": "*CHARGING SODA*",
+
+	// Bsodaa Helper
+	"PST_PRI_RecChars_BsodaaHelper1": "Bsodaa Helper",
+	"PST_PRI_RecChars_BsodaaHelper2": "Eveyone's Bsodaa's greatest pal! She makes sure he always has soda on him!\n<b>DON'T steal from her!</b>",
+
+	"Vfx_RecChars_BsodaaHelper_Oops": "OOPS!",
+	"Vfx_RecChars_BsodaaHelper_Laugh": "HEHEHEHEHEE!",
+	"Vfx_RecChars_BsodaaHelper_Sad": "OH! THAT MAKES ME SAD!"
+}

@@ -1,0 +1,21 @@
+{
+	// Mr. Daycare
+	"PST_PRI_RecChars_Daycare1": "Mr. Daycare",
+	"PST_PRI_RecChars_Daycare2": "\"Hey there! I'm Mr. Daycare!\"\nMr. Daycare is the man who runs the daycare! He's very good at keeping things in order!",
+  
+	"Vfx_RecChars_Daycare_Timeout": "You'll be sitting in the timeout corner for",
+	"Vfx_RecChars_Daycare_Seconds": "seconds.",
+	"Vfx_RecChars_Daycare_30": "30",
+	"Vfx_RecChars_Daycare_60": "60",
+	"Vfx_RecChars_Daycare_100": "100",
+	"Vfx_RecChars_Daycare_200": "200",
+	"Vfx_RecChars_Daycare_500": "500",
+	"Vfx_RecChars_Daycare_3161": "3161",
+	
+	"Vfx_RecChars_Daycare_NoRunning": "Do not run inside the hallway!",
+	"Vfx_RecChars_Daycare_NoDrinking": "Do not consume beverages inside the hallway!",
+	"Vfx_RecChars_Daycare_NoEating": "Do not eat food inside the hallway!",
+	"Vfx_RecChars_Daycare_NoThrowing": "Do not throw things at faculty members inside the hallway!",
+	"Vfx_RecChars_Daycare_NoEscaping": "Do not leave the timeout corner without my permission inside the hallway!",
+	"Vfx_RecChars_Daycare_NoLoudSound": "Do not make loud sounds in the hallway!"
+}

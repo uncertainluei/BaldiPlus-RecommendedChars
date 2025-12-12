@@ -10,27 +10,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         internal static Character charEnum = (Character)(-1);
 
-        private readonly int[] lockTimes =
-        [
-            30,
-            60,
-            100,
-            200,
-            500,
-            3161
-        ];
+        private readonly int[] lockTimes = [30, 60, 100, 200, 500, 3161];
 
         public int maxTimeoutLevel = -1;
         public float ruleSensitivityMul = 1.5f;
 
-        public readonly string[] rules =
-        [
-            "Running",
-            "Drinking",
-            "Eating",
-            "Throwing",
-            "LoudSound"
-        ];
+        public readonly string[] rules = ["Running", "Drinking", "Eating", "Throwing", "LoudSound"];
 
         public static Dictionary<string, SoundObject> audRuleBreaks = [];
         public SoundObject audSeconds;
@@ -175,9 +160,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         public override void PlayerInSight(PlayerManager player)
-        {
-            daycare.ObservePlayer(player);
-        }
+            => daycare.ObservePlayer(player);
 
         public override void PlayerLost(PlayerManager player)
         {
@@ -192,9 +175,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         public override void DoorHit(StandardDoor door)
-        {
-            door.OpenTimedWithKey(door.DefaultTime, false);
-        }
+            => door.OpenTimedWithKey(door.DefaultTime, false);
     }
 
     public class MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer(daycare, player)
@@ -211,9 +192,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private readonly MrDaycare daycare = daycare;
 
         public override void Resume()
-        {
-            daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
-        }
+            => daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
 
         public override void OnStateTriggerStay(Collider other, bool canCollide)
         {
@@ -225,9 +204,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         public override void DestinationEmpty()
-        {
-            daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
-        }
+            => daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
     }
 
     public class MrDaycare_Timeout(MrDaycare daycare) : Principal_Detention(daycare, 0)
