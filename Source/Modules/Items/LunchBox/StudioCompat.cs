@@ -22,9 +22,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("EditorSpr/Item_LunchBox_2", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_2.png"));
             AssetMan.Add("EditorSpr/Item_LunchBox_3", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_3.png"));
             AssetMan.Add("EditorSpr/Item_LunchBox_4", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_4.png"));
-
-            // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "LunchBox.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
