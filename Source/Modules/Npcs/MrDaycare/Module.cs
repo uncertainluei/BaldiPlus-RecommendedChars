@@ -40,7 +40,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddTexturesToAssetMan("DaycareTex/", ["Textures", "Npc", "Daycare"]);
             AddTexturesToAssetMan("DaycareRoom/", ["Textures", "Environment", "Room", "Daycare"]);
             AddTexturesToAssetMan("DaycarePoster/", ["Textures", "Environment", "Room", "Daycare"]);
-            AddAudioToAssetMan("DaycareAud/", ["Audio", "Daycare"]);
+            AddAudioToAssetMan("DaycareAud/", ["Audio", "Npc", "Daycare"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "MrDaycare.json5");
