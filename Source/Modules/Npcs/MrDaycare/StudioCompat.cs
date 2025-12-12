@@ -13,7 +13,7 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
+namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public partial class Module_MrDaycare : RecCharsModule
     {

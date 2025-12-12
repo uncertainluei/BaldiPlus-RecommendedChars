@@ -32,7 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Mr. Daycare"), CaudexModuleSaveTag("Mdl_MrDaycare")]
     [CaudexModuleConfig("Modules", "MrDaycare",
         "Adds Mr. Daycare from Dave's House, as well the Pie and Door Key items.", true)]
-    public sealed class Module_MrDaycare : RecCharsModule
+    public sealed partial class Module_MrDaycare : RecCharsModule
     {
         protected override void Initialized()
         {
