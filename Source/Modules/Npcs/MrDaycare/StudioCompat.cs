@@ -20,20 +20,21 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
         private static void InitializeStudioCompat()
         {
-            // Load texture assets
-            AddTexturesToAssetMan("EditorTex/Daycare/", ["Textures", "Editor", "Daycare"]);
+            // Load texture assets            
+            AssetMan.Add("EditorSpr/Npc_MrDaycare", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "MrDaycare.png"));
+            AssetMan.Add("EditorSpr/Npc_MrDaycare_Unnerfed", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "MrDaycare_Unnerfed.png"));
+
+            AssetMan.Add("EditorSpr/Room_Daycare", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Room", "Daycare.png"));
+            AssetMan.Add("EditorSpr/Door_BookGate", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Door", "BookGate.png")); 
+            AssetMan.Add("EditorSpr/Window_Daycare", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Door", "Window_Daycare.png"));
+            AssetMan.Add("EditorSpr/Light_Daycare", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Light", "Daycare.png"));
+
+            AssetMan.Add("EditorSpr/Poster_DaycareInfo", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Poster", "DaycareInfo.png"));
+            AssetMan.Add("EditorSpr/Poster_DaycareRules", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Poster", "DaycareRules.png"));
+            AssetMan.Add("EditorSpr/Poster_DaycareClock", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Poster", "DaycareClock.png"));
             
-            AssetMan.Add("EditorSpr/Npc_MrDaycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/npc_mrdaycare"), 1f));
-            AssetMan.Add("EditorSpr/Npc_MrDaycare_Og", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/npc_mrdaycare_og"), 1f));
-
-            AssetMan.Add("EditorSpr/Room_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/room_daycare"), 1f));
-            AssetMan.Add("EditorSpr/Window_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/window_daycare"), 1f));
-            AssetMan.Add("EditorSpr/Light_Daycare", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/light_daycare"), 1f));
-            AssetMan.Add("EditorSpr/Poster_DaycareClock", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/poster_daycareclock"), 1f));
-            AssetMan.Add("EditorSpr/Door_BookGate", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("EditorTex/Daycare/door_bookgate"), 1f));
-
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "MrDaycare.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "MrDaycare.json5");
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
@@ -47,8 +48,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"]);
 
             EditorInterface.AddDoor<DoorDisplay>("recchars_bookgate", DoorIngameStatus.AlwaysDoor, DaycareDoorAssets.mask, [DaycareDoorAssets.template.shut, DaycareDoorAssets.template.shut]);
-
-            LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_pie", "recchars_doorkey"]);
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 
@@ -60,7 +59,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
             EditorInterfaceModes.AddToolsToCategory(mode, "npcs", [
                 new ExtRoomNpcTool("recchars_mrdaycare", AssetMan.Get<Sprite>("EditorSpr/Npc_MrDaycare"),
                     daycareRoomIds),
-                new ExtRoomNpcTool("recchars_mrdaycare_og", AssetMan.Get<Sprite>("EditorSpr/Npc_MrDaycare_Og"),
+                new ExtRoomNpcTool("recchars_mrdaycare_og", AssetMan.Get<Sprite>("EditorSpr/Npc_MrDaycare_Unnerfed"),
                     "Ed_Tool_npc_recchars_daycare_og_Title", "Ed_Tool_npc_recchars_daycare_og_Desc", daycareRoomIds)
             ]);
 
@@ -74,14 +73,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat
                 new LightTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Light_Daycare")));
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
                 new PosterTool("recchars_pri_daycare"),
-                new PosterTool("recchars_daycareinfo"),
-                new PosterTool("recchars_daycarerules"),
+                new PosterTool("recchars_daycareinfo", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareInfo")),
+                new PosterTool("recchars_daycarerules", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareRules")),
                 new PosterTool("recchars_daycareclock", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareClock"))
-            ]);
-
-            EditorInterfaceModes.AddToolsToCategory(mode, "items", [
-                new ItemTool("recchars_pie"),
-                new ItemTool("recchars_doorkey"),
             ]);
         }
     }

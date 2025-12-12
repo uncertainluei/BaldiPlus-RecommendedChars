@@ -43,7 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddAudioToAssetMan("DaycareAud/", ["Audio", "Daycare"]);
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "MrDaycare.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "MrDaycare.json5");
 
             // Load patches
             Hooks.PatchAll(typeof(MrDaycarePatches));
@@ -153,7 +153,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.ruleSensitivityMul = 1;
             ObjMan.Add("Npc_MrDaycare_Nerfed", daycare);
 
-            PineDebugNpcIconPatch.icons.Add(daycare.Character, AssetMan.Get<Texture2D>("DaycareTex/BorderDaycare"));
+            //PineDebugNpcIconPatch.icons.Add(daycare.Character, AssetMan.Get<Texture2D>("DaycareTex/BorderDaycare"));
             CharacterRadarColorPatch.colors.Add(daycare.Character, daycare.audMan.subtitleColor);
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);
@@ -281,7 +281,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void FragileWindowsCompat()
         {
             // Dave Windowlet >u<
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(BasePlugin, "Textures", "Npc", "Compat", "DaveWindowlet.png"));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2,2,256,Vector2.one/2f,AssetLoader.TextureFromMod(BasePlugin, "Textures", "Compat", "FragileWindows", "DaveWindowlet.png"));
             FragileWindowsCompatHelper.AddWindowlet<DaveWindowlet>("Dave", sprites[0], sprites[3], new(81/255f, 38/255f, 10/255f), 3);
             DaveWindowlet.sprLo = sprites[1];
             DaveWindowlet.sprHi = sprites[2];

@@ -33,7 +33,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddAudioToAssetMan("CircleAud/", ["Audio", "Npc", "Circle"]);
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Circle.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Circle.json5");
 
             // Load patches
             Hooks.PatchAll(typeof(CirclePatches));

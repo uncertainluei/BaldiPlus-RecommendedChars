@@ -47,7 +47,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddAudioToAssetMan("BsodaaAud/", ["Audio", "Bsodaa"]);
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Bsodaa.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Bsodaa.json5");
 
             // Load patches
             Hooks.PatchAll(typeof(BsodaaSavePatches));

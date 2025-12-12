@@ -17,11 +17,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
         private static void InitializeStudioCompat()
         {
-            // Load texture asset
+            // Load icon asset
             AssetMan.Add("EditorSpr/Npc_ArtsWithWires", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "ArtsWithWires.png"));
-            
-            // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "SwappedDuo.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

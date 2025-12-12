@@ -31,7 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add<Fog>("Fog/BlueGuyFog", new() { color = Color.blue, maxDist = 15, startDist = 5, strength = 1, priority = 16});
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Loldi.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "BlueGuy.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

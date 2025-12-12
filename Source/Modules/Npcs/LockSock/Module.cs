@@ -28,7 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddTexturesToAssetMan("LSockTex/", ["Textures", "Npc", "LockSock"]);
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "LockSock.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "LockSock.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

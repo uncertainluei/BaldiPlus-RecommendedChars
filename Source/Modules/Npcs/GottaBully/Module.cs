@@ -42,7 +42,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddAudioToAssetMan("GottaBullyAud/", ["Audio", "Npc", "GottaBully"]);
             
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "SwappedDuo.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "SwappedDuo.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

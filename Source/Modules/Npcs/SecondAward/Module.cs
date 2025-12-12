@@ -29,7 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("StatusSpr/ElectricalStun", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("AwaTex/2AwStunIcon"), 25));
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "SecondAward.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "SecondAward.json5");
 
             // Load patches
             Hooks.PatchAll(typeof(SecondAwardPatches));

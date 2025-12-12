@@ -23,7 +23,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("EditorSpr/Npc_Circle_Og", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Circle_Unnerfed.png"));
 
             // Load localization
-            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "Circle.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Circle.json5");
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
