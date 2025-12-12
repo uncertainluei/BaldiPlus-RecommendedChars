@@ -85,7 +85,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Editor", "LunchBox.json5");
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.eventSprites.Add("recchars_stormynight", AssetMan.Get<Sprite>("EditorSpr/Event_StormyNight"));
