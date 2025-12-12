@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    class CircleNpc : Playtime
+    public class CircleNpc : Playtime
     {
         public SpriteRenderer sprite;
         public Sprite sprNormal;
@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static Character charEnum = (Character)(-1);
     }
 
-    class CircleJumprope : Jumprope
+    public class CircleJumprope : Jumprope
     {
         private const string startKey = "Hud_RecChars_CircleRope_Start";
         private const string continueKey = "Hud_RecChars_CircleRope_Continue";
