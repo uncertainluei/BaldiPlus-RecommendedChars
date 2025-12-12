@@ -130,7 +130,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
     }
 
-    public class RecommendedCharsSaveGameIO(PluginInfo info) : ModdedSaveGameIOBinary
+    internal class RecommendedCharsSaveGameIO(PluginInfo info) : ModdedSaveGameIOBinary
     {
         private readonly PluginInfo info = info;
         public override PluginInfo pluginInfo => info;
