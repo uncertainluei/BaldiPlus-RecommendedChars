@@ -16,6 +16,8 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 using PlusStudioLevelLoader;
 using UncertainLuei.CaudexLib.Util;
 using MTM101BaldAPI.Components.Animation;
+using System;
+using AsmResolver.DotNet;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -84,7 +86,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             circle.poster.name = "CirclePoster";
 
             circle.sprite = circle.spriteRenderer[0];
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 100f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CircleTex/CircleSprites"));
+
+            DateTime today = DateTime.Today;
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 100f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>
+                (today.Month == 12 && today.Day >= 20 ? "CircleTex/SantaCircleSprites" : "CircleTex/CircleSprites"));
+             
             circle.sprNormal = sprites[0];
             circle.sprite.sprite = circle.sprNormal;
 
