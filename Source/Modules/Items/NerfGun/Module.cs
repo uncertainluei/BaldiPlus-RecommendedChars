@@ -21,9 +21,10 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Nerf Gun"), CaudexModuleSaveTag("Mdl_NerfGun")]
+    [CaudexModulePriority(-1)]
     [CaudexModuleConfig("Modules.Items", "NerfGun",
         "A 'toy' water gun that prematurely ends Circle's game.", true)]
-    public sealed partial class Module_Item_NerfGun : RecCharsSubModule<Module_Circle>
+    public sealed partial class Module_Item_NerfGun : RecCharsSubModule<Module_Npc_Circle>
     {
         protected override void Initialized()
         {

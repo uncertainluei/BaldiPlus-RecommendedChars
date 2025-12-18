@@ -7,8 +7,6 @@ using MTM101BaldAPI.UI;
 
 using BBPlusAnimations.Components;
 
-using System.Linq;
-
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
@@ -24,7 +22,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("TCMGBiMaE Circle"), CaudexModuleSaveTag("Mdl_Circle")]
     [CaudexModuleConfig("Modules", "Circle",
         "Adds Circle and Nerf Gun from TCMG's Basics in Mods and Edits.", true)]
-    public sealed partial class Module_Circle : RecCharsModule
+    public sealed partial class Module_Npc_Circle : RecCharsModule
     {
         protected override void Initialized()
         {

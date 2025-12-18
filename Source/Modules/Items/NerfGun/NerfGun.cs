@@ -17,9 +17,8 @@
                     pm.jumpropes[i].End(false);
                 }
             }
-            if (fail) return false;
-
-            return true;
+            
+            return fail;
         }
     }
 }

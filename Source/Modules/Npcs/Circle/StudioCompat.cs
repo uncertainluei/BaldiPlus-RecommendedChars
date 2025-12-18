@@ -13,7 +13,7 @@ using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public partial class Module_Circle : RecCharsModule
+    public partial class Module_Npc_Circle : RecCharsModule
     {
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
         private static void InitializeStudioCompat()

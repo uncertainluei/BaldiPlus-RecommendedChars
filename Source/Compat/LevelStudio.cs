@@ -50,4 +50,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
         }
     }
     
+    internal class ExtRoomObjectTool(string id, Sprite spr, params string[] rooms) : ObjectToolNoRotation(id, spr, 5f)
+    {
+        private string[] allowedRoomIds = rooms;
+
+        public override bool ValidLocation(IntVector2 pos)
+        {
+            if (!base.ValidLocation(pos)) return false;
+            return allowedRoomIds.Contains(EditorController.Instance.levelData.RoomFromPos(pos, forEditor: true).roomType);
+        }
+    }
 }

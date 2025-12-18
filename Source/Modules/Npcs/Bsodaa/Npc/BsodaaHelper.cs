@@ -151,8 +151,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         // Instantly despawn upon spawning
         public override void Initialize()
-        {
-            Despawn();
-        }
+            => Despawn();
     }
 }

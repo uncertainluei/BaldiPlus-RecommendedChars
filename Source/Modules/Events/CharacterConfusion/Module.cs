@@ -10,8 +10,6 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 
 using PlusStudioLevelLoader;
 using PlusLevelStudio;
-using UncertainLuei.CaudexLib.Util;
-using UnityEngine.TextCore;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -23,7 +21,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load audio assets
-            AssetMan.Add("EvtAud/CharConfusionAnnouncement", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_CharacterConfusion.wav"), "Event_CharacterConfusion", SoundType.Voice, Color.green));
+            AssetMan.Add("EvtAud/CharConfusionAnnouncement", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_CharacterConfusion.wav"), "Vfx_Baldi_Event_RecChars_CharacterConfusion", SoundType.Voice, Color.green));
 
             // Load localization
             //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Event", "CharacterConfusion.json5");
