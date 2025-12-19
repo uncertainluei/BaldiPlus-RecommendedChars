@@ -22,7 +22,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load sprite and audio assets
-            AssetMan.Add("EvtAud/FoodFight", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_FoodFight.wav"), "Vfx_Baldi_Event_RecChars_FoodFight", SoundType.Voice, Color.green));
+            AssetMan.Add("EvtAud/FoodFightAnnouncement", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_FoodFight.wav"), "Vfx_Baldi_Event_RecChars_FoodFight", SoundType.Voice, Color.green));
 
             // Load localization
             //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Event", "FoodFight.json5");

@@ -23,10 +23,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load sprite and audio assets
-            AssetMan.Add("EvtAud/Crawlspace", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_Crawlspace.wav"), "Vfx_Baldi_Event_RecChars_Crawlspace", SoundType.Voice, Color.green));
+            AssetMan.Add("EvtAud/CrawlspaceAnnouncement", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_Crawlspace.wav"), "Vfx_Baldi_Event_RecChars_Crawlspace", SoundType.Voice, Color.green));
 
             // Load localization
             //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Event", "Crawlspace.json5");
+
+            Hooks.PatchAll(typeof(CrawlspaceHeightPatch));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -50,7 +52,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             crawlspaceEvent.roomPrefab.acceptsExits = false;
             crawlspaceEvent.roomPrefab.acceptsPosters = false;
             crawlspaceEvent.roomPrefab.florTex = crawlspaceEvent.roomPrefab.wallTex = crawlspaceEvent.roomPrefab.ceilTex
-                = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "BlackTexture" && x.GetInstanceID() >= 0);
+                = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "ColoredBrickWall" && x.GetInstanceID() >= 0);
+
+            crawlspaceEvent.transparent = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "Transparent" && x.GetInstanceID() >= 0);
 
             LevelLoaderPlugin.Instance.randomEventAliases.Add("recchars_crawlspace", crawlspaceEvent);
             ObjMan.Add("Evt_Crawlspace", crawlspaceEvent);
