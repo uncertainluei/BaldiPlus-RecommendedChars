@@ -36,7 +36,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 maxTimeoutLevel = lockTimes.Length-1;
 
             Cell currentCell = ec.CellFromPosition(transform.position);
-            if (currentCell == null || (daycareRoom = currentCell.room) == null || !daycareRoom.functionObject.TryGetComponent(out daycareFunction))
+            if (currentCell == null || !(daycareRoom = currentCell.room) || !daycareRoom.functionObject.TryGetComponent(out daycareFunction))
             {
                 RecommendedCharsPlugin.Log.LogError("Mr. Daycare spawned in an invalid location! Despawning...");
                 Despawn();

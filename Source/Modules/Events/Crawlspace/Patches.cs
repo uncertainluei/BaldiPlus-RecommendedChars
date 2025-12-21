@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using HarmonyLib;
+using UnityEngine.AI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -23,8 +24,27 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     }
 
     [HarmonyPatch]
-    internal static class CrawlspaceHeightPatch
+    internal static class CrawlspacePatches
     {
+        internal static bool LookerRaycast(PlayerManager player, NPC ___npc, ref bool targetSighted, ref bool ____castFailed)
+        {
+            targetSighted = false;
+            ____castFailed = false;
+            if (player.ec != ___npc.ec)
+            {
+                ____castFailed = true;
+                return false;
+            }
+            return true;
+        }
+
+        [HarmonyPatch(typeof(Entity), "Initialize"), HarmonyPostfix]
+        private static void EntityInitialize(Entity __instance)
+        {
+            if (CrawlspaceEvent.Instance)
+                __instance.gameObject.AddComponent<CrawlspaceEntity>();
+        }
+
         private static float _physicalHeight, _playerHeight;
 
         [HarmonyPatch(typeof(PlayerMovement), "PlayerMove"), HarmonyPrefix]
@@ -35,7 +55,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
         [HarmonyPatch(typeof(PlayerMovement), "PlayerMove"), HarmonyPostfix]
         private static void PlayerMovePostfix(PlayerMovement __instance)
-            => __instance.height = _physicalHeight;
+            => __instance.height = _playerHeight;
 
         [HarmonyPatch(typeof(Entity), "EntityUpdate"), HarmonyPrefix]
         private static void EntityUpdatePrefix(Entity __instance)

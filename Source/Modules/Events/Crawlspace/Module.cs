@@ -12,23 +12,29 @@ using PlusStudioLevelLoader;
 using PlusLevelStudio;
 using UncertainLuei.CaudexLib.Util;
 using System.Linq;
+using System.Reflection;
+using HarmonyLib;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Crawlspace"), CaudexModuleSaveTag("Mdl_Crawlspace")]
     [CaudexModuleConfig("Modules.Events", "Crawlspace",
-        "falling deep underground", true)]
+        "the backrooms", true)]
     public sealed partial class Module_Event_Crawlspace : RecCharsModule
     {
         protected override void Initialized()
         {
-            // Load sprite and audio assets
+            // Load texture and audio assets
+            AddTexturesToAssetMan("CrawlspaceTex/", ["Textures", "Environment", "Room", "Crawlspace"]);
+
             AssetMan.Add("EvtAud/CrawlspaceAnnouncement", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Event", "Event_Crawlspace.wav"), "Vfx_Baldi_Event_RecChars_Crawlspace", SoundType.Voice, Color.green));
 
             // Load localization
             //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Event", "Crawlspace.json5");
 
-            Hooks.PatchAll(typeof(CrawlspaceHeightPatch));
+            // Load patches
+            Hooks.PatchAll(typeof(CrawlspacePatches));
+            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.GetParameters().Length == 5), new HarmonyMethod(AccessTools.Method(typeof(CrawlspacePatches), "LookerRaycast")));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -43,31 +49,54 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .Build();
 
             crawlspaceEvent.ecPrefab = Resources.FindObjectsOfTypeAll<EnvironmentController>().First(x => x.GetInstanceID() >= 0);
+            crawlspaceEvent.lvlLoaderPre = Resources.FindObjectsOfTypeAll<LevelLoader>().First(x => x.GetInstanceID() >= 0);
 
-            crawlspaceEvent.roomPrefab = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<RoomController>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform);
-            crawlspaceEvent.roomPrefab.name = "CrawlspaceRoom";
-            crawlspaceEvent.roomPrefab.type = RoomType.Null;
-            crawlspaceEvent.roomPrefab.category = RoomCategory.Null;
-            crawlspaceEvent.roomPrefab.expandable = true;
-            crawlspaceEvent.roomPrefab.acceptsExits = false;
-            crawlspaceEvent.roomPrefab.acceptsPosters = false;
-            crawlspaceEvent.roomPrefab.florTex = crawlspaceEvent.roomPrefab.wallTex = crawlspaceEvent.roomPrefab.ceilTex
-                = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "ColoredBrickWall" && x.GetInstanceID() >= 0);
+            crawlspaceEvent.lvlData = crawlspaceEvent.gameObject.AddComponent<LevelDataContainer>();
+            crawlspaceEvent.lvlData.rooms = [new() {
+                name = "Crawlspace",
+                type = RoomType.Hall,
+                category = RoomCategory.Null,
+                wallTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceWall"),
+                florTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceFloor"),
+                ceilTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceCeiling")
+            }];
 
-            crawlspaceEvent.transparent = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "Transparent" && x.GetInstanceID() >= 0);
+            crawlspaceEvent.tilePrefab = GameObject.Instantiate(crawlspaceEvent.ecPrefab.TilePre, MTM101BaldiDevAPI.prefabTransform).GetComponent<MeshRenderer>();
+            GameObject.DestroyImmediate(crawlspaceEvent.tilePrefab.GetComponent<Tile>());
+            GameObject.DestroyImmediate(crawlspaceEvent.tilePrefab.transform.GetChild(0).gameObject);
+            GameObject.DestroyImmediate(crawlspaceEvent.tilePrefab.transform.GetChild(0).gameObject);
+            GameObject.DestroyImmediate(crawlspaceEvent.tilePrefab.transform.GetChild(0).gameObject);
+            GameObject.DestroyImmediate(crawlspaceEvent.tilePrefab.transform.GetChild(0).gameObject);
+            crawlspaceEvent.tilePrefab.name = "Tile_Stripped";
+
+            crawlspaceEvent.darkLightmap = new(1,1);
+            crawlspaceEvent.darkLightmap.name = "Dark_Lightmap";
+            crawlspaceEvent.darkLightmap.SetPixel(0,0,Color.gray);
+            crawlspaceEvent.darkLightmap.Apply();
+
+            // crawlspaceEvent.roomPrefab.defaultMat = new Material(crawlspaceEvent.roomPrefab.defaultMat);
+            // crawlspaceEvent.roomPrefab.defaultMat.SetTexture("_LightMap", lightmap);
+            // crawlspaceEvent.roomPrefab.defaultAlphaMat = new Material(crawlspaceEvent.roomPrefab.defaultAlphaMat);
+            // crawlspaceEvent.roomPrefab.defaultAlphaMat.SetTexture("_LightMap", lightmap);
+            // crawlspaceEvent.roomPrefab.defaultPosterMat = new Material(crawlspaceEvent.roomPrefab.defaultPosterMat);
+            // crawlspaceEvent.roomPrefab.defaultPosterMat.SetTexture("_LightMap", lightmap);
+            // crawlspaceEvent.roomPrefab.defaultAlphaPosterMap = new Material(crawlspaceEvent.roomPrefab.defaultAlphaPosterMap);
+            // crawlspaceEvent.roomPrefab.defaultAlphaPosterMap.SetTexture("_LightMap", lightmap);
+
+            crawlspaceEvent.transparentTexture = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "Transparent" && x.isReadable && x.GetInstanceID() >= 0);
 
             LevelLoaderPlugin.Instance.randomEventAliases.Add("recchars_crawlspace", crawlspaceEvent);
             ObjMan.Add("Evt_Crawlspace", crawlspaceEvent);
         }
 
-        //[CaudexGenModEvent(GenerationModType.Addend)]
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
             if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/Crawlspace", GenerationStageFlags.Addend))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Events/Crawlspace", GenerationStageFlags.Addend);
 
-            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_Crawlspace").Weighted(100));
+            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_Crawlspace").Weighted(1000));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
