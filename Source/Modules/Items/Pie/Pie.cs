@@ -27,6 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             transform.forward = CoreGameManager.Instance.GetCamera(pm.playerNumber).transform.forward;
 
             entity.Initialize(ec, transform.position);
+            entity.CopyStatusEffects(pm.plm.Entity);
             entity.OnEntityMoveInitialCollision += OnWallCollision;
 
             CoreGameManager.Instance.audMan.PlaySingle(audThrow);

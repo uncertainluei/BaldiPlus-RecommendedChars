@@ -79,10 +79,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public void SendToTimeout(bool canCollide)
+        public void SendToTimeout(bool validCollision)
         {
             DaycareGuiltManager.GetInstance(targetedPlayer).ClearGuilt();
-            if (canCollide)
+            if (validCollision)
             {
                 targetedPlayer.Teleport(ec.RealRoomMid(daycareRoom));
                 Navigator.Entity.Teleport(targetedPlayer.transform.position + targetedPlayer.transform.forward * 10f);

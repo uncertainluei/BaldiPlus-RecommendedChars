@@ -50,14 +50,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 npc = GetComponent<NPC>();
             }
 
-            location = entity.Ec == CrawlspaceEvent.Instance.ec ? LocationState.Above : LocationState.Below;
-            Debug.Log(location.ToString());
+            location = entity.Ec == CrawlspaceEvent.Instance.CrawlspaceEc ? LocationState.Below : LocationState.Above;
         }
 
         private Cell _cell;
         private void FixedUpdate()
         {
-            if (!CrawlspaceEvent.Instance || location == LocationState.Falling || !entity.active || !entity.Grounded)
+            if (!CrawlspaceEvent.Instance || location == LocationState.Falling ||
+                !entity.active || !entity.InBounds || !entity.Grounded)
                 return;
 
             _cell = entity.Ec.CellFromPosition(transform.position);
@@ -98,9 +98,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 yield return null;
             }
 
-            entity.ExternalActivity.moveMods.Add(moveModCrawlspace);
-            location = LocationState.Below;
-
             overrider.SetInteractionState(true);
             overrider.SetFrozen(false);
             entity.SetTrigger(true);
@@ -111,7 +108,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     player.plm.Entity.ExternalActivity.moveMods.Remove(moveModStationary);
                     player.itm.Disable(false);
                     break;
-                case EntityType.Npc:
+                default:
                     overrider.SetBlinded(false);
                     break;
             }
@@ -120,8 +117,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             SetEnvironmentController(CrawlspaceEvent.Instance.CrawlspaceEc);
         }
 
-        private void SetEnvironmentController(EnvironmentController ec)
+        public void SetEnvironmentController(EnvironmentController ec)
         {
+            location = ec == CrawlspaceEvent.Instance.CrawlspaceEc ? LocationState.Below : LocationState.Above;
+            
             entity.environmentController = ec;
             switch (entType)
             {
@@ -133,9 +132,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     GameCamera.dijkstraMap.QueueUpdate();
                     break;
                 case EntityType.Npc:
+                    npc.transform.parent = ec.transform;
                     npc.ec = ec;
                     if (npc.Navigator)
-                        npc.Navigator.ec = ec;
+                    {
+                        npc.Navigator.Initialize(ec);
+                        if (npc.Navigator._navMeshPath != null)
+                        {
+                            Debug.LogError(npc.Navigator._navMeshPath.status.ToString());
+                            npc.Navigator.recalculatePath = true;
+                            npc.behaviorStateMachine.ChangeNavigationState(new NavigationState_WanderRandom(npc, 126));
+                        }
+                    }
                     break;
             }
             
@@ -145,6 +153,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 audMan.propagationPosition = transform.position;
                 audMan.propagationSource.transform.SetParent(ec.soundPropagationTransform);
             }
+
+            if (location == LocationState.Above)
+            {
+                if (entity.ExternalActivity.moveMods.Contains(moveModCrawlspace))
+                    entity.ExternalActivity.moveMods.Remove(moveModCrawlspace);
+
+                return;
+            }
+            if (!entity.ExternalActivity.moveMods.Contains(moveModCrawlspace))
+                entity.ExternalActivity.moveMods.Add(moveModCrawlspace);
         }
     }
 }

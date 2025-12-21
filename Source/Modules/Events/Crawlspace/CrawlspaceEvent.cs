@@ -45,6 +45,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CrawlspaceEc.transform.position -= Vector3.up * 20f;
             CrawlspaceEc.transform.localScale = new Vector3(1,1,1);
             CrawlspaceEc.standardDarkLevel = Color.white;
+            CrawlspaceEc.height = -20;
 
             lvlLoader = Instantiate(lvlLoaderPre);
             lvlLoader.name = "CrawlspaceLevelLoader";
@@ -80,6 +81,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             yield return new WaitWhile(() => lvlLoader.levelInProgress && !_setup);
             DestroyImmediate(lvlLoader.scene);
 
+            CrawlspaceEc.name += "_Crawlspace";
+            CrawlspaceEc.mainHall = CrawlspaceEc.rooms[0];
+            
             try
             {
                 // Re-initialize the EC's lightmap
@@ -89,7 +93,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 CoreGameManager.Instance.updateLightMap = false;
 
                 // Setup areas
-                SetupArea(CrawlspaceEc.mainHall, true);
+                SetupArea(CrawlspaceEc.rooms[0], true);
 
                 if (ec.mainHall)
                     SetupArea(ec.mainHall);
@@ -110,9 +114,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 yield break;
             }
 
-            CrawlspaceEc.active = true;
-
-            Destroy(lvlLoader);
+            
+            Destroy(lvlLoader.gameObject);
             if (elevate)
                 elevate.busy = false;
         }
@@ -174,7 +177,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     tileVisual.transform.localPosition = Vector3.up * -10f;
                 }
 
-                CrawlspaceEc.CellFromPosition(cell.position.x,cell.position.z).SetBase(holeAtlases[CrawlspaceEc.mainHall].NormalMat);
+                CrawlspaceEc.CellFromPosition(cell.position.x,cell.position.z).SetBase(holeAtlases[CrawlspaceEc.rooms[0]].NormalMat);
             }
         }
 
@@ -183,10 +186,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public bool IsCellEntitySafe(Cell a) => a.room.entitySafeCells.Count > 0 || a.room.entitySafeCells.Contains(a.position);
         public bool IsCellOpen(Cell cell) => openCells.Count > 0 && openCells.Contains(cell);
 
-        private void UpdateHallCell(int x, int y, bool open)
+        public void UpdateHallCell(int x, int y, bool open)
         {
             Cell cell = ec.CellFromPosition(x,y), crawlspaceCell = CrawlspaceEc.CellFromPosition(x,y);
-            IntVector2 pos = new(x,y);
             if (crawlspaceCell == null || crawlspaceCell.Null ||
                 cell == null || cell.Null || !cell.room || !holeAtlases.ContainsKey(cell.room)) return;
 
@@ -196,7 +198,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 openCells.Remove(cell);
 
                 cell.SetBase(cell.Tile.MeshRenderer.sharedMaterial == holeAtlases[cell.room].NormalMat ? cell.room.baseMat : cell.room.posterMat);
-                crawlspaceCell.SetBase(CrawlspaceEc.mainHall.baseMat);
+                crawlspaceCell.SetBase(CrawlspaceEc.rooms[0].baseMat);
                 return;
             }
 
@@ -204,7 +206,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             openCells.Add(cell);
 
             cell.SetBase(cell.Tile.MeshRenderer.sharedMaterial == cell.room.baseMat ? holeAtlases[cell.room].NormalMat : holeAtlases[cell.room].PosterMat);
-            crawlspaceCell.SetBase(holeAtlases[CrawlspaceEc.mainHall].NormalMat);
+            crawlspaceCell.SetBase(holeAtlases[CrawlspaceEc.rooms[0]].NormalMat);
         }
 
         private CellData[] FillArea()
@@ -235,6 +237,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Begin()
         {
             base.Begin();
+            CrawlspaceEc.Active = true;
             StartCoroutine(TilesStartDisappearingCusWhyNot());
         }
 
@@ -242,10 +245,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             while (active && potentialFallCells.Count > 0)
             {
-                yield return new WaitForSecondsEnvironmentTimescale(ec, UnityEngine.Random.Range(0f,1f));
+                //yield return new WaitForSecondsEnvironmentTimescale(ec, UnityEngine.Random.Range(0f,1f));
                 Cell cellThatFell = potentialFallCells[UnityEngine.Random.Range(0,potentialFallCells.Count)];
                 potentialFallCells.Remove(cellThatFell);
                 UpdateHallCell(cellThatFell.position.x, cellThatFell.position.z, true);
+                yield return null;
             }
         }
 

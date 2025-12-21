@@ -33,8 +33,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             //CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Event", "Crawlspace.json5");
 
             // Load patches
-            Hooks.PatchAll(typeof(CrawlspacePatches));
-            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.GetParameters().Length == 5), new HarmonyMethod(AccessTools.Method(typeof(CrawlspacePatches), "LookerRaycast")));
+            Hooks.PatchAll(typeof(CrawlspaceEntityPatches));
+            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.GetParameters().Length == 5), new HarmonyMethod(AccessTools.Method(typeof(CrawlspaceEntityPatches), "LookerRaycast")));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -54,7 +54,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             crawlspaceEvent.lvlData = crawlspaceEvent.gameObject.AddComponent<LevelDataContainer>();
             crawlspaceEvent.lvlData.rooms = [new() {
                 name = "Crawlspace",
-                type = RoomType.Hall,
+                type = RoomType.Room,
                 category = RoomCategory.Null,
                 wallTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceWall"),
                 florTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceFloor"),
