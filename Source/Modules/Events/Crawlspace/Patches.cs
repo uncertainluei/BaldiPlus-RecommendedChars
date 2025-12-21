@@ -30,7 +30,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             targetSighted = false;
             ____castFailed = false;
-            if (player.ec != ___npc.ec)
+            if (player && player.ec != ___npc.ec)
             {
                 ____castFailed = true;
                 return false;

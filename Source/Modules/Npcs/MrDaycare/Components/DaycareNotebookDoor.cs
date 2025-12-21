@@ -94,8 +94,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static IEnumerator ProperlyUnlockDoor(StandardDoor door)
         {
             yield return new WaitForEndOfFrame();
-            door.Unlock();
             door.Block(false);
+            door.Unlock();
         }
     }
 }

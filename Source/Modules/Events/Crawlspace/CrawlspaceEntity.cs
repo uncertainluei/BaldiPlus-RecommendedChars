@@ -127,7 +127,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 case EntityType.Player:
                     player.ec = ec;
+                    GameCamera.dijkstraMap.Deactivate();
                     GameCamera.dijkstraMap.environment = ec;
+                    GameCamera.dijkstraMap.Activate();
                     GameCamera.dijkstraMap.QueueUpdate();
                     break;
                 case EntityType.Npc:
