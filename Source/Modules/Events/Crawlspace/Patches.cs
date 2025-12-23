@@ -41,7 +41,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         // Principal sends player to detention in Crawlspace
         [HarmonyPatch(typeof(Principal), "SendToDetention"), HarmonyPrefix]
-        [HarmonyPatch(typeof(MrDaycare), "SendToTimeout")]
+        [HarmonyPatch(typeof(MrDaycare), "SendToTimeout", typeof(bool))]
         private static void PrincipalSendPlayerToDetention(Principal __instance, PlayerManager ___targetedPlayer, bool validCollision)
         {
             if (!CrawlspaceEvent.Instance || __instance.ec != CrawlspaceEvent.Instance.CrawlspaceEc)
@@ -55,6 +55,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ___targetedPlayer.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
             EntityHeightFixer.GetInstance(___targetedPlayer.plm.Entity).heightDifference = CrawlspaceEvent.Instance.ec.Height;
         }
+        
 
         [HarmonyPatch(typeof(Entity), "CopyStatusEffects"), HarmonyPostfix]
         private static void CopyHeightDifference(Entity __instance, Entity entityToCopy)
