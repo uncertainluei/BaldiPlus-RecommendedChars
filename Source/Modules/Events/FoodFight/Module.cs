@@ -11,10 +11,11 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 using PlusStudioLevelLoader;
 using PlusLevelStudio;
 using UncertainLuei.CaudexLib.Util;
+using System.Linq;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [CaudexModule("Food Fight"), CaudexModuleSaveTag("Mdl_FoodFight")]
+    //[CaudexModule("Food Fight"), CaudexModuleSaveTag("Mdl_FoodFight")]
     [CaudexModuleConfig("Modules.Events", "FoodFight",
         "\"Foodfight? More like Gayfight! This movie is the worst movie on the planet!\" ~ Michael the GoAnimate Guy, 2015", true)]
     public sealed partial class Module_Event_FoodFight : RecCharsModule
@@ -46,11 +47,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         //[CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
-            if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/FoodFight", GenerationStageFlags.Addend))
+            if (title == "END" || lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/FoodFight", GenerationStageFlags.Addend))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Events/FoodFight", GenerationStageFlags.Addend);
 
-            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_FoodFight").Weighted(100));
+            // Cannot take place in F1-F2 (Schoolhouse Small/Medium in Endless)
+            if (num < 2) return;
+
+            // There are no food fights without cafeterias, they say
+            if (lvl.potentialSpecialRooms.FirstOrDefault(x => x.selection.roomFunctionContainer && x.selection.roomFunctionContainer.name.StartsWith("Cafeteria")) == null)
+                return;
+
+            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_FoodFight").Weighted(150));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]

@@ -147,7 +147,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             int totalWeight = 0, totalCount = 0;
             for (int i = 0; i < specialRooms.Count; i++)
             {
-                if (specialRooms[i].selection.roomFunctionContainer == null ||
+                if (!specialRooms[i].selection.roomFunctionContainer ||
                     !specialRooms[i].selection.roomFunctionContainer.name.StartsWith("Cafeteria"))
                     continue;
 

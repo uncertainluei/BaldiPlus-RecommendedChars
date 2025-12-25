@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Cecil;
 using MTM101BaldAPI;
@@ -90,9 +91,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
 
             float gravity = 0f;
+            Vector3 center = entity.Ec.CellFromPosition(transform.position).CenterWorldPosition;
             EntityHeightFixer heightComp = EntityHeightFixer.GetInstance(entity);
+
             while (heightComp.heightDifference > -20f)
             {
+                if (Time.timeScale == 0f || entity.Ec.EnvironmentTimeScale == 0f)
+                {
+                    yield return null;
+                    continue;
+                }
+
+                center.y = transform.position.y;
+                if (Vector3.Distance(transform.position, center) > 0.5f)
+                    transform.position = Vector3.Lerp(transform.position, center, 3f * Time.deltaTime * entity.Ec.EnvironmentTimeScale);
+                else
+                    transform.position = center;
+
                 gravity -= 40f * Time.deltaTime * entity.Ec.EnvironmentTimeScale;
                 heightComp.heightDifference = Mathf.Max(-20f, heightComp.heightDifference + gravity * Time.deltaTime * entity.Ec.EnvironmentTimeScale);
                 yield return null;
@@ -122,9 +137,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             location = ec == CrawlspaceEvent.Instance.CrawlspaceEc ? LocationState.Below : LocationState.Above;
             
             entity.environmentController = ec;
+            entity.CullRenderer(false);
+            entity.UpdateHeightAndScale();
             switch (entType)
             {
                 case EntityType.Player:
+                    if (player.ec == ec)
+                        break;
+
+                    List<PlayerManager> players = new(player.ec.Players);
+                    players.Remove(player);
+                    player.ec.players = players.ToArray();
+
+                    players = new(ec.Players);
+                    players.Add(player);
+                    ec.players = players.ToArray();
+
                     player.ec = ec;
                     GameCamera.dijkstraMap.Deactivate();
                     GameCamera.dijkstraMap.environment = ec;
@@ -132,6 +160,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     GameCamera.dijkstraMap.QueueUpdate();
                     break;
                 case EntityType.Npc:
+                    if (npc.ec == ec)
+                        break;
+
+                    npc.ec.Npcs.Remove(npc);
+                    ec.Npcs.Add(npc);
+
                     npc.transform.parent = ec.transform;
                     npc.ec = ec;
                     if (npc.Navigator)
@@ -139,9 +173,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         npc.Navigator.Initialize(ec);
                         if (npc.Navigator._navMeshPath != null)
                         {
-                            Debug.LogError(npc.Navigator._navMeshPath.status.ToString());
                             npc.Navigator.recalculatePath = true;
-                            npc.behaviorStateMachine.ChangeNavigationState(new NavigationState_WanderRandom(npc, 126));
+                            npc.behaviorStateMachine.ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
+                            npc.Navigator.CheckPath();
                         }
                     }
                     break;
@@ -153,6 +187,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 audMan.propagationPosition = transform.position;
                 audMan.propagationSource.transform.SetParent(ec.soundPropagationTransform);
             }
+
+            return;
 
             if (location == LocationState.Above)
             {

@@ -14,6 +14,7 @@ using UncertainLuei.CaudexLib.Util;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using brobowindowsmod;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -74,15 +75,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             crawlspaceEvent.darkLightmap.SetPixel(0,0,Color.gray);
             crawlspaceEvent.darkLightmap.Apply();
 
-            // crawlspaceEvent.roomPrefab.defaultMat = new Material(crawlspaceEvent.roomPrefab.defaultMat);
-            // crawlspaceEvent.roomPrefab.defaultMat.SetTexture("_LightMap", lightmap);
-            // crawlspaceEvent.roomPrefab.defaultAlphaMat = new Material(crawlspaceEvent.roomPrefab.defaultAlphaMat);
-            // crawlspaceEvent.roomPrefab.defaultAlphaMat.SetTexture("_LightMap", lightmap);
-            // crawlspaceEvent.roomPrefab.defaultPosterMat = new Material(crawlspaceEvent.roomPrefab.defaultPosterMat);
-            // crawlspaceEvent.roomPrefab.defaultPosterMat.SetTexture("_LightMap", lightmap);
-            // crawlspaceEvent.roomPrefab.defaultAlphaPosterMap = new Material(crawlspaceEvent.roomPrefab.defaultAlphaPosterMap);
-            // crawlspaceEvent.roomPrefab.defaultAlphaPosterMap.SetTexture("_LightMap", lightmap);
-
             crawlspaceEvent.transparentTexture = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "Transparent" && x.isReadable && x.GetInstanceID() >= 0);
 
             LevelLoaderPlugin.Instance.randomEventAliases.Add("recchars_crawlspace", crawlspaceEvent);
@@ -92,11 +84,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
-            if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/Crawlspace", GenerationStageFlags.Addend))
+            if (title == "END" || lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/Crawlspace", GenerationStageFlags.Addend))
                 return;
+
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Events/Crawlspace", GenerationStageFlags.Addend);
 
-            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_Crawlspace").Weighted(1000));
+            // Exclude F1-F2 / Small/Medium Schoolhouse (unless you get Maintenance with Level Typed)
+            if (num < 2 && lvl.type != LevelType.Maintenance) return;
+            // Exclude Fragile Windows Window World level type (because of THOSE DREADED FLOOR WINDOWS)
+            if (lvl.type.ToStringExtended() == "WindowWorld") return;
+
+            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_Crawlspace").Weighted(lvl.type == LevelType.Maintenance ? 150 : 80));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]

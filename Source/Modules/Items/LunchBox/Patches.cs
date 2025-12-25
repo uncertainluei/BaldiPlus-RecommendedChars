@@ -30,7 +30,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
                 if (___pickups[i].item.itemType != ITM_LunchBox.itemEnum)
                     continue;
 
-                ___pickups[i].price += priceVariations[Random.Range(0,5)];
+                // Revert any sales
+                ___pickups[i].price = ___pickups[i].item.price + priceVariations[Random.Range(0,5)];
                 ___tag[i].SetText(___pickups[i].price.ToString());
             }
         }

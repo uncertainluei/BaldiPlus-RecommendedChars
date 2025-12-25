@@ -47,13 +47,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!CrawlspaceEvent.Instance || __instance.ec != CrawlspaceEvent.Instance.CrawlspaceEc)
                 return;
 
-            __instance.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
             EntityHeightFixer.GetInstance(__instance.Navigator.Entity).heightDifference = CrawlspaceEvent.Instance.ec.Height;
+            __instance.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
 
             if (!validCollision) return;
 
-            ___targetedPlayer.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
             EntityHeightFixer.GetInstance(___targetedPlayer.plm.Entity).heightDifference = CrawlspaceEvent.Instance.ec.Height;
+            ___targetedPlayer.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
         }
         
 

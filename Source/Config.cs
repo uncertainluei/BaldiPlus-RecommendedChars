@@ -23,12 +23,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Enforces that only one in-your-face NPC 'activity' (i.e. Playtime/Circle's jumprope game and AwW's grabbing sequence) can be active at a time.");
 
             nerfCircle = config.Bind(
-                "Behaviors",
+                "Behaviors.Nerfs",
                 "Circle",
                 true,
                 "Nerfs Circle's speed and max jump count, increases his cooldowns, and makes the Nerf Gun cheaper and more common.");
             nerfMrDaycare = config.Bind(
-                "Behaviors",
+                "Behaviors.Nerfs",
                 "MrDaycare",
                 true,
                 "Nerfs Mr. Daycare's movement speed, guilt sensitivity and timeout times to be overall more manageable.");

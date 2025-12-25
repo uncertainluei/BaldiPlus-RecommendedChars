@@ -47,11 +47,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
-            if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/CharacterConfusion", GenerationStageFlags.Addend))
+            if (title == "END" || lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Events/CharacterConfusion", GenerationStageFlags.Addend))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Events/CharacterConfusion", GenerationStageFlags.Addend);
 
-            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_CharacterConfusion").Weighted(100));
+            // Exclude F1-F2 / Small/Medium Schoolhouse
+            if (num < 2) return;
+
+            lvl.randomEvents.Add(ObjMan.Get<RandomEvent>("Evt_CharacterConfusion").Weighted(lvl.type == LevelType.Laboratory ? 150 : 100));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]

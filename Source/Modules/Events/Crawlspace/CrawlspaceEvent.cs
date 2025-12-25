@@ -39,6 +39,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Initialize(EnvironmentController controller, System.Random rng)
         {
             base.Initialize(controller, rng);
+            if (Instance)
+                return;
+
             Instance = this;
 
             CrawlspaceEc = Instantiate(ecPrefab);
@@ -64,7 +67,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             lvlLoader.ec = CrawlspaceEc;
             lvlLoader.levelContainer = lvlData;
             lvlData.levelSize = ec.levelSize;
-            lvlData.tile = FillArea();
+            lvlData.tile = RoomAssetHelper.CellRect(lvlData.levelSize.x, lvlData.levelSize.z).ToArray();
         }
 
         private bool _setup = false;
@@ -83,7 +86,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             CrawlspaceEc.name += "_Crawlspace";
             CrawlspaceEc.mainHall = CrawlspaceEc.rooms[0];
-            
+
+            int lightmap = Shader.PropertyToID("_LightMap");
+
+            CrawlspaceEc.mainHall.baseMat.SetTexture(lightmap, darkLightmap);
+            CrawlspaceEc.mainHall.posterMat.SetTexture(lightmap, darkLightmap);
+
+            CrawlspaceEc.mainHall.defaultAlphaMat = new Material(CrawlspaceEc.mainHall.defaultAlphaMat);
+            CrawlspaceEc.mainHall.defaultAlphaMat.SetTexture(lightmap, darkLightmap);
+            CrawlspaceEc.mainHall.defaultAlphaPosterMap = new Material(CrawlspaceEc.mainHall.defaultAlphaPosterMap);
+            CrawlspaceEc.mainHall.defaultAlphaPosterMap.SetTexture(lightmap, darkLightmap);
+
             try
             {
                 // Re-initialize the EC's lightmap
@@ -114,7 +127,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 yield break;
             }
 
-            
+            CrawlspaceEc.gameObject.SetActive(false);
+
             Destroy(lvlLoader.gameObject);
             if (elevate)
                 elevate.busy = false;
@@ -209,34 +223,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             crawlspaceCell.SetBase(holeAtlases[CrawlspaceEc.rooms[0]].NormalMat);
         }
 
-        private CellData[] FillArea()
-        {
-            List<CellData> cells = [];
-            for (int y = 0; y < ec.levelSize.z; y++)
-            {
-                int yOffset = 0;
-                if (y == 0)
-                    yOffset = 4;
-                if (y == ec.levelSize.z - 1)
-                    yOffset += 1;
-
-                for (int x = 0; x < ec.levelSize.x; x++)
-                {
-                    int type = yOffset;
-                    if (x == 0)
-                        type += 8;
-                    if (x == ec.levelSize.x - 1)
-                        type += 2;
-
-                    cells.Add(new() { pos = new(x,y), roomId = 0, type = type});
-                }
-            }
-            return cells.ToArray();
-        }
-
         public override void Begin()
         {
             base.Begin();
+            if (Instance != this)
+            {
+                Instance.Begin();
+                return;
+            }
+
+            CrawlspaceEc.gameObject.SetActive(true);
             CrawlspaceEc.Active = true;
             StartCoroutine(TilesStartDisappearingCusWhyNot());
         }
@@ -256,6 +252,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void End()
         {
             base.End();
+            if (Instance != this)
+            {
+                Instance.End();
+                return;
+            }
         }
     }
 }
