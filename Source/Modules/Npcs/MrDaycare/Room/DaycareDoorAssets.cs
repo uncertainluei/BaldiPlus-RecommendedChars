@@ -27,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (dummyPoster == null)
             {
                 dummyPoster = PosterObject.CreateInstance<PosterObject>();
-                dummyPoster.name = "MrDaycare_DummyPoster";
+                dummyPoster.name = "DaycareDoor_Template";
                 dummyPoster.textData =
                 [
                     new()

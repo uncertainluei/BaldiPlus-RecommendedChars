@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Mono.Cecil;
-using MTM101BaldAPI;
-using MTM101BaldAPI.Registers;
+
 using UncertainLuei.CaudexLib.Components;
 using UncertainLuei.CaudexLib.Util;
+
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -45,10 +44,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Instance = this;
 
             CrawlspaceEc = Instantiate(ecPrefab);
-            CrawlspaceEc.transform.position -= Vector3.up * 20f;
-            CrawlspaceEc.transform.localScale = new Vector3(1,1,1);
             CrawlspaceEc.standardDarkLevel = Color.white;
             CrawlspaceEc.height = -20;
+            CrawlspaceEc.transform.position -= Vector3.up * 20f;
+            CrawlspaceEc.transform.localScale = new Vector3(1,1,1);
 
             lvlLoader = Instantiate(lvlLoaderPre);
             lvlLoader.name = "CrawlspaceLevelLoader";
@@ -81,24 +80,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             yield return new WaitWhile(() => lvlData.tile == null);
             lvlLoader.StartGenerate();
             yield return new WaitWhile(() => !lvlLoader.levelInProgress);
-            yield return new WaitWhile(() => lvlLoader.levelInProgress && !_setup);
+            yield return new WaitWhile(() => lvlLoader.levelInProgress || !_setup);
             DestroyImmediate(lvlLoader.scene);
-
-            CrawlspaceEc.name += "_Crawlspace";
-            CrawlspaceEc.mainHall = CrawlspaceEc.rooms[0];
-
-            int lightmap = Shader.PropertyToID("_LightMap");
-
-            CrawlspaceEc.mainHall.baseMat.SetTexture(lightmap, darkLightmap);
-            CrawlspaceEc.mainHall.posterMat.SetTexture(lightmap, darkLightmap);
-
-            CrawlspaceEc.mainHall.defaultAlphaMat = new Material(CrawlspaceEc.mainHall.defaultAlphaMat);
-            CrawlspaceEc.mainHall.defaultAlphaMat.SetTexture(lightmap, darkLightmap);
-            CrawlspaceEc.mainHall.defaultAlphaPosterMap = new Material(CrawlspaceEc.mainHall.defaultAlphaPosterMap);
-            CrawlspaceEc.mainHall.defaultAlphaPosterMap.SetTexture(lightmap, darkLightmap);
 
             try
             {
+                CrawlspaceEc.name += "_Crawlspace";
+                CrawlspaceEc.mainHall = CrawlspaceEc.rooms[0];
+
+                int lightmap = Shader.PropertyToID("_LightMap");
+
+                CrawlspaceEc.mainHall.baseMat.SetTexture(lightmap, darkLightmap);
+                CrawlspaceEc.mainHall.posterMat.SetTexture(lightmap, darkLightmap);
+
+                CrawlspaceEc.mainHall.defaultAlphaMat = new Material(CrawlspaceEc.mainHall.defaultAlphaMat);
+                CrawlspaceEc.mainHall.defaultAlphaMat.SetTexture(lightmap, darkLightmap);
+                CrawlspaceEc.mainHall.defaultAlphaPosterMap = new Material(CrawlspaceEc.mainHall.defaultAlphaPosterMap);
+                CrawlspaceEc.mainHall.defaultAlphaPosterMap.SetTexture(lightmap, darkLightmap);
+
                 // Re-initialize the EC's lightmap
                 CrawlspaceEc.standardDarkLevel = Color.white;
                 CrawlspaceEc.InitializeLighting();
@@ -189,6 +188,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     tileVisual.GetComponent<MeshFilter>().sharedMesh = ec.TileMesh(type);
                     tileVisual.sharedMaterial = holeMat;
                     tileVisual.transform.localPosition = Vector3.up * -10f;
+                    cell.Chunk.AddRenderer(tileVisual);
                 }
 
                 CrawlspaceEc.CellFromPosition(cell.position.x,cell.position.z).SetBase(holeAtlases[CrawlspaceEc.rooms[0]].NormalMat);
@@ -233,6 +233,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
 
             CrawlspaceEc.gameObject.SetActive(true);
+            ec.navMeshTransform.gameObject.SetActive(false);
+            CrawlspaceEc.navMeshTransform.gameObject.SetActive(false);
             CrawlspaceEc.Active = true;
             StartCoroutine(TilesStartDisappearingCusWhyNot());
         }

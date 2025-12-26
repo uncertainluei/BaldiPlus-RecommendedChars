@@ -7,9 +7,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     {
         [HarmonyPatch(typeof(BaseGameManager), "RestartLevel"), HarmonyPostfix]
         private static void ResetHelperExhaust()
-        {
-            ModuleSaveSystem_Bsodaa.Instance.helperExhausted = false;
-        }
+            => ModuleSaveSystem_Bsodaa.Instance.helperExhausted = false;
 
         [HarmonyPatch(typeof(BaseGameManager), "LoadNextLevel"), HarmonyPostfix]
         private static void SetToDietMode()

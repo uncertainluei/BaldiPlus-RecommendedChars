@@ -1,13 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Mono.Cecil;
-using MTM101BaldAPI;
-using MTM101BaldAPI.Registers;
+
 using UncertainLuei.CaudexLib.Components;
-using UncertainLuei.CaudexLib.Util;
+
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -115,6 +110,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             overrider.SetInteractionState(true);
             overrider.SetFrozen(false);
+            overrider.SetInBounds(true);
             entity.SetTrigger(true);
 
             switch (entType)
@@ -139,6 +135,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             entity.environmentController = ec;
             entity.CullRenderer(false);
             entity.UpdateHeightAndScale();
+
+            EntityHeightFixer.GetInstance(entity).heightDifference = ec.Height;
+            entity.Teleport(new(transform.position.x, Entity.physicalHeight+ec.Height, transform.position.z));
+
             switch (entType)
             {
                 case EntityType.Player:
@@ -168,6 +168,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                     npc.transform.parent = ec.transform;
                     npc.ec = ec;
+
                     if (npc.Navigator)
                     {
                         npc.Navigator.Initialize(ec);
@@ -175,7 +176,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                         {
                             npc.Navigator.recalculatePath = true;
                             npc.behaviorStateMachine.ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
-                            npc.Navigator.CheckPath();
+
+                            if (npc.Navigator.destinationPoints.Count > 0)
+                                npc.Navigator.FindPath(transform.position, npc.Navigator.destinationPoints[npc.Navigator.destinationPoints.Count-1]);
                         }
                     }
                     break;
@@ -187,8 +190,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 audMan.propagationPosition = transform.position;
                 audMan.propagationSource.transform.SetParent(ec.soundPropagationTransform);
             }
-
-            return;
 
             if (location == LocationState.Above)
             {

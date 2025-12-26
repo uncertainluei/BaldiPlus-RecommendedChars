@@ -55,12 +55,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             crawlspaceEvent.lvlData = crawlspaceEvent.gameObject.AddComponent<LevelDataContainer>();
             crawlspaceEvent.lvlData.rooms = [new() {
                 name = "Crawlspace",
-                type = RoomType.Room,
+                type = RoomType.Hall,
                 category = RoomCategory.Null,
-                wallTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceWall"),
                 florTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceFloor"),
+                wallTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceWall"),
                 ceilTex = AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceCeiling")
             }];
+
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_crawlspaceflor", AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceFloor"));
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_crawlspacewall", AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceWall"));
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_crawlspaceceil", AssetMan.Get<Texture2D>("CrawlspaceTex/CrawlspaceCeiling"));
 
             crawlspaceEvent.tilePrefab = GameObject.Instantiate(crawlspaceEvent.ecPrefab.TilePre, MTM101BaldiDevAPI.prefabTransform).GetComponent<MeshRenderer>();
             GameObject.DestroyImmediate(crawlspaceEvent.tilePrefab.GetComponent<Tile>());
@@ -108,6 +112,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.eventSprites.Add("recchars_crawlspace", AssetMan.Get<Sprite>("EditorSpr/Event_Crawlspace"));
+            LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_crawlspaceflor", "recchars_crawlspacewall", "recchars_crawlspaceceil"]);    
+
             EditorInterfaceModes.AddModeCallback((mode, vanillaCompiant) => mode.availableRandomEvents.Add("recchars_crawlspace"));
         }
     }

@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using HarmonyLib;
 using UnityEngine.AI;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using TMPro;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using System.Linq;
+using System.Reflection;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -47,12 +55,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!CrawlspaceEvent.Instance || __instance.ec != CrawlspaceEvent.Instance.CrawlspaceEc)
                 return;
 
-            EntityHeightFixer.GetInstance(__instance.Navigator.Entity).heightDifference = CrawlspaceEvent.Instance.ec.Height;
             __instance.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
 
             if (!validCollision) return;
 
-            EntityHeightFixer.GetInstance(___targetedPlayer.plm.Entity).heightDifference = CrawlspaceEvent.Instance.ec.Height;
             ___targetedPlayer.GetComponent<CrawlspaceEntity>().SetEnvironmentController(CrawlspaceEvent.Instance.ec);
         }
         
@@ -91,5 +97,78 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [HarmonyPatch(typeof(Entity), "EntityUpdate"), HarmonyPostfix]
         private static void EntityUpdatePostfix()
             => Entity.physicalHeight = _physicalHeight;
+
+
+        [HarmonyPatch(typeof(Navigator), "BuildNavPath"), HarmonyPrefix]
+        private static bool BuildNavPathPrefix(Navigator __instance, Cell firstOpenTile, Cell lastOpenTile)
+        {
+            if (firstOpenTile == lastOpenTile)
+            {
+                __instance.destinationPoints.Add(firstOpenTile.CenterWorldPosition + Vector3.up * __instance.ec.Height);
+                return false;
+            }
+            return true;
+        }
+
+
+
+        private static readonly object zeroOutY = AccessTools.Method(typeof(Vector3Extensions), "ZeroOutY");
+        private static readonly object floorWorldPosGetter = AccessTools.PropertyGetter(typeof(Cell), "FloorWorldPosition");
+
+
+        // For nav meshes, duh!
+        private static readonly MethodInfo correctYMethod = AccessTools.Method(typeof(CrawlspaceEntityPatches), "CorrectY");
+        private static Vector3 CorrectY(this Vector3 v, Navigator nav)
+            => new(v.x, 1+nav.npc.ec.Height, v.z);
+
+        // For the singular cell
+        private static readonly MethodInfo accurateCellPos = AccessTools.Method(typeof(CrawlspaceEntityPatches), "GetAccurateCellPos");
+        private static Vector3 GetAccurateCellPos(this Cell cell)
+        {
+            Vector3 pos = cell.FloorWorldPosition;
+            pos.y = cell.room.ec.Height;
+            return pos;
+        }
+
+        [HarmonyPatch(typeof(Navigator), "BuildNavPath"), HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> BuildNavPathTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            byte patchesDone = 0;
+
+            CodeInstruction[] array = instructions.ToArray();
+            int length = array.Length, i = 0;
+
+            for (; i < length; i++)
+            {
+                // vector.ZeroOutY()
+                if (array[i].opcode   == OpCodes.Call    &&
+                    array[i].operand  == zeroOutY)
+                {
+                    patchesDone++;
+
+                    // vector.CorrectY(this)
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    array[i].operand = correctYMethod;
+                    yield return array[i];
+                    continue;
+                }
+                // cell.FloorWorldPosition
+                if (array[i].opcode   == OpCodes.Callvirt    &&
+                    array[i].operand  == floorWorldPosGetter)
+                {
+                    patchesDone++;
+
+                    // cell.GetAccurateCellPos()
+                    yield return new CodeInstruction(OpCodes.Call, accurateCellPos);
+                    continue;
+                }
+                yield return array[i];
+            }
+
+            if (patchesDone == 0)
+                RecommendedCharsPlugin.Log.LogError("No patches have been done for \"RecommendedChars.CrawlspaceEntityPatches.BuildNavPathTranspiler\"!");
+
+            yield break;
+        }
     }
 }

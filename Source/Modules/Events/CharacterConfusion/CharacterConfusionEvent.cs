@@ -41,30 +41,39 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 NPC b = null;
                 CharacterShuffleData shuffledB = null;
+                bool final = false;
                 //swap twice with a random NPC if we are out
                 if (npcsToSwap.Count == 0)
                 {
+                    break;
+
                     do b = npcs[crng.Next(npcs.Count)]; while (b == a);
-                    shuffledB = b.GetComponent<CharacterShuffleData>();
-                    npcSwaps[shuffledB] = shuffledA;
+                    final = true;
                 }
                 else
                 {
                     b = npcsToSwap[crng.Next(npcsToSwap.Count)];
                     npcsToSwap.Remove(b);
-
-                    shuffledB = b.gameObject.AddComponent<CharacterShuffleData>();
-                    shuffledB.Npc = b;
-                    shuffledB.SpriteParent = b.spriteRenderer[0].transform.parent;
-                    shuffledB.ToSwap = shuffledA;
-                    npcSwaps.Add(shuffledB, shuffledA);
                 }
+
+                shuffledB = b.gameObject.AddComponent<CharacterShuffleData>();
+                shuffledB.Npc = b;
+                shuffledB.SpriteParent = b.spriteRenderer[0].transform.parent;
+                shuffledB.ToSwap = shuffledA;
                 
-                npcSwaps.Add(shuffledA, shuffledB);
+                if (final)
+                    npcSwaps.Add(shuffledB, shuffledA);
+                else
+                    npcSwaps.Add(shuffledA, shuffledB);
+
                 shuffledA.ToSwap = shuffledB;
             }
+
             foreach (var toSwap in npcSwaps.Keys)
+            {
                 toSwap.SwapSprites();
+                toSwap.ToSwap.SwapSprites();
+            }
         }
 
         public override void End()
