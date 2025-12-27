@@ -46,7 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetWanderEnterRooms()
                 .Build();
 
-            //PineDebugNpcIconPatch.icons.Add(gifter.character, AssetMan.Get<Texture2D>("GifterTex/BorderGifter"));
+            PineDebugNpcIconPatch.icons.Add(gifter.character, "BorderGifter.png");
 
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 2, 42f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("GifterTex/Gifter_Sheet"));
 

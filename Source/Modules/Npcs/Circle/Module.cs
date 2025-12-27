@@ -44,10 +44,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void LoadCircle()
         {
             CircleNpc circle = SwapComponentSimple<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
-            circle.name = "ShapeWorld Circle";
+            circle.name = "RecChars ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
-            //PineDebugNpcIconPatch.icons.Add(CircleNpc.charEnum, AssetMan.Get<Texture2D>("CircleTex/BorderCircle"));
+            PineDebugNpcIconPatch.icons.Add(CircleNpc.charEnum, "BorderCircle.png");
 
             circle.character = CircleNpc.charEnum;
             circle.looker.npc = circle;

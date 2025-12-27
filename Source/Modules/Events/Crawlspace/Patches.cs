@@ -1,14 +1,11 @@
-﻿using UnityEngine;
-using HarmonyLib;
-using UnityEngine.AI;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using TMPro;
-using System.Collections;
+﻿using HarmonyLib;
+
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -119,7 +116,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         // For nav meshes, duh!
         private static readonly MethodInfo correctYMethod = AccessTools.Method(typeof(CrawlspaceEntityPatches), "CorrectY");
         private static Vector3 CorrectY(this Vector3 v, Navigator nav)
-            => new(v.x, 1+nav.npc.ec.Height, v.z);
+            => new(v.x, nav.npc.ec.Height, v.z);
 
         // For the singular cell
         private static readonly MethodInfo accurateCellPos = AccessTools.Method(typeof(CrawlspaceEntityPatches), "GetAccurateCellPos");

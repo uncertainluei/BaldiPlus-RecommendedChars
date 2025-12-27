@@ -18,9 +18,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public AudioManager audMan;
         public EveyBsodaaSpray projectilePre;
 
-        public SoundObject audCharging;
+        public SoundObject audCharging, audReloaded;
         public SoundObject[] audSuccess;
-        public SoundObject audReloaded;
 
         public List<RoomController> BsodaaRooms { get; private set; } = [];
         private DijkstraMap dijkstraMap;

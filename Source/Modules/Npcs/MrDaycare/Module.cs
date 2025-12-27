@@ -153,7 +153,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.ruleSensitivityMul = 1;
             ObjMan.Add("Npc_MrDaycare_Nerfed", daycare);
 
-            //PineDebugNpcIconPatch.icons.Add(daycare.Character, AssetMan.Get<Texture2D>("DaycareTex/BorderDaycare"));
+            PineDebugNpcIconPatch.icons.Add(daycare.Character, "BorderDaycare");
             CharacterRadarColorPatch.colors.Add(daycare.Character, daycare.audMan.subtitleColor);
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);

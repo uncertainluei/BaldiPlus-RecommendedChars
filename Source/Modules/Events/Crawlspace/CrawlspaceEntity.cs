@@ -137,7 +137,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             entity.UpdateHeightAndScale();
 
             EntityHeightFixer.GetInstance(entity).heightDifference = ec.Height;
-            entity.Teleport(new(transform.position.x, Entity.physicalHeight+ec.Height, transform.position.z));
+            entity.Teleport(transform.position);
+            //transform.position = new(transform.position.x, Entity.physicalHeight+ec.Height, transform.position.z);
 
             switch (entType)
             {

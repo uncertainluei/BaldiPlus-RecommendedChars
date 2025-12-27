@@ -16,38 +16,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public AudioManager audMan;
         public SoundObject[] audCount;
-        public SoundObject audLaugh;
-        public SoundObject audOops;
-        public SoundObject audSad;
+        public SoundObject audLaugh, audOops, audSad;
 
-        public ItemObject itmSmallBsoda;
-        public ItemObject itmDietBsoda;
-        public ItemObject itmBsoda;
+        public ItemObject itmSmallBsoda, itmDietBsoda, itmBsoda;
 
         public SpriteRenderer sprite;
-        public Sprite sprEmpty;
-        public Sprite sprSprayed;
+        public Sprite sprEmpty, sprSprayed;
 
         public bool forceDietMode = false;
 
-        public bool ClickableHidden()
-        {
-            return !InStock;
-        }
-
-        public bool ClickableRequiresNormalHeight()
-        {
-            return true;
-        }
-
-        public void ClickableSighted(int player)
-        {
-            _player = CoreGameManager.Instance.GetPlayer(player);
-        }
-
-        public void ClickableUnsighted(int player)
-        {
-        }
+        public bool ClickableHidden() => !InStock;
+        public bool ClickableRequiresNormalHeight() => true;
+        public void ClickableSighted(int player) => _player = CoreGameManager.Instance.GetPlayer(player);
+        public void ClickableUnsighted(int player) {}
 
         private int lastPlayer = -1;
         private PlayerManager _player;
@@ -68,7 +49,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             audMan.QueueAudio(audCount[3-bsodaCount]);
             bsodaCount--;
 
-            // Give Diet BSODA Minis if the player takes more than three during a run
+            // Give Diet BSODA Minis (if there are any) if the player takes more than three during a run
             if (countUntilSmall == 0)
                 _player.itm.AddItem(itmSmallBsoda);
             else
@@ -121,7 +102,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Cell currentCell = ec.CellFromPosition(transform.position);
             RoomController room;
-            if (currentCell != null && (room = currentCell.room) != null)
+            if (currentCell != null && !currentCell.Null && (room = currentCell.room))
                 bsodaaRoom = room.functionObject.GetComponent<BsodaaRoomFunction>();
         }
 
@@ -144,8 +125,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     // Dummy component so we can keep track on what's a (regular) BSODA spray and not a variant
     public class VanillaBsodaComponent : MonoBehaviour
-    {
-    }
+    {}
 
     public class BsodaaHelperDummyNpc : NPC
     {

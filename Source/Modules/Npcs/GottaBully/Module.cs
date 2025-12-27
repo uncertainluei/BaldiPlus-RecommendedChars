@@ -70,7 +70,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.name = "GottaBully";
 
             gottaBully.character = EnumExtensions.ExtendEnum<Character>("RecChars_GottaBully");
-            //PineDebugNpcIconPatch.icons.Add(gottaBully.character, AssetMan.Get<Texture2D>("GottaBullyTex/BorderGottaBully"));
+            PineDebugNpcIconPatch.icons.Add(gottaBully.character, "BorderGottaBully.png");
 
             gottaBully.ignorePlayerOnSpawn = true;
 
