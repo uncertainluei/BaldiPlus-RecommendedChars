@@ -47,8 +47,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             circle.name = "RecChars ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
-            PineDebugNpcIconPatch.icons.Add(CircleNpc.charEnum, "BorderCircle.png");
-
             circle.character = CircleNpc.charEnum;
             circle.looker.npc = circle;
             circle.navigator.npc = circle;
@@ -145,6 +143,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjMan.Add("Npc_Circle", circle);
                 ObjMan.Add("Comp_CircleJumprope", jumprope);
             }
+
+            PineDebugNpcIcons.AddIcon([circle, unnerfedCircle], "BorderCircle.png");
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", circle);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle_og", unnerfedCircle);

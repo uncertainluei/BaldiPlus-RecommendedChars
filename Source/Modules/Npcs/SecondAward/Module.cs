@@ -54,7 +54,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             secondAward.spriteRenderer[0].sprite = rotationMap.spriteSheet[0];
             secondAward.spriteRenderer[0].GetComponent<AnimatedSpriteRotator>().spriteMap = [rotationMap];
 
-            PineDebugNpcIconPatch.icons.Add(SecondAward.charEnum, "BorderSecondAward");
+            PineDebugNpcIcons.AddIcon([secondAward], "BorderSecondAward.png");
 
             // Subtitle/Radar color
             secondAward.audMan.subtitleColor = secondAward.motorAudMan.subtitleColor = new(219/255f, 159/255f, 86/255f);

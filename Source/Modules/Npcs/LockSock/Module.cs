@@ -43,7 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .AddTrigger()
                 .Build();
 
-            PineDebugNpcIconPatch.icons.Add(lockSock.character, "BorderLockSock.png");
+            PineDebugNpcIcons.AddIcon([lockSock], "BorderLockSock.png");
 
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("LSockTex/LockSockSprites"));
 

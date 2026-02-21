@@ -1,30 +1,28 @@
-﻿using BepInEx.Configuration;
+﻿using BBPlusAnimations.Components;
 
 using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
-using MTM101BaldAPI.UI;
+
+using PlusStudioLevelLoader;
 
 using System;
-using System.IO;
 using System.Linq;
 
+using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
-using UnityEngine.UI;
-using UncertainLuei.CaudexLib.Util.Extensions;
-using PlusStudioLevelLoader;
-using UncertainLuei.CaudexLib.Objects;
+
 using System.Collections.Generic;
-using UncertainLuei.CaudexLib.Util;
-using BBPlusAnimations.Components;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -70,7 +68,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.name = "GottaBully";
 
             gottaBully.character = EnumExtensions.ExtendEnum<Character>("RecChars_GottaBully");
-            PineDebugNpcIconPatch.icons.Add(gottaBully.character, "BorderGottaBully.png");
+            PineDebugNpcIcons.AddIcon([gottaBully], "BorderGottaBully.png");
 
             gottaBully.ignorePlayerOnSpawn = true;
 

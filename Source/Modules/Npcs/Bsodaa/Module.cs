@@ -184,7 +184,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.audMan = bsodaaGuy.GetComponent<AudioManager>();
             bsodaaGuy.audMan.subtitleColor = new Color(3f/255f, 36f/255f, 1f);
 
-            PineDebugNpcIconPatch.icons.Add(bsodaaGuy.Character, "BorderBsodaa.png");
+            PineDebugNpcIcons.AddIcon([bsodaaGuy], "BorderBsodaa.png");
             CharacterRadarColorPatch.colors.Add(bsodaaGuy.Character, bsodaaGuy.audMan.subtitleColor);
 
             bsodaaGuy.audCharging = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Charging"), "Sfx_RecChars_Bsodaa_Charging", SoundType.Effect, bsodaaGuy.audMan.subtitleColor);

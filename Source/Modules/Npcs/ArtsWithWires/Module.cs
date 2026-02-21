@@ -49,7 +49,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .AddTrigger()
                 .Build();
 
-            //PineDebugNpcIconPatch.icons.Add(artsWithWires.character, AssetMan.Get<Texture2D>("WiresTex/BorderWires"));
+            PineDebugNpcIcons.AddIcon([artsWithWires], "BorderWires.png");
 
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("WiresTex/WiresSprites"));
 

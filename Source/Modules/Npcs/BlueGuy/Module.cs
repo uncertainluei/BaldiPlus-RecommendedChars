@@ -61,7 +61,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bluGuy.audMan = bluGuy.GetComponent<AudioManager>();
             bluGuy.audMan.subtitleColor = new(36/255f, 72/255f, 145/255f);
 
-            //PineDebugNpcIconPatch.icons.Add(bluGuy.character, AssetMan.Get<Texture2D>("BluTex/BorderBlueGuy"));
+            PineDebugNpcIcons.AddIcon([bluGuy], "BorderBlueGuy.png");
             CharacterRadarColorPatch.colors.Add(bluGuy.character, bluGuy.audMan.subtitleColor);
 
             bluGuy.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Intro"), "Vfx_RecChars_BlueGuy_Intro", SoundType.Effect, bluGuy.audMan.subtitleColor);

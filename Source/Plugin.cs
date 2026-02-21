@@ -71,12 +71,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Register base/generic assets
             LoadGenericLocalization();
             LoadingEvents.RegisterOnAssetsLoaded(Info, RegisterEssentialAssets(), LoadingEventOrder.Pre);
+            if (Chainloader.PluginInfos.ContainsKey(PineDebugGuid)) LoadingEvents.RegisterOnAssetsLoaded(Info, RegisterPost(), LoadingEventOrder.Post);
 
             // Register built-in patches
             Hooks = new(ModGuid);
             Hooks.PatchAll(typeof(LevelGeneratorPatches));
             Hooks.PatchAll(typeof(NoNpcActivityChaosPatches));
-            PatchCompat(typeof(PineDebugNpcIconPatch), PineDebugGuid);
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
             PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
             PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
@@ -127,6 +127,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             yield return "Loading generic sounds";
             AssetMan.Add("Sfx/FoodSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
+        }
+
+        private IEnumerator RegisterPost()
+        {
+            yield return 1;
+            yield return "Setting PineDebug icons";
+            PineDebugNpcIcons.SetIcons();
         }
     }
 

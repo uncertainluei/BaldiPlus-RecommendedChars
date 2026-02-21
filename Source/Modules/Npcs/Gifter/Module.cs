@@ -46,8 +46,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetWanderEnterRooms()
                 .Build();
 
-            PineDebugNpcIconPatch.icons.Add(gifter.character, "BorderGifter.png");
-
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 2, 42f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("GifterTex/Gifter_Sheet"));
 
             gifter.sprite = gifter.spriteRenderer[0];
@@ -100,6 +98,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gifter", gifter);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gifttanynt", gifter);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gifter", gifter.Poster);
+
+            PineDebugNpcIcons.AddIcon([gifter], "BorderGifter.png");
             ObjMan.Add("Npc_Gifter", gifter);
         }
 

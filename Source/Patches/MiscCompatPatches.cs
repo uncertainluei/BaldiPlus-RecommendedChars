@@ -1,8 +1,5 @@
 ﻿using HarmonyLib;
-using MTM101BaldAPI;
-using MTM101BaldAPI.AssetTools;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
@@ -19,24 +16,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
             BaseGameManager.Instance.Ec.map.AddArrow(__0.Navigator.Entity, colors[__0.character]);
             return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(PineDebug.PineDebugManager), "InitAssets")]
-    static class PineDebugNpcIconPatch
-    {
-        internal static readonly Dictionary<Character, string> icons = [];
-        private static bool initialized;
-
-        private static void Postfix()
-        {
-            if (initialized) return;
-            initialized = true;
-
-            string pathTemplate = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Textures", "Compat", "PineDebug");
-
-            foreach (Character character in icons.Keys)
-                PineDebug.PineDebugManager.pinedebugAssets.Add($"Border{character.ToStringExtended()}", AssetLoader.TextureFromFile(Path.Combine(pathTemplate, icons[character])));
         }
     }
 }
