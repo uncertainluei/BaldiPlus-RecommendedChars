@@ -1,12 +1,5 @@
 using HarmonyLib;
 
-using MTM101BaldAPI;
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
     [HarmonyPatch]

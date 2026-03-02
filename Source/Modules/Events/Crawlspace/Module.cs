@@ -10,11 +10,9 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 
 using PlusStudioLevelLoader;
 using PlusLevelStudio;
-using UncertainLuei.CaudexLib.Util;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using brobowindowsmod;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -35,7 +33,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Load patches
             Hooks.PatchAll(typeof(CrawlspaceEntityPatches));
-            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.GetParameters().Length == 5), new HarmonyMethod(AccessTools.Method(typeof(CrawlspaceEntityPatches), "LookerRaycast")));
+            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.Name == "Raycast" && x.GetParameters().Length == 5 && x.GetParameters()[4].IsOut), new HarmonyMethod(AccessTools.Method(typeof(CrawlspaceEntityPatches), "LookerRaycast")));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

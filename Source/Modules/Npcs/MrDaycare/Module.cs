@@ -85,7 +85,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             MrDaycare.charEnum = daycare.character;
 
             daycare.spriteRenderer[0].transform.localPosition = Vector3.up * -1f;
-            daycare.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/MrDaycare"), 65f);
+            daycare.chasingSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/MrDaycare"), 65f);
+            daycare.normalSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/MrDaycare_ArmDown"), 65f);
+            daycare.spriteRenderer[0].sprite = daycare.normalSprite;
 
             daycare.audMan = daycare.GetComponent<AudioManager>();
             daycare.audMan.subtitleColor = new(192/255f, 242/255f, 75/255f);
