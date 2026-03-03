@@ -1,0 +1,39 @@
+{
+	// Carter
+	"PST_PRI_RecChars_Carter1": "Carter",
+	"PST_PRI_RecChars_Carter2": "This student always keeps forgetting his most important items!\nMaybe you can help find them?",
+
+	"Vfx_RecChars_Carter_Lost1": "I seem to have misplaced my",
+	"Vfx_RecChars_Carter_Lost2": "Fiddle tree branches! I forgot my",
+	"Vfx_RecChars_Carter_Lost3": "Oh, feces! Not my",
+
+	"Vfx_RecChars_Carter_Lost_Bsoda": "BSODA!",
+	"Vfx_RecChars_Carter_Lost_Scissors": "safety scissors!",
+	"Vfx_RecChars_Carter_Lost_Tape": "favorite song that Mr. Baldimore dosen't like!",
+	"Vfx_RecChars_Carter_Lost_PrincipalWhistle": "whistle!",
+	"Vfx_RecChars_Carter_Lost_ZestyBar": "Zesty Bar!",
+	"Vfx_RecChars_Carter_Lost_DoorLock": "yellow door lock!",
+	"Vfx_RecChars_Carter_Lost_Wd40": "WD-NoSquee!",
+
+	"Vfx_RecChars_Carter_Help1": "Hey, maybe YOU can help me find it!",
+	"Vfx_RecChars_Carter_Help2": "Well, I guess it's up to you to return it...",
+	"Vfx_RecChars_Carter_Help3": "Hey, you!", //Cylinder-looking thing!
+
+	"Vfx_RecChars_Carter_MapCoords": "Here's the map coordinates!",
+
+	"Vfx_RecChars_Carter_Leave1": "Good luck!",
+	"Vfx_RecChars_Carter_Leave2": "Happy investigating!",
+	"Vfx_RecChars_Carter_Leave3": "Now, go on and find it for me!",
+
+	"Vfx_RecChars_Carter_Thanks": "Thanks so much!",
+	"Vfx_RecChars_Carter_Thanks_1": "See you later!",
+
+	"Vfx_RecChars_Carter_ScreamIntro": "*SCREEECHHH*",
+	"Vfx_RecChars_Carter_ScreamLoop": "*SCREEECHHH*",
+
+	// Carter's items
+	"Itm_RecChars_CarterItmGeneric": "Carter's {0}",
+	"Itm_RecChars_CarterPrincipalWhistle": "Carter's Whistle",
+	"Itm_RecChars_CarterTape": "Carter's Favorite Tape"
+
+}
