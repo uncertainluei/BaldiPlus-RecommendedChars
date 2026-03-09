@@ -9,7 +9,7 @@
 
 	"Vfx_RecChars_Carter_Lost_Bsoda": "BSODA!",
 	"Vfx_RecChars_Carter_Lost_Scissors": "safety scissors!",
-	"Vfx_RecChars_Carter_Lost_Tape": "favorite song that Mr. Baldimore dosen't like!",
+	"Vfx_RecChars_Carter_Lost_Tape": "favorite song that Mr. Baldimore doesn't like!",
 	"Vfx_RecChars_Carter_Lost_PrincipalWhistle": "whistle!",
 	"Vfx_RecChars_Carter_Lost_ZestyBar": "Zesty Bar!",
 	"Vfx_RecChars_Carter_Lost_DoorLock": "yellow door lock!",
@@ -32,7 +32,8 @@
 	"Vfx_RecChars_Carter_ScreamLoop": "*SCREEECHHH*",
 
 	// Carter's items
-	"Itm_RecChars_CarterItmGeneric": "Carter's {0}",
+	"Itm_RecChars_CarterItmGeneric": "Carter's Item",
+	"Itm_RecChars_CarterItmFormat": "Carter's {0}",
 	"Itm_RecChars_CarterPrincipalWhistle": "Carter's Whistle",
 	"Itm_RecChars_CarterTape": "Carter's Favorite Tape"
 

@@ -60,7 +60,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .Build();
 
 
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CarterTex/cartre_sheet"));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 40f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CarterTex/cartre_sheet"));
 
             carter.sprite = carter.spriteRenderer[0];
             carter.sprite.transform.localPosition = Vector3.zero;
@@ -75,7 +75,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             carter.audMan = carter.GetComponent<AudioManager>();
             carter.audMan.subtitleColor = new(19/255f, 158/255f, 140/255f);
 
-            //PineDebugNpcIcons.AddIcon([carter], "BorderCarter.png");
+            PineDebugNpcIcons.AddIcon([carter], "BorderCarter.png");
             CharacterRadarColorPatch.colors.Add(carter.character, carter.audMan.subtitleColor);
 
             carter.audLost = [
@@ -118,13 +118,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add("Npc_Carter", carter);
         }
 
+        private ItemMetaData _carterItmMeta;
         private CarterItemObject CreateCarterItem(Items baseItm, bool suffix = true)
         {
-            CarterItemObject itm = new ItemBuilder(Plugin)
+            ItemBuilder builder = new ItemBuilder(Plugin)
                 .SetNameAndDescription("Itm_RecChars_Carter"+baseItm.ToStringExtended(), "")
-                .SetEnum(_carterItmEnum)
-                .SetMeta(ItemFlags.None, ["recchars:gifter_blacklist", "adv_forbidden_present"])
-                .Build<CarterItemObject>();
+                .SetEnum(_carterItmEnum);
+                
+            if (_carterItmMeta == null)
+                builder.SetMeta(ItemFlags.None, ["recchars:gifter_blacklist", "adv_forbidden_present"]);
+            else
+                builder.SetMeta(_carterItmMeta);
+
+            CarterItemObject itm = builder.Build<CarterItemObject>();
+            _carterItmMeta = itm.GetMeta();
             itm.Setup(baseItm, suffix);
             return itm;
         }

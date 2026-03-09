@@ -25,7 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         public override string LocalizedName => !useSuffix ? base.LocalizedName :
-            string.Format(UnlocalizedName.Localize(), baseItm.GetName(true));
+            string.Format("Itm_RecChars_CarterItmFormat".Localize(), baseItm.GetName(true));
         public override string LocalizedDesc => baseItm.GetDescription(true);
     }
 }
