@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UncertainLuei.CaudexLib.Components;
 using UnityEngine;
@@ -22,7 +21,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             RoomCategory.Hall,
             RoomCategory.FieldTrip,
             RoomCategory.Mystery,
-            RoomCategory.Office,
             RoomCategory.Store,
             RoomCategory.Test
         ];
@@ -57,6 +55,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 }
                 if (itms.Count == 0) continue;
 
+                room = selection;
+                foundItemCount = -1;
                 LostItem = possibleItems[id];
                 Player = player;
                 Pickup = itms[Random.Range(0, itms.Count)];
@@ -67,10 +67,55 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             return -1;
         }
 
+        public void CheckForItem()
+        {
+            if (foundItemCount == -1)
+            {
+                // Stop method if pickup is still present
+                if (Pickup && Pickup.isActiveAndEnabled && Pickup.item == LostItem)
+                    return;
+
+                foundItemCount = CountInventoryItems();
+            }
+            if (foundItemCount > 0 && CountInventoryItems() >= foundItemCount)
+                return;
+
+            // GET FUCKING MAD!!!!
+            behaviorStateMachine.ChangeState(new Carter_AngryStare(this));
+        }
+
+        // How many items does the player now have??
+        private sbyte CountInventoryItems()
+        {
+            sbyte count = 0;
+            for (int i = 0; i <= Player.itm.maxItem && i <= Player.itm.items.Length; i++)
+            {
+                if (Player.itm.items[i] == LostItem)
+                    count++;
+            }
+            return count;
+        }
+
+        public void IssueMap()
+        {
+            paper = CarterHudManager.GetInstance(CoreGameManager.Instance.GetHud(Player.playerNumber)).ActivatePaper(room);
+        }
+
+        private void OnDestroy()
+        {
+            if (paper)
+                paper.Deactivate();
+        }
+
         public ItemObject LostItem {get; protected set;}
         public Pickup Pickup {get; protected set;}
 
         public PlayerManager Player {get; protected set;}
+
+        private RoomController room;
+        private CarterPaper paper;
+
+        private sbyte foundItemCount;
     }
 
     public class Carter_StateBase(Carter carter) : NpcState(carter)
@@ -135,19 +180,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Enter();
             npc.Navigator.maxSpeed = 0f;
-            npc.Navigator.Entity.AddForce(new Force(npc.transform.position-carter.Player.transform.position, 4f, -25f));
+            npc.Navigator.Entity.AddForce(new Force(npc.transform.position-carter.Player.transform.position, 6f, -25f));
         }
 
         public override void Update()
         {
             base.Update();
-            if (carter.audMan.QueuedAudioIsPlaying)
+            carter.CheckForItem();
+            if (carter.audMan.QueuedAudioIsPlaying || carter.behaviorStateMachine.CurrentState != this)
                 return;
 
             if (!mapIssued)
             {
-                // ADD THE MAP PAPER TO THE HUD (this might be tricky atm so I'll hold off for now)
-
+                carter.IssueMap();
                 carter.audMan.QueueAudio(carter.audCoords, true);
                 mapIssued = true;
                 return;
@@ -163,6 +208,82 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Update()
         {
             base.Update();
+            carter.CheckForItem();
+        }
+    }
+
+    public class Carter_AngryStare(Carter carter) : Carter_StateBase(carter)
+    {
+        private float stareTime;
+
+        // Silence layer
+        private PlayerSilenceManager silencer;
+        private bool silenceActive;
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            Vector3 targetPos = carter.Player.transform.position;
+            float dist = 16f;
+            if (Physics.Raycast(targetPos, carter.Player.cameraBase.transform.forward, out RaycastHit hit, dist, carter.looker.layerMask))
+                dist = hit.distance;
+            carter.Navigator.Entity.Teleport(targetPos+carter.Player.cameraBase.transform.forward*dist*0.8f);
+
+            stareTime = Random.Range(1f,9.991f);
+            silenceActive = false;
+            silencer = carter.Player.GetComponent<PlayerSilenceManager>();
+            
+            carter.audMan.FlushQueue(true);
+            carter.sprite.sprite = carter.sprAngry;
+            npc.Navigator.maxSpeed = 0f;
+        }
+
+        public override void Unsighted()
+        {
+            base.Unsighted();
+            if (!silenceActive)
+            {
+                silenceActive = true;
+                silencer.Silence(true);
+            }
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            if (silenceActive)
+            {
+                silenceActive = false;
+                silencer.Silence(false);
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            stareTime -= Time.deltaTime * npc.TimeScale;
+            if (stareTime <= 0f)
+                carter.behaviorStateMachine.ChangeState(new Carter_CallingBaldi(carter));
+        }
+    } 
+
+    public class Carter_CallingBaldi(Carter carter) : Carter_StateBase(carter)
+    {
+        public override void Enter()
+        {
+            base.Enter();            
+            carter.sprite.sprite = carter.sprScreech;
+            carter.audMan.FlushQueue(true);
+            carter.audMan.QueueAudio(carter.audIntro);
+            carter.audMan.QueueAudio(carter.audLoop);
+            carter.audMan.loop = true;
+            npc.Navigator.maxSpeed = 0f;
+        }
+
+
+        public override void Update()
+        {
         }
     }
 }

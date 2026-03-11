@@ -35,6 +35,27 @@
 	"Itm_RecChars_CarterItmGeneric": "Carter's Item",
 	"Itm_RecChars_CarterItmFormat": "Carter's {0}",
 	"Itm_RecChars_CarterPrincipalWhistle": "Carter's Whistle",
-	"Itm_RecChars_CarterTape": "Carter's Favorite Tape"
+	"Itm_RecChars_CarterTape": "Carter's Favorite Tape",
 
+	// Hints
+	"Hud_RecChars_CarterHint_Class": "um... probably in a classroom",
+	"Hud_RecChars_CarterHint_Class_BalloonBuster": "got carried away with counting balloons",
+	"Hud_RecChars_CarterHint_Class_Match": "must have left it while matching pairs",
+	"Hud_RecChars_CarterHint_Faculty": "a faculty member maybe thought it was theirs?",
+	"Hud_RecChars_CarterHint_Faculty_Locked": "i put it in a pedestal...",
+	"Hud_RecChars_CarterHint_Office": "the principal must have took it!",
+
+	"Hud_RecChars_CarterHint_Cafeteria": "maybe i left it behind while i ate?",
+	"Hud_RecChars_CarterHint_Playground": "i must have dropped it somewhere outside",
+	"Hud_RecChars_CarterHint_Library": "likely left it while reading...",
+	"Hud_RecChars_CarterHint_Laboratory": "i perhaps dropped it while going to the machine",
+	"Hud_RecChars_CarterHint_LightbulbTesting": "last time i had it, it went dark...",
+	"Hud_RecChars_CarterHint_Closet": "it must've been picked up by the broom!",
+	"Hud_RecChars_CarterHint_Clinic": "i was ill last time i saw it...",
+	
+	"Hud_RecChars_CarterHint_Bsodaa": "perhaps consult that soda baldi guy...",
+	"Hud_RecChars_CarterHint_Daycare": "must've been in the green alien's room",
+	"Hud_RecChars_CarterHint_SwappedCloset": "that no-good bully broom stole it!",
+
+	"Hud_RecChars_CarterHint_Fallback": "perhaps find a '{0}'..."
 }

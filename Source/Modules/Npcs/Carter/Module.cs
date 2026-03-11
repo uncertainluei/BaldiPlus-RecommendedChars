@@ -4,15 +4,16 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
-
+using MTM101BaldAPI.UI;
 using PlusStudioLevelLoader;
-
+using TMPro;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -27,8 +28,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddTexturesToAssetMan("CarterTex/", ["Textures", "Npc", "Carter"]);
             AddAudioToAssetMan("CarterAud/", ["Audio", "Npc", "Carter"]);
 
+            AssetMan.Add("Sfx/MapZoom", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_ZoomIn.wav"), "", SoundType.Effect, Color.white, -1));
+            AssetMan.Add("Sfx/MapWhoosh", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Whoosh.wav"), "", SoundType.Effect, Color.white, -1));
+            AssetMan.Add("Sfx/MapThump", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Thump.wav"), "", SoundType.Effect, Color.white, -1));
+            AssetMan.Add("Sfx/MapTurn", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Turn.wav"), "", SoundType.Effect, Color.white, -1));
+
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Carter.json5");
+
+            // Load patches
+            Hooks.PatchAll(typeof(CarterPatches));
         }
 
         private Items _carterItmEnum;
@@ -48,6 +57,34 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 CreateCarterItem(Items.Wd40)
             ];
 
+            // Carter's paper
+            GameObject paperObject = new("CarterPaper", typeof(Image));
+            Image paperImage = paperObject.GetComponent<Image>();
+            paperImage.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("CarterTex/carterpaper"), 100);
+            paperImage.rectTransform.sizeDelta = new(128,128);
+            paperObject.SetActive(false);
+            CarterPaper paper = paperObject.AddComponent<CarterPaper>();
+            paper.audZoom = AssetMan.Get<SoundObject>("Sfx/MapZoom");
+            paper.audWhoosh = AssetMan.Get<SoundObject>("Sfx/MapWhoosh");
+            paper.audThump = AssetMan.Get<SoundObject>("Sfx/MapThump");
+            paperObject.transform.SetParent(MTM101BaldiDevAPI.prefabTransform, false);
+            GameObject paperText = new("PaperText", typeof(TextMeshProUGUI));
+            paper.text = paperText.GetComponent<TMP_Text>();
+            paperText.transform.SetParent(paperObject.transform, false);
+            paper.text.font = BaldiFonts.ComicSans12.FontAsset();
+            paper.text.fontSize = 12;
+            paper.text.alignment = TextAlignmentOptions.Center;
+            paper.text.lineSpacing = -40;
+            paper.text.color = Color.black;
+            paper.text.rectTransform.anchorMin = Vector2.up; 
+            paper.text.rectTransform.anchorMax = Vector2.up; 
+            paper.text.rectTransform.pivot = Vector2.up; 
+            paper.text.rectTransform.anchoredPosition = new(16, -44);
+            paper.text.rectTransform.sizeDelta = new(96, 50);
+            paper.gameObject.SetActive(true);
+            ObjMan.Add("Obj_CarterPaper", paper);
+
+            // Carter himself
             Carter carter = new NPCBuilder<Carter>(Plugin)
                 .SetName("Carter")
                 .SetEnum("RecChars_Carter")
@@ -60,7 +97,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .Build();
 
 
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 40f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CarterTex/cartre_sheet"));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 28f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CarterTex/cartre_sheet"));
 
             carter.sprite = carter.spriteRenderer[0];
             carter.sprite.transform.localPosition = Vector3.zero;

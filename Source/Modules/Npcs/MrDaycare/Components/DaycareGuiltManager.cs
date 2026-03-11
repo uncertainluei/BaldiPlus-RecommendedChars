@@ -8,7 +8,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static DaycareGuiltManager _instance;
         public static DaycareGuiltManager GetInstance(PlayerManager player)
         {
-            if (_player == player && _instance != null)
+            if (_player == player && _instance)
                 return _instance;
 
             _player = player;
