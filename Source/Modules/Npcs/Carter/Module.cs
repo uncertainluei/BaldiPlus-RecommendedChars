@@ -163,7 +163,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum(_carterItmEnum);
                 
             if (_carterItmMeta == null)
-                builder.SetMeta(ItemFlags.None, ["recchars:gifter_blacklist", "adv_forbidden_present"]);
+                builder.SetMeta(ItemFlags.None, ["recchars:gifter_blacklist", "adv_forbidden_present", "presents_nopresent"]);
             else
                 builder.SetMeta(_carterItmMeta);
 

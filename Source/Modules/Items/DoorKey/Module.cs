@@ -35,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ItemObject keyItemObject = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_DoorKey", "Desc_RecChars_DoorKey")
             .SetEnum("RecChars_DoorKey")
-            .SetMeta(ItemFlags.MultipleUse, ["key", "crmp_contraband"])
+            .SetMeta(ItemFlags.MultipleUse, ["key", "crmp_contraband", "presents_lessvalue"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DoorKeyItm/DoorKey_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DoorKeyItm/DoorKey_Large"), 50f))
             .SetShopPrice(750)
             .SetGeneratorCost(90)

@@ -75,6 +75,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (Pickup && Pickup.isActiveAndEnabled && Pickup.item == LostItem)
                     return;
 
+                if (paper) paper.Deactivate();
+                paper = null;
+
                 foundItemCount = CountInventoryItems();
             }
             if (foundItemCount > 0 && CountInventoryItems() >= foundItemCount)
@@ -103,8 +106,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void OnDestroy()
         {
-            if (paper)
-                paper.Deactivate();
+            if (paper) paper.Deactivate();
+            paper = null;
         }
 
         public ItemObject LostItem {get; protected set;}
@@ -116,6 +119,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private CarterPaper paper;
 
         private sbyte foundItemCount;
+        public bool FoundItem => foundItemCount > 0;
     }
 
     public class Carter_StateBase(Carter carter) : NpcState(carter)
@@ -136,6 +140,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class Carter_WanderDefault(Carter carter, float coolDown = 0f) : Carter_Wander(carter)
     {
         private float coolDown = coolDown;
+
+        public override void Enter()
+        {
+            base.Enter();
+            carter.sprite.sprite = carter.sprNormal;
+        }
 
         public override void Update()
         {
@@ -161,12 +171,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
 
             carter.audMan.FlushQueue(true);
-            carter.audMan.QueueAudio(carter.audLost[Random.Range(0,carter.audLost.Length)], true);
+            carter.audMan.QueueAudio(carter.audLost[Random.Range(0,carter.audLost.Length)]);
             carter.audMan.QueueAudio(carter.audItms[id]);
             carter.audMan.QueueAudio(carter.audHelp[Random.Range(0,carter.audHelp.Length)]);
-
-            if (!carter.audMan.QueuedAudioIsPlaying)
-                carter.audMan.PlayQueue();
 
             carter.behaviorStateMachine.ChangeState(new Carter_Request(carter));
         }
@@ -205,10 +212,44 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class Carter_WanderWaiting(Carter carter) : Carter_Wander(carter)
     {
+        private bool following = false;
+        private NavigationState_TargetPlayer targetPlayer = new(carter, 63, Vector3.zero);
+
         public override void Update()
         {
             base.Update();
             carter.CheckForItem();
+        }
+
+        public override void PlayerInSight(PlayerManager player)
+        {
+            base.PlayerInSight(player);
+            if (!carter.FoundItem || player != carter.Player)
+                return;
+
+            targetPlayer.UpdatePosition(player.transform.position);
+            if (!following)
+                ChangeNavigationState(targetPlayer);
+            
+            following = true;
+        }
+
+        public override void DestinationEmpty()
+        {
+            base.DestinationEmpty();
+            following = false;
+            Enter();
+        }
+
+        public override void OnStateTriggerEnter(Collider other, bool validCollision)
+        {
+            base.OnStateTriggerEnter(other, validCollision);
+            if (!validCollision || !following) return;
+            if (!other.CompareTag("Player") || !other.transform == carter.Player.transform) return;
+
+            carter.audMan.PlaySingle(carter.audThanks);
+            CoreGameManager.Instance.AddPoints(30, carter.Player.playerNumber, true);
+            carter.behaviorStateMachine.ChangeState(new Carter_WanderDefault(carter, 30f));
         }
     }
 
@@ -220,9 +261,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private PlayerSilenceManager silencer;
         private bool silenceActive;
 
-        public override void Enter()
+        public override void Initialize()
         {
-            base.Enter();
+            base.Initialize();
 
             Vector3 targetPos = carter.Player.transform.position;
             float dist = 16f;
@@ -270,6 +311,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class Carter_CallingBaldi(Carter carter) : Carter_StateBase(carter)
     {
+        public Carter Carter => carter;
+
+        private Baldi baldi;
+
         public override void Enter()
         {
             base.Enter();            
@@ -279,11 +324,138 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             carter.audMan.QueueAudio(carter.audLoop);
             carter.audMan.loop = true;
             npc.Navigator.maxSpeed = 0f;
-        }
 
+            baldi = carter.ec.GetBaldi();
+            if (!baldi)
+            {
+                Done();
+                return;
+            }
+
+            baldi.behaviorStateMachine.ChangeState(new Baldi_CarterResponse(baldi, this, baldi.behaviorStateMachine.CurrentState));
+        }
 
         public override void Update()
         {
+            base.Update();
+            if (!baldi)
+                Done();
+        }
+
+        public void Done()
+        {
+            carter.behaviorStateMachine.ChangeState(new Carter_AngryRecoil(carter));
+        }
+    }
+
+    public class Baldi_CarterResponse : Baldi_SubState
+    {
+        private Carter_CallingBaldi carterState;
+        private readonly NpcState inheritor;
+        private int angerVal;
+
+
+        public Baldi_CarterResponse(Baldi baldi, Carter_CallingBaldi carterState, NpcState previousState) : base(baldi, baldi, previousState)
+        {
+            this.carterState = carterState;
+
+            // Grab inheriting state (ideally to get his/other teachers' slapping routines)
+            inheritor = previousState;
+            while (inheritor is Baldi_SubState state)
+                inheritor = state.previousState;
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            angerVal = BaseGameManager.Instance.NotebookTotal;
+            baldi.GetAngry(angerVal);
+            baldi.Hear(null, carterState.Carter.transform.position, 127, true); // Force Baldicator
+            ChangeNavigationState(new NavigationState_TargetPosition(npc, 127, carterState.Carter.transform.position));
+        }
+
+        public override void Enter() => inheritor.Enter();
+        public override void Update() => inheritor.Update();
+        public override void DoorHit(StandardDoor door) => inheritor.DoorHit(door);
+        public override void OnStateTriggerStay(Collider other, bool validCollision)
+            => inheritor.OnStateTriggerStay(other, validCollision);
+        public override void OnStateTriggerEnter(Collider other, bool validCollision)
+            => inheritor.OnStateTriggerEnter(other, validCollision);
+        public override void OnStateTriggerExit(Collider other, bool validCollision)
+            => inheritor.OnStateTriggerExit(other, validCollision);
+        public override void NavigationStateChanged() => inheritor.NavigationStateChanged();
+
+
+        public override void Hear(GameObject source, Vector3 position, int value)
+        {
+            // Baldi will ALWAYS treat other noises as 'low-priority' in this state
+            int currentVal = baldi.currentSoundVal;
+            baldi.currentSoundVal = Mathf.Max(currentVal, value)+1;
+            inheritor.Hear(source, position, value);
+            baldi.currentSoundVal = currentVal;
+        }
+
+        public override void PlayerInSight(PlayerManager player)
+        {
+            currentNavigationState.priority = 0;
+            inheritor.PlayerInSight(player);
+            npc.behaviorStateMachine.ChangeState(previousState);
+        }
+
+        public override void ActivateSlapAnimation()
+        {
+            if (inheritor is Baldi_StateBase state)
+                state.ActivateSlapAnimation();
+        }
+
+        public override void Resume()
+        {
+            inheritor.Resume();
+            npc.behaviorStateMachine.ChangeState(previousState);
+        }
+
+        public override void DestinationEmpty()
+        {
+            currentNavigationState.priority = 0;
+            inheritor.DestinationEmpty();
+            npc.behaviorStateMachine.ChangeState(previousState);
+        }
+
+        public override void Exit()
+        {
+            inheritor.Exit();
+
+            currentNavigationState.priority = 0;
+            baldi.GetAngry(-angerVal);
+            
+            if (carterState != null && carterState.Carter)
+                carterState.Done();
+            carterState = null;
+        }
+    }
+
+    public class Carter_AngryRecoil(Carter carter) : Carter_StateBase(carter)
+    {
+        private float time;
+
+        public override void Enter()
+        {
+            base.Enter();
+            time = Random.Range(1f, 4f);
+            carter.sprite.sprite = carter.sprAngry;
+            carter.audMan.FadeOut(0.15f);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (carter.audMan.QueuedAudioIsPlaying)
+                return;
+
+            time -= Time.deltaTime * npc.TimeScale;
+            if (time <= 0f)
+                carter.behaviorStateMachine.ChangeState(new Carter_WanderDefault(carter, 30f));
         }
     }
 }

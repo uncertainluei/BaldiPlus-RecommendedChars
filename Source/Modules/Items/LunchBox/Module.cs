@@ -49,7 +49,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexMultiItemObject lunchBox = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_LunchBox", "Desc_RecChars_LunchBox")
             .SetEnum("RecChars_LunchBox")
-            .SetMeta(ItemFlags.MultipleUse, ["recchars:gifter_blacklist", "adv_forbidden_present"])
+            .SetMeta(ItemFlags.MultipleUse, ["recchars:gifter_blacklist", "adv_forbidden_present", "presents_nopresent"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("LunchTex/LunchBox_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("LunchTex/LunchBox_Large"), 50f))
             .SetShopPrice(550)
             .SetGeneratorCost(20)

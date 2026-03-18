@@ -25,6 +25,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private readonly List<CarterPaper> papers = [];
         private SoundObject audTurn;
 
+        public bool QuickMapActive;
+
         private void Awake()
         {
             prefab = RecommendedCharsPlugin.ObjMan.Get<CarterPaper>("Obj_CarterPaper");
@@ -36,6 +38,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CarterPaper paper = Instantiate(prefab, transform);
             papers.Add(paper);
             paper.manager = this;
+            SortPapers();
 
             string key = GetLocationKey(location);
             paper.text.text = ("Hud_RecChars_CarterHint_"+key).Localize(string.Format("Hud_RecChars_CarterHint_Fallback".Localize(), key));
@@ -65,9 +68,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             if (location.category == RoomCategory.Class)
             {
-                if (location.activity.name == "Activity_BalloonBuster")
+                if (location.activity.name == "Activity_BalloonBuster(Clone)")
                     return "Class_BalloonBuster";
-                if (location.activity.name == "Activity_Match")
+                if (location.activity.name == "Activity_Match(Clone)")
                     return "Class_Match";
             }
 
@@ -76,6 +79,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return key.Substring(9);
 
             return key;
+        }
+
+        public void RemovePaper(CarterPaper paper)
+        {
+            papers.Remove(paper);
+            SortPapers();
+        }
+
+        private void SortPapers()
+        {
+            int c = papers.Count, d = 129-c, s = (c-1)*d/-2;
+            for (int i = 0; i < c; i++)
+            {
+                papers[i].SetX(s);
+                s+=d;
+            }
         }
     }
 
@@ -89,6 +108,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private Vector2 pos;
         private float targetX, newX;
         private bool updatePos = false;
+        private bool initialized = false;
 
         private void Awake()
         {
@@ -106,9 +126,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator PopUpRoutine()
         {
-            Transform oldParent = transform.parent;
-            transform.SetParent(transform.parent.parent, false);
-            transform.anchoredPosition = Vector3.zero;
+            updatePos = false;
+            pos.x = newX = targetX;
+            transform.anchoredPosition = new(newX, 0);
 
             CoreGameManager.Instance.audMan.PlaySingle(audZoom);
             
@@ -125,19 +145,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             yield return new WaitForSeconds(1f);
 
             CoreGameManager.Instance.audMan.PlaySingle(audWhoosh);
-            yield return SmoothGlide(new(0,25),15);
+            yield return SmoothGlide(new(newX,25),15);
 
             CoreGameManager.Instance.audMan.PlaySingle(audThump);
-            yield return SmoothGlide(new(0,-228),20);
-            yield return SmoothGlide(new(0,-220),20);
+            yield return SmoothGlide(new(newX,-228),20);
+            yield return SmoothGlide(new(newX,-220),20);
 
             yield return new WaitForSeconds(0.5f);
 
-            transform.SetParent(oldParent, false);
-            pos.x = newX = 0;
-            pos.y = 0;
-            transform.anchoredPosition = Vector3.zero;
+            pos.y = -220;
+            transform.anchoredPosition = pos;
             updatePos = true;
+            initialized = true;
         }
 
         private IEnumerator SmoothGlide(Vector2 dest, float speed)
@@ -151,11 +170,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             transform.anchoredPosition = dest;
         }
 
-        public void SetX(float value)
+        public void SetX(int value)
         {
-            newX = pos.x;
             targetX = value;
-            updatePos = true;
+            if (initialized)
+            {
+                newX = pos.x;
+                updatePos = true;
+            }
         }
 
         private void Update()
@@ -165,6 +187,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             newX = Mathf.Lerp(newX, targetX, 10*Time.deltaTime);
             pos.x = Mathf.Round(newX);
+            transform.anchoredPosition = pos;
 
             if (pos.x == targetX)
                 updatePos = false;
@@ -172,7 +195,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public void Deactivate()
         {
-            // I don't know what to add so here's this instead
+            manager.RemovePaper(this);
+            initialized = false;
+            StopAllCoroutines();
+            StartCoroutine(LeaveRoutine());
+        }
+
+        private IEnumerator LeaveRoutine()
+        {
+            updatePos = false;
+
+            newX = transform.anchoredPosition.x;
+            pos.y = transform.anchoredPosition.y;
+            yield return SmoothGlide(new(newX,pos.y+16),15);
+            yield return SmoothGlide(new(newX,-256),20);
             Destroy(gameObject);
         }
     }
