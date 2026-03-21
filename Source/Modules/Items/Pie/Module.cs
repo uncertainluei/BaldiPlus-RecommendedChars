@@ -47,8 +47,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Gum gumClone = GameObject.Instantiate(((Beans)NPCMetaStorage.Instance.Get(Character.Beans).value).gumPre, MTM101BaldiDevAPI.prefabTransform);
 
             ITM_Pie pieUse = gumClone.gameObject.AddComponent<ITM_Pie>();
+            pieUse.name = "Itm_Pie";
             pie.item = pieUse;
-            pie.item.name = "Itm_Pie";
 
             pieUse.entity = gumClone.entity;
             pieUse.audMan = gumClone.audMan;
