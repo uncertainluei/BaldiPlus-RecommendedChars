@@ -123,10 +123,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class Gifter_WanderSimple(Gifter gifter) : Gifter_Wander(gifter)
     {
-        public override void OnStateTriggerEnter(Collider other, bool validCollision)
+        public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            base.OnStateTriggerEnter(other, validCollision);
-            if (!gifter.OnCooldown && validCollision && !gifter.Blinded && other.CompareTag("Player") &&
+            base.OnStateTriggerEnter(ent, other, valid);
+            if (!gifter.OnCooldown && valid && !gifter.Blinded && other.CompareTag("Player") &&
                 other.TryGetComponent(out PlayerManager player) && npc.looker.PlayerInSight() && !player.Tagged && !player.itm.InventoryFull())
                 npc.behaviorStateMachine.ChangeState(new Gifter_GiveGiftDirect(gifter, player));
         }

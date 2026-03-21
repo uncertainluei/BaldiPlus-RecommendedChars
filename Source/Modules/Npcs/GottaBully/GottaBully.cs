@@ -12,11 +12,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new GottaBully_Wait(this));
         }
 
-        public override void VirtualOnTriggerEnter(Collider other)
+        public override void VirtualOnTriggerEnter(Entity ent, Collider other)
         {
         }
 
-        public override void VirtualOnTriggerExit(Collider other)
+        public override void VirtualOnTriggerExit(Entity ent, Collider other)
         {
         }
 
@@ -82,9 +82,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class GottaBully_BullyingTime(GottaBully gottaBully) : GottaSweep_SweepingTime(gottaBully, gottaBully)
     {
-        public override void OnStateTriggerEnter(Collider other, bool canCollide)
+        public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            base.OnStateTriggerEnter(other, canCollide);
+            base.OnStateTriggerEnter(ent, other, valid);
 
             if (other.isTrigger && other.GetComponent<Principal>() != null)
             {

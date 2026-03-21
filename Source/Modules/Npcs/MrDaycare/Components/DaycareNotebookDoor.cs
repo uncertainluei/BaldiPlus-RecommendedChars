@@ -37,10 +37,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (BaseGameManager.Instance.NotebookTotal < 5)
                 NotebookRequirement = BaseGameManager.Instance.NotebookTotal-1;
 
-            lockBlocks = false;
+            blocking = false;
+            Block(true);
             locked = true; // Set it already to locked so it doesn't do the lock sound
             Lock(true);
-            Block(true);
             SetMaterial(NotebookRequirement);
         }
 
@@ -94,11 +94,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static IEnumerator ProperlyUnlockDoor(StandardDoor door)
         {
             yield return new WaitForEndOfFrame();
-            door.lockBlocks = true;
             door.Unlock();
             yield return new WaitForEndOfFrame();
-            door.lockBlocks = false;
-            door.blocking = true;
+            door.Block(true);
             door.Block(false);
         }
     }

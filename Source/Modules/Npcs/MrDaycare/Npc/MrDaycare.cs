@@ -180,7 +180,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer(daycare, player)
     {
-        public override void OnStateTriggerStay(Collider other, bool canCollide)
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool canCollide)
         {
             if (other.CompareTag("Player") && other.transform == player.transform)
                 daycare.SendToTimeout(canCollide);
@@ -194,7 +194,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Resume()
             => daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
 
-        public override void OnStateTriggerStay(Collider other, bool canCollide)
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool canCollide)
         {
             if (other.transform == targetedNpc.transform)
             {

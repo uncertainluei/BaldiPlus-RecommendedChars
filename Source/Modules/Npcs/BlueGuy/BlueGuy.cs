@@ -167,17 +167,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 npc.behaviorStateMachine.ChangeState(new BlueGuy_Wander(blueGuy, blueGuy.defaultCoolDown));
         }
 
-        public override void OnStateTriggerEnter(Collider other, bool canCollide)
+        public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            base.OnStateTriggerEnter(other, canCollide);
+            base.OnStateTriggerEnter(ent, other, valid);
             if (other.CompareTag("Player"))
             {
                 npc.behaviorStateMachine.ChangeState(new BlueGuy_Wander(blueGuy, blueGuy.defaultCoolDown));
-                if (canCollide)
+                if (valid)
                     other.GetComponent<PlayerManager>().ActivateReusableEffect<BlueGuyFog>(blueGuy.playerFogTime);
                 return;
             }
-            if (other.CompareTag("NPC") && canCollide)
+            if (other.CompareTag("NPC") && valid)
                 other.GetComponent<NPC>().ActivateReusableEffect<BlueGuyFog>(blueGuy.npcFogTime);
         }
     }

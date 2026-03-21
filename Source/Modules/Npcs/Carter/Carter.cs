@@ -154,11 +154,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 coolDown -= Time.deltaTime * npc.TimeScale;
         }
 
-        public override void OnStateTriggerStay(Collider other, bool validCollision)
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool valid)
         {
-            base.OnStateTriggerStay(other, validCollision);
+            base.OnStateTriggerStay(ent, other, valid);
 
-            if (coolDown > 0 || !validCollision || npc.Blinded ||
+            if (coolDown > 0 || !valid || npc.Blinded ||
                 !other.CompareTag("Player") || !other.TryGetComponent(out PlayerManager player) || player.Tagged)
                 return;
 
@@ -241,14 +241,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Enter();
         }
 
-        public override void OnStateTriggerEnter(Collider other, bool validCollision)
+        public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            base.OnStateTriggerEnter(other, validCollision);
-            if (!validCollision || !following) return;
+            base.OnStateTriggerEnter(ent, other, valid);
+            if (!valid || !following) return;
             if (!other.CompareTag("Player") || !other.transform == carter.Player.transform) return;
 
+            carter.audMan.FlushQueue(true);
             carter.audMan.PlaySingle(carter.audThanks);
             CoreGameManager.Instance.AddPoints(30, carter.Player.playerNumber, true);
+
+            for (int i = 0; i <= carter.Player.itm.maxItem && i <= carter.Player.itm.items.Length; i++)
+            {
+                if (carter.Player.itm.items[i] != carter.LostItem) continue;
+                carter.Player.itm.RemoveItem(i);
+                break;
+            }
             carter.behaviorStateMachine.ChangeState(new Carter_WanderDefault(carter, 30f));
         }
     }
@@ -375,15 +383,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ChangeNavigationState(new NavigationState_TargetPosition(npc, 127, carterState.Carter.transform.position));
         }
 
-        public override void Enter() => inheritor.Enter();
+        public override void Enter()
+        {
+            base.Enter();
+            inheritor.Enter();
+        }
+
         public override void Update() => inheritor.Update();
         public override void DoorHit(StandardDoor door) => inheritor.DoorHit(door);
-        public override void OnStateTriggerStay(Collider other, bool validCollision)
-            => inheritor.OnStateTriggerStay(other, validCollision);
-        public override void OnStateTriggerEnter(Collider other, bool validCollision)
-            => inheritor.OnStateTriggerEnter(other, validCollision);
-        public override void OnStateTriggerExit(Collider other, bool validCollision)
-            => inheritor.OnStateTriggerExit(other, validCollision);
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool valid)
+            => inheritor.OnStateTriggerStay(ent, other, valid);
+        public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
+            => inheritor.OnStateTriggerEnter(ent, other, valid);
+        public override void OnStateTriggerExit(Entity ent, Collider other, bool valid)
+            => inheritor.OnStateTriggerExit(ent, other, valid);
         public override void NavigationStateChanged() => inheritor.NavigationStateChanged();
 
 

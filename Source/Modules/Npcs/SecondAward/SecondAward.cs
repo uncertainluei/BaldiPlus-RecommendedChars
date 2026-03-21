@@ -36,9 +36,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public override void OnStateTriggerEnter(Collider other, bool validCollision)
+        public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            if (!validCollision) return;
+            if (!valid) return;
             if (other.CompareTag("NPC"))
             {
                 award.StunSound();
@@ -60,7 +60,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             player.ActivateReusableEffect<SecondAwardStun>(award.stunTime);
         }
 
-        public override void OnStateTriggerExit(Collider other, bool validCollision)
+        public override void OnStateTriggerExit(Entity ent, Collider other, bool valid)
         {
         }
 

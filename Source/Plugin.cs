@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.2.1")]
+    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.3")]
     [BepInDependency(LevelLoaderGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -86,7 +86,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ModdedSaveGame.AddSaveHandler(saveGameSystem);
             ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
 
-            //MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
+            MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
         }
 
         internal static void PatchCompat(Type type, string guid)

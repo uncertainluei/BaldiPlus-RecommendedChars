@@ -42,19 +42,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 entity.UpdateInternalMovement(transform.forward * speed * ec.EnvironmentTimeScale);
         }
 
-        private ActivityModifier actMod;
-        private Entity looker;
-        public void EntityTriggerEnter(Collider other, bool canCollide)
+        private Entity affectedEntity;
+        public void EntityTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            if (!canCollide || !flying || !other.isTrigger || !other.CompareTag("NPC")) return;
+            if (!valid || !flying || !other.isTrigger || !other.CompareTag("NPC")) return;
 
-            actMod = other.GetComponent<ActivityModifier>();
-            looker = other.GetComponent<Entity>();
             flying = false;
+            affectedEntity = ent;
             flyingSprite.SetActive(false);
             splatSprite.SetActive(true);
-            looker.SetBlinded(true);
-            actMod.moveMods.Add(moveMod);
+            ent.SetBlinded(true);
+            ent.ExternalActivity.moveMods.Add(moveMod);
             StartCoroutine(NpcHitTimer(setTime));
             audMan.FlushQueue(true);
             audMan.PlaySingle(audSplat);
@@ -67,7 +65,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 flying = false;
                 entity.SetFrozen(true);
-                actMod = null;
+                affectedEntity = null;
                 transform.rotation = Quaternion.LookRotation(hit.normal * -1f, Vector3.up);
                 transform.position = hit.point;
                 flyingSprite.SetActive(false);
@@ -84,18 +82,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             while (time > 0f)
             {
-                if (actMod == null)
+                if (!affectedEntity)
                 {
                     Destroy(gameObject);
                     yield break;
                 }
                 time -= Time.deltaTime * ec.EnvironmentTimeScale;
                 entity.UpdateInternalMovement(Vector3.zero);
-                transform.position = actMod.transform.position;
+                transform.position = affectedEntity.transform.position;
                 yield return null;
             }
-            actMod.moveMods.Remove(moveMod);
-            looker.SetBlinded(false);
+            affectedEntity.ExternalActivity.moveMods.Remove(moveMod);
+            affectedEntity.SetBlinded(false);
             Destroy(gameObject);
         }
 
@@ -105,10 +103,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Destroy(gameObject);
         }
 
-        public void EntityTriggerExit(Collider other, bool canCollide)
+        public void EntityTriggerExit(Entity ent, Collider other, bool valid)
         {
         }
-        public void EntityTriggerStay(Collider other, bool canCollide)
+        public void EntityTriggerStay(Entity ent, Collider other, bool valid)
         {
         }
     }

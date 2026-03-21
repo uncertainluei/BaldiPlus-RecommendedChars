@@ -30,9 +30,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 BsodaFinished(false);
         }
 
-        public new void EntityTriggerEnter(Collider other, bool canCollide)
+        public new void EntityTriggerEnter(Entity ent, Collider other, bool valid)
         {
-            if (!canCollide || launching) return;
+            if (!valid || launching) return;
             if (!other.isTrigger && other.gameObject.layer == 1)
             {
                 if (!finished)
@@ -41,25 +41,25 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             }
 
-            if (other.TryGetComponent(out Entity entity))
+            if (ent)
             {
                 if (!finished)
                     BsodaFinished(true);
 
-                entity.ExternalActivity.moveMods.Add(moveMod);
-                activityMods.Add(entity.ExternalActivity);
+                ent.ExternalActivity.moveMods.Add(moveMod);
+                activityMods.Add(ent.ExternalActivity);
             }
         }
 
-        public new void EntityTriggerExit(Collider other, bool canCollide)
+        public new void EntityTriggerExit(Entity ent, Collider other, bool valid)
         {
             if (other.transform == bsodaa.transform)
                 launching = false;
 
-            if (canCollide && other.TryGetComponent(out Entity entity)) 
+            if (valid && ent)
             {
-                entity.ExternalActivity.moveMods.Remove(moveMod);
-                activityMods.Remove(entity.ExternalActivity);
+                ent.ExternalActivity.moveMods.Remove(moveMod);
+                activityMods.Remove(ent.ExternalActivity);
             }
         }
 
