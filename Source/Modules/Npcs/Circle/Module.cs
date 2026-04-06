@@ -5,8 +5,6 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
-using BBPlusAnimations.Components;
-
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
@@ -17,13 +15,12 @@ using PlusStudioLevelLoader;
 using UncertainLuei.CaudexLib.Util;
 using MTM101BaldAPI.Components.Animation;
 using System;
-using AsmResolver.DotNet;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("TCMGBiMaE Circle"), CaudexModuleSaveTag("Mdl_Circle")]
     [CaudexModuleConfig("Modules", "Circle",
-        "Adds Circle and Nerf Gun from TCMG's Basics in Mods and Edits.", true)]
+        "Adds Circle from TCMG's Basics in Mods and Edits.", true)]
     public sealed partial class Module_Npc_Circle : RecCharsModule
     {
         protected override void Initialized()
@@ -37,7 +34,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Load patches
             Hooks.PatchAll(typeof(CirclePatches));
-            RecommendedCharsPlugin.PatchCompat(typeof(CircleMusicCompatPatch), RecommendedCharsPlugin.CustomMusicsGuid);
+            //RecommendedCharsPlugin.PatchCompat(typeof(CircleMusicCompatPatch), RecommendedCharsPlugin.CustomMusicsGuid);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -153,7 +150,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             NPCMetaStorage.Instance.Add(circleMeta);
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
+        /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
             GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed").GetComponent<GenericAnimationExtraComponent>());
@@ -161,7 +158,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             
             GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Nerfed").GetComponent<GenericAnimationExtraComponent>());
             GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
-        }
+        }*/
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()

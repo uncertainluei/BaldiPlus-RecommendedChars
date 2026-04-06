@@ -58,7 +58,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Enter()
         {
             base.Enter();
-            npc.navigationStateMachine.ChangeState(new NavigationState_WanderRandom(npc, 0));
+            ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
             lookTime = 0f;
         }
 

@@ -109,9 +109,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [HarmonyPatch(typeof(BBPlusCustomMusics.Patches.PlaytimeDingOverridePatch), "PlaytimeDingOverride")]
+    /*[HarmonyPatch(typeof(BBPlusCustomMusics.Patches.PlaytimeDingOverridePatch), "PlaytimeDingOverride")]
     static class CircleMusicCompatPatch
     {
         private static bool Prefix(Playtime __0) => __0.Character != CircleNpc.charEnum;
-    }
+    }*/
 }

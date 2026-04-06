@@ -50,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public void Activate()
         {
-            navigationStateMachine.currentState.priority = -1;
+            navigationStateMachine.currentState.priority = 0;
             Navigator.Entity.SetResistAddend(false);
             Navigator.Entity.SetFrozen(false);
             behaviorStateMachine.ChangeState(new MrDaycare_Wandering(this));
@@ -180,10 +180,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer(daycare, player)
     {
-        public override void OnStateTriggerStay(Entity ent, Collider other, bool canCollide)
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool valid)
         {
             if (other.CompareTag("Player") && other.transform == player.transform)
-                daycare.SendToTimeout(canCollide);
+                daycare.SendToTimeout(valid);
         }
     }
 
@@ -194,11 +194,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Resume()
             => daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
 
-        public override void OnStateTriggerStay(Entity ent, Collider other, bool canCollide)
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool valid)
         {
             if (other.transform == targetedNpc.transform)
             {
-                daycare.SendToTimeout(npc, canCollide);
+                daycare.SendToTimeout(npc, valid);
                 daycare.behaviorStateMachine.ChangeState(new MrDaycare_Wandering(daycare));
             }
         }

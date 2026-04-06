@@ -1,6 +1,4 @@
-﻿using BBPlusAnimations.Components;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
@@ -8,7 +6,6 @@ using MTM101BaldAPI.Registers;
 
 using PlusStudioLevelLoader;
 
-using System;
 using System.Linq;
 
 using UncertainLuei.CaudexLib.Objects;
@@ -55,12 +52,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LoadGottaBully();
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
+        /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void GottaBullyAnimationsCompat()
         {
             GameObject.DestroyImmediate(ObjMan.Get<GottaBully>("Npc_GottaBully").GetComponent<GenericAnimationExtraComponent>());
             GameObject.DestroyImmediate(ObjMan.Get<GottaBully>("Npc_GottaBully").GetComponent<GottaSweepComponent>());
-        }
+        }*/
 
         private void LoadGottaBully()
         {

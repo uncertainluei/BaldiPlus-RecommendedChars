@@ -21,7 +21,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("BSODA Mini"), CaudexModuleSaveTag("Mdl_BsodaMini")]
     [CaudexModulePriority(-10)]
     [CaudexModuleConfig("Modules.Items", "BsodaMini",
-        "BSODA in small cans, given when yield is short!", true)]
+        "BSODA in small cans, given when yield is short!\n(Requires the Eveyone's Bsodaa module to be enabled.)", true)]
     public sealed partial class Module_Item_BsodaMini : RecCharsSubModule<Module_Bsodaa>
     {
         protected override void Initialized()

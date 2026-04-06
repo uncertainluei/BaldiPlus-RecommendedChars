@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Carter"), CaudexModuleSaveTag("Mdl_Carter")]
     [CaudexModuleConfig("Modules", "Carter",
-        "placeholder", true)]
+        "Adds Carter, an Arts and Crafters OC originating from a scratch project shared in 2022.", true)]
     public sealed partial class Module_Carter : RecCharsModule
     {
         protected override void Initialized()

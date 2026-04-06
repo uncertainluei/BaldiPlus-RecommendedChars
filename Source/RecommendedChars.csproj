@@ -49,22 +49,22 @@
 		<Reference Include="AnalogFeelings.CharacterRadar" Publicize="true">
 			<HintPath>../Dependencies/AnalogFeelings.CharacterRadar.dll</HintPath>
 		</Reference>
-		<Reference Include="BBPlusCustomMusics" Publicize="true">
+		<Reference Include="BaldisBasicsPlusAdvanced" Publicize="true">
+			<HintPath>../Dependencies/BaldisBasicsPlusAdvanced.dll</HintPath>
+		</Reference>
+		
+		<!-- <Reference Include="BBPlusCustomMusics" Publicize="true">
 			<HintPath>../Dependencies/BBPlusCustomMusics.dll</HintPath>
 		</Reference>
 		<Reference Include="BBPlusAnimations" Publicize="true">
 			<HintPath>../Dependencies/BBPlusAnimations.dll</HintPath>
 		</Reference>
-		<Reference Include="BaldisBasicsPlusAdvanced" Publicize="true">
-			<HintPath>../Dependencies/BaldisBasicsPlusAdvanced.dll</HintPath>
-		</Reference>
-		
 		<Reference Include="brobowindowsmod" Publicize="true">
 			<HintPath>../Dependencies/brobowindowsmod.dll</HintPath>
 		</Reference>
 		<Reference Include="BigThinkersEcoFriendlyPack">
 			<HintPath>../Dependencies/BigThinkersEcoFriendlyPack.dll</HintPath>
-		</Reference>
+		</Reference> -->
 		
 		<Reference Include="PlusStudioLevelLoader">
 			<HintPath>../Dependencies/PlusStudioLevelLoader.dll</HintPath>

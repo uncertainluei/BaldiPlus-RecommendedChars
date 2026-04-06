@@ -2,9 +2,7 @@
 
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
-using PlusStudioLevelFormat;
 
-using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;

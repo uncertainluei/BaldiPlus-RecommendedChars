@@ -20,7 +20,7 @@ using System.Collections.Generic;
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Lunch Box"), CaudexModuleSaveTag("Mdl_LunchBox")]
-    [CaudexModuleConfig("Modules", "LunchBox",
+    [CaudexModuleConfig("Modules.Items", "LunchBox",
         "A rare box that can give you random food items.", true)]
     public sealed partial class Module_Item_LunchBox : RecCharsModule
     {

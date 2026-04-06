@@ -8,12 +8,11 @@
 	"Txt_RecChars_Version_1": "v1.3-v1.3.1",
 	"Txt_RecChars_Version_2": "v1.4+",
 
-	// Module Names
+	// Character Modules
 	"Mdl_Bsodaa": "Eveyone's Bsodaa",
 	"Mdl_Carter": "Carter",
 	"Mdl_Circle": "TCMGBiMaE Circle",
 	"Mdl_LockSock": "Locks and Bolts",
-	"Mdl_LunchBox": "Lunch Box",
 	"Mdl_MaintenanceMachine": "Evil Maintenance Machine",
 	"Mdl_MrDaycare": "Mr. Daycare",
 	"Mdl_SecondAward": "2nd Award",
@@ -21,6 +20,8 @@
 	"Mdl_GottaBully": "Gotta Bully",
 	"Mdl_BlueGuy": "Blue, Guy",
 	"Mdl_Gifter": "Gifter",
+
+	"Mdl_LunchBox": "Lunch Box",
 
 	// Older version module names
 	"Mdl_SwappedDuo": "Swapped Duo",

@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-using BBPlusAnimations.Components;
 
 using BepInEx.Bootstrap;
 
@@ -20,7 +19,6 @@ using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
@@ -31,7 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Mr. Daycare"), CaudexModuleSaveTag("Mdl_MrDaycare")]
     [CaudexModuleConfig("Modules", "MrDaycare",
-        "Adds Mr. Daycare from Dave's House, as well the Pie and Door Key items.", true)]
+        "Adds Mr. Daycare from Dave's House.", true)]
     public sealed partial class Module_MrDaycare : RecCharsModule
     {
         protected override void Initialized()
@@ -49,8 +47,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Hooks.PatchAll(typeof(MrDaycarePatches));
             Hooks.PatchAll(typeof(DaycareRoomPatches));
             RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareAdvancedPatches), RecommendedCharsPlugin.AdvancedGuid);
-            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareEcoFriendlyPatches), RecommendedCharsPlugin.EcoFriendlyGuid);
-            RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareFragilePatches), RecommendedCharsPlugin.FragileWindowsGuid);
+            //RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareEcoFriendlyPatches), RecommendedCharsPlugin.EcoFriendlyGuid);
+            //RecommendedCharsPlugin.PatchCompat(typeof(MrDaycareFragilePatches), RecommendedCharsPlugin.FragileWindowsGuid);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -259,27 +257,28 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add("Room_Daycare", daycareRoom);
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
+        /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
         private void EnableAnimationsCompat()
-            => GameObject.DestroyImmediate(ObjMan.Get<DaycareNotebookDoor>("Door_Daycare").GetComponent<StandardDoorExtraMaterials>());
+            => GameObject.DestroyImmediate(ObjMan.Get<DaycareNotebookDoor>("Door_Daycare").GetComponent<StandardDoorExtraMaterials>());*/
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
         private void AdvancedCompat()
         {
             // Make Mr. Daycare scold the player for using throwing/shooting items
             BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("MysteriousTeleporter"), advInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("TeleportationBomb"), advInfo).tags.Add("recchars_daycare_throwable");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("CookedChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
-            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("RawChickenLeg"), advInfo).tags.Add("recchars_daycare_exempt");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("MysteriousTeleporter"), advInfo).tags.Add("recchars:daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("TeleportationBomb"), advInfo).tags.Add("recchars:daycare_throwable");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("CookedChickenLeg"), advInfo).tags.Add("recchars:daycare_exempt");
+            ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>("RawChickenLeg"), advInfo).tags.Add("recchars:daycare_exempt");
 
             // Add new words and tips
-            ApiManager.AddNewSymbolMachineWords(Plugin, "Moldy", "Dave", "house");
+            ApiManager.AddNewSymbolMachineWords(Plugin, "Muko", "Dave", "Bambi", "house");
             ApiManager.AddNewTips(Plugin, "Adv_Elv_Tip_RecChars_Pie", "Adv_Elv_Tip_RecChars_DoorKey",
                 "Adv_Elv_Tip_RecChars_MrDaycareExceptions", "Adv_Elv_Tip_RecChars_MrDaycareEarly");
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
+        // Thinker's mods haven't been updated for like ever so unless that actually updates then 
+        /*[CaudexLoadEventMod(RecommendedCharsPlugin.FragileWindowsGuid, LoadingEventOrder.Pre)]
         private void FragileWindowsCompat()
         {
             // Dave Windowlet >u<
@@ -297,11 +296,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 case "ShardSoda":
                     meta.tags.Add("food");
                     meta.tags.Add("drink");
-                    meta.tags.Add("recchars_daycare_throwable");
+                    meta.tags.Add("recchars:daycare_throwable");
                     break;
                 case "Marble":
                     meta.tags.Add("caudex:always_trigger_event");
-                    meta.tags.Add("recchars_daycare_throwable");
+                    meta.tags.Add("recchars:daycare_throwable");
                     break;
                 case "Stone":
                 case "WindowBlaster1":
@@ -309,7 +308,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 case "WindowBlaster3":
                 case "WindowBlaster4":
                 case "WindowBlaster5":
-                    meta.tags.Add("recchars_daycare_throwable");
+                    meta.tags.Add("recchars:daycare_throwable");
                     break;
                 }
             }
@@ -331,7 +330,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 case "BBGun_2":
                 case "BBGun_3":
                 case "BBGun_4":
-                    meta.tags.Add("recchars_daycare_throwable");
+                    meta.tags.Add("recchars:daycare_throwable");
                     break;
                 }
             }
@@ -353,11 +352,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 case "DonutGun3":
                 case "DonutGun2":
                 case "DonutGun1":
-                    meta.tags.Add("recchars_daycare_throwable");
+                    meta.tags.Add("recchars:daycare_throwable");
                     break;
                 }
             }
-        }
+        }*/
 
         [CaudexLoadEvent(LoadingEventOrder.Post)]
         private void UpdateRuleFreeZones()

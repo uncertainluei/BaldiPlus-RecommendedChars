@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
+/*namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
 {
     internal class DaveWindowlet : ExtWindowletVariant
     {
@@ -93,4 +93,4 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
             return true;
         }
     }
-}
+}*/

@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("DoorKey"), CaudexModuleSaveTag("Mdl_DoorKey")]
     [CaudexModuleConfig("Modules.Items", "DoorKey",
-        "As seen in Dave's House! Dave couldn't appear here, so you might find others to fill in that gap!", true)]
+        "A three-use key that can unlock anything*. (*notebook doors not included)", true)]
     public sealed partial class Module_Item_DoorKey : RecCharsModule
     {
         protected override void Initialized()
@@ -37,8 +37,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetEnum("RecChars_DoorKey")
             .SetMeta(ItemFlags.MultipleUse, ["key", "crmp_contraband", "presents_lessvalue"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DoorKeyItm/DoorKey_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DoorKeyItm/DoorKey_Large"), 50f))
-            .SetShopPrice(750)
-            .SetGeneratorCost(90)
+            .SetShopPrice(600)
+            .SetGeneratorCost(80)
             .SetItemComponent<ITM_DoorKey>()
             .BuildAsMulti(3);
             ((ITM_DoorKey)keyItemObject.item).layerMask = ((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DetentionKey).value.item).layerMask;

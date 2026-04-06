@@ -14,8 +14,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(StoreRoomFunction), "Restock"), HarmonyPostfix]
         private static void RandomizeLunchBoxPrice(SceneObject ___storeData, List<Pickup> ___pickups, PriceTag[] ___tag)
         {
-            if (___storeData == null)
-                return;
+            if (!___storeData) return;
 
             for (int i = 0; i < ___pickups.Count; i++)
             {

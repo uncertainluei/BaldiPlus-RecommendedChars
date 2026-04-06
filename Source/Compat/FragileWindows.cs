@@ -1,4 +1,6 @@
-﻿using brobowindowsmod;
+﻿// Fragile Windows compat has been currently disabled as the mod hasn't been updated for quite a while now.
+/*
+using brobowindowsmod;
 using brobowindowsmod.ItemScripts;
 using brobowindowsmod.NPCs;
 using brobowindowsmod.Patches;
@@ -175,3 +177,4 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows
         public virtual bool Shatter() => true;
     }
 }
+*/

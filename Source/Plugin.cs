@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.FragileWindows;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
@@ -31,15 +30,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(PineDebugGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CustomMusicsGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(CharacterRadarGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(AdvancedGuid, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LevelStudioGuid, BepInDependency.DependencyFlags.SoftDependency)]
     
-    [BepInDependency(ConnectorGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(FragileWindowsGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(EcoFriendlyGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency(CrazyBabyGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    //[BepInDependency(AnimationsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    //[BepInDependency(ConnectorGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    //[BepInDependency(FragileWindowsGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    //[BepInDependency(EcoFriendlyGuid, BepInDependency.DependencyFlags.SoftDependency)]
+    //[BepInDependency(CrazyBabyGuid, BepInDependency.DependencyFlags.SoftDependency)]
 
     public partial class RecommendedCharsPlugin : BaseUnityPlugin
     {
@@ -78,8 +77,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Hooks.PatchAll(typeof(LevelGeneratorPatches));
             Hooks.PatchAll(typeof(NoNpcActivityChaosPatches));
             PatchCompat(typeof(CharacterRadarColorPatch), CharacterRadarGuid);
-            PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
-            PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
+            //PatchCompat(typeof(FragileMiscPatches), FragileWindowsGuid);
+            //PatchCompat(typeof(WindowletVariantPatches), FragileWindowsGuid);
 
             CaudexModuleLoader.LoadAllModules(this);
             RecommendedCharsSaveGameIO saveGameSystem = new(Info);
@@ -131,9 +130,27 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator RegisterPost()
         {
-            yield return 1;
+            yield return 2;
             yield return "Setting PineDebug icons";
             PineDebugNpcIcons.SetIcons();
+
+            yield return "Updating legacy tags";
+            Dictionary<string,string> legacyItmTagMap = new()
+            {
+                {"recchars_daycare_exempt", "recchars:daycare_exempt"},
+                {"recchars_daycare_throwable", "recchars:daycare_throwable"},
+                {"recchars_daycare_loud", "recchars:daycare_loud"},
+                {"recchars_gifter_blacklist", "recchars:gifter_blacklist"}
+            };
+            foreach (string legacyTag in legacyItmTagMap.Keys)
+            {
+                foreach (ItemMetaData itm in ItemMetaStorage.Instance.FindAllWithTags(true, legacyTag))
+                {
+                    Log.LogWarning($"Item {itm.value.GetName()} from \"{itm.info.Metadata.Name}\" has legacy tag \"{legacyTag}\". Please replace it with \"{legacyItmTagMap[legacyTag]}\" to ensure compatibility with newer versions!");
+                    itm.tags.Add(legacyItmTagMap[legacyTag]);
+                    itm.tags.Remove(legacyTag);
+                }
+            }
         }
     }
 

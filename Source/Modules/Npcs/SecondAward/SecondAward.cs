@@ -79,11 +79,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class SecondAward_Stunned(SecondAward award, float time) : FirstPrize_Stunned(award, time)
     {
-        public override void Enter()
-        {
-            base.Enter();
-        }
-
         public override void Update()
         {
             base.Update();

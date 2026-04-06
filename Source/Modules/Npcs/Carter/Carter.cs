@@ -133,7 +133,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Enter();
             npc.navigator.maxSpeed = carter.OriginalSpeed;
-            npc.navigationStateMachine.ChangeState(new NavigationState_WanderRandom(npc, 0));
+            ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
         }
     }
 

@@ -3,9 +3,6 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Patches.Characters;
 
-using brobowindowsmod;
-using ecopack;
-
 using HarmonyLib;
 
 using System.Linq;
@@ -44,7 +41,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         }
     }
 
-    [HarmonyPatch]
+    /*[HarmonyPatch]
     static class MrDaycareFragilePatches
     {
         [HarmonyPatch(typeof(CannonWindowHotspot), "Clicked"), HarmonyPrefix]
@@ -58,5 +55,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         [HarmonyPatch(typeof(CheeseStand), "EatCheese"), HarmonyPostfix]
         private static void CheeseStandScold(PlayerManager pm)
             => DaycareGuiltManager.GetInstance(pm).BreakRule("Eating", 1.2f, 0.25f);
-    }
+    }*/
 }

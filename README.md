@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
 ![Version](https://img.shields.io/badge/version-1.4-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.14-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.1.1-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-10.0.0-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![BB+ version](https://img.shields.io/badge/bb+-0.14-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
@@ -15,23 +15,30 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 
 ### Required to run (and build):
 - [BepInEx v5.4.23.x](https://github.com/BepInEx/BepInEx/releases)
+- [Caudex Lib v0.3](https://github.com/uncertainluei/CaudexLib)
 - [Dev API](https://gamebanana.com/mods/383711)
 - [Level Loader System](https://gamebanana.com/mods/617565)
 
 ### Fully optional:
-- [Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)
 - [Crispy+](https://gamebanana.com/mods/529314)
-- [Epic Entertainment Pack](https://gamebanana.com/mods/546336)
+<br><br>
+- ~~[Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)~~*
+- ~~[Epic Entertainment Pack](https://gamebanana.com/mods/546336)~~*
 
 ### Functional (optional to run, required to build):
 - [PineDebug](https://gamebanana.com/mods/542418)
 - [Character Radar](https://gamebanana.com/mods/321209)
-- [Custom Musics](https://gamebanana.com/mods/527812)
-- [Animations](https://gamebanana.com/mods/503644)
 - [Advanced Edition](https://gamebanana.com/mods/504169)
 - [Level Studio](https://gamebanana.com/mods/617567)
-- [Fragile Windows](https://gamebanana.com/mods/512880)
-- [Eco Friendly](https://gamebanana.com/mods/606391)
+<br><br>
+- ~~[Custom Musics](https://gamebanana.com/mods/527812)~~\*\*
+- ~~[Animations](https://gamebanana.com/mods/503644)~~\*\*
+- ~~[Fragile Windows](https://gamebanana.com/mods/512880)~~*
+- ~~[Eco Friendly](https://gamebanana.com/mods/606391)~~*
+
+\**Support for ThinkerAPI and its mods is halted until further notice.*
+<br>
+\*\*_Support will be brought back once PixelGuy's **True Plus Immersion Bundle** releases._
 
 # Build Instructions
 This is for building the mod's .DLL and .PDB, which should be found at the `Source/bin/Debug*/netstandard2.0/` directory.

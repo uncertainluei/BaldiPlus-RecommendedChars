@@ -31,7 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .Where(x => !x.flags.HasFlag(ItemFlags.InstantUse) && !x.flags.HasFlag(ItemFlags.NoUses)
                 && !x.flags.HasFlag(ItemFlags.Unobtainable) && x.value.itemType.ToStringExtended() != "WPB"
                 && !x.tags.Contains("lost_item") && !x.tags.Contains("shape_key") && !x.tags.Contains("shop_dummy")
-                && !x.tags.Contains("recchars_gifter_blacklist")).ToArray();
+                && !x.tags.Contains("recchars:gifter_blacklist")).ToArray();
 
             RerollGift();        
             behaviorStateMachine.ChangeState(new Gifter_WanderSimple(this));
@@ -105,7 +105,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Enter()
         {
             base.Enter();
-            npc.behaviorStateMachine.ChangeNavigationState(new NavigationState_WanderRandom(npc, 0, true));
+            ChangeNavigationState(new NavigationState_WanderRandom(npc, 0, true));
         }
 
         public override void DestinationEmpty()

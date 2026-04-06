@@ -23,7 +23,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Nerf Gun"), CaudexModuleSaveTag("Mdl_NerfGun")]
     [CaudexModulePriority(-1)]
     [CaudexModuleConfig("Modules.Items", "NerfGun",
-        "A 'toy' water gun that prematurely ends Circle's game.", true)]
+        "A 'toy' water gun that prematurely ends Circle's game.\n(Requires the Circle module to be enabled.)", true)]
     public sealed partial class Module_Item_NerfGun : RecCharsSubModule<Module_Npc_Circle>
     {
         protected override void Initialized()
