@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
 ![Version](https://img.shields.io/badge/version-1.4-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.14-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![BB+ version](https://img.shields.io/badge/bb+-0.14.1-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
@@ -22,7 +22,7 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 ### Fully optional:
 - [Crispy+](https://gamebanana.com/mods/529314)
 <br><br>
-- ~~[Dev API Connector (required when running alongside ThinkerAPI mods)](https://gamebanana.com/mods/606386)~~*
+- ~~[Dev API Connector (required when running alongside ThinkerAPI mods)](https://github.com/AlexBW145/BaldiAPIConnector/releases)~~*
 - ~~[Epic Entertainment Pack](https://gamebanana.com/mods/546336)~~*
 
 ### Functional (optional to run, required to build):
@@ -33,8 +33,8 @@ All code, unless stated otherwise, is licensed under the [GNU General Public Lic
 <br><br>
 - ~~[Custom Musics](https://gamebanana.com/mods/527812)~~\*\*
 - ~~[Animations](https://gamebanana.com/mods/503644)~~\*\*
-- ~~[Fragile Windows](https://gamebanana.com/mods/512880)~~*
-- ~~[Eco Friendly](https://gamebanana.com/mods/606391)~~*
+- ~~Fragile Windows~~*
+- ~~Eco Friendly~~*
 
 \**Support for ThinkerAPI and its mods is halted until further notice.*
 <br>
