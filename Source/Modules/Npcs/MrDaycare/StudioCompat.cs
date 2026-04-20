@@ -40,7 +40,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_mrdaycare", ObjMan.Get<MrDaycare>("Npc_MrDaycare_Nerfed"));
+            EditorInterface.AddNPCVisual("recchars_mrdaycare", ObjMan.Get<MrDaycare>("Npc/MrDaycare_Nerfed"));
             LevelStudioPlugin.Instance.npcDisplays.Add("recchars_mrdaycare_og", LevelStudioPlugin.Instance.npcDisplays["recchars_mrdaycare"]);
 
             LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_daycare", new("recchars_daycareflor", "recchars_daycarewall", "recchars_daycareceil"));
@@ -58,24 +58,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             EditorInterfaceModes.AddToolsToCategory(mode, "npcs", [
                 new ExtRoomNpcTool("recchars_mrdaycare", AssetMan.Get<Sprite>("EditorSpr/Npc_MrDaycare"),
-                    daycareRoomIds),
+                    daycareRoomIds).SetModdedFrame(),
                 new ExtRoomNpcTool("recchars_mrdaycare_og", AssetMan.Get<Sprite>("EditorSpr/Npc_MrDaycare_Unnerfed"),
-                    "Ed_Tool_npc_recchars_daycare_og_Title", "Ed_Tool_npc_recchars_daycare_og_Desc", daycareRoomIds)
+                    "Ed_Tool_npc_recchars_daycare_og_Title", "Ed_Tool_npc_recchars_daycare_og_Desc", daycareRoomIds).SetModdedFrame()
             ]);
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms",
-                new RoomTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Room_Daycare")));
+                new RoomTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Room_Daycare")).SetModdedFrame());
             EditorInterfaceModes.AddToolsToCategory(mode, "doors", [
-                new DoorTool("recchars_bookgate", AssetMan.Get<Sprite>("EditorSpr/Door_BookGate")),
-                new WindowTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Window_Daycare"))
+                new DoorTool("recchars_bookgate", AssetMan.Get<Sprite>("EditorSpr/Door_BookGate")).SetModdedFrame(),
+                new WindowTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Window_Daycare")).SetModdedFrame()
             ]);
             EditorInterfaceModes.AddToolToCategory(mode, "lights",
-                new LightTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Light_Daycare")));
+                new LightTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Light_Daycare")).SetModdedFrame());
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
                 new PosterTool("recchars_pri_daycare"),
-                new PosterTool("recchars_daycareinfo", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareInfo")),
-                new PosterTool("recchars_daycarerules", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareRules")),
-                new PosterTool("recchars_daycareclock", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareClock"))
+                new PosterTool("recchars_daycareinfo", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareInfo")).SetModdedFrame(),
+                new PosterTool("recchars_daycarerules", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareRules")).SetModdedFrame(),
+                new PosterTool("recchars_daycareclock", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareClock")).SetModdedFrame()
             ]);
         }
     }

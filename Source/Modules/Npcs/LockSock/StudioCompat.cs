@@ -7,8 +7,8 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -24,16 +24,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_locksock", ObjMan.Get<LockSock>("Npc_LockSock"));
+            EditorInterface.AddNPCVisual("recchars_locksock", ObjMan.Get<LockSock>("Npc/LockSock"));
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("recchars_locksock", AssetMan.Get<Sprite>("EditorSpr/Npc_LockSock")));
+                new NPCTool("recchars_locksock", AssetMan.Get<Sprite>("EditorSpr/Npc_LockSock")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_pri_locksock"));
+                new PosterTool("recchars_pri_locksock").SetModdedFrame());
         }
     }
 }

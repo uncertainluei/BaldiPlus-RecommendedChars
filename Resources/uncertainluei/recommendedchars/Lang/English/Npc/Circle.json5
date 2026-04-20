@@ -3,12 +3,12 @@
 	"PST_PRI_RecChars_Circle1": "Circle",
 	"PST_PRI_RecChars_Circle2": "i bet you\nwon't get\nthe\nreference.",
 	
-	"Mfx_RecChars_JingleBells": "*Jingle Bells*",
+	"Mfx_RecChars_JingleBells": "[Jingle Bells]",
 	
 	"Vfx_RecChars_Circle_LetsPlay": "Let's play!",
 	"Vfx_RecChars_Circle_Go": "Go!",
 	"Vfx_RecChars_Circle_Oops": "Try agAIn!",
 	"Vfx_RecChars_Circle_Congrats": "Wow, you're awesome! Let's play another time!",
 	"Vfx_RecChars_Circle_Sad": "OH! I guess I'll play with you later...",
-	"Vfx_RecChars_Circle_Random": "*WEIRD LAUGHING*"
+	"Vfx_RecChars_Circle_Random": "[WEIRD LAUGHING]"
 }

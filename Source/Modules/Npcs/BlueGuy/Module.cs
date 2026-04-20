@@ -72,22 +72,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_blueguy", bluGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_blueguy", bluGuy.Poster);
-            ObjMan.Add("Npc_BlueGuy", bluGuy);
+            ObjMan.Add("Npc/BlueGuy", bluGuy);
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(ObjMan.Get<BlueGuy>("Npc_BlueGuy"), scene, 90, true);
+                AddToNpcs(ObjMan.Get<BlueGuy>("Npc/BlueGuy"), scene, 90, true);
                 return;
             }
             if (title.StartsWith("F") && id > 0)
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(ObjMan.Get<BlueGuy>("Npc_BlueGuy"), scene, id > 1 ? 100 : 45, false, 1);
+                AddToNpcs(ObjMan.Get<BlueGuy>("Npc/BlueGuy"), scene, id > 1 ? 100 : 45, false, 1);
             }
         }
 

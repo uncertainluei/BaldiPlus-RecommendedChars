@@ -7,8 +7,8 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -21,19 +21,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("EditorSpr/Npc_ArtsWithWires", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "ArtsWithWires.png"));
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_artswithwires", ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
+            EditorInterface.AddNPCVisual("recchars_artswithwires", ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("recchars_artswithwires", AssetMan.Get<Sprite>("EditorSpr/Npc_ArtsWithWires")));
+                new NPCTool("recchars_artswithwires", AssetMan.Get<Sprite>("EditorSpr/Npc_ArtsWithWires")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_pri_wires"));
+                new PosterTool("recchars_pri_wires").SetModdedFrame());
         }
     }
 }

@@ -28,8 +28,8 @@
 	"Vfx_RecChars_Carter_Thanks": "Thanks so much!",
 	"Vfx_RecChars_Carter_Thanks_1": "See you later!",
 
-	"Vfx_RecChars_Carter_ScreamIntro": "*SCREEECHHH*",
-	"Vfx_RecChars_Carter_ScreamLoop": "*SCREEECHHH*",
+	"Vfx_RecChars_Carter_ScreamIntro": "[SCREEECHHH]",
+	"Vfx_RecChars_Carter_ScreamLoop": "[SCREEECHHH]",
 
 	// Carter's items
 	"Itm_RecChars_CarterItmGeneric": "Carter's Item",
@@ -57,5 +57,8 @@
 	"Hud_RecChars_CarterHint_Daycare": "must've been in the green alien's room",
 	"Hud_RecChars_CarterHint_SwappedCloset": "that no-good bully broom stole it!",
 
-	"Hud_RecChars_CarterHint_Fallback": "perhaps find a '{0}'..."
+	"Hud_RecChars_CarterHint_Fallback": "perhaps find a '{0}'...",
+
+	// Poster
+	"PST_RecChars_ClassicCarterMissing": "MISSING"
 }

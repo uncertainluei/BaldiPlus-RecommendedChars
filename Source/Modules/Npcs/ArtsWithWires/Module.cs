@@ -104,23 +104,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", artsWithWires);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_wires", artsWithWires.Poster);
-            ObjMan.Add("Npc_ArtsWithWires", artsWithWires);
+            ObjMan.Add("Npc/ArtsWithWires", artsWithWires);
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs-1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
 
                 return;
             }
@@ -130,10 +130,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 scene.MarkAsNeverUnload();
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
                 else if (id == 1)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<ArtsWithWires>("Npc_ArtsWithWires"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs-1, 0);
                 }
             }

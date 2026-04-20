@@ -100,16 +100,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gifter", gifter.Poster);
 
             PineDebugNpcIcons.AddIcon([gifter], "BorderGifter.png");
-            ObjMan.Add("Npc_Gifter", gifter);
+            ObjMan.Add("Npc/Gifter", gifter);
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END" || title.StartsWith("F"))
+            if (scene.GetMeta()?.tags.Contains("endless") == true || title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(ObjMan.Get<Gifter>("Npc_Gifter"), scene, 125, title == "END");
+                AddToNpcs(ObjMan.Get<Gifter>("Npc/Gifter"), scene, 125, title == "END");
             }
         }
 

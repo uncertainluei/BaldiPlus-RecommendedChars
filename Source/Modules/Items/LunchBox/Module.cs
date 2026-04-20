@@ -63,9 +63,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_lunchbox_4", lunchBox);
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_lunchbox_3", lunchBox.nextStage);
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_lunchbox_2", ((CaudexMultiItemObject)lunchBox.nextStage).nextStage); // WHY ME
-            ObjMan.Add("Itm_LunchBox_4", lunchBox);
-            ObjMan.Add("Itm_LunchBox_3", lunchBox.nextStage);
-            ObjMan.Add("Itm_LunchBox_2", ((CaudexMultiItemObject)lunchBox.nextStage).nextStage);
+            ObjMan.Add("Itm/LunchBox_4", lunchBox);
+            ObjMan.Add("Itm/LunchBox_3", lunchBox.nextStage);
+            ObjMan.Add("Itm/LunchBox_2", ((CaudexMultiItemObject)lunchBox.nextStage).nextStage);
 
             ITM_LunchBox.weightedItems =
             [
@@ -88,7 +88,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Post)]
         private void GetLunchBoxFoodItems()
         {
-            ITM_LunchBox lunchBox = (ITM_LunchBox)ObjMan.Get<ItemObject>("Itm_LunchBox_4").item;
+            ITM_LunchBox lunchBox = (ITM_LunchBox)ObjMan.Get<ItemObject>("Itm/LunchBox_4").item;
             
             ItemMetaData[] itemMetas = ItemMetaStorage.Instance.FindAllWithTags(false, "food")
                 .Where(x => !x.flags.HasFlag(ItemFlags.InstantUse) && !x.tags.Contains("recchars:lunchbox_blacklist")).ToArray();
@@ -112,9 +112,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title == "END" || title.StartsWith("F"))
             {
                 lvl.shopItems = lvl.shopItems.AddRangeToArray([
-                    ObjMan.Get<ItemObject>("Itm_LunchBox_2").Weighted(20),
-                    ObjMan.Get<ItemObject>("Itm_LunchBox_3").Weighted(15),
-                    ObjMan.Get<ItemObject>("Itm_LunchBox_4").Weighted(10)
+                    ObjMan.Get<ItemObject>("Itm/LunchBox_2").Weighted(20),
+                    ObjMan.Get<ItemObject>("Itm/LunchBox_3").Weighted(15),
+                    ObjMan.Get<ItemObject>("Itm/LunchBox_4").Weighted(10)
                 ]);
             }
         }
@@ -127,9 +127,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/LunchBox", GenerationStageFlags.Addend);
             
             lvl.potentialItems = lvl.potentialItems.AddRangeToArray([
-                ObjMan.Get<ItemObject>("Itm_LunchBox_2").Weighted(4),
-                ObjMan.Get<ItemObject>("Itm_LunchBox_3").Weighted(2),
-                ObjMan.Get<ItemObject>("Itm_LunchBox_4").Weighted(2),
+                ObjMan.Get<ItemObject>("Itm/LunchBox_2").Weighted(4),
+                ObjMan.Get<ItemObject>("Itm/LunchBox_3").Weighted(2),
+                ObjMan.Get<ItemObject>("Itm/LunchBox_4").Weighted(2),
             ]);            
         }
 

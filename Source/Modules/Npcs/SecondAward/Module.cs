@@ -86,14 +86,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_secondaward", secondAward);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_secaward", secondAward.Poster);
-            ObjMan.Add("Npc_SecondAward", secondAward);
+            ObjMan.Add("Npc/SecondAward", secondAward);
             NPCMetaStorage.Instance.Add(new(Plugin, [secondAward], secondAward.name, NPCMetaStorage.Instance.Get(Character.Prize).flags, []));
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
                 AddToNpcs(scene, 100, true);
@@ -109,10 +109,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
             if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                scene.potentialNPCs.Add(ObjMan.Get<SecondAward>("Npc_SecondAward").Weighted(weight));
+                scene.potentialNPCs.Add(ObjMan.Get<SecondAward>("Npc/SecondAward").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {
-                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<SecondAward>("Npc_SecondAward"));
+                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<SecondAward>("Npc/SecondAward"));
                 scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
             }
         }

@@ -13,6 +13,7 @@ using UnityEngine;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -65,21 +66,21 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             pieUse.splatSprite.transform.localPosition = Vector3.back * -0.1f;
             pieUse.splatSprite.GetComponent<SpriteRenderer>().sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("PieItm/PieSplat"), 10f);
 
-            pieUse.noBillboardMat = AssetMan.Get<Material>("NoBillboardMaterial");
+            pieUse.noBillboardMat = AssetMan.Get<Material>("Mat/SpriteNoBillboard");
 
             GameObject.DestroyImmediate(gumClone);
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_pie", pie);
-            ObjMan.Add("Itm_Pie", pie);
+            ObjMan.Add("Itm/Pie", pie);
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END" || title.StartsWith("F"))
+            if (scene.GetMeta()?.tags.Contains("endless") == true || title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm_Pie").Weighted(50));
+                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(50));
             }
         }
 
@@ -90,18 +91,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Pie", GenerationStageFlags.Addend);
 
-            if (title == "END" || title.StartsWith("F"))
+            if (title.StartsWith("F"))
             {
                 lvl.MarkAsNeverUnload();
-                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_Pie").Weighted(25));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(25));
             }
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_pie");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_pie")));
+            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_pie").SetModdedFrame()));
         }
     }
 }

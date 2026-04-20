@@ -17,5 +17,11 @@
 	"Vfx_RecChars_Daycare_NoEating": "Do not eat food inside the hallway!",
 	"Vfx_RecChars_Daycare_NoThrowing": "Do not throw things at faculty members inside the hallway!",
 	"Vfx_RecChars_Daycare_NoEscaping": "Do not leave the timeout corner without my permission inside the hallway!",
-	"Vfx_RecChars_Daycare_NoLoudSound": "Do not make loud sounds in the hallway!"
+	"Vfx_RecChars_Daycare_NoLoudSound": "Do not make loud sounds in the hallway!",
+
+	// Posters
+	"PST_RecChars_DaycareInfo1": "WELCOME TO\nTHE DAYCARE!",
+	"PST_RecChars_DaycareInfo2": "Daycare will start the moment more than half of the total activities are complete.\nMr Daycare will patrol the building during daycare.\nMake sure you follow the daycare rules!",
+
+	"PST_RecChars_DaycareRules": "<b>DAYCARE RULES</b>\n\n1. No running\n2. No eating\n3. No drinking\n4. No throwing objects\n5. No escaping timeout\n6. No making loud noises\n\nThat's it! Have fun at daycare, kids!"
 }

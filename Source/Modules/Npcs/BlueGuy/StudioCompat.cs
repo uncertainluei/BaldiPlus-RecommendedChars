@@ -6,6 +6,7 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -15,16 +16,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_blueguy", ObjMan.Get<BlueGuy>("Npc_BlueGuy"));
+            EditorInterface.AddNPCVisual("recchars_blueguy", ObjMan.Get<BlueGuy>("Npc/BlueGuy"));
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("recchars_blueguy", AssetMan.Get<Sprite>("StatusSpr/BlueGuyFog")));
+                new NPCTool("recchars_blueguy", AssetMan.Get<Sprite>("StatusSpr/BlueGuyFog")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_pri_blueguy"));
+                new PosterTool("recchars_pri_blueguy").SetModdedFrame());
         }
     }
 }

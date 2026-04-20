@@ -12,9 +12,9 @@ using PlusStudioLevelLoader;
 using UnityEngine;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util.Extensions;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
 using BepInEx.Bootstrap;
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -55,7 +55,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             miniBsoda.item = miniBsodaSpray;
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smallbsoda", miniBsoda);
-            ObjMan.Add("Itm_BsodaMini", miniBsoda);
+            ObjMan.Add("Itm/BsodaMini", miniBsoda);
 
 
             // Diet BSODA Mini
@@ -79,24 +79,27 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             miniDietBsoda.item = miniBsodaSpray;
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_smalldietbsoda", miniDietBsoda);
-            ObjMan.Add("Itm_DietBsodaMini", miniDietBsoda);
+            ObjMan.Add("Itm/DietBsodaMini", miniDietBsoda);
 
-            ObjMan.Get<BsodaaHelper>("Npc_BsodaaHelper").itmSmallBsoda = miniDietBsoda;
-            ObjMan.Get<BsodaaHelper>("Npc_BsodaaHelper_Diet").itmSmallBsoda = miniDietBsoda;
+            ObjMan.Get<BsodaaHelper>("Npc/BsodaaHelper").itmSmallBsoda = miniDietBsoda;
+            ObjMan.Get<BsodaaHelper>("Npc/BsodaaHelper_Diet").itmSmallBsoda = miniDietBsoda;
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_smallbsoda", "recchars_smalldietbsoda"]);
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.AddToolsToCategory(mode, "items", [new ItemTool("recchars_smallbsoda"), new ItemTool("recchars_smalldietbsoda")]));
+            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => {
+                EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_dietbsoda", new ItemTool("recchars_smalldietbsoda").SetModdedFrame());
+                EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_bsoda", new ItemTool("recchars_smallbsoda").SetModdedFrame());
+            });
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Post)]
         private void AdvancedRecipes()
         {
-            ItemObject smallBsoda = ObjMan.Get<ItemObject>("Itm_BsodaMini");
-            ItemObject smallDietBsoda = ObjMan.Get<ItemObject>("Itm_DietBsodaMini");
+            ItemObject smallBsoda = ObjMan.Get<ItemObject>("Itm/BsodaMini");
+            ItemObject smallDietBsoda = ObjMan.Get<ItemObject>("Itm/DietBsodaMini");
 
             BepInEx.PluginInfo advInfo = Chainloader.PluginInfos[RecommendedCharsPlugin.AdvancedGuid];
             

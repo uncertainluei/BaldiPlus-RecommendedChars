@@ -106,8 +106,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             jumprope.startVal = 64;
             jumprope.penaltyVal = -8;
 
-            ObjMan.Add("Npc_Circle_Nerfed", circle);
-            ObjMan.Add("Comp_CircleJumprope_Nerfed", jumprope);
+            ObjMan.Add("Npc/Circle_Nerfed", circle);
+            ObjMan.Add("Comp/CircleRope_Nerfed", jumprope);
             
             CircleNpc unnerfedCircle = GameObject.Instantiate(circle, MTM101BaldiDevAPI.prefabTransform);
             unnerfedCircle.name = "ShapeWorld Circle Unnerfed";
@@ -127,18 +127,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             unnerfedJumprope.startVal = 43;
             unnerfedJumprope.penaltyVal = -5;
 
-            ObjMan.Add("Npc_Circle_Unnerfed", unnerfedCircle);
-            ObjMan.Add("Comp_CircleJumprope_Unnerfed", unnerfedJumprope);
+            ObjMan.Add("Npc/Circle_Unnerfed", unnerfedCircle);
+            ObjMan.Add("Comp/CircleRope_Unnferfed", unnerfedJumprope);
 
             if (!RecommendedCharsConfig.nerfCircle.Value)
             {
-                ObjMan.Add("Npc_Circle", unnerfedCircle);
-                ObjMan.Add("Comp_CircleJumprope", unnerfedJumprope);
+                ObjMan.Add("Npc/Circle", unnerfedCircle);
+                ObjMan.Add("Comp/CircleRope", unnerfedJumprope);
             }
             else
             {
-                ObjMan.Add("Npc_Circle", circle);
-                ObjMan.Add("Comp_CircleJumprope", jumprope);
+                ObjMan.Add("Npc/Circle", circle);
+                ObjMan.Add("Comp/CircleRope", jumprope);
             }
 
             PineDebugNpcIcons.AddIcon([circle, unnerfedCircle], "BorderCircle.png");
@@ -153,11 +153,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void AnimationsCompat()
         {
-            GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed").GetComponent<GenericAnimationExtraComponent>());
-            GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc_Circle_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc/Circle_Nerfed").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleNpc>("Npc/Circle_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
             
-            GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Nerfed").GetComponent<GenericAnimationExtraComponent>());
-            GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp_CircleJumprope_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp/CircleRope_Nerfed").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<CircleJumprope>("Comp/CircleRope_Unnerfed").GetComponent<GenericAnimationExtraComponent>());
         }*/
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -170,7 +170,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
                 AddToNpcs(scene, 100, true);
@@ -185,7 +185,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     case 0:
                         // A 1 in 1000 chance is kinda impossible to predict so instead it's pretty low weight, also if you have guaranteed spawns it only spawns on F2
                         if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                            scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc_Circle").Weighted(3));
+                            scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc/Circle").Weighted(3));
                         return;
                     case 1:
                         AddToNpcs(scene, 75);
@@ -200,10 +200,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
             if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc_Circle").Weighted(weight));
+                scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc/Circle").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {
-                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<CircleNpc>("Npc_Circle"));
+                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<CircleNpc>("Npc/Circle"));
                 scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
             }
         }

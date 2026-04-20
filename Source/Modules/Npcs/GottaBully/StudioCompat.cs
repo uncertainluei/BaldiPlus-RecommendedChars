@@ -7,6 +7,7 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
@@ -28,7 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_gottabully", ObjMan.Get<GottaBully>("Npc_GottaBully"));
+            EditorInterface.AddNPCVisual("recchars_gottabully", ObjMan.Get<GottaBully>("Npc/GottaBully"));
             LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_swapcloset", new("recchars_swapflor", "recchars_swapwall", "BlueCarpet"));
             LevelStudioPlugin.Instance.selectableTextures.AddRange(["recchars_swapflor", "recchars_swapwall"]);
 
@@ -38,14 +39,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("recchars_gottabully", AssetMan.Get<Sprite>("EditorSpr/Npc_GottaBully")));
+                new NPCTool("recchars_gottabully", AssetMan.Get<Sprite>("EditorSpr/Npc_GottaBully")).SetModdedFrame());
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms",
-                new RoomTool("recchars_swapcloset", AssetMan.Get<Sprite>("EditorSpr/Room_SwapCloset")));
+                new RoomTool("recchars_swapcloset", AssetMan.Get<Sprite>("EditorSpr/Room_SwapCloset")).SetModdedFrame());
 
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
-                new PosterTool("recchars_pri_gbully"),
-                new PosterTool("recchars_sub2tapliasmy")
+                new PosterTool("recchars_pri_gbully").SetModdedFrame(),
+                new PosterTool("recchars_sub2tapliasmy").SetModdedFrame()
             ]);
         }
     }

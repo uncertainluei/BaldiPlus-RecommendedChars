@@ -28,6 +28,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AddTexturesToAssetMan("CarterTex/", ["Textures", "Npc", "Carter"]);
             AddAudioToAssetMan("CarterAud/", ["Audio", "Npc", "Carter"]);
 
+            AssetMan.Add("CarterPst/ClassicCarterMissing", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "ClassicCarterMissing.png"));
+
             AssetMan.Add("Sfx/MapZoom", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_ZoomIn.wav"), "", SoundType.Effect, Color.white, 0));
             AssetMan.Add("Sfx/MapWhoosh", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Whoosh.wav"), "", SoundType.Effect, Color.white, 0));
             AssetMan.Add("Sfx/MapThump", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Thump.wav"), "", SoundType.Effect, Color.white, 0));
@@ -45,6 +47,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
+            // Create poster
+            CreatePoster("CarterPst/ClassicCarterMissing", "ClassicCarterMissing", new PosterTextData() {
+                color = Color.black,
+                textKey = "PST_RecChars_ClassicCarterMissing",
+                font = BaldiFonts.BoldComicSans24.FontAsset(),
+                fontSize = 24,
+                alignment = TextAlignmentOptions.Center,
+                position = new(48,48),
+                size = new(160,32)
+            });
+
             // Carter's items
             _carterItmEnum = EnumExtensions.ExtendEnum<Items>("RecChars_CarterItem");
             CarterItemObject[] carterItems = [
@@ -152,7 +165,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_carter", carter);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_carter", carter.Poster);
-            ObjMan.Add("Npc_Carter", carter);
+            ObjMan.Add("Npc/Carter", carter);
         }
 
         private ItemMetaData _carterItmMeta;
@@ -176,16 +189,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(ObjMan.Get<Carter>("Npc_Carter"), scene, 90, true);
+                AddToNpcs(ObjMan.Get<Carter>("Npc/Carter"), scene, 90, true);
                 return;
             }
             if (title.StartsWith("F") && id > 1)
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(ObjMan.Get<Carter>("Npc_Carter"), scene, id > 1 ? 100 : 45, false, 2);
+                AddToNpcs(ObjMan.Get<Carter>("Npc/Carter"), scene, id > 1 ? 100 : 45, false, 2);
             }
         }
 

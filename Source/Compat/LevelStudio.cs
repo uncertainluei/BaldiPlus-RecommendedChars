@@ -11,11 +11,35 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
     internal static class LevelStudioCompatHelper
     {
+        private static Sprite _frameSprite;
+        internal static Sprite FrameSprite
+        {
+            get
+            {
+                if (!_frameSprite)
+                    _frameSprite = MTM101BaldAPI.AssetTools.AssetLoader.SpriteFromMod(RecommendedCharsPlugin.Plugin, Vector2.one / 2f, 1f,
+                        "Textures", "Compat", "LevelStudio", "SlotRcPack.png");
+                return _frameSprite;
+            }
+        }
+
+        internal static T SetModdedFrame<T>(this T tool) where T : EditorTool
+        {
+            tool.frameOverride = FrameSprite;
+            return tool;
+        }
+
         /*internal static void AddRoomDefaultTextures(string id, string florTex, string wallTex, string ceilTex)
         {
             EditorLevelData.AddDefaultTextureAction((Dictionary<string, TextureContainer> texs) =>
                 texs.Add(id, new(florTex, wallTex, ceilTex)));
         }*/
+    }
+
+    internal class ExtItemTool(string id, Sprite spr, string descKey, bool useItemName = true) : ItemTool(id, spr, useItemName)
+    {
+        protected string newDescKey = descKey;
+        public override string descKey => newDescKey;
     }
 
     internal class ExtNpcTool(string id, Sprite spr) : NPCTool(id, spr)

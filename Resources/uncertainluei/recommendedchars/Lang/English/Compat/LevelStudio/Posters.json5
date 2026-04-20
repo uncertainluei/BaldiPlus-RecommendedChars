@@ -1,4 +1,21 @@
 {
+	// Misc. posters
+	"Ed_Poster_Title_recchars_bee": "IMG_0231.jpg",
+	"Ed_Poster_Desc_recchars_bee": "Bzzz, bzzzz!!!",
+
+	"Ed_Poster_Title_recchars_classiccartermissing": "Classic Carter",
+	"Ed_Poster_Desc_recchars_classiccartermissing": "I wonder where this fella's at right now!",
+
+	// "Cut Zayden Character" posters
+	"Ed_Poster_Title_recchars_magicedwayne": "Magic E'Dwayne Poster",
+	"Ed_Poster_Desc_recchars_magicedwayne": "A sentient rock with a wizard hat?\nWhere did I see that before?",
+	"Ed_Poster_Title_recchars_starwarsguy": "Jon Jedi Poster",
+	"Ed_Poster_Desc_recchars_starwarsguy": "Now, where is Sean Sith?",
+	"Ed_Poster_Title_recchars_sundude": "Sun Poster",
+	"Ed_Poster_Desc_recchars_sundude": "Maybe him being cut is why it was all snowy.",
+	"Ed_Poster_Title_recchars_fakerobb": "\"???????\" Poster",
+	"Ed_Poster_Desc_recchars_fakerobb": "What is this, and why?",
+
     // Office posters
     "Ed_Poster_Title_recchars_pri_wires": "Arts w. Wires's Office Poster",
 	"Ed_Poster_Desc_recchars_pri_wires": "Arts with Wires's poster in the office.",
@@ -11,6 +28,9 @@
 
 	"Ed_Poster_Title_recchars_pri_bsodaahelper": "Bsodaa Helper's Office Poster",
 	"Ed_Poster_Desc_recchars_pri_bsodaahelper": "Bsodaa Helper's poster in the office.",
+
+	"Ed_Poster_Title_recchars_pri_carter": "Carter's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_carter": "Carter's poster in the office.",
 
     "Ed_Poster_Title_recchars_pri_circle": "Circle's Office Poster",
 	"Ed_Poster_Desc_recchars_pri_circle": "Circle's absolutely uninformative poster in the office.",
@@ -27,6 +47,9 @@
 	"Ed_Poster_Title_recchars_pri_locksock": "Locks n' Bolts's Office Poster",
 	"Ed_Poster_Desc_recchars_pri_locksock": "Locks and Bolts's poster in the office.",
 
+	"Ed_Poster_Title_recchars_pri_maintenancemachine": "Evil Maintenance Machine's Office Poster",
+	"Ed_Poster_Desc_recchars_pri_maintenancemachine": "Evil Maintenance Machine's not-so-evil poster in office.",
+
 	"Ed_Poster_Title_recchars_pri_secaward": "2nd Award's Office Poster",
 	"Ed_Poster_Desc_recchars_pri_secaward": "Second Award's poster in the office.\n\"Second\", \"2nd\" or <i>\"2st\"</i>?\n Make up your mind, Programmer!",
 
@@ -36,7 +59,7 @@
 
 	// Daycare (Room) posters
 	"Ed_Poster_Title_recchars_daycareinfo": "Daycare Information",
-	"Ed_Poster_Desc_recchars_daycareinfo": "Half-outdated information regarding the Daycare.",
+	"Ed_Poster_Desc_recchars_daycareinfo": "Information regarding the Daycare.",
 	"Ed_Poster_Title_recchars_daycarerules": "Daycare Rules",
 	"Ed_Poster_Desc_recchars_daycarerules": "Remember to also follow these (when Mr. Daycare's active)!",
 	"Ed_Poster_Title_recchars_daycareclock": "Daycare Clock",
@@ -44,5 +67,5 @@
 
 	// Swap Closet posters
     "Ed_Poster_Title_recchars_sub2tapliasmy": "\"Sub to Tapliasmy\" Board",
-	"Ed_Poster_Desc_recchars_sub2tapliasmy": "Shameless self promotion."
+	"Ed_Poster_Desc_recchars_sub2tapliasmy": "Shameless self-promotion."
 }

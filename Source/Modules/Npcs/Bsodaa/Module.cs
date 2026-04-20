@@ -98,7 +98,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 100f, Vector2.one/2f, AssetMan.Get<Texture2D>("BsodaaTex/BsodaaHelper"));
 
             helper.sprite.sprite = sprites[0];
-            helper.sprite.material = AssetMan.Get<Material>("BillboardMaterial");
+            helper.sprite.material = AssetMan.Get<Material>("Mat/SpriteBillboard");
             helper.sprEmpty = sprites[1];
             helper.sprSprayed = sprites[2];
 
@@ -111,13 +111,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             collider.radius = 0.4f;
             collider.center = Vector3.down;
 
-            ObjMan.Add("Npc_BsodaaHelper", helper);
+            ObjMan.Add("Npc/BsodaaHelper", helper);
             LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper", helper.gameObject);
 
             helper = GameObject.Instantiate(helper,MTM101BaldiDevAPI.prefabTransform);
             helper.name = "BsodaaHelper Diet";
             helper.forceDietMode = true;
-            ObjMan.Add("Npc_BsodaaHelper_Diet", helper);
+            ObjMan.Add("Npc/BsodaaHelper_Diet", helper);
 
             LevelLoaderPlugin.Instance.basicObjects.Add("recchars_bsodaahelper_diet", helper.gameObject);
 
@@ -130,7 +130,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "PST_PRI_RecChars_BsodaaHelper1", "PST_PRI_RecChars_BsodaaHelper2");
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaahelper", dummy.Poster);
             
-            ObjMan.Add("Npc_BsodaaHelperDummy", dummy);
+            ObjMan.Add("Npc/BsodaaHelperDummy", dummy);
         }
 
         private void LoadEveyBsodaa()
@@ -204,9 +204,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
 
-            bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_Bsodaa"), "Bsodaa",
+            bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Bsodaa"), "Bsodaa",
                 50, 50, 50, 25, 25, 25, 25, 150);
-            ObjMan.Add("Npc_Bsodaa", bsodaaGuy);
+            ObjMan.Add("Npc/Bsodaa", bsodaaGuy);
         }
 
         private void CreateBsodaaRoomBlueprint()
@@ -248,7 +248,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaawall", bsodaaRoom.texWall);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaceil", bsodaaRoom.texCeil);
             LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_bsodaa", bsodaaRoom.lightObj);
-            ObjMan.Add("Room_Bsodaa", bsodaaRoom);
+            ObjMan.Add("Room/Bsodaa", bsodaaRoom);
         }
             
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Pre)]
@@ -270,17 +270,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<EveyBsodaa>("Npc_Bsodaa"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<EveyBsodaa>("Npc_Bsodaa"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
                 return;
             }
 
@@ -290,21 +290,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<EveyBsodaa>("Npc_Bsodaa"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
                 }
                 else if (id == 1)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<EveyBsodaa>("Npc_Bsodaa"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
             }
         }
         private void AddBsodaaHelpers(LevelGenerator gen)
         {
-            NPC helperDummy = ObjMan.Get<NPC>("Npc_BsodaaHelperDummy");
-            int bsodaas = gen.Ec.npcsToSpawn.Where(x => x != null && x.Character == EveyBsodaa.charEnum).ToArray().Length;
-            for (int i = 0; i < bsodaas; i++)
-                gen.Ec.npcsToSpawn.Add(helperDummy);
+            NPC helperDummy = ObjMan.Get<NPC>("Npc/BsodaaHelperDummy");
+            int c = gen.Ec.npcsToSpawn.Count;
+            for (int i = 0; i < c; i++)
+            {
+                if (gen.Ec.npcsToSpawn[i] && gen.Ec.npcsToSpawn[i].Character == EveyBsodaa.charEnum)
+                    gen.Ec.npcsToSpawn.Add(helperDummy);
+            }
         }
     }
 }

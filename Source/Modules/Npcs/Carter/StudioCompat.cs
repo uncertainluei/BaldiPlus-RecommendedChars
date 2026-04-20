@@ -1,4 +1,5 @@
-﻿using MTM101BaldAPI.Registers;
+﻿using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.Registers;
 
 using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
@@ -6,8 +7,8 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using MTM101BaldAPI.AssetTools;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -23,16 +24,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_carter", ObjMan.Get<Carter>("Npc_Carter"));
+            EditorInterface.AddNPCVisual("recchars_carter", ObjMan.Get<Carter>("Npc/Carter"));
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("recchars_carter", AssetMan.Get<Sprite>("EditorSpr/Npc_Carter")));
-            EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_pri_carter"));
+                new NPCTool("recchars_carter", AssetMan.Get<Sprite>("EditorSpr/Npc_Carter")).SetModdedFrame());
+            EditorInterfaceModes.AddToolsToCategory(mode, "posters",
+                [new PosterTool("recchars_pri_carter").SetModdedFrame(), new PosterTool("recchars_classiccartermissing").SetModdedFrame()]);
         }
     }
 }

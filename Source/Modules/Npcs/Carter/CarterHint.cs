@@ -63,7 +63,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (location.category == RoomCategory.Special)
             {
-                // Grab all of them
+                // Fallback if Custom Posters isn't installed
                 if (location.doorMats.name == "SuppliesDoorSet")
                     return "Closet";
                 if (location.doorMats.name == "DoctorDoorSet")

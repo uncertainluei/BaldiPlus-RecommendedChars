@@ -69,13 +69,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_locksock", lockSock);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_locksock", lockSock.Poster);
-            ObjMan.Add("Npc_LockSock", lockSock);
+            ObjMan.Add("Npc/LockSock", lockSock);
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
                 AddToNpcs(scene, 75, true);
@@ -91,10 +91,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
             if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                scene.potentialNPCs.Add(ObjMan.Get<LockSock>("Npc_LockSock").Weighted(weight));
+                scene.potentialNPCs.Add(ObjMan.Get<LockSock>("Npc/LockSock").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {
-                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<LockSock>("Npc_LockSock"));
+                scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<LockSock>("Npc/LockSock"));
                 scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
             }
         }

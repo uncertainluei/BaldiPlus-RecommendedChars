@@ -75,11 +75,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (Pickup && Pickup.isActiveAndEnabled && Pickup.item == LostItem)
                     return;
 
-                if (paper) paper.Deactivate();
-                paper = null;
-
                 foundItemCount = CountInventoryItems();
             }
+            if (paper)
+            {
+                paper.Deactivate();
+                paper = null;
+            }
+            
             if (foundItemCount > 0 && CountInventoryItems() >= foundItemCount)
                 return;
 
@@ -194,6 +197,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Update();
             carter.CheckForItem();
+            if (carter.FoundItem && carter.looker.PlayerInSight())
+            {
+                carter.audMan.FlushQueue(true);
+                carter.behaviorStateMachine.ChangeState(new Carter_WanderWaiting(carter));
+                return;
+            }
             if (carter.audMan.QueuedAudioIsPlaying || carter.behaviorStateMachine.CurrentState != this)
                 return;
 

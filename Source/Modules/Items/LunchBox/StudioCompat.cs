@@ -3,12 +3,12 @@ using MTM101BaldAPI.Registers;
 
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
+using PlusLevelStudio.Editor.Tools;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util;
-using PlusLevelStudio.Editor.Tools;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -24,7 +24,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("EditorSpr/Item_LunchBox_4", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Item", "LunchBox_4.png"));
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_lunchbox_random");
@@ -34,10 +34,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolsToCategory(mode, "items", [
-                new ItemTool("recchars_lunchbox_random", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_Random"), false),
-                new ItemTool("recchars_lunchbox_2", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_2"), false),
-                new ItemTool("recchars_lunchbox_3", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_3"), false),
-                new ItemTool("recchars_lunchbox_4", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_4"), false)
+                new ItemTool("recchars_lunchbox_random", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_Random"), false).SetModdedFrame(),
+                new ExtItemTool("recchars_lunchbox_2", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_2"), "Ed_Tool_item_recchars_lunchbox_Desc", false).SetModdedFrame(),
+                new ExtItemTool("recchars_lunchbox_3", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_3"), "Ed_Tool_item_recchars_lunchbox_Desc", false).SetModdedFrame(),
+                new ExtItemTool("recchars_lunchbox_4", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_4"), "Ed_Tool_item_recchars_lunchbox_Desc", false).SetModdedFrame()
             ]);
         }
     }

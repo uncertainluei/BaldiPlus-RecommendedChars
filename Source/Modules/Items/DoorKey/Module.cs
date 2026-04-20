@@ -13,6 +13,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
+
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
@@ -44,7 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ((ITM_DoorKey)keyItemObject.item).layerMask = ((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DetentionKey).value.item).layerMask;
 
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_doorkey", keyItemObject);
-            ObjMan.Add("Itm_DoorKey", keyItemObject);
+            ObjMan.Add("Itm/DoorKey", keyItemObject);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Post)]
@@ -62,10 +64,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END" || (title.StartsWith("F") && id > 0))
+            if (scene.GetMeta()?.tags.Contains("endless") == true || (title.StartsWith("F") && id > 0))
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm_DoorKey").Weighted(25));
+                scene.shopItems = scene.shopItems.AddToArray(ObjMan.Get<ItemObject>("Itm/DoorKey").Weighted(25));
             }
         }
 
@@ -76,18 +78,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/DoorKey", GenerationStageFlags.Addend);
 
-            if (title == "END" || (title.StartsWith("F") && id > 0))
+            if (title.StartsWith("F") && id > 0)
             {
                 lvl.MarkAsNeverUnload();
-                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_DoorKey").Weighted(10));
+                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/DoorKey").Weighted(10));
             }
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_doorkey");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_doorkey")));
+            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_keys", new ItemTool("recchars_doorkey").SetModdedFrame()));
         }
     }
 }

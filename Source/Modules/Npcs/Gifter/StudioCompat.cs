@@ -7,6 +7,7 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
@@ -30,7 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_gifter", ObjMan.Get<Gifter>("Npc_Gifter"));
+            EditorInterface.AddNPCVisual("recchars_gifter", ObjMan.Get<Gifter>("Npc/Gifter"));
             LevelStudioPlugin.Instance.npcDisplays.Add("recchars_gifttanynt", LevelStudioPlugin.Instance.npcDisplays["recchars_gifter"]);
 
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
@@ -43,10 +44,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 //new ExtNpcTool("recchars_gifttanynt", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifttanynt"),
                     //"Ed_Tool_npc_recchars_gifttanynt_Title", "Ed_Tool_npc_recchars_gifttanynt_Desc")
 
-                new NPCTool("recchars_gifttanynt", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifter"))
+                new NPCTool("recchars_gifttanynt", AssetMan.Get<Sprite>("EditorSpr/Npc_Gifter")).SetModdedFrame()
             ]);
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_pri_gifter"));
+                new PosterTool("recchars_pri_gifter").SetModdedFrame());
         }
     }
 }

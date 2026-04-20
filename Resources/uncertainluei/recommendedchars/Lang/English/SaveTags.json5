@@ -21,8 +21,12 @@
 	"Mdl_BlueGuy": "Blue, Guy",
 	"Mdl_Gifter": "Gifter",
 
-  // Item Modules
+	// Item Modules
+	"Mdl_BsodaMini": "BSODA Mini",
 	"Mdl_LunchBox": "Lunch Box",
+	"Mdl_NerfGun": "Nerf Gun",
+	"Mdl_Pie": "Pie",
+	"Mdl_Psoda": "PSODA",
 
 	// Older version module names
 	"Mdl_SwappedDuo": "Swapped Duo",

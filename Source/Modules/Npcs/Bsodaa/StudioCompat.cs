@@ -32,11 +32,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Bsodaa.json5");
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_bsodaa", ObjMan.Get<EveyBsodaa>("Npc_Bsodaa"));
-            EditorBasicObject helperVisual = EditorInterface.AddObjectVisual("recchars_bsodaahelper", ObjMan.Get<BsodaaHelper>("Npc_BsodaaHelper").gameObject, true);
+            EditorInterface.AddNPCVisual("recchars_bsodaa", ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
+            EditorBasicObject helperVisual = EditorInterface.AddObjectVisual("recchars_bsodaahelper", ObjMan.Get<BsodaaHelper>("Npc/BsodaaHelper").gameObject, true);
             LevelStudioPlugin.Instance.basicObjectDisplays.Add("recchars_bsodaahelper_diet", helperVisual);
 
             LevelStudioPlugin.Instance.defaultRoomTextures.Add("recchars_bsodaaroom", new("recchars_bsodaaflor", "recchars_bsodaawall", "recchars_bsodaaceil"));
@@ -48,20 +48,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Npc_Bsodaa")));
+                new NPCTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Npc_Bsodaa")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, mode.id == "rooms" ? "objects" : "npcs",
-                new ExtRoomObjectTool("recchars_bsodaahelper", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper"), "recchars_bsodaaroom"));
+                new ExtRoomObjectTool("recchars_bsodaahelper", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper"), "recchars_bsodaaroom").SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "npcs", 
-                new ExtRoomObjectTool("recchars_bsodaahelper_diet", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper_Diet"), "recchars_bsodaaroom"));
+                new ExtRoomObjectTool("recchars_bsodaahelper_diet", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper_Diet"), "recchars_bsodaaroom").SetModdedFrame());
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms",
-                new RoomTool("recchars_bsodaaroom", AssetMan.Get<Sprite>("EditorSpr/Room_BsodaaRoom")));
+                new RoomTool("recchars_bsodaaroom", AssetMan.Get<Sprite>("EditorSpr/Room_BsodaaRoom")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "lights",
-                new LightTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Light_Bsodaa")));
+                new LightTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Light_Bsodaa")).SetModdedFrame());
 
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
-                new PosterTool("recchars_pri_bsodaa"),
-                new PosterTool("recchars_pri_bsodaahelper")
+                new PosterTool("recchars_pri_bsodaa").SetModdedFrame(),
+                new PosterTool("recchars_pri_bsodaahelper").SetModdedFrame()
             ]);
         }
     }

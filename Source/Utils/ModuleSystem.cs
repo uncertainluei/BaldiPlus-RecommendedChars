@@ -24,12 +24,21 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public virtual ModuleSaveSystem SaveSystem => null;
 
-        protected static PosterObject CreatePoster(string path, string name)
+        protected static PosterObject CreatePoster(Texture2D tex, string name, string editorAlias, params PosterTextData[] posterTextData)
         {
-            PosterObject poster = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>(path), []);
+            PosterObject poster = ObjectCreators.CreatePosterObject(tex, posterTextData);
             poster.name = name;
+            ObjMan.Add("Pst/"+name, poster);
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_"+editorAlias, poster);
             return poster;
         }
+
+        protected static PosterObject CreatePoster(Texture2D tex, string name, params PosterTextData[] posterTextData)
+            => CreatePoster(tex, name, name.ToLower(), posterTextData);
+        protected static PosterObject CreatePoster(string path, string name, string editorAlias, params PosterTextData[] posterTextData)
+            => CreatePoster(AssetMan.Get<Texture2D>(path), name, editorAlias, posterTextData);
+        protected static PosterObject CreatePoster(string path, string name, params PosterTextData[] posterTextData)
+            => CreatePoster(path, name, name.ToLower(), posterTextData);
 
         protected static void AddTexturesToAssetMan(string prefix, string[] paths)
             => AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", paths), x => prefix+x.name);

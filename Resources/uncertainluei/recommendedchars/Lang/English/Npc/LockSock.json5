@@ -2,6 +2,6 @@
 	"PST_PRI_RecChars_LockSock1": "Locks and Bolts",
 	"PST_PRI_RecChars_LockSock2": "A strange sock-shaped puppet made from old padlocks. As it's entirely made out of padlocks, it'll lock doors from time to time!",
 
-	"Sfx_RecChars_LockSock_Lock": "*THUD!*"
+	"Sfx_RecChars_LockSock_Lock": "[THUD!]"
 	// Smh...
 }

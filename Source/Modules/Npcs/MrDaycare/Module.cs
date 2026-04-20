@@ -24,6 +24,9 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UnityEngine;
 
 using PlusStudioLevelLoader;
+using MTM101BaldAPI.PlusExtensions;
+using UnityEngine.UI;
+using MTM101BaldAPI.UI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -55,9 +58,33 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Create posters
-            AssetMan.Add("DaycareRulesPoster", CreatePoster("DaycarePoster/pst_daycarerules", "DaycarePoster_Rules"));
-            AssetMan.Add("DaycareInfoPoster", CreatePoster("DaycarePoster/pst_daycareinfo", "DaycarePoster_Info"));
-            AssetMan.Add("DaycareClockPoster", CreatePoster("DaycarePoster/pst_daycareclock", "DaycarePoster_Clock"));
+            CreatePoster("DaycarePoster/pst_daycarerules", "DaycarePoster_Rules", "daycarerules", new PosterTextData() {
+                color = Color.black,
+                textKey = "PST_RecChars_DaycareRules",
+                font = BaldiFonts.ComicSans12.FontAsset(),
+                fontSize = 12,
+                alignment = TMPro.TextAlignmentOptions.Center,
+                position = new(55,31),
+                size = new(145,196)
+            });
+            CreatePoster("DaycarePoster/pst_daycareinfo", "DaycarePoster_Info", "daycareinfo", new PosterTextData() {
+                color = Color.black,
+                textKey = "PST_RecChars_DaycareInfo1",
+                font = BaldiFonts.ComicSans18.FontAsset(),
+                fontSize = 18,
+                alignment = TMPro.TextAlignmentOptions.Center,
+                position = new(57,177),
+                size = new(140,48)
+            }, new PosterTextData() {
+                color = Color.black,
+                textKey = "PST_RecChars_DaycareInfo2",
+                font = BaldiFonts.ComicSans12.FontAsset(),
+                fontSize = 12,
+                alignment = TMPro.TextAlignmentOptions.Center,
+                position = new(57,37),
+                size = new(140,144)
+            });
+            CreatePoster("DaycarePoster/pst_daycareclock", "DaycarePoster_Clock", "daycareclock");
 
             CreateDaycareBlueprint();
             LoadMrDaycare();
@@ -141,24 +168,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
 
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_daycare", daycare.Poster);
-            daycare.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_Daycare"), "Daycare");
+            daycare.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Daycare"), "Daycare");
 
             MrDaycare unnerfedDaycare = GameObject.Instantiate(daycare, MTM101BaldiDevAPI.prefabTransform);
             unnerfedDaycare.name = "MrDaycare Unnerfed";
-            ObjMan.Add("Npc_MrDaycare_Unnerfed", unnerfedDaycare);
+            ObjMan.Add("Npc/MrDaycare_Unnerfed", unnerfedDaycare);
 
             daycare.Navigator.speed = 30f;
             daycare.Navigator.maxSpeed = 30f;
             daycare.maxTimeoutLevel = 1;
             daycare.ruleSensitivityMul = 1;
-            ObjMan.Add("Npc_MrDaycare_Nerfed", daycare);
+            ObjMan.Add("Npc/MrDaycare_Nerfed", daycare);
 
             PineDebugNpcIcons.AddIcon([daycare, unnerfedDaycare], "BorderDaycare.png");
             CharacterRadarColorPatch.colors.Add(daycare.Character, daycare.audMan.subtitleColor);
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", unnerfedDaycare);
-            ObjMan.Add("Npc_MrDaycare", RecommendedCharsConfig.nerfMrDaycare.Value ? daycare : unnerfedDaycare);
+            ObjMan.Add("Npc/MrDaycare", RecommendedCharsConfig.nerfMrDaycare.Value ? daycare : unnerfedDaycare);
         }
 
         private void CreateDaycareBlueprint()
@@ -238,9 +265,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ruleFreeZone.excludeEscaping = false;
 
             // Randomly place Info, Rules and Clock posters for rooms in generated levels
-            daycareRoom.functionContainer.AddChalkboardBuilder(AssetMan.Get<PosterObject>("DaycareInfoPoster").Weighted(100));
-            daycareRoom.functionContainer.AddChalkboardBuilder(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(100));
-            daycareRoom.functionContainer.AddChalkboardBuilder(AssetMan.Get<PosterObject>("DaycareClockPoster").Weighted(100));
+            daycareRoom.functionContainer.AddChalkboardBuilder(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Info"));
+            daycareRoom.functionContainer.AddChalkboardBuilder(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Rules"));
+            daycareRoom.functionContainer.AddChalkboardBuilder(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Clock"));
 
             LevelLoaderCompatHelper.AddRoom(daycareRoom);
 
@@ -249,12 +276,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycareceil", daycareRoom.texCeil);
             LevelLoaderPlugin.Instance.windowObjects.Add("recchars_daycare", daycareRoom.windowSet);
             LevelLoaderPlugin.Instance.lightTransforms.Add("recchars_daycare", daycareRoom.lightObj);
-
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycareinfo", AssetMan.Get<PosterObject>("DaycareInfoPoster"));
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycarerules", AssetMan.Get<PosterObject>("DaycareRulesPoster"));
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_daycareclock", AssetMan.Get<PosterObject>("DaycareClockPoster"));
-
-            ObjMan.Add("Room_Daycare", daycareRoom);
+            ObjMan.Add("Room/Daycare", daycareRoom);
         }
 
         /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Post)]
@@ -378,16 +400,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                 return;
             }
             if (title.StartsWith("F"))
@@ -395,11 +417,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 scene.MarkAsNeverUnload();
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                 }
                 else if (id == 0)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc_MrDaycare"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
                 }
             }
@@ -410,7 +432,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (gen.scene == null) return;
             if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == MrDaycare.charEnum) == null) return;
 
-            gen.ld.posters = gen.ld.posters.AddToArray(AssetMan.Get<PosterObject>("DaycareRulesPoster").Weighted(50));
+            gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Rules").Weighted(50));
         }
 
         private static void SetGuiltForItems(ItemManager itemMan, ItemObject itm)

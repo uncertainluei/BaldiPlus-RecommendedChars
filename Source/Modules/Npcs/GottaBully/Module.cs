@@ -44,9 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Tapliasmy Chalkboard
-            PosterObject tapliasmyChalkboard = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("SwapClosetPoster/SubToTapliasmy"), []);
-            tapliasmyChalkboard.name = "Pst_Sub2Tapliasmy";
-            ObjMan.Add("Pst_Sub2Tapliasmy", tapliasmyChalkboard);
+            CreatePoster("SwapClosetPoster/SubToTapliasmy", "Sub2Tapliasmy");
 
             CreateSwapClosetBlueprint();
             LoadGottaBully();
@@ -55,8 +53,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
         private void GottaBullyAnimationsCompat()
         {
-            GameObject.DestroyImmediate(ObjMan.Get<GottaBully>("Npc_GottaBully").GetComponent<GenericAnimationExtraComponent>());
-            GameObject.DestroyImmediate(ObjMan.Get<GottaBully>("Npc_GottaBully").GetComponent<GottaSweepComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<GottaBully>("Npc/GottaBully").GetComponent<GenericAnimationExtraComponent>());
+            GameObject.DestroyImmediate(ObjMan.Get<GottaBully>("Npc/GottaBully").GetComponent<GottaSweepComponent>());
         }*/
 
         private void LoadGottaBully()
@@ -92,9 +90,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", gottaBully);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gbully", gottaBully.Poster);
 
-            gottaBully.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room_SwapCloset"), "SwapCloset");
+            gottaBully.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/SwapCloset"), "SwapCloset");
 
-            ObjMan.Add("Npc_GottaBully", gottaBully);
+            ObjMan.Add("Npc/GottaBully", gottaBully);
             NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(gottaBullyMeta);
         }
@@ -114,31 +112,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bullyRoom.color = new(198/255f, 136/255f, 91/255f);
 
             List<WeightedPosterObject> bullyRoomPoster =
-            [ObjMan.Get<PosterObject>("Pst_Sub2Tapliasmy").Weighted(100)];
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_sub2tapliasmy", bullyRoomPoster[0].selection);
+            [ObjMan.Get<PosterObject>("Pst/Sub2Tapliasmy").Weighted(100)];
             bullyRoom.posterChance = 0.25f;
             bullyRoom.posters = bullyRoomPoster;
 
             LevelLoaderCompatHelper.AddRoom(bullyRoom, "recchars_swapcloset");
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapflor", bullyRoom.texFloor);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapwall", bullyRoom.texWall);
-            ObjMan.Add("Room_SwapCloset", bullyRoom);
+            ObjMan.Add("Room/SwapCloset", bullyRoom);
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
-            if (title == "END")
+            if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
 
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<GottaBully>("Npc_GottaBully"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<GottaBully>("Npc/GottaBully"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs-1, 0);
                 }
                 else
-                    scene.potentialNPCs.CopyNpcWeight(Character.LookAt, ObjMan.Get<GottaBully>("Npc_GottaBully"));
+                    scene.potentialNPCs.CopyNpcWeight(Character.LookAt, ObjMan.Get<GottaBully>("Npc/GottaBully"));
                 return;
             }
 
@@ -149,11 +146,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
                 {
                     if (id > 1)
-                        scene.potentialNPCs.CopyNpcWeight(Character.LookAt, ObjMan.Get<GottaBully>("Npc_GottaBully"));
+                        scene.potentialNPCs.CopyNpcWeight(Character.LookAt, ObjMan.Get<GottaBully>("Npc/GottaBully"));
                 }
                 else if (id == 2)
                 {
-                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<GottaBully>("Npc_GottaBully"));
+                    scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<GottaBully>("Npc/GottaBully"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs-1, 0);
                 }
             }

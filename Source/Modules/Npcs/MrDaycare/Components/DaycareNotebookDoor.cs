@@ -35,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             NotebookRequirement = Mathf.RoundToInt(BaseGameManager.Instance.NotebookTotal*0.5f+0.1f);
             if (BaseGameManager.Instance.NotebookTotal < 5)
-                NotebookRequirement = BaseGameManager.Instance.NotebookTotal-1;
+                NotebookRequirement = Mathf.Max(1,BaseGameManager.Instance.NotebookTotal-1);
 
             blocking = false;
             Block(true);

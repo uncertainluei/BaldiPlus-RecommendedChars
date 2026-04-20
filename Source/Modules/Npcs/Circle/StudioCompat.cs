@@ -26,10 +26,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Circle.json5");
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            EditorInterface.AddNPCVisual("recchars_circle", ObjMan.Get<CircleNpc>("Npc_Circle_Nerfed"));
+            EditorInterface.AddNPCVisual("recchars_circle", ObjMan.Get<CircleNpc>("Npc/Circle_Nerfed"));
             LevelStudioPlugin.Instance.npcDisplays.Add("recchars_circle_og", LevelStudioPlugin.Instance.npcDisplays["recchars_circle"]);
             EditorInterfaceModes.AddModeCallback(AddContentToMode);
         }
@@ -38,12 +38,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             EditorInterfaceModes.AddToolsToCategory(mode, "npcs", [
                 new ExtNpcTool("recchars_circle", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle"),
-                    "Ed_Tool_npc_recchars_circle_Desc"),
+                    "Ed_Tool_npc_recchars_circle_Desc").SetModdedFrame(),
                 new ExtNpcTool("recchars_circle_og", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle_Og"),
-                    "Ed_Tool_npc_recchars_circle_og_Title", "Ed_Tool_npc_recchars_circle_og_Desc")
+                    "Ed_Tool_npc_recchars_circle_og_Title", "Ed_Tool_npc_recchars_circle_og_Desc").SetModdedFrame()
             ]);
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_pri_circle"));
+                new PosterTool("recchars_pri_circle").SetModdedFrame());
         }
     }
 }

@@ -14,6 +14,6 @@
 	"Vfx_RecChars_Gifter_Shocked": "Oh no! Not again!",
 	"Vfx_RecChars_Gifter_Sorry": "I'm very sorry! I promise that won't happen again!",
 
-	"Sfx_RecChars_GiftUnwrap": "*UNWRAPPING*",
-	"Sfx_RecChars_BombFuse": "*SSssSSss....*"
+	"Sfx_RecChars_GiftUnwrap": "[UNWRAPPING]",
+	"Sfx_RecChars_BombFuse": "[SSssSSss....]"
 }

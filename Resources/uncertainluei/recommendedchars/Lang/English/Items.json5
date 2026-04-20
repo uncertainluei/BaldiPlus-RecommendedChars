@@ -23,5 +23,13 @@
 	// Pie
 	"Itm_RecChars_Pie": "Pie",
 	"Desc_RecChars_Pie": "Pie\nOne of Dave's countless home-baked pies! While you could eat it,\nit's more fun to throw these towards unsuspecting victims!",
-	"Sfx_RecChars_PieSplat": "*SPLAT!*",
+	"Sfx_RecChars_PieSplat": "[SPLAT!]",
+
+	// PSODA
+    "Itm_RecChars_Psoda": "PSODA",
+    "Itm_RecChars_SmallPsoda": "PSODA Mini",
+	"Sfx_RecChars_Boing": "[Boing!]",
+
+    "Desc_RecChars_Psoda": "PSODA\nA special limited-edition flavored BSODA!\nIts unique pink fizz will propel <b>anyone</b> like a golf ball!",
+    "Desc_RecChars_SmallPsoda": "PSODA Mini\nPSODA is already limited in its normal size, so I\nsay this is a rare find! Don't take my word for it, though.",
 }

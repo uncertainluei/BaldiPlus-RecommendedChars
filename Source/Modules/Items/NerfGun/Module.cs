@@ -14,6 +14,8 @@ using System.Linq;
 
 using UnityEngine;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
+
 using UncertainLuei.CaudexLib.Registers;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
@@ -50,13 +52,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             ItemObject nerfGun = nerfGunBuilder.BuildAsMulti(2);
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", nerfGun);
-            ObjMan.Add("Itm_NerfGun", nerfGun);
+            ObjMan.Add("Itm/NerfGun", nerfGun);
 
-            PosterObject nerfGunHint = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("NerfGunPoster/hnt_nerfgun"), []);
-            nerfGunHint.name = "NerfGunPoster";
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_nerfgun_hint", nerfGunHint);
-            ObjMan.Add("Pst_NerfGunHint", nerfGunHint);
-
+            CreatePoster("NerfGunPoster/hnt_nerfgun", "NerfGunHint", "nerfgun_hint");
             CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddItemsToLevel);
         }
 
@@ -66,7 +64,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm_NerfGun"), weight = 50 });
+                scene.shopItems = scene.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm/NerfGun"), weight = 50 });
             }
         }
 
@@ -75,20 +73,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!gen.scene) return;
             if (!gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == CircleNpc.charEnum)) return;
 
-            SceneObjectMetadata meta = SceneObjectMetaStorage.Instance.Get(gen.scene);
-            if (meta == null || !meta.tags.Contains("endless") || gen.scene.levelTitle != "END")
-            {
-                gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst_NerfGunHint").Weighted(75));
-                gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_NerfGun").Weighted(25));
-                return;
-            }
+            if (gen.scene.GetMeta()?.tags.Contains("endless") == true)
+                gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm/NerfGun"), weight = 50 });
 
-            gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst_NerfGunHint").Weighted(100));
-            gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm_NerfGun").Weighted(50));
-            gen.ld.shopItems = gen.ld.shopItems.AddToArray(new WeightedItemObject() { selection = ObjMan.Get<ItemObject>("Itm_NerfGun"), weight = 50 });
+            gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/NerfGunHint").Weighted(100));
+            gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/NerfGun").Weighted(50));
         }
 
-        [CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_nerfgun");
@@ -97,9 +89,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_nerfgun"));
+            EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_scissors", new ItemTool("recchars_nerfgun").SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_nerfgun_hint")
+                new PosterTool("recchars_nerfgun_hint").SetModdedFrame()
             );
         }
     }

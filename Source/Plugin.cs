@@ -117,14 +117,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             
             // Sprite materials
             Material[] materials = [.. Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0)];
-            AssetMan.Add("BillboardMaterial", materials.First(x => x.name == "SpriteStandard_Billboard"));
-            AssetMan.Add("NoBillboardMaterial", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
+            AssetMan.Add("Mat/SpriteBillboard", materials.First(x => x.name == "SpriteStandard_Billboard"));
+            AssetMan.Add("Mat/SpriteNoBillboard", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
             
             // Sound objects
-            AssetMan.Add("Sfx/Silence", Resources.FindObjectsOfTypeAll<SoundObject>().First(x => x.name == "Silence" && x.GetInstanceID() >= 0));
+            SoundObject[] sounds = [.. Resources.FindObjectsOfTypeAll<SoundObject>().Where(x => x.GetInstanceID() >= 0)];
+            AssetMan.Add("Sfx/Silence", sounds.First(x => x.name == "Silence"));
+            AssetMan.Add("Sfx/CartoonEating", sounds.First(x => x.name == "CartoonEating"));
+            AssetMan.Add("Sfx/FoodCrunch", ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat);
 
             yield return "Loading generic sounds";
             AssetMan.Add("Sfx/FoodSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_Boing", SoundType.Effect, Color.white));
         }
 
         private IEnumerator RegisterPost()
