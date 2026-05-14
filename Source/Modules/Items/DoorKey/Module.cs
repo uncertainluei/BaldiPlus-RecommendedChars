@@ -28,7 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("DoorKeyItm/", ["Textures", "Item", "DoorKey"]);
+            ObjectCreation.AddTexturesToAssetMan("DoorKeyItm/", ["Textures", "Item", "DoorKey"]);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -74,15 +74,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int id, CustomLevelObject lvl)
         {
-            if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/DoorKey", GenerationStageFlags.Addend))
+            if (!title.StartsWith("F") || lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/DoorKey", GenerationStageFlags.Addend))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/DoorKey", GenerationStageFlags.Addend);
 
-            if (title.StartsWith("F") && id > 0)
-            {
-                lvl.MarkAsNeverUnload();
-                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/DoorKey").Weighted(10));
-            }
+            lvl.MarkAsNeverUnload();
+            lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/DoorKey").Weighted(10));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]

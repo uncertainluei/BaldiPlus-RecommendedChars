@@ -25,7 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("LSockTex/", ["Textures", "Npc", "LockSock"]);
+            ObjectCreation.AddTexturesToAssetMan("LSockTex/", ["Textures", "Npc", "LockSock"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "LockSock.json5");
@@ -59,6 +59,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             lockSock.audMan = lockSock.GetComponent<AudioManager>();
             lockSock.audMan.subtitleColor = new(84/255f, 75/255f, 65/255f);
+            lockSock.audMan.usesSfx = true;
+            lockSock.audMan.usesVfx = false;
 
             lockSock.audLock = GameObject.Instantiate(((ITM_Acceptable)ItemMetaStorage.Instance.FindByEnum(Items.DoorLock).value.item).audUse);
             lockSock.audLock.subtitle = true;

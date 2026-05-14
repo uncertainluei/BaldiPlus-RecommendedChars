@@ -32,7 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("PsodaTex/", ["Textures", "Item", "Psoda"]);
+            ObjectCreation.AddTexturesToAssetMan("PsodaTex/", ["Textures", "Item", "Psoda"]);
             AssetMan.Add("VendingTex/PsodaMachine", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Structure", "PsodaMachine.png"));
             AssetMan.Add("VendingTex/PsodaMachine_Out", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Structure", "PsodaMachine_Out.png"));
         }
@@ -50,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetGeneratorCost(75)
             .Build();
 
-            ITM_Psoda psodaSpray = SwapComponentSimple<ITM_BSODA, ITM_Psoda>(GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform));
+            ITM_Psoda psodaSpray = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<ITM_BSODA, ITM_Psoda>();
             psodaSpray.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("PsodaTex/Psoda_Spray"), 12f);
             psodaSpray.speed = 40f;
             psodaSpray.time = 60f;
@@ -118,11 +118,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
-            if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Psoda", GenerationStageFlags.Addend))
+            if (!title.StartsWith("F") || lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Psoda", GenerationStageFlags.Addend))
                 return;
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Psoda", GenerationStageFlags.Addend);
 
-            if (!title.StartsWith("F") || num < 1) return;
+            if (num < 1) return;
 
             GameObject psodaMachine = ObjMan.Get<SodaMachine>("Obj/PsodaMachine").gameObject;
 
@@ -177,7 +177,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
-            LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_psoda"]);
+            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_psoda");
             EditorInterface.AddObjectVisualWithMeshCollider("recchars_psodamachine", LevelLoaderPlugin.Instance.basicObjects["recchars_psodamachine"], convex: true);
 
             EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => {
@@ -188,7 +188,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // PSODA Mini
             if (!ObjMan.ContainsKey("Itm/PsodaMini")) return;
 
-            LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_smallpsoda"]);
+            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_smallpsoda");
             EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_recchars_psoda", new ItemTool("recchars_smallpsoda").SetModdedFrame()));
         }
     }

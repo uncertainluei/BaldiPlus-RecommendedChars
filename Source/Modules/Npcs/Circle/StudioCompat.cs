@@ -10,6 +10,7 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
+using System.Collections.Generic;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -36,12 +37,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolsToCategory(mode, "npcs", [
-                new ExtNpcTool("recchars_circle", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle"),
-                    "Ed_Tool_npc_recchars_circle_Desc").SetModdedFrame(),
-                new ExtNpcTool("recchars_circle_og", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle_Og"),
-                    "Ed_Tool_npc_recchars_circle_og_Title", "Ed_Tool_npc_recchars_circle_og_Desc").SetModdedFrame()
-            ]);
+            List<EditorTool> npcTools = [new ExtNpcTool("recchars_circle", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle"),
+                    "Ed_Tool_npc_recchars_circle_Desc").SetModdedFrame()];
+            if (vanillaCompliant)
+                npcTools.Add(new ExtNpcTool("recchars_circle_og", AssetMan.Get<Sprite>("EditorSpr/Npc_Circle_Og"),
+                    "Ed_Tool_npc_recchars_circle_og_Title", "Ed_Tool_npc_recchars_circle_og_Desc").SetModdedFrame());
+
+            EditorInterfaceModes.InsertToolsInCategory(mode, "npcs", "npc_playtime", npcTools);
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
                 new PosterTool("recchars_pri_circle").SetModdedFrame());
         }

@@ -26,8 +26,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("WiresTex/", ["Textures", "Npc", "ArtsWWires"]);
-            AddAudioToAssetMan("WiresAud/", ["Audio", "Npc", "ArtsWWires"]);
+            ObjectCreation.AddTexturesToAssetMan("WiresTex/", ["Textures", "Npc", "ArtsWWires"]);
+            ObjectCreation.AddAudioToAssetMan("WiresAud/", ["Audio", "Npc", "ArtsWWires"]);
             
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "ArtsWithWires.json5");

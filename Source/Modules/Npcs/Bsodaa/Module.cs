@@ -37,11 +37,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("BsodaaTex/", ["Textures", "Npc", "Bsodaa"]);
-            //AddTexturesToAssetMan("BsodaaItm/", ["Textures", "Item", "Bsodaa"]);
-            AddTexturesToAssetMan("BsodaaRoom/", ["Textures", "Environment", "Room", "Bsodaa"]);
+            ObjectCreation.AddTexturesToAssetMan("BsodaaTex/", ["Textures", "Npc", "Bsodaa"]);
+            ObjectCreation.AddTexturesToAssetMan("BsodaaRoom/", ["Textures", "Environment", "Room", "Bsodaa"]);
 
-            AddAudioToAssetMan("BsodaaAud/", ["Audio", "Npc", "Bsodaa"]);
+            ObjectCreation.AddAudioToAssetMan("BsodaaAud/", ["Audio", "Npc", "Bsodaa"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Bsodaa.json5");
@@ -62,17 +61,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadBsodaaHelper()
         {
-            // Essentially this other guy will not be like the below guy, as in she's a glorified structure rather than an
-            // NPC.
-
-            GameObject helperObj = new("BsodaaHelper", typeof(BsodaaHelper), typeof(CapsuleCollider), typeof(PropagatedAudioManager));
+            // Essentially, she's a glorified structure rather than a real NPC.
+            GameObject helperObj = new("BsodaaHelper", typeof(BsodaaHelper), typeof(CapsuleCollider));
             helperObj.transform.parent = MTM101BaldiDevAPI.prefabTransform;
             helperObj.transform.localPosition = Vector3.zero;
 
             BsodaaHelper helper = helperObj.GetComponent<BsodaaHelper>();
-            helper.audMan = helperObj.GetComponent<PropagatedAudioManager>();
-            GameObject.DestroyImmediate(helper.audMan.audioDevice.gameObject);
-            ((PropagatedAudioManager)helper.audMan).minDistance = 10f;
+            helper.audMan = helperObj.AddComponent<PropagatedAudioManager>();
             ((PropagatedAudioManager)helper.audMan).maxDistance = 150f;
 
             helper.audMan.overrideSubtitleColor = true;
@@ -89,16 +84,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/BHelp_3"), "Vfx_Playtime_3", SoundType.Voice, helper.audMan.subtitleColor)
             ];
 
-            GameObject spriteObj = new("Sprite", typeof(SpriteRenderer));
-            spriteObj.transform.parent = helperObj.transform;
-            spriteObj.transform.localPosition = Vector3.up * -2.16f;
-            spriteObj.layer = LayerMask.NameToLayer("Billboard");
-
-            helper.sprite = spriteObj.GetComponent<SpriteRenderer>();
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 100f, Vector2.one/2f, AssetMan.Get<Texture2D>("BsodaaTex/BsodaaHelper"));
-
-            helper.sprite.sprite = sprites[0];
-            helper.sprite.material = AssetMan.Get<Material>("Mat/SpriteBillboard");
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(3, 1, 100f, Vector2.one/2f, AssetMan.Get<Texture2D>(RecommendedCharsPlugin.PartyMode ? "BsodaaTex/BsodaaHelper_Party" : "BsodaaTex/BsodaaHelper"));
+            
+            helper.sprite = ObjectCreation.CreateSpriteBillboard(sprites[0], Vector3.up * -2.16f, helperObj.transform);
             helper.sprEmpty = sprites[1];
             helper.sprSprayed = sprites[2];
 
@@ -149,7 +137,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             EveyBsodaa.charEnum = bsodaaGuy.Character;
 
-            Sprite[] sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Idle"), 106, 256, 32f, 3);
+            Sprite[] sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>(RecommendedCharsPlugin.PartyMode ? "BsodaaTex/Bsodaa_PartyIdle" : "BsodaaTex/Bsodaa_Idle"), 106, 256, 32f, 3);
 
             bsodaaGuy.spriteRenderer[0].transform.localPosition = Vector3.up * -1.08f;
             bsodaaGuy.spriteRenderer[0].sprite = sprites[0];
@@ -167,7 +155,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bsodaaGuy.animator.AddAnimation("Happy", new(8, [sprites[1]]));
             bsodaaGuy.animator.AddAnimation("Upset", new(8, [sprites[2]]));
 
-            sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Shoot"), 106, 256, 32f, 6);
+            sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>(RecommendedCharsPlugin.PartyMode ? "BsodaaTex/Bsodaa_PartyShoot" : "BsodaaTex/Bsodaa_Shoot"), 106, 256, 32f, 6);
 
             bsodaaGuy.animator.AddAnimation("Charge", new([
                 new(sprites[4], 0.5f),
@@ -196,7 +184,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BsodaaAud/Evey_Happy2"), "Vfx_RecChars_Bsodaa_Happy2", SoundType.Voice, bsodaaGuy.audMan.subtitleColor)
             ];
 
-            bsodaaGuy.projectilePre = SwapComponentSimple<ITM_BSODA, EveyBsodaaSpray>(GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform));
+            bsodaaGuy.projectilePre = GameObject.Instantiate((ITM_BSODA)ItemMetaStorage.Instance.FindByEnum(Items.Bsoda).value.item, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<ITM_BSODA, EveyBsodaaSpray>();
             bsodaaGuy.projectilePre.spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BsodaaTex/Bsodaa_Spray"), 8f);
             bsodaaGuy.projectilePre.time = 10f;
             bsodaaGuy.projectilePre.name = "Bsodaa_Spray";
@@ -204,7 +192,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
 
-            bsodaaGuy.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Bsodaa"), "Bsodaa",
+            bsodaaGuy.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Bsodaa"), "Bsodaa",
                 50, 50, 50, 25, 25, 25, 25, 150);
             ObjMan.Add("Npc/Bsodaa", bsodaaGuy);
         }

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {

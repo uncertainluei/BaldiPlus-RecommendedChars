@@ -39,10 +39,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
             if (!valid) return;
-            if (other.CompareTag("NPC"))
+            if (other.CompareTag("NPC") && other.TryGetComponent(out NPC npc))
             {
                 award.StunSound();
-                other.GetComponent<NPC>().ActivateReusableEffect<SecondAwardStun>(award.stunTime);
+                npc.ActivateReusableEffect<SecondAwardStun>(award.stunTime);
                 return;
             }
             if (!other.CompareTag("Player"))

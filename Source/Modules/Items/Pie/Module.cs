@@ -25,7 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("PieItm/", ["Textures", "Item", "Pie"]);
+            ObjectCreation.AddTexturesToAssetMan("PieItm/", ["Textures", "Item", "Pie"]);
 
             // Load throw sound
             AssetMan.Add("Sfx/PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
@@ -39,8 +39,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             .SetEnum("RecChars_Pie")
             .SetMeta(ItemFlags.Persists | ItemFlags.CreatesEntity, ["food", "recchars:daycare_exempt", "adv_good", "adv_sm_potential_reward"])
             .SetSprites(AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("PieItm/Pie_Small"), 25f), AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("PieItm/Pie_Large"), 50f))
-            .SetShopPrice(450)
-            .SetGeneratorCost(55)
+            .SetShopPrice(400)
+            .SetGeneratorCost(50)
             .Build();
 
             pie.name = "RecChars Pie";
@@ -89,13 +89,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             if (lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Pie", GenerationStageFlags.Addend))
                 return;
-            lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Pie", GenerationStageFlags.Addend);
 
-            if (title.StartsWith("F"))
-            {
-                lvl.MarkAsNeverUnload();
-                lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(25));
-            }
+            lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Pie", GenerationStageFlags.Addend);
+            lvl.MarkAsNeverUnload();
+            lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(25));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]

@@ -25,8 +25,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("CarterTex/", ["Textures", "Npc", "Carter"]);
-            AddAudioToAssetMan("CarterAud/", ["Audio", "Npc", "Carter"]);
+            ObjectCreation.AddTexturesToAssetMan("CarterTex/", ["Textures", "Npc", "Carter"]);
+            ObjectCreation.AddAudioToAssetMan("CarterAud/", ["Audio", "Npc", "Carter"]);
 
             AssetMan.Add("CarterPst/ClassicCarterMissing", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "ClassicCarterMissing.png"));
 
@@ -48,7 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Create poster
-            CreatePoster("CarterPst/ClassicCarterMissing", "ClassicCarterMissing", new PosterTextData() {
+            ObjectCreation.CreatePoster("CarterPst/ClassicCarterMissing", "ClassicCarterMissing", new PosterTextData() {
                 color = Color.black,
                 textKey = "PST_RecChars_ClassicCarterMissing",
                 font = BaldiFonts.BoldComicSans24.FontAsset(),

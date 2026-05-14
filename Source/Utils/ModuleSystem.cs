@@ -1,17 +1,11 @@
-﻿using BepInEx.Bootstrap;
-using HarmonyLib;
-using MTM101BaldAPI;
+﻿using HarmonyLib;
 using MTM101BaldAPI.AssetTools;
-using PlusStudioLevelFormat;
-using PlusStudioLevelLoader;
+
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UncertainLuei.CaudexLib.Objects;
+
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util.Extensions;
-using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -23,85 +17,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static RecommendedCharsPlugin BasePlugin => RecommendedCharsPlugin.Plugin;
 
         public virtual ModuleSaveSystem SaveSystem => null;
-
-        protected static PosterObject CreatePoster(Texture2D tex, string name, string editorAlias, params PosterTextData[] posterTextData)
-        {
-            PosterObject poster = ObjectCreators.CreatePosterObject(tex, posterTextData);
-            poster.name = name;
-            ObjMan.Add("Pst/"+name, poster);
-            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_"+editorAlias, poster);
-            return poster;
-        }
-
-        protected static PosterObject CreatePoster(Texture2D tex, string name, params PosterTextData[] posterTextData)
-            => CreatePoster(tex, name, name.ToLower(), posterTextData);
-        protected static PosterObject CreatePoster(string path, string name, string editorAlias, params PosterTextData[] posterTextData)
-            => CreatePoster(AssetMan.Get<Texture2D>(path), name, editorAlias, posterTextData);
-        protected static PosterObject CreatePoster(string path, string name, params PosterTextData[] posterTextData)
-            => CreatePoster(path, name, name.ToLower(), posterTextData);
-
-        protected static void AddTexturesToAssetMan(string prefix, string[] paths)
-            => AssetMan.AddRange(AssetLoader.TexturesFromMod(BasePlugin, "*.png", paths), x => prefix+x.name);
-
-        protected static void AddAudioToAssetMan(string prefix, string[] paths)
-        {
-            string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(BasePlugin), Path.Combine(paths)), "*.wav");
-            for (int i = 0; i < files.Length; i++)
-            {
-                AudioClip aud = AssetLoader.AudioClipFromFile(files[i], AudioType.WAV);
-                AssetMan.Add(prefix + aud.name, aud);
-                aud.name = "RecChars_" + aud.name;
-            }
-        }
-
-        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(string dir, params int[] weights)
-            => RoomAssetsFromDirectory(null, dir, weights);
-
-        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(string dir)
-            => RoomAssetsFromDirectory(dir, 100);
-
-        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(CaudexRoomBlueprint blueprint, string dir)
-            => RoomAssetsFromDirectory(blueprint, dir, 100);
-
-        protected static WeightedRoomAsset[] RoomAssetsFromDirectory(CaudexRoomBlueprint blueprint, string dir, params int[] weights)
-        {
-            if (weights == null || weights.Length == 0)
-                weights = [100];
-
-            int idx = 0;
-            List<WeightedRoomAsset> rooms = [];
-
-            foreach (string file in Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(BasePlugin), "Layouts", dir), "*.rbpl"))
-            {
-                BinaryReader reader = new(File.OpenRead(file));
-                BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
-                reader.Close();
-
-                ExtendedRoomAsset asset = LevelImporter.CreateRoomAsset(formatAsset);
-                if (blueprint != null)
-                {
-                    asset.roomFunctionContainer = blueprint.functionContainer;
-                    asset.lightPre = blueprint.lightObj;
-                    asset.windowObject = blueprint.windowSet;
-                    asset.windowChance = blueprint.windowChance;
-                    asset.posters = blueprint.posters;
-                    asset.posterChance = blueprint.posterChance;
-                    asset.mapMaterial = blueprint.mapMaterial;
-                    asset.basicSwaps = blueprint.objectSwaps;
-                    asset.name = blueprint.name+"_"+Path.GetFileNameWithoutExtension(file);
-                }
-                else
-                    asset.name = asset.category.ToStringExtended()+"_"+Path.GetFileNameWithoutExtension(file);
-
-                ((ScriptableObject)asset).name = asset.type.ToString()+"_"+asset.name;
-                rooms.Add(asset.Weighted(weights[Math.Min(idx,weights.Length-1)]));
-                idx++;
-            }
-            return rooms.ToArray();
-        }
-
-        protected static X SwapComponentSimple<T, X>(T original) where T : MonoBehaviour where X : T
-            => original.gameObject.SwapComponent<T, X>(original, false);
     }
 
     public abstract class RecCharsSubModule<T> : RecCharsModule where T : RecCharsModule 

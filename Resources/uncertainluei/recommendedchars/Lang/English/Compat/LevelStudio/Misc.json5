@@ -1,0 +1,35 @@
+{
+	// Party Cafeteria
+	"Ed_Tool_room_recchars_partycafeteria_Title": "Party Cafeteria",
+	"Ed_Tool_room_recchars_partycafeteria_Desc": "Bananas and balloons are littered across the floor in this room.",
+	"Ed_Tool_room_recchars_partycafeterianonanas_Title": "Party Cafeteria (No 'Nanas)",
+	"Ed_Tool_room_recchars_partycafeterianonanas_Desc": "Only balloons spawn in this room.",
+
+	// Cake
+	"Ed_Tool_object_recchars_cake_Title": "Giant Cake",
+	"Ed_Tool_object_recchars_cake_Desc": "Cannot throw a party without one of these!",
+	"Ed_Tool_object_recchars_cakewcandle_Title": "Giant Cake with Candle",
+	"Ed_Tool_object_recchars_cakewcandle_Desc": "Someone's gotta blow out the candle!\n<b>NOTE:</b> Purely for aeshetics.",
+	
+	// Party Elevator
+	"Ed_Tool_object_recchars_partyelevator_Title": "Party Elevator",
+	"Ed_Tool_object_recchars_partyelevator_Desc": "How else would you get up close to the candle fire?",
+	
+	// Art Paintings (doodads)
+	"Ed_Tool_object_recchars_painting0_Title": "Sunset Hills Painting",
+	"Ed_Tool_object_recchars_painting0_Desc": "What a nice sunset!",
+	"Ed_Tool_object_recchars_painting1_Title": "Hearts Painting",
+	"Ed_Tool_object_recchars_painting1_Desc": "Perfect for showing to your Valentine!",
+	"Ed_Tool_object_recchars_painting2_Title": "Netherlands Flag Painting",
+	"Ed_Tool_object_recchars_painting2_Desc": "Definitely not a reference to an obscure, now defunct Minecraft server!",
+	"Ed_Tool_object_recchars_painting3_Title": "Sword Painting",
+	"Ed_Tool_object_recchars_painting3_Desc": "Remember that animated music video about a guy bragging about his sword?",
+	"Ed_Tool_object_recchars_painting4_Title": "Laifu Painting",
+	"Ed_Tool_object_recchars_painting4_Desc": "Ooohhhhh, Story of Outcore!",
+	"Ed_Tool_object_recchars_painting5_Title": "Tropical Island Painting",
+	"Ed_Tool_object_recchars_painting5_Desc": "The DREAM vacation spot!",
+	"Ed_Tool_object_recchars_painting6_Title": "Losky Painting",
+	"Ed_Tool_object_recchars_painting6_Desc": "Why couldn't he be my teacher?",
+	"Ed_Tool_object_recchars_painting7_Title": "Corrupted Painting",
+	"Ed_Tool_object_recchars_painting7_Desc": "..."
+}

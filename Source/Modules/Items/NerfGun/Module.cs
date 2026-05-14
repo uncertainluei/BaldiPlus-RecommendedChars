@@ -31,8 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("NerfGun/", ["Textures", "Item", "NerfGun"]);
-            AssetMan.Add("NerfGunPoster/hnt_nerfgun", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "hnt_nerfgun.png"));
+            ObjectCreation.AddTexturesToAssetMan("NerfGun/", ["Textures", "Item", "NerfGun"]);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -54,7 +53,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", nerfGun);
             ObjMan.Add("Itm/NerfGun", nerfGun);
 
-            CreatePoster("NerfGunPoster/hnt_nerfgun", "NerfGunHint", "nerfgun_hint");
+            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "hnt_nerfgun.png"), "NerfGunHint", "nerfgun_hint");
             CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddItemsToLevel);
         }
 

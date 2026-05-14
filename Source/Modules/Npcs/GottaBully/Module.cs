@@ -31,10 +31,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("SwapCloset/", ["Textures", "Environment", "Room", "SwapCloset"]);
-            AddTexturesToAssetMan("SwapClosetPoster/", ["Textures", "Environment", "Poster", "SwapCloset"]);
-            AddTexturesToAssetMan("GottaBullyTex/", ["Textures", "Npc", "GottaBully"]);
-            AddAudioToAssetMan("GottaBullyAud/", ["Audio", "Npc", "GottaBully"]);
+            ObjectCreation.AddTexturesToAssetMan("SwapCloset/", ["Textures", "Environment", "Room", "SwapCloset"]);
+            ObjectCreation.AddTexturesToAssetMan("SwapClosetPoster/", ["Textures", "Environment", "Poster", "SwapCloset"]);
+            ObjectCreation.AddTexturesToAssetMan("GottaBullyTex/", ["Textures", "Npc", "GottaBully"]);
+            ObjectCreation.AddAudioToAssetMan("GottaBullyAud/", ["Audio", "Npc", "GottaBully"]);
             
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "GottaBully.json5");
@@ -44,7 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Tapliasmy Chalkboard
-            CreatePoster("SwapClosetPoster/SubToTapliasmy", "Sub2Tapliasmy");
+            ObjectCreation.CreatePoster("SwapClosetPoster/SubToTapliasmy", "Sub2Tapliasmy");
 
             CreateSwapClosetBlueprint();
             LoadGottaBully();
@@ -59,7 +59,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadGottaBully()
         {
-            GottaBully gottaBully = SwapComponentSimple<GottaSweep, GottaBully>(GameObject.Instantiate((GottaSweep)NPCMetaStorage.Instance.Get(Character.Sweep).value, MTM101BaldiDevAPI.prefabTransform));
+            GottaBully gottaBully = GameObject.Instantiate((GottaSweep)NPCMetaStorage.Instance.Get(Character.Sweep).value, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<GottaSweep, GottaBully>();
             gottaBully.name = "GottaBully";
 
             gottaBully.character = EnumExtensions.ExtendEnum<Character>("RecChars_GottaBully");
@@ -80,7 +80,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("GottaBullyTex/pri_gbully"), "PST_PRI_RecChars_GBully1", "PST_PRI_RecChars_GBully2");
             gottaBully.poster.name = "GottaBullyPoster";
 
-            gottaBully.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("GottaBullyTex/GottaBully"), 26f);
+            gottaBully.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>(RecommendedCharsPlugin.PartyMode ? "GottaBullyTex/GottaBully_Party" : "GottaBullyTex/GottaBully"), 26f);
             gottaBully.audMan.subtitleColor = new(198/255f, 136/255f, 91/255f);
             CharacterRadarColorPatch.colors.Add(gottaBully.character, gottaBully.audMan.subtitleColor);
 
@@ -90,7 +90,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_gottabully", gottaBully);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gbully", gottaBully.Poster);
 
-            gottaBully.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/SwapCloset"), "SwapCloset");
+            gottaBully.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/SwapCloset"), "SwapCloset");
 
             ObjMan.Add("Npc/GottaBully", gottaBully);
             NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);

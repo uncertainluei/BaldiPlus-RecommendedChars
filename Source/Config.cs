@@ -11,8 +11,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static ConfigEntry<bool> intendedWiresBehavior;
         //internal static ConfigEntry<bool> intendedGifter;
 
+        internal static ConfigEntry<PartyModeConfigMode> partyMode;
         internal static ConfigEntry<bool> guaranteeSpawnChar;
 
+
+        internal enum PartyModeConfigMode : byte
+        {
+            DateBased,
+            ForceOff,
+            ForceOn
+        }
 
         internal static void BindConfig(ConfigFile config)
         {
@@ -46,6 +54,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "LOLdi's Gifter will behave almost exactly like his iteration from LOLdi's Public Alpha (Gifttany from BBRMS).");
             */
 
+            partyMode = config.Bind(
+                "Misc",
+                "PartyMode",
+                PartyModeConfigMode.DateBased,
+                "Sets how Party Mode will trigger. If \"DateBased\", then it will turn on only in May 1st-15th.");
             guaranteeSpawnChar = config.Bind(
                 "Misc",
                 "GuaranteeCharacterSpawn",

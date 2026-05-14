@@ -23,8 +23,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("AwaTex/", ["Textures", "Npc", "SecondAward"]);
-            AddAudioToAssetMan("AwaAud/", ["Audio", "Npc", "SecondAward"]);
+            ObjectCreation.AddTexturesToAssetMan("AwaTex/", ["Textures", "Npc", "SecondAward"]);
+            ObjectCreation.AddAudioToAssetMan("AwaAud/", ["Audio", "Npc", "SecondAward"]);
 
             AssetMan.Add("StatusSpr/ElectricalStun", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("AwaTex/2AwStunIcon"), 25));
 
@@ -38,7 +38,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void LoadSecondAward()
         {
-            SecondAward secondAward = SwapComponentSimple<FirstPrize, SecondAward>(GameObject.Instantiate((FirstPrize)NPCMetaStorage.Instance.Get(Character.Prize).value, MTM101BaldiDevAPI.prefabTransform));
+            SecondAward secondAward = GameObject.Instantiate((FirstPrize)NPCMetaStorage.Instance.Get(Character.Prize).value, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<FirstPrize, SecondAward>();
             secondAward.name = "Second Award";
 
             SecondAward.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_SecondAward");

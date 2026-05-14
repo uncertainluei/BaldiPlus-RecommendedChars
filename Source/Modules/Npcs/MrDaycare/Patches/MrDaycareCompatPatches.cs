@@ -1,7 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Game.Events;
-using BaldisBasicsPlusAdvanced.Game.Objects.Food;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
-using BaldisBasicsPlusAdvanced.Patches.Characters;
+﻿using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 
 using HarmonyLib;
 
@@ -12,7 +9,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
     [HarmonyPatch]
     static class MrDaycareAdvancedPatches
     {
-        [HarmonyPatch(typeof(VotingEvent.PrincipalController), "SetCheckingRoomMode"), HarmonyPrefix]
+        // Voting event has been removed from Advanced in v0.3.4.16
+        /*[HarmonyPatch(typeof(VotingEvent.PrincipalController), "SetCheckingRoomMode"), HarmonyPrefix]
         private static bool VotingEventCheck(bool value, Principal ___principal, ref NavigationState_PartyEvent ___state, RoomController ___room)
         {
             if (!value || !___principal || ___principal.Character != MrDaycare.charEnum) return true;
@@ -31,7 +29,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
         {
             if (!VotingEvent.IsTopicActive<PrincipalIgnoresSomeRulesTopic>()) return true;
             return !PrincipalObservePatch.allowedRulesWhenTopicActive.Contains(DaycareGuiltManager.GetInstance(player).RuleBreak);
-        }
+        }*/
 
         [HarmonyPatch(typeof(PlateFoodTrap), "Eat"), HarmonyPostfix]
         private static void PlateFoodScold(Entity entity)

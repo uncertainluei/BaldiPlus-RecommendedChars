@@ -1,0 +1,42 @@
+# Blender 5.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl DiamondPlateFloor
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/DiamongPlateFloor.png
+map_d C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/DiamongPlateFloor.png
+
+newmtl MetalFence
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/MetalFence.png
+map_d C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/MetalFence.png
+
+newmtl PantographFront
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/PantographFront.png
+map_d C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/PantographFront.png
+
+newmtl PantographSide
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/PantographSide.png
+map_d C:/Users/luei/Downloads/Baldi CR/GameObject/PartyElevator/PantographSide.png

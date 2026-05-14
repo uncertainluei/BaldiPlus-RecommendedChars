@@ -72,7 +72,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             EditorInterfaceModes.AddToolToCategory(mode, "lights",
                 new LightTool("recchars_daycare", AssetMan.Get<Sprite>("EditorSpr/Light_Daycare")).SetModdedFrame());
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
-                new PosterTool("recchars_pri_daycare"),
+                new PosterTool("recchars_pri_daycare").SetModdedFrame(),
                 new PosterTool("recchars_daycareinfo", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareInfo")).SetModdedFrame(),
                 new PosterTool("recchars_daycarerules", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareRules")).SetModdedFrame(),
                 new PosterTool("recchars_daycareclock", AssetMan.Get<Sprite>("EditorSpr/Poster_DaycareClock")).SetModdedFrame()

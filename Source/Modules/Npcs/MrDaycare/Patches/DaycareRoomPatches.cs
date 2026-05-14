@@ -3,7 +3,7 @@
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 {
     [HarmonyPatch]
-    class DaycareRoomPatches
+    static class DaycareRoomPatches
     {
         [HarmonyPatch(typeof(StandardDoor), "ItemFits"), HarmonyPostfix]
         private static void NotebookGateItemFits(StandardDoor __instance, ref bool __result)

@@ -26,8 +26,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("CircleTex/", ["Textures", "Npc", "Circle"]);
-            AddAudioToAssetMan("CircleAud/", ["Audio", "Npc", "Circle"]);
+            ObjectCreation.AddTexturesToAssetMan("CircleTex/", ["Textures", "Npc", "Circle"]);
+            ObjectCreation.AddAudioToAssetMan("CircleAud/", ["Audio", "Npc", "Circle"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Circle.json5");
@@ -40,7 +40,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void LoadCircle()
         {
-            CircleNpc circle = SwapComponentSimple<Playtime, CircleNpc>(GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform));
+            CircleNpc circle = GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<Playtime, CircleNpc>();
             circle.name = "RecChars ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
@@ -82,22 +82,26 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             circle.sprite = circle.spriteRenderer[0];
 
+            String spritePath = "CircleTex/Circle";
             DateTime today = DateTime.Today;
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 100f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>
-                (today.Month == 12 && today.Day >= 20 ? "CircleTex/SantaCircleSprites" : "CircleTex/CircleSprites"));
+            if (RecommendedCharsPlugin.PartyMode)
+                spritePath = "CircleTex/Circle_Party";
+            else if (today.Month == 12 && today.Day >= 20)
+                spritePath = "CircleTex/Circle_Xmas";
+
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 100f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>(spritePath));
              
             circle.sprNormal = sprites[0];
-            circle.sprite.sprite = circle.sprNormal;
-
             circle.sprSad = sprites[1];
 
-            CircleJumprope jumprope = SwapComponentSimple<Jumprope, CircleJumprope>(GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform));
+            circle.sprite.sprite = circle.sprNormal;
+
+            CircleJumprope jumprope = GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<Jumprope, CircleJumprope>();
             circle.jumpropePre = jumprope;
 
             jumprope.name = "ShapeWorld Circle_Jumprope";
             jumprope.ropeAnimator = jumprope.animator.gameObject.AddComponent<CustomSpriteRendererAnimator>();
             jumprope.ropeAnimator.renderer = jumprope.ropeAnimator.GetComponentInChildren<SpriteRenderer>();
-            // thank you serialization but you still stink
             jumprope.ropeAnimator.AddAnimation("JumpRope", new(15, AssetLoader.SpritesFromSpritesheet(4, 4, 1f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("CircleTex/CircleRainbow"))));
 
             jumprope.ropeDelay = 0f;

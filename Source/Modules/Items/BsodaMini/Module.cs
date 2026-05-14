@@ -27,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("BsodaMiniTex/", ["Textures", "Item", "BsodaMini"]);
+            ObjectCreation.AddTexturesToAssetMan("BsodaMiniTex/", ["Textures", "Item", "BsodaMini"]);
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

@@ -24,8 +24,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("BluTex/", ["Textures", "Npc", "BlueGuy"]);
-            AddAudioToAssetMan("BluAud/", ["Audio", "Npc", "BlueGuy"]);
+            ObjectCreation.AddTexturesToAssetMan("BluTex/", ["Textures", "Npc", "BlueGuy"]);
+            ObjectCreation.AddAudioToAssetMan("BluAud/", ["Audio", "Npc", "BlueGuy"]);
 
             AssetMan.Add("StatusSpr/BlueGuyFog", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("BluTex/BlueGuyFogIcon"), 1));
             ObjMan.Add<Fog>("Fog/BlueGuyFog", new() { color = Color.blue, maxDist = 15, startDist = 5, strength = 1, priority = 16});

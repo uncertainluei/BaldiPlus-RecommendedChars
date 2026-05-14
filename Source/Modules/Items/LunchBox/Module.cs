@@ -16,6 +16,7 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 using PlusStudioLevelLoader;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -27,7 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture assets
-            AddTexturesToAssetMan("LunchTex/", ["Textures", "Item", "LunchBox"]);
+            ObjectCreation.AddTexturesToAssetMan("LunchTex/", ["Textures", "Item", "LunchBox"]);
 
             // Load patches
             Hooks.PatchAll(typeof(LunchBoxPatches));
@@ -40,7 +41,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             RoomAsset cafeteria = Resources.FindObjectsOfTypeAll<RoomAsset>().First(x => x.GetInstanceID() >= 0 && x.roomFunctionContainer != null && x.roomFunctionContainer.name.StartsWith("Cafeteria"));
             CaudexRoomBlueprint cafeBlueprint = new(Plugin, "Cafeteria_LunchBox", cafeteria);
-            newCafeterias = RoomAssetsFromDirectory(cafeBlueprint, "Cafeteria");
+            newCafeterias = ObjectCreation.RoomAssetsFromDirectory(cafeBlueprint, RecommendedCharsPlugin.PartyMode ? Path.Combine("Cafeteria", "Party", "LunchBox") : "Cafeteria");
         }
         private WeightedRoomAsset[] newCafeterias;
 
@@ -161,8 +162,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
 
             int additionalWeight = totalWeight/5, weightPerCafe = additionalWeight/newCafeterias.Length;
-            additionalWeight = weightPerCafe * newCafeterias.Length;
-            totalWeight = -additionalWeight/totalCount;
+            totalWeight -= additionalWeight/totalCount;
 
             foreach (WeightedRoomAsset cafeteria in cafeterias)
                 cafeteria.weight = totalWeight;

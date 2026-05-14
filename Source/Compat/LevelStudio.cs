@@ -28,12 +28,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             tool.frameOverride = FrameSprite;
             return tool;
         }
-
-        /*internal static void AddRoomDefaultTextures(string id, string florTex, string wallTex, string ceilTex)
-        {
-            EditorLevelData.AddDefaultTextureAction((Dictionary<string, TextureContainer> texs) =>
-                texs.Add(id, new(florTex, wallTex, ceilTex)));
-        }*/
     }
 
     internal class ExtItemTool(string id, Sprite spr, string descKey, bool useItemName = true) : ItemTool(id, spr, useItemName)

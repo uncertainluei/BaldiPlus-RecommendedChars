@@ -24,8 +24,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("GifterTex/", ["Textures", "Npc", "Gifter"]);
-            AddAudioToAssetMan("GifterAud/", ["Audio", "Npc", "Gifter"]);
+            ObjectCreation.AddTexturesToAssetMan("GifterTex/", ["Textures", "Npc", "Gifter"]);
+            ObjectCreation.AddAudioToAssetMan("GifterAud/", ["Audio", "Npc", "Gifter"]);
             AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.wav"), "Sfx_RecChars_GiftUnwrap", SoundType.Effect, Color.white));
 
             // Load localization
@@ -46,7 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetWanderEnterRooms()
                 .Build();
 
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 2, 42f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("GifterTex/Gifter_Sheet"));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 2, 42f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>(RecommendedCharsPlugin.PartyMode ? "GifterTex/Gifter_Party" : "GifterTex/Gifter_Sheet"));
 
             gifter.sprite = gifter.spriteRenderer[0];
             gifter.sprite.transform.localPosition = Vector3.up * -1.32f;

@@ -38,10 +38,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            AddTexturesToAssetMan("DaycareTex/", ["Textures", "Npc", "Daycare"]);
-            AddTexturesToAssetMan("DaycareRoom/", ["Textures", "Environment", "Room", "Daycare"]);
-            AddTexturesToAssetMan("DaycarePoster/", ["Textures", "Environment", "Poster", "Daycare"]);
-            AddAudioToAssetMan("DaycareAud/", ["Audio", "Npc", "Daycare"]);
+            ObjectCreation.AddTexturesToAssetMan("DaycareTex/", ["Textures", "Npc", "Daycare"]);
+            ObjectCreation.AddTexturesToAssetMan("DaycareRoom/", ["Textures", "Environment", "Room", "Daycare"]);
+            ObjectCreation.AddTexturesToAssetMan("DaycarePoster/", ["Textures", "Environment", "Poster", "Daycare"]);
+            ObjectCreation.AddAudioToAssetMan("DaycareAud/", ["Audio", "Npc", "Daycare"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "MrDaycare.json5");
@@ -58,7 +58,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Create posters
-            CreatePoster("DaycarePoster/pst_daycarerules", "DaycarePoster_Rules", "daycarerules", new PosterTextData() {
+            ObjectCreation.CreatePoster("DaycarePoster/pst_daycarerules", "DaycarePoster_Rules", "daycarerules", new PosterTextData() {
                 color = Color.black,
                 textKey = "PST_RecChars_DaycareRules",
                 font = BaldiFonts.ComicSans12.FontAsset(),
@@ -67,7 +67,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 position = new(55,31),
                 size = new(145,196)
             });
-            CreatePoster("DaycarePoster/pst_daycareinfo", "DaycarePoster_Info", "daycareinfo", new PosterTextData() {
+            ObjectCreation.CreatePoster("DaycarePoster/pst_daycareinfo", "DaycarePoster_Info", "daycareinfo", new PosterTextData() {
                 color = Color.black,
                 textKey = "PST_RecChars_DaycareInfo1",
                 font = BaldiFonts.ComicSans18.FontAsset(),
@@ -84,7 +84,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 position = new(57,37),
                 size = new(140,144)
             });
-            CreatePoster("DaycarePoster/pst_daycareclock", "DaycarePoster_Clock", "daycareclock");
+            ObjectCreation.CreatePoster("DaycarePoster/pst_daycareclock", "DaycarePoster_Clock", "daycareclock");
 
             CreateDaycareBlueprint();
             LoadMrDaycare();
@@ -109,9 +109,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             MrDaycare.charEnum = daycare.character;
 
+            Sprite[] sprites;
+            if (RecommendedCharsPlugin.PartyMode)
+                sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 65f, new Vector2(0.5f, 0.4f), AssetMan.Get<Texture2D>("DaycareTex/MrDaycare_Party"));
+            else
+                sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 65f, Vector2.one/2f, AssetMan.Get<Texture2D>("DaycareTex/MrDaycare"));
+
             daycare.spriteRenderer[0].transform.localPosition = Vector3.up * -1f;
-            daycare.chasingSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/MrDaycare"), 65f);
-            daycare.normalSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/MrDaycare_ArmDown"), 65f);
+            daycare.normalSprite = sprites[0];
+            daycare.chasingSprite = sprites[1];
             daycare.spriteRenderer[0].sprite = daycare.normalSprite;
 
             daycare.audMan = daycare.GetComponent<AudioManager>();
@@ -168,7 +174,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
 
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_daycare", daycare.Poster);
-            daycare.potentialRoomAssets = RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Daycare"), "Daycare");
+            daycare.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Daycare"), "Daycare");
 
             MrDaycare unnerfedDaycare = GameObject.Instantiate(daycare, MTM101BaldiDevAPI.prefabTransform);
             unnerfedDaycare.name = "MrDaycare Unnerfed";
@@ -231,8 +237,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.windowSet.mask.name = "DaycareWindow_Mask";
             daycareRoom.windowChance = 0.35f;
 
-            DaycareNotebookDoor daycareDoor = SwapComponentSimple<StandardDoor, DaycareNotebookDoor>
-                (GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform));
+            DaycareNotebookDoor daycareDoor = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<StandardDoor, DaycareNotebookDoor>();
             daycareDoor.name = "DaycareNotebookDoor";
             daycareDoor.mask[0] = DaycareDoorAssets.mask;
             daycareDoor.mask[1] = DaycareDoorAssets.mask;
@@ -256,7 +261,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.functionContainer.AddDoorAssigner(daycareDoor);
             daycareRoom.functionContainer.AddFunction<MrDaycareHolderFunction>();
             
-            DaycareTimeoutRoomFunction dcRoomFunction = SwapComponentSimple<DetentionRoomFunction, DaycareTimeoutRoomFunction>(detRoomFunction);
+            DaycareTimeoutRoomFunction dcRoomFunction = detRoomFunction.SwapComponentSimple<DetentionRoomFunction, DaycareTimeoutRoomFunction>();
             dcRoomFunction.gaugeSprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("DaycareTex/TimeoutIcon"), 25f);
 
             daycareRoom.functionContainer.AddFunction(dcRoomFunction);

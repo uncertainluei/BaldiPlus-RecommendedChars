@@ -51,6 +51,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         internal static ManualLogSource Log { get; private set; }
         internal static Harmony Hooks { get; private set; }
 
+        public static bool PartyMode { get; private set; }
+
         private void Awake()
         {
             Plugin = this;
@@ -66,6 +68,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Read the config values and remove disabled modules
             RecommendedCharsConfig.BindConfig(Config);
+
+            // Check for party mode
+            DateTime today = DateTime.Today;
+            PartyMode = true;
+            switch (RecommendedCharsConfig.partyMode.Value)
+            {
+                case RecommendedCharsConfig.PartyModeConfigMode.ForceOff:
+                    PartyMode = false;
+                    break;
+                case RecommendedCharsConfig.PartyModeConfigMode.DateBased:
+                    if (today.Month != 5 || today.Day > 15) // Not May 1st-15th
+                        PartyMode = false;
+                    break;
+            }
 
             // Register base/generic assets
             LoadGenericLocalization();
@@ -102,9 +118,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // I could've made dummy modules for this but I'd rather spare y'all the drama and just do it here
             if (Chainloader.PluginInfos.ContainsKey(LevelStudioGuid))
             {
-                CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Events.json5");
                 CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Items.json5");
                 CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Posters.json5");
+                CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "LevelStudio", "Misc.json5");
             }
             if (Chainloader.PluginInfos.ContainsKey(AdvancedGuid))
                 CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Compat", "AdvancedTips.json5");
@@ -123,12 +139,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Sound objects
             SoundObject[] sounds = [.. Resources.FindObjectsOfTypeAll<SoundObject>().Where(x => x.GetInstanceID() >= 0)];
             AssetMan.Add("Sfx/Silence", sounds.First(x => x.name == "Silence"));
-            AssetMan.Add("Sfx/CartoonEating", sounds.First(x => x.name == "CartoonEating"));
             AssetMan.Add("Sfx/FoodCrunch", ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat);
 
             yield return "Loading generic sounds";
             AssetMan.Add("Sfx/FoodSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
-            AssetMan.Add("Sfx/Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_Boing", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/CartoonEating", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodEatShort.wav"), "Sfx_RecChars_EatingShort", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_Boing", SoundType.Effect, Color.white));            
+            AssetMan.Add("Sfx/FakeShatter", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FakeShatter.wav"), "Sfx_GlassBreak", SoundType.Effect, Color.white, 0));            
         }
 
         private IEnumerator RegisterPost()

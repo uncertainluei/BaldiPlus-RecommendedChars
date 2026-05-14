@@ -1,4 +1,9 @@
 {
+	// Birthday Cake
+	"Itm_RecChars_BaldiCake": "Baldi's Birthday Cake",
+	"Desc_RecChars_BaldiCake": "Baldi's Birthday Cake\nA small slice of (assumedly) Baldi's GIANT birthday cake!\nJust remember: it's quite sugary, so eat it at your own risk!",
+	"Sfx_RecChars_EatingShort": "[Eating like an animal]",
+
 	// BSODA Mini and Diet BSODA Mini
 	"Itm_RecChars_SmallBsoda": "BSODA Mini",
 	"Itm_RecChars_SmallDietBsoda": "Diet BSODA Mini",

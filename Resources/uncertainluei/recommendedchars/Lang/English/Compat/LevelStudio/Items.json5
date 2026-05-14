@@ -1,16 +1,16 @@
-{
+{	
 	// Birthday Cake
-    "Ed_Tool_item_recchars_baldicake_Desc": "Gives the player a slight sugar rush for 10 seconds.",
-
-    // BSODA Mini and Diet BSODA Mini
-    "Ed_Tool_item_recchars_smallbsoda_Desc": "Pushes away entities. Lasts 18 seconds and travels ~13% slower compared to its original size.",
+	"Ed_Tool_item_recchars_baldicake_Desc": "Gives the player a slight sugar rush for 10 seconds.",
+	
+	// BSODA Mini and Diet BSODA Mini
+	"Ed_Tool_item_recchars_smallbsoda_Desc": "Pushes away entities. Lasts 18 seconds and travels ~13% slower compared to its original size.",
 	"Ed_Tool_item_recchars_smalldietbsoda_Desc": "Pushes away entities. Lasts 1.8 seconds and travels ~13% slower compared to its original size.",
 
 	// Door Key
-    "Ed_Tool_item_recchars_doorkey_Desc": "Can be used to open locked standard doors and Shape Locks.\nCan be used 3 times.",
+	"Ed_Tool_item_recchars_doorkey_Desc": "Can be used to open locked standard doors and Shape Locks.\nCan be used 3 times.",
 
-    // Lunch Box
-    "Ed_Tool_item_recchars_lunchbox_2_Title": "(2) Lunch Box",
+	// Lunch Box
+	"Ed_Tool_item_recchars_lunchbox_2_Title": "(2) Lunch Box",
 	"Ed_Tool_item_recchars_lunchbox_3_Title": "(3) Lunch Box",
 	"Ed_Tool_item_recchars_lunchbox_4_Title": "(4) Lunch Box",
 
@@ -20,33 +20,15 @@
 	"Ed_Tool_item_recchars_lunchbox_random_Desc": "Can be opened to get a random food item.\n<b>Variant used for placement in Cafeteria room layouts.</b>",
 
 	// Nerf Gun
-    "Ed_Tool_item_recchars_nerfgun_Desc": "Ends Circle's jump rope game prematurely.\nCan be used twice.",
+	"Ed_Tool_item_recchars_nerfgun_Desc": "Ends Circle's jump rope game prematurely.\nCan be used twice.",
 
-    // Pie
-    "Ed_Tool_item_recchars_pie_Desc": "Throw it at any NPC to obstruct their vision for 15 seconds.",
+	// Pie
+	"Ed_Tool_item_recchars_pie_Desc": "Throw it at any NPC to obstruct their vision for 15 seconds.",
 
 	// PSODA
 	"Ed_Tool_item_recchars_psoda_Desc": "Pushes away entities (including the player) and bounces off walls.\nLasts 60 seconds.",
 	"Ed_Tool_item_recchars_smallpsoda_Desc": "Pushes away entities (including the player) and bounces off walls.\nLasts 30 seconds and travels 25% slower compared to its original size.",
 
 	"Ed_Tool_object_recchars_psodamachine_Title": "PSODA Machine",
-	"Ed_Tool_object_recchars_psodamachine_Desc": "Gives you a PSODA when you put a quarter in! Boing!",
-
-	// Art Paintings (seen in classrooms, NOT ACTUAL ITEMS!!!)
-	"Ed_Tool_object_recchars_painting0_Title": "Sunset Hills Painting",
-	"Ed_Tool_object_recchars_painting0_Desc": "What a nice sunset!",
-	"Ed_Tool_object_recchars_painting1_Title": "Netherlands Flag Painting",
-	"Ed_Tool_object_recchars_painting1_Desc": "Is that a reference to an obscure, now defunct Minecraft server someone spent a few years on?",
-	"Ed_Tool_object_recchars_painting2_Title": "Laifu Painting",
-	"Ed_Tool_object_recchars_painting2_Desc": "Ooohhhhh, Story of Outcore!",
-	"Ed_Tool_object_recchars_painting3_Title": "Losky Painting",
-	"Ed_Tool_object_recchars_painting3_Desc": "When is the new Losky's Lucky Lessons going to come out?\nI don't know.",
-	"Ed_Tool_object_recchars_painting4_Title": "Hearts Painting",
-	"Ed_Tool_object_recchars_painting4_Desc": "Perfect for showing to your Valentine!",
-	"Ed_Tool_object_recchars_painting5_Title": "Sword Painting",
-	"Ed_Tool_object_recchars_painting5_Desc": "I can SWING MY SWORD! Stinks that the one who sang it isn't that great of a person...",
-	"Ed_Tool_object_recchars_painting6_Title": "Tropical Island Painting",
-	"Ed_Tool_object_recchars_painting6_Desc": "The DREAM vacation spot!",
-	"Ed_Tool_object_recchars_painting7_Title": "Corrupted Painting",
-	"Ed_Tool_object_recchars_painting7_Desc": "...",
+	"Ed_Tool_object_recchars_psodamachine_Desc": "Gives you a PSODA when you put a quarter in! Boing!"
 }
