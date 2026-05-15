@@ -8,7 +8,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public AudioManager audMan;
         public SoundObject audOhno, audClean;
         public List<PrimitiveDrop> entityPres = [];
-        public Vector2 delayTimeRange = new(30f, 60f); 
+        public Vector2 delayTimeRange = new(3f, 6f); 
         public Vector2 activeTimeRange = new(30f, 60f); 
         private readonly List<Entity> entitiesSpawned = [];
         private DijkstraMap dijkstraMap;
@@ -43,19 +43,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public void RemoveEntity(Entity ent)
-        {
-            if (entitiesSpawned.Contains(ent))
-                entitiesSpawned.Remove(ent);
-        }
+        public void AddEntity(Entity ent) { if (!entitiesSpawned.Contains(ent)) entitiesSpawned.Add(ent); }
+        public void RemoveEntity(Entity ent) { if (entitiesSpawned.Contains(ent)) entitiesSpawned.Remove(ent); }
 
         public void TryCleanEntity(Entity ent)
         {
             if (!ent || !entitiesSpawned.Contains(ent)) return;
-
+            
             audMan.PlaySingle(audClean);
             entitiesSpawned.Remove(ent);
             Destroy(ent.gameObject);
+
+            if (entitiesSpawned.Count == 0)
+                behaviorStateMachine.ChangeState(new MaintenanceMachine_WanderCool(this));
         }
 
         public void TargetNearestEntity()
@@ -154,18 +154,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected override void TimeUp()
         {
-            machine.behaviorStateMachine.ChangeState(new MaintenanceMachine_DropEntities(machine));
+            machine.behaviorStateMachine.ChangeState(new MaintenanceMachine_CleanEntities(machine));
         }
     }
 
     public class NavigationState_WanderRandomDropEntities(MaintenanceMachine machine, int priority) : NavigationState_WanderRandom(machine, priority)
     {
         private readonly MaintenanceMachine machine = machine;
+        private readonly float spawnChance = 0.1f;
 
         public override void DestinationEmpty()
         {
             base.DestinationEmpty();
-            machine.SpawnEntity();
+            if (Random.value < spawnChance)
+                machine.SpawnEntity();
         }
     }
 
@@ -179,7 +181,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override void OnStateTriggerEnter(Entity ent, Collider other, bool validCollision)
         {
-            if (validCollision)
+            if (!machine.Entity.Squished)
                 machine.TryCleanEntity(ent);
         }
 

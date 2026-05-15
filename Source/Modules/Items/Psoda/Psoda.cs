@@ -83,7 +83,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             
             audMan.PlaySingle(boing);
-            transform.forward = transform.forward - (2f * Vector3.Dot(hit.normal, transform.forward) * hit.normal);
+            transform.forward = Vector3.Reflect(transform.forward, hit.normal);
             moveMod.movementAddend = entity.ExternalActivity.Addend + transform.forward * speed * ec.EnvironmentTimeScale;
             entity.MoveWithCollision(transform.forward * speed * ec.EnvironmentTimeScale * Time.deltaTime);
         }

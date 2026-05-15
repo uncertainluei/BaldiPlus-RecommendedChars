@@ -3,5 +3,7 @@
 	"PST_PRI_RecChars_MaintMachine2": "Designed for performing maintenance on areas in need!\nUnfortunately, it seems to cause more messes than it does fix them.",
 
 	"Vfx_RecChars_MaintMachine_Cleaning": "CLEANIN' CLEANIN', CLEANIN'",
-	"Vfx_RecChars_MaintMachine_OhNo": "OHNOWHATTAMESSIHAVE2CLEANITUP!"
+	"Vfx_RecChars_MaintMachine_OhNo": "OHNOWHATTAMESSIHAVE2CLEANITUP!",
+
+	"Sfx_RecChars_SourPlink": "[PLINK!]",
 }

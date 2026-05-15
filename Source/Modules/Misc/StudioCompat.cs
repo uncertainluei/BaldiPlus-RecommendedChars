@@ -62,7 +62,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Sprite[] paintingSprites = AssetMan.Get<Sprite[]>("EditorSpr/Obj_ArtPaintings");
             EditorTool[] paintings = new EditorTool[paintingSprites.Length];
             for (int i = 0; i < paintings.Length; i++)
-                paintings[i] = new ObjectToolNoRotation("recchars_painting"+i, paintingSprites[0], 5f).SetModdedFrame();
+                paintings[i] = new ObjectToolNoRotation("recchars_painting"+i, paintingSprites[i], 5f).SetModdedFrame();
             EditorInterfaceModes.AddToolsToCategory(mode, "objects", paintings);
 
             EditorInterfaceModes.AddToolsToCategory(mode, "objects", [

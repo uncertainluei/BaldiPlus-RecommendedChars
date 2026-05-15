@@ -6,20 +6,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class PrimitiveDrop_Spike : PrimitiveDrop, IEntityTrigger
     {
         public float slowdownTime = 10f;
+        public SoundObject audTouch;
 
         public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
-            if (validCollision)
-                otherEntity.ActivateReusableEffect<SpikeSlowdown>(10f);
+            if (Ready && validCollision && otherEntity && (other.CompareTag("Player") || other.CompareTag("NPC")))
+            {
+                audMan.PlaySingle(audTouch);
+                otherEntity.ActivateReusableEffect<SpikeSlowdown>(slowdownTime);
+            }
         }
 
-        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision)
-        {
-        }
-
-        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision)
-        {
-        }
+        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision) {}
+        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision) {}
     }
 
     public class SpikeSlowdown : ReusableEffect
@@ -28,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             => EntType == EntityType.Generic; // Cannot stun Non-"NPC" Entities
         protected override Sprite GaugeIcon => RecommendedCharsPlugin.AssetMan.Get<Sprite>("StatusSpr/SpikeSlowdown");
 
-        private readonly MovementModifier moveMod = new(default, 0.5f);
+        private readonly MovementModifier moveMod = new(default, 0.4f);
 
         protected override void Activated()
         {
@@ -36,18 +35,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 Entity.ExternalActivity.moveMods.Add(moveMod);
         }
 
-        protected override void Reactivated()
-        {
-        }
-
-        protected override void ActiveUpdate()
-        {
-        }
-
         protected override void Deactivated()
         {
             if (Entity.ExternalActivity.moveMods.Contains(moveMod))
                 Entity.ExternalActivity.moveMods.Remove(moveMod);
         }
+
+        protected override void Reactivated() {}
+        protected override void ActiveUpdate() {}
     }
 }

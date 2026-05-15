@@ -10,13 +10,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public Entity entity;
         private MaintenanceMachine machine;
 
-        protected float height = 5f, endHeight = 0f, gravity = -5f;
-        private bool ready = false;
+        protected float height = 5f, endHeight = 0f, gravity = -25f;
+        protected bool Ready {get; private set;} = false;
 
         public void Spawn(MaintenanceMachine machine)
         {
             this.machine = machine;
             entity.Initialize(machine.ec, machine.transform.position);
+            entity.CopyStatusEffects(machine.Entity);
             entity.SetGrounded(false);
             Initialize();
             Fall(endHeight, gravity, endHeight == 0f);
@@ -24,16 +25,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void Update()
         {
-            if (!ready)
+            if (!Ready)
             {
-                if (_fallRoutine != null) return;
-                ready = true;
+                if (Falling) return;
+                Ready = true;
             }
             VirtualUpdate();
         }
 
-        private float _signEnd;
+        private float _sign, _ySpeed;
         private Coroutine _fallRoutine;
+        public bool Falling => _fallRoutine != null;
         protected void Fall(float end, float gravity, bool setGrounded = true)
         {
             if (_fallRoutine != null)
@@ -41,14 +43,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             _fallRoutine = StartCoroutine(FallRoutine(end,gravity,setGrounded));
         }
+        
 
         private IEnumerator FallRoutine(float end, float gravity, bool setGrounded)
         {
-            _signEnd = Mathf.Sign(height-end)*end;
+            _sign = Mathf.Sign(height-end);
             entity.SetGrounded(false);
-            while (height < _signEnd)
+            _ySpeed = 0f;
+            while (_sign*height > _sign*end)
             {
-                height += gravity * Time.deltaTime * entity.Ec.EnvironmentTimeScale;
+                _ySpeed += gravity * Time.deltaTime * entity.Ec.EnvironmentTimeScale;
+                height += _ySpeed * Time.deltaTime * entity.Ec.EnvironmentTimeScale;
                 entity.UpdateInternalMovement(Vector3.zero);
                 entity.SetHeight(height);
                 yield return null;
@@ -58,7 +63,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             entity.SetGrounded(setGrounded);
             _fallRoutine = null;
         }
-
+        
         protected virtual void Initialize() {}
 
         protected virtual void VirtualUpdate() {}

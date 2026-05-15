@@ -15,6 +15,8 @@ using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
+using System.Linq;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -31,6 +33,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "MaintenanceMachine.json5");
+
+            // Add effect icons
+            AssetMan.Add("StatusSpr/SpikeSlowdown", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("MMachineTex/SpikeSlowdownIcon"), 1));
+            AssetMan.Add("StatusSpr/PyramidFlip", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("MMachineTex/PyramidFlipIcon"), 1));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
@@ -49,17 +55,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             machine.poster.textData[0].size = new(224, 32);
             PineDebugNpcIcons.AddIcon([machine], "BorderMaintenanceMachine.png");
 
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 50f, new Vector2(0.5f, 0.5f), AssetMan.Get<Texture2D>("LSockTex/LockSockSprites"));
-
             machine.navigator.SetSpeed(25);
             machine.navigator.accel = 15f;
 
-            machine.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("MMachineTex/EvilMaintenanceMachine"), 30f);
+            machine.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(
+                AssetMan.Get<Texture2D>(RecommendedCharsPlugin.Plugin ? "MMachineTex/EvilMaintenanceMachine_Party" : "MMachineTex/EvilMaintenanceMachine"), 30f);
             machine.spriteRenderer[0].transform.localPosition = Vector3.down;
 
             machine.audMan = machine.GetComponent<AudioManager>();
             ((PropagatedAudioManager)machine.audMan).maxDistance = 300;
             machine.audMan.subtitleColor = new(194/255f, 48/255f, 49/255f);
+            machine.audClean = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("MMachineAud/EMM_Cleaning"), "Vfx_RecChars_MaintMachine_Cleaning", SoundType.Voice, machine.audMan.subtitleColor);
+            machine.audOhno = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("MMachineAud/EMM_OhNo"), "Vfx_RecChars_MaintMachine_OhNo", SoundType.Voice, machine.audMan.subtitleColor);
+
+            LoadDropEntities(machine);
 
             CharacterRadarColorPatch.colors.Add(machine.character, machine.audMan.subtitleColor);
 
@@ -69,6 +78,61 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Add spawn tag for the maintenance level type
             LevelType.Maintenance.GetMeta().tags.Add("recchars:spawns_maintenance_machine");
+        }
+
+        private void LoadDropEntities(MaintenanceMachine prefab)
+        {
+            Sprite[] shapeSprites = AssetLoader.SpritesFromSpritesheet(3, 3, 25f, new Vector2(0.5f, 0f), AssetMan.Get<Texture2D>("MMachineTex/PrimitiveShapes"));
+            GameObject.DestroyImmediate(shapeSprites[7]);
+            GameObject.DestroyImmediate(shapeSprites[8]);
+
+            // Spike
+            PrimitiveDrop_Spike spike = CreateDropEntityBase<PrimitiveDrop_Spike>(shapeSprites[0]);
+            spike.audTouch = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "SourPlink.wav"), "Sfx_RecChars_SourPlink", SoundType.Effect, Color.white, 0);
+            prefab.entityPres.Add(spike);
+
+            // Cube
+            PrimitiveDrop_Cube cube = CreateDropEntityBase<PrimitiveDrop_Cube>(shapeSprites[1]);
+            cube.audSquish = Resources.FindObjectsOfTypeAll<Balder_Entity>().First(x => x.GetInstanceID() >= 0).audSquish;
+            prefab.entityPres.Add(cube);
+
+            // Cylinder
+            PrimitiveDrop_Cylinder cylinder = CreateDropEntityBase<PrimitiveDrop_Cylinder>(shapeSprites[2]);
+            cylinder.audSlipLoop = AssetMan.Get<SoundObject>("Sfx/SlipLoop");
+            prefab.entityPres.Add(cylinder);
+
+            // Rounded Cuboid
+            PrimitiveDrop_RoundedCuboid rounded = CreateDropEntityBase<PrimitiveDrop_RoundedCuboid>(shapeSprites[4]);
+            rounded.audSlip = AssetMan.Get<SoundObject>("Sfx/Slip");
+            rounded.puddleSprite = GameObject.Instantiate(rounded.sprite, rounded.sprite.transform.parent);
+            rounded.puddleSprite.name = "Puddle";
+            rounded.puddleSprite.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("MMachineTex/RoundedCuboidPuddle"), 16);
+            rounded.puddleSprite.sharedMaterial = AssetMan.Get<Material>("Mat/SpriteNoBillboard");
+            rounded.puddleSprite.transform.localEulerAngles = Vector3.right * -90f;
+            rounded.puddleSprite.transform.localPosition = Vector3.up * 0.01f;
+            rounded.entity.renderer = [rounded.sprite, rounded.puddleSprite];
+            prefab.entityPres.Add(rounded);
+
+            // Pyramid
+            PrimitiveDrop_Pyramid pyramid = CreateDropEntityBase<PrimitiveDrop_Pyramid>(shapeSprites[6]);
+            prefab.entityPres.Add(pyramid);
+        }
+
+        private T CreateDropEntityBase<T>(Sprite sprite) where T : PrimitiveDrop
+        {
+            Entity entity = new EntityBuilder()
+                .SetName(typeof(T).Name)
+                .SetBaseRadius(2.5f)
+                .AddTrigger(2.5f)
+                .AddDefaultRenderBaseFunction(sprite)
+                .Build();
+            T drop = entity.gameObject.AddComponent<T>();
+            drop.entity = entity;
+            drop.sprite = entity.rendererBase.GetComponentInChildren<SpriteRenderer>();
+            PropagatedAudioManager audMan = entity.gameObject.AddComponent<PropagatedAudioManager>();
+            audMan.maxDistance = 80f;
+            drop.audMan = audMan;
+            return drop;
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
@@ -84,7 +148,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
                     lvl.GetForcedNpcsInclusive().Add(ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine"));
                 else
-                    lvl.GetPotentialNpcsInclusive().Add(ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine").Weighted(125));
+                    lvl.GetPotentialNpcsInclusive().Add(ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine").Weighted(200));
             }
         }
     }

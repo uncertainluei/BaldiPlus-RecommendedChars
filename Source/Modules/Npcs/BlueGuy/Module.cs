@@ -64,8 +64,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             PineDebugNpcIcons.AddIcon([bluGuy], "BorderBlueGuy.png");
             CharacterRadarColorPatch.colors.Add(bluGuy.character, bluGuy.audMan.subtitleColor);
 
-            bluGuy.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Intro"), "Vfx_RecChars_BlueGuy_Intro", SoundType.Effect, bluGuy.audMan.subtitleColor);
-            bluGuy.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Loop"), "Vfx_RecChars_BlueGuy_Loop", SoundType.Effect, bluGuy.audMan.subtitleColor);
+            bluGuy.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Intro"), "Vfx_RecChars_BlueGuy_Intro", SoundType.Voice, bluGuy.audMan.subtitleColor);
+            bluGuy.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("BluAud/Blu_Loop"), "Vfx_RecChars_BlueGuy_Loop", SoundType.Voice, bluGuy.audMan.subtitleColor);
 
             bluGuy.Navigator.speed = 45;
             bluGuy.Navigator.maxSpeed = 45;
