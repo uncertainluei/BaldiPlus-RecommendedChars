@@ -3,22 +3,20 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public class PrimitiveDrop_Spike : PrimitiveDrop, IEntityTrigger
+    public class PrimitiveDrop_Spike : PrimitiveDrop
     {
         public float slowdownTime = 10f;
         public SoundObject audTouch;
 
-        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
+        protected override void ShapeTriggerEnter(Entity ent, bool validCollision)
         {
-            if (Ready && validCollision && otherEntity && (other.CompareTag("Player") || other.CompareTag("NPC")))
+            if (validCollision && (ent.CompareTag("Player") || ent.CompareTag("NPC")))
             {
+                SetDead();
                 audMan.PlaySingle(audTouch);
-                otherEntity.ActivateReusableEffect<SpikeSlowdown>(slowdownTime);
+                ent.ActivateReusableEffect<SpikeSlowdown>(slowdownTime);
             }
         }
-
-        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision) {}
-        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision) {}
     }
 
     public class SpikeSlowdown : ReusableEffect

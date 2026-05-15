@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {   
-    public abstract class PrimitiveDrop : MonoBehaviour
+    public abstract class PrimitiveDrop : MonoBehaviour, IEntityTrigger
     {
         public AudioManager audMan;
         public SpriteRenderer sprite;
@@ -12,6 +12,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected float height = 5f, endHeight = 0f, gravity = -25f;
         protected bool Ready {get; private set;} = false;
+        private bool dead = false;
 
         public void Spawn(MaintenanceMachine machine)
         {
@@ -23,6 +24,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Fall(endHeight, gravity, endHeight == 0f);
         }
 
+        protected void SetDead() => dead = true;
+
         private void Update()
         {
             if (!Ready)
@@ -31,6 +34,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 Ready = true;
             }
             VirtualUpdate();
+            if (dead && !audMan.AnyAudioIsPlaying)
+                Destroy(gameObject);
         }
 
         private float _sign, _ySpeed;
@@ -68,6 +73,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected virtual void VirtualUpdate() {}
 
+        protected virtual void ShapeTriggerEnter(Entity ent, bool validCollision) {}
+        protected virtual void ShapeTriggerStay(Entity ent, bool validCollision) {}
+        protected virtual void ShapeTriggerExit(Entity ent, bool validCollision) {}
+
+
         private void OnDisable()
         {
             if (machine)
@@ -75,6 +85,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 machine.RemoveEntity(entity);
                 Destroy(gameObject);
             }
+        }
+
+        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
+        {
+            if (Ready && !dead && otherEntity != machine.Entity)
+                ShapeTriggerEnter(otherEntity, validCollision);
+        }
+
+        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision)
+        {
+            if (Ready && !dead && otherEntity != machine.Entity)
+                ShapeTriggerStay(otherEntity, validCollision);
+        }
+
+        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision)
+        {
+            if (Ready && !dead && otherEntity != machine.Entity)
+                ShapeTriggerExit(otherEntity, validCollision);
         }
     }
 }

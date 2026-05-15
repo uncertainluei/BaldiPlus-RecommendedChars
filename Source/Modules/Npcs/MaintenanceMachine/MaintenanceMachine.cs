@@ -8,7 +8,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public AudioManager audMan;
         public SoundObject audOhno, audClean;
         public List<PrimitiveDrop> entityPres = [];
-        public Vector2 delayTimeRange = new(3f, 6f); 
+        public Vector2 delayTimeRange = new(30f, 60f); 
         public Vector2 activeTimeRange = new(30f, 60f); 
         private readonly List<Entity> entitiesSpawned = [];
         private DijkstraMap dijkstraMap;

@@ -4,21 +4,18 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public class PrimitiveDrop_Pyramid : PrimitiveDrop, IEntityTrigger
+    public class PrimitiveDrop_Pyramid : PrimitiveDrop
     {
         public float flipTime = 10f;
 
-        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
+        protected override void ShapeTriggerEnter(Entity ent, bool validCollision)
         {
-            if (Ready && validCollision && otherEntity)
+            if (validCollision && ent)
             {
-                otherEntity.ActivateReusableEffect<PyramidFlip>(flipTime);
+                ent.ActivateReusableEffect<PyramidFlip>(flipTime);
                 Destroy(gameObject);
             }
         }
-
-        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision) {}
-        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision) {}
     }
 
     public class PyramidFlip : ReusableEffect

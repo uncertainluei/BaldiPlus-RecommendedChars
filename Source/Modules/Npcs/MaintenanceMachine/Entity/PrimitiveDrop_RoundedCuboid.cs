@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public class PrimitiveDrop_RoundedCuboid : PrimitiveDrop, IEntityTrigger
+    public class PrimitiveDrop_RoundedCuboid : PrimitiveDrop
     {
         public float setTime = 20f;
         public SoundObject audSlip;
@@ -51,16 +51,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 			puddleSprite.SetPropertyBlock(entity._propertyBlock);
         }
 
-        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
+        protected override void ShapeTriggerEnter(Entity ent, bool validCollision)
         {
-            if (molten && otherEntity && entity.Flipped == otherEntity.Flipped)
+            if (molten && entity.Flipped == ent.Flipped)
             {
                 audMan.PlaySingle(audSlip);
-                otherEntity.AddForce(new Force(otherEntity.Velocity.normalized, slipSpeed, slipAccel));
+                ent.AddForce(new Force(ent.Velocity.normalized, slipSpeed, slipAccel));
             }
         }
-
-        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision) {}
-        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision) {}
     }
 }

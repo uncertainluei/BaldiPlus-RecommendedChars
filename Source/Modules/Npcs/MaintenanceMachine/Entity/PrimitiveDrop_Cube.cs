@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public class PrimitiveDrop_Cube : PrimitiveDrop, IEntityTrigger
+    public class PrimitiveDrop_Cube : PrimitiveDrop
     {
         public float squishTime = 10f;
         public SoundObject audSquish;
@@ -31,10 +31,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
             entities.Clear();
             up = true;
-            Fall(endHeight, gravity);
+            SetDead();
         }
 
-        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision)
+        protected override void ShapeTriggerStay(Entity otherEntity, bool validCollision)
         {
             if (!entities.Contains(otherEntity))
                 entities.Add(otherEntity);
@@ -46,12 +46,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
-        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision)
+        protected override void ShapeTriggerExit(Entity otherEntity, bool validCollision)
         {
             if (entities.Contains(otherEntity))
                 entities.Remove(otherEntity);
         }
-
-        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision) {}
     }
 }

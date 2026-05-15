@@ -99,6 +99,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Cylinder
             PrimitiveDrop_Cylinder cylinder = CreateDropEntityBase<PrimitiveDrop_Cylinder>(shapeSprites[2]);
             cylinder.audSlipLoop = AssetMan.Get<SoundObject>("Sfx/SlipLoop");
+            cylinder.audSlipEnd = AssetMan.Get<SoundObject>("Sfx/Slip");
             prefab.entityPres.Add(cylinder);
 
             // Rounded Cuboid

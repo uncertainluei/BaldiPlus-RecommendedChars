@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public class PrimitiveDrop_Cylinder : PrimitiveDrop, IEntityTrigger
+    public class PrimitiveDrop_Cylinder : PrimitiveDrop
     {
         public float time = 30f;
-        public SoundObject audSlipLoop;
+        public SoundObject audSlipLoop, audSlipEnd;
 
         private bool slipping;
         private float speed = 30f, endAngle = 20f;
@@ -27,50 +27,58 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected override void VirtualUpdate()
         {
-            if (slipping)
+            if (!slipping)
             {
-                if (entity.ExternalActivity.Addend.magnitude > 0f)
-                    direction = entity.ExternalActivity.Addend.ZeroOutY().normalized;
-                    
-                entity.UpdateInternalMovement(direction * speed * entity.Ec.EnvironmentTimeScale);
-                moveMod.movementAddend = entity.ExternalActivity.Addend + direction * speed * entity.Ec.EnvironmentTimeScale;
-                time -= Time.deltaTime * entity.Ec.EnvironmentTimeScale;
+                entity.UpdateInternalMovement(Vector3.zero);
                 return;
             }
-            entity.UpdateInternalMovement(Vector3.zero);
+            if (entity.ExternalActivity.Addend.magnitude > 0f)
+                direction = entity.ExternalActivity.Addend.ZeroOutY().normalized;
+                    
+            entity.UpdateInternalMovement(direction * speed * entity.Ec.EnvironmentTimeScale);
+            moveMod.movementAddend = entity.ExternalActivity.Addend + direction * speed * entity.Ec.EnvironmentTimeScale;
+            time -= Time.deltaTime * entity.Ec.EnvironmentTimeScale;
         }
 
-        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision)
+        protected override void ShapeTriggerStay(Entity ent, bool validCollision)
         {
-            if (validCollision && Ready && !slipping && otherEntity && otherEntity.Grounded && otherEntity.Velocity.magnitude > 0f)
+            if (validCollision && !slipping && ent.Grounded && ent.Velocity.magnitude > 0f)
             {
                 entity.OnEntityMoveInitialCollision += OnEntityMoveCollision;
-                entity.Teleport(otherEntity.transform.position);
-                otherEntity.ExternalActivity.moveMods.Add(moveMod);
-                slippingEntity = otherEntity;
+                entity.Teleport(ent.transform.position);
+                ent.ExternalActivity.moveMods.Add(moveMod);
+                slippingEntity = ent;
                 slipping = true;
                 entity.ExternalActivity.ignoreFrictionForce = true;
-                direction = otherEntity.transform.forward;
+                direction = ent.transform.forward;
                 audMan.FlushQueue(true);
                 audMan.QueueAudio(audSlipLoop);
                 audMan.SetLoop(true);
             }
         }
 
+        protected override void ShapeTriggerExit(Entity ent, bool validCollision)
+        {
+            if (validCollision && slipping && (!slippingEntity || ent == slippingEntity))
+                End();
+        }
+
         private void OnEntityMoveCollision(RaycastHit hit)
         {
             if (!slipping) return;
             if (Vector3.Angle(-direction, hit.normal) <= endAngle || time < 0f)
-                Destroy(gameObject);
+                End();
             direction = Vector3.Reflect(direction, hit.normal);
         }
 
-        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision)
+        private void End()
         {
-            if (validCollision && slipping && (!slippingEntity || otherEntity == slippingEntity))
-                Destroy(gameObject);
+            entity.UpdateInternalMovement(-direction * speed * entity.Ec.EnvironmentTimeScale);
+            SetDead();
+            audMan.FlushQueue(true);
+            audMan.PlaySingle(audSlipEnd);
+            if (slippingEntity)
+			    slippingEntity.ExternalActivity.moveMods.Remove(moveMod);
         }
-
-        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision) {}
     }
 }

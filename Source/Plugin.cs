@@ -78,7 +78,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     PartyMode = false;
                     break;
                 case RecommendedCharsConfig.PartyModeConfigMode.DateBased:
-                    if (today.Month != 5 || today.Day > 15) // Not May 1st-15th
+                    if (today.Month != 5 || today.Day > 22) // Not May 1st-22th
                         PartyMode = false;
                     break;
             }
