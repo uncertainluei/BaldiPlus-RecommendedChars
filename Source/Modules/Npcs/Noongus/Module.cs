@@ -33,7 +33,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Noongus.json5");
         }
 
-        //[CaudexLoadEvent(LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void LoadNoongus()
         {
             Noongus noongus = new NPCBuilder<Noongus>(Plugin)
