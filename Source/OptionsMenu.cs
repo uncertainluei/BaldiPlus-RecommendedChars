@@ -189,10 +189,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
                 Sprite[] moduleIcons = AssetLoader.SpritesFromSpriteSheetCount(moduleIconSheet, 32, 32, 1, 20);
 
-                cat.CreateText("InfoTxt", "Opt_RecChars_Modules_Instructions".Localize(), new Vector3(0, 22), BaldiFonts.ComicSans18, TextAlignmentOptions.Bottom, new Vector2(360, 18), Color.black, false)
+                cat.CreateText("InfoTxt", "Opt_RecChars_Modules_Instructions".Localize(), new Vector3(0, 20), BaldiFonts.ComicSans18, TextAlignmentOptions.Bottom, new Vector2(360, 18), Color.black, false)
                     .transform.SetParent(transform, false);
 
-                Vector2 pos = new(-140f, -8f);
+                Vector2 pos = new(-140f, -10f);
                 byte i = 0;
                 ConfigDefinition definition;
                 string currentSection = "";

@@ -442,7 +442,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void SetMrDaycarePrefab()
         {
             ObjMan.Add("Npc/MrDaycare", ObjMan.Get<MrDaycare>(RecommendedCharsConfig.nerfMrDaycare.Value ? "Npc/MrDaycare_Nerfed" : "Npc/MrDaycare_Unnerfed"));
-            NPCMetaStorage.Instance.Get(MrDaycare.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<MrDaycare>("Npc/MrDaycare").name);
+            //NPCMetaStorage.Instance.Get(MrDaycare.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<MrDaycare>("Npc/MrDaycare").name);
         }
 
         private void UpdateMrDaycareInstances()

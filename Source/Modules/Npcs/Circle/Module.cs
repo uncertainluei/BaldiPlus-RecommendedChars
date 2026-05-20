@@ -135,7 +135,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             unnerfedJumprope.penaltyVal = -5;
 
             ObjMan.Add("Npc/Circle_Unnerfed", unnerfedCircle);
-            ObjMan.Add("Comp/CircleRope_Unnferfed", unnerfedJumprope);
+            ObjMan.Add("Comp/CircleRope_Unnerfed", unnerfedJumprope);
 
             PineDebugNpcIcons.AddIcon([circle, unnerfedCircle], "BorderCircle.png");
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", circle);
@@ -202,7 +202,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             ObjMan.Add("Npc/Circle", ObjMan.Get<CircleNpc>(RecommendedCharsConfig.nerfCircle.Value ? "Npc/Circle_Nerfed" : "Npc/Circle_Unnerfed"));
             ObjMan.Add("Comp/CircleRope", ObjMan.Get<CircleJumprope>(RecommendedCharsConfig.nerfCircle.Value ? "Comp/CircleRope_Nerfed" : "Comp/CircleRope_Unnerfed"));
-            NPCMetaStorage.Instance.Get(CircleNpc.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<CircleNpc>("Npc/Circle").name);
+            //NPCMetaStorage.Instance.Get(CircleNpc.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<CircleNpc>("Npc/Circle").name);
         }
 
         private void UpdateCircleInstances()
