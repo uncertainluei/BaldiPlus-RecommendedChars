@@ -23,10 +23,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Arts with Wires from Playtime's Swapped Basics/1st Prize's Mania.", true)]
     public sealed partial class Module_ArtsWithWires : RecCharsModule
     {
+        internal override byte IconId => 2;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
-            ObjectCreation.AddTexturesToAssetMan("WiresTex/", ["Textures", "Npc", "ArtsWWires"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("WiresTex/", ["Textures", "Npc", "ArtsWWires"]);
             ObjectCreation.AddAudioToAssetMan("WiresAud/", ["Audio", "Npc", "ArtsWWires"]);
             
             // Load localization
@@ -61,18 +63,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             artsWithWires.sprAngry = sprites[1];
 
             artsWithWires.audMan = artsWithWires.GetComponent<AudioManager>();
-            artsWithWires.audMan.subtitleColor = new(138/255f, 22/255f, 15/255f);
+            artsWithWires.audMan.subtitleColor = new(138 / 255f, 22 / 255f, 15 / 255f);
 
             CharacterRadarColorPatch.colors.Add(artsWithWires.character, artsWithWires.audMan.subtitleColor);
 
             artsWithWires.audIntro = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Intro"), "Sfx_RecChars_Wires_Intro", SoundType.Effect, artsWithWires.audMan.subtitleColor);
             artsWithWires.audLoop = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("WiresAud/AWW_Loop"), "Sfx_RecChars_Wires_Loop", SoundType.Effect, artsWithWires.audMan.subtitleColor);
 
-            artsWithWires.stareStacks = RecommendedCharsConfig.intendedWiresBehavior.Value;
-
             Jumprope jumpropeCopy = GameObject.Instantiate(((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value).jumpropePre, MTM101BaldiDevAPI.prefabTransform);
             jumpropeCopy.name = "ArtsWithWires GrabbingGame";
             jumpropeCopy.enabled = false;
+
+            artsWithWires.stareStacks = RecommendedCharsConfig.intendedWires.Value;
 
             artsWithWires.gamePrefab = jumpropeCopy.gameObject.AddComponent<GrabbingGame>();
             artsWithWires.gamePrefab.textCanvas = jumpropeCopy.textCanvas;
@@ -105,6 +107,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", artsWithWires);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_wires", artsWithWires.Poster);
             ObjMan.Add("Npc/ArtsWithWires", artsWithWires);
+
+            RecommendedCharsConfig.intendedWires.SettingChanged += (x,y) => artsWithWires.stareStacks = RecommendedCharsConfig.intendedWires.Value;
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
@@ -114,7 +118,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
 
-                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs-1, 0);
@@ -129,7 +133,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
 
-                if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (!RecommendedCharsConfig.guaranteeSpawnChar)
                     scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));
                 else if (id == 1)
                 {

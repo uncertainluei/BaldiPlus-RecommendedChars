@@ -1,16 +1,13 @@
+using MTM101BaldAPI;
+using MTM101BaldAPI.AssetTools;
+using PlusLevelStudio.Editor;
+using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
-using MTM101BaldAPI;
-using MTM101BaldAPI.AssetTools;
-
-using PlusStudioLevelFormat;
-using PlusStudioLevelLoader;
-
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Util.Extensions;
-
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -62,6 +59,82 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 aud.name = "RecChars_" + aud.name;
             }
         }
+
+        private struct TextureUpdateInfo(string key, string path, string legacyPath)
+        {
+            public string key = key;
+            public string path = path, legacyPath = legacyPath;
+        }
+
+        private static readonly List<TextureUpdateInfo> texturesToUpdate = [];
+        
+        internal static void AddTexturesToAssetManWLegacy(string prefix, string[] paths)
+        {
+            string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths)), "*.png");
+            for (int i = 0; i < files.Length; i++)
+                AddTextureToAssetManWLegacy(prefix+Path.GetFileNameWithoutExtension(files[i]), files[i]);
+        }
+
+        internal static void AddSpriteToAssetManWLegacy(string key, string[] paths, Vector2 pivot, float ppu)
+            => RecommendedCharsPlugin.AssetMan.Add(key, AssetLoader.SpriteFromTexture2D(AddTextureToAssetManWLegacy(key, paths), pivot, ppu));
+        internal static void AddSpriteToAssetManWLegacy(string key, string[] paths) => AddSpriteToAssetManWLegacy(key, paths, Vector2.one / 2, 1f);
+
+        internal static Texture2D AddTextureToAssetManWLegacy(string key, string[] paths)
+            => AddTextureToAssetManWLegacy(key, Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths)));
+
+        private static Texture2D AddTextureToAssetManWLegacy(string key, string path)
+        {
+            string legacyPath = Path.Combine(Directory.GetParent(path).ToString(), "Legacy", Path.GetFileName(path));
+            if (File.Exists(legacyPath))
+            {
+                texturesToUpdate.Add(new(key, path, legacyPath));
+                if (RecommendedCharsConfig.legacyTextures.Value)
+                    path = legacyPath;
+            }
+            Texture2D tex = AssetLoader.TextureFromFile(path);
+            RecommendedCharsPlugin.AssetMan.Add(key, tex);
+            return tex;
+        }
+
+        internal static void UpdateRequiredTextures()
+        {
+            foreach (TextureUpdateInfo info in texturesToUpdate)
+                UpdateTextureInAssetMan(info.key, info.path, info.legacyPath);
+        }
+
+        /*internal static void UpdateTexturesInAssetMan(string prefix, string[] paths)
+        {
+            string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths), "Legacy"), "*.png");
+            string name, regPath;
+            for (int i = 0; i < files.Length; i++)
+            {
+                name = Path.GetFileNameWithoutExtension(files[i]);
+                regPath = Path.Combine(Path.GetPathRoot(Path.GetPathRoot(files[i])), name+".png");
+                if (!File.Exists(regPath))
+                {
+                    RecommendedCharsPlugin.Log.LogWarning($"Legacy texture \"{files[i]}\" does not have any original equivalent.");
+                    continue;
+                }
+                UpdateTextureInAssetMan(prefix+name, regPath, files[i]);
+            }
+        }
+
+        internal static void UpdateTextureInAssetMan(string key, string[] paths)
+        {
+            string path = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths));
+            UpdateTextureInAssetMan(key, path, Path.Combine(Path.GetPathRoot(path), "Legacy", Path.GetFileName(path)));
+        }*/
+
+        private static void UpdateTextureInAssetMan(string key, string path, string legacyPath)
+        {
+            if (RecommendedCharsConfig.legacyTextures.Value)
+                path = legacyPath;
+
+            Texture2D tex = RecommendedCharsPlugin.AssetMan.Get<Texture2D>(key);
+            tex.LoadImage(File.ReadAllBytes(path));
+        }
+
+        
 
         internal static WeightedRoomAsset[] RoomAssetsFromDirectory(string dir, params int[] weights)
             => RoomAssetsFromDirectory(null, dir, weights);

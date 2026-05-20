@@ -23,6 +23,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Miscellaneous"), CaudexModulePriority(10)]
     public sealed partial class Module_Misc : RecCharsModule
     {
+        internal override byte IconId => 19;
 
         protected override void Initialized()
         {
@@ -40,8 +41,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "bee.png"), "bee");
 
             // BBCR Party Style Objects
-            _baseMat = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "TileBase" && x.GetInstanceID() >= 0);
-            _baseShader = Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Shader Graphs/Standard");
+            _baseMat = AssetMan.Get<Material>("Mat/TileBase");
+            _baseShader = AssetFinder.FindOfTypeWithName<Shader>("Shader Graphs/Standard", true);
 
             LoadCakeObj(
                 CreateMaterial("CakeTex/CakeSide"),
@@ -49,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 CreateMaterial("CakeTex/Candle")
             );
             LoadPartyElevatorObj(
-                CreateMaterial(Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "DiamongPlateFloor" && x.GetInstanceID() >= 0), "DiamondPlateFloor"),
+                CreateMaterial(AssetFinder.FindOfTypeWithName<Texture2D>("DiamongPlateFloor", true), "DiamondPlateFloor"),
                 CreateMaterial("PartyElevateTex/PantographSide"),
                 CreateMaterial("PartyElevateTex/PantographFront"),
                 CreateMaterial("PartyElevateTex/MetalFence")
@@ -153,7 +154,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 AssetLoader.TextureFromMod(BasePlugin,"Textures","Environment","Room","Classroom","ArtPaintings.png")
             );
 
-            Notebook notebookObj = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<Notebook>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform);
+            Notebook notebookObj = GameObject.Instantiate(AssetFinder.FindAllOfType<Notebook>(true).First(), MTM101BaldiDevAPI.prefabTransform);
             Painting paintingObj = notebookObj.gameObject.AddComponent<Painting>();
             paintingObj.name = "Painting_0";
             paintingObj.sprite = notebookObj.sprite;

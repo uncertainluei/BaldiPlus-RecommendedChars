@@ -1,5 +1,4 @@
-﻿using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.Registers;
+﻿using MTM101BaldAPI.Registers;
 
 using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
@@ -18,7 +17,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void InitializeStudioCompat()
         {
             // Load icon asset
-            AssetMan.Add("EditorSpr/Npc_LockSock", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "LockSock.png"));
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_LockSock", ["Textures", "Compat", "LevelStudio", "Npc", "LockSock.png"]);
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]

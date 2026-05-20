@@ -6,7 +6,7 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
 using PlusStudioLevelLoader;
-
+using System.Linq;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
@@ -21,12 +21,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Gifter from LOLdi's Basics Public Alpha.", true)]
     public sealed partial class Module_Gifter : RecCharsModule
     {
+        internal override byte IconId => 5;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
-            ObjectCreation.AddTexturesToAssetMan("GifterTex/", ["Textures", "Npc", "Gifter"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("GifterTex/", ["Textures", "Npc", "Gifter"]);
             ObjectCreation.AddAudioToAssetMan("GifterAud/", ["Audio", "Npc", "Gifter"]);
+
             AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.wav"), "Sfx_RecChars_GiftUnwrap", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/BombFuse", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "BombFuse.wav"), "Sfx_RecChars_BombFuse", SoundType.Effect, Color.white));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Gifter.json5");
@@ -103,6 +107,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add("Npc/Gifter", gifter);
         }
 
+        [CaudexLoadEvent(LoadingEventOrder.Post)]
+        private void SetGifterTags()
+        {
+            ItemMetaStorage.Instance.FindByEnum(Items.BusPass).tags.Add("recchars:gifter_blacklist");
+            ItemMetaStorage.Instance.FindAllWithTags(false, ["lost_item", "shape_key", "shop_dummy"]).Do(x => { x.tags.Add("recchars:gifter_blacklist"); });
+        }
+
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
@@ -115,7 +126,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void AddToNpcs(NPC npc, SceneObject scene, int weight, bool endless, int firstNo = 0)
         {
-            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 scene.potentialNPCs.Add(npc.Weighted(weight));
             else if (endless || scene.levelNo == firstNo)
             {

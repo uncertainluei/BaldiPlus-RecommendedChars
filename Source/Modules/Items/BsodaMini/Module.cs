@@ -24,6 +24,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "BSODA in small cans, given when yield is short!\n(Requires the Eveyone's Bsodaa module to be enabled.)", true)]
     public sealed partial class Module_Item_BsodaMini : RecCharsSubModule<Module_Bsodaa>
     {
+        internal override byte IconId => 15;
+
         protected override void Initialized()
         {
             // Load texture assets

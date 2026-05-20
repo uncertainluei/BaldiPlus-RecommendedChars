@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void InitializeStudioCompat()
         {
             // Load icon assets            
-            AssetMan.Add("EditorSpr/Npc_Bsodaa", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Bsodaa.png"));
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Bsodaa", ["Textures", "Compat", "LevelStudio", "Npc", "Bsodaa.png"]);
 
             AssetMan.Add("EditorSpr/Npc_BsodaaHelper", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "BsodaaHelper.png"));
             AssetMan.Add("EditorSpr/Npc_BsodaaHelper_Diet", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "BsodaaHelper_Diet.png"));

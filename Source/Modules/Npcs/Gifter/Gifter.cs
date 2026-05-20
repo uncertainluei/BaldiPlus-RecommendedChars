@@ -26,14 +26,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             base.Initialize();
             OriginalSpeed = navigator.maxSpeed;
-
-            items = ItemMetaStorage.Instance.All()
-            .Where(x => !x.flags.HasFlag(ItemFlags.InstantUse) && !x.flags.HasFlag(ItemFlags.NoUses)
-                && !x.flags.HasFlag(ItemFlags.Unobtainable) && x.value.itemType.ToStringExtended() != "WPB"
-                && !x.tags.Contains("lost_item") && !x.tags.Contains("shape_key") && !x.tags.Contains("shop_dummy")
-                && !x.tags.Contains("recchars:gifter_blacklist")).ToArray();
-
-            RerollGift();        
+            items = ItemMetaStorage.Instance.All().Where(x =>
+                !x.flags.HasFlag(ItemFlags.InstantUse) && !x.flags.HasFlag(ItemFlags.NoUses) && !x.flags.HasFlag(ItemFlags.Unobtainable) &&
+                !x.tags.Contains("recchars:gifter_blacklist") && x.value.itemType.ToStringExtended() != "WPB").ToArray();
+            RerollGift();
             behaviorStateMachine.ChangeState(new Gifter_WanderSimple(this));
         }
 

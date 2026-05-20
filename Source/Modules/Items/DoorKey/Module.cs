@@ -22,9 +22,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("DoorKey"), CaudexModuleSaveTag("Mdl_DoorKey")]
     [CaudexModuleConfig("Modules.Items", "DoorKey",
-        "A three-use key that can unlock anything*. (*notebook doors not included)", true)]
+        "A three-use key that can unlock anything*. (*notebook-locked Daycare doors not included)", true)]
     public sealed partial class Module_Item_DoorKey : RecCharsModule
     {
+        internal override byte IconId => 13;
+
         protected override void Initialized()
         {
             // Load texture assets

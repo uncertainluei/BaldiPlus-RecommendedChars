@@ -31,14 +31,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Baldi and Playtime from Eveything is Bsodaa, with their own room and mechanic.", true)]
     public sealed partial class Module_Bsodaa : RecCharsModule
     {
+        internal override byte IconId => 3;
+
         private readonly ModuleSaveSystem_Bsodaa saveSystem = new();
         public override ModuleSaveSystem SaveSystem => saveSystem;
 
         protected override void Initialized()
         {
             // Load texture and audio assets
-            ObjectCreation.AddTexturesToAssetMan("BsodaaTex/", ["Textures", "Npc", "Bsodaa"]);
-            ObjectCreation.AddTexturesToAssetMan("BsodaaRoom/", ["Textures", "Environment", "Room", "Bsodaa"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("BsodaaTex/", ["Textures", "Npc", "Bsodaa"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("BsodaaRoom/", ["Textures", "Environment", "Room", "Bsodaa"]);
 
             ObjectCreation.AddAudioToAssetMan("BsodaaAud/", ["Audio", "Npc", "Bsodaa"]);
 
@@ -262,7 +264,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
 
-                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
@@ -276,7 +278,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
 
-                if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     scene.potentialNPCs.CopyNpcWeight(Character.DrReflex, ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));
                 }

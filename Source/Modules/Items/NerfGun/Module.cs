@@ -28,6 +28,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "A 'toy' water gun that prematurely ends Circle's game.\n(Requires the Circle module to be enabled.)", true)]
     public sealed partial class Module_Item_NerfGun : RecCharsSubModule<Module_Npc_Circle>
     {
+        internal override byte IconId => 12;
+
         protected override void Initialized()
         {
             // Load texture assets

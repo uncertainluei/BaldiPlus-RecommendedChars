@@ -20,8 +20,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void InitializeStudioCompat()
         {
             // Load texture assets
-            AssetMan.Add("EditorSpr/Npc_Circle", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Circle.png"));
-            AssetMan.Add("EditorSpr/Npc_Circle_Og", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Circle_Unnerfed.png"));
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Circle", ["Textures", "Compat", "LevelStudio", "Npc", "Circle.png"]);
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Circle_Og", ["Textures", "Compat", "LevelStudio", "Npc", "Circle_Unnerfed.png"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Circle.json5");

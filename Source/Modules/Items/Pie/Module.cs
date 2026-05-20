@@ -22,6 +22,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "As seen in Dave's House! Dave couldn't appear here, so you might find others to fill in that gap!", true)]
     public sealed partial class Module_Item_Pie : RecCharsModule
     {
+        internal override byte IconId => 14;
+
         protected override void Initialized()
         {
             // Load texture assets
@@ -92,7 +94,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Pie", GenerationStageFlags.Addend);
             lvl.MarkAsNeverUnload();
-            lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(25));
+            lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(35));
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]

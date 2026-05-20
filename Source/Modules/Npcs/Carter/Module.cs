@@ -5,8 +5,11 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
+
 using PlusStudioLevelLoader;
+
 using TMPro;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
@@ -22,6 +25,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Carter, an Arts and Crafters OC originating from a scratch project shared in 2022.", true)]
     public sealed partial class Module_Carter : RecCharsModule
     {
+        internal override byte IconId => 9;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
@@ -204,7 +209,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void AddToNpcs(NPC npc, SceneObject scene, int weight, bool endless, int firstNo = 0)
         {
-            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 scene.potentialNPCs.Add(npc.Weighted(weight));
             else if (endless || scene.levelNo == firstNo)
             {

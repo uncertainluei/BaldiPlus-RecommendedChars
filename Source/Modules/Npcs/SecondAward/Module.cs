@@ -20,6 +20,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds 2nd Award. It's 1st Prize, but slow and stuns characters.", true)]
     public sealed partial class Module_SecondAward : RecCharsModule
     {
+        internal override byte IconId => 8;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
@@ -108,7 +110,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
-            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 scene.potentialNPCs.Add(ObjMan.Get<SecondAward>("Npc/SecondAward").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {

@@ -15,14 +15,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static readonly Dictionary<NPC, Texture2D> icons = [];
 
         private static bool initialized, pinedebugPresent;
-        private static string pathTemplate;
+        //private static string pathTemplate;
 
         private static void InitializeIfNecessary()
         {
             if (!initialized)
             {
                 pinedebugPresent = Chainloader.PluginInfos.ContainsKey(RecommendedCharsPlugin.PineDebugGuid);
-                pathTemplate = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Textures", "Compat", "PineDebug");
+                //pathTemplate = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Textures", "Compat", "PineDebug");
             }
             initialized = true;
         }
@@ -33,7 +33,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (!pinedebugPresent)
                 return; // DO NOT RUN IF PINEDEBUG IS NOT PRESENT!!!!
 
-            Texture2D tex = AssetLoader.TextureFromFile(Path.Combine(pathTemplate, icon));
+            Texture2D tex = ObjectCreation.AddTextureToAssetManWLegacy("PineDebugTex/"+icon, ["Textures", "Compat", "PineDebug", icon]);
             icons.AddRange(instances.ToDictionary(x => x, x => tex));
         }
 

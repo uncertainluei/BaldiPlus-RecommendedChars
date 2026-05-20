@@ -21,6 +21,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds \"Blue, Guy\" from LOLdi's Basics.", true)]
     public sealed partial class Module_BlueGuy : RecCharsModule
     {
+        internal override byte IconId => 7;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
@@ -93,7 +95,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void AddToNpcs(NPC npc, SceneObject scene, int weight, bool endless, int firstNo = 0)
         {
-            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 scene.potentialNPCs.Add(npc.Weighted(weight));
             else if (endless || scene.levelNo == firstNo)
             {

@@ -22,10 +22,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds a padlock sockpuppet.", true)]
     public sealed partial class Module_LockSock : RecCharsModule
     {
+        internal override byte IconId => 6;
+
         protected override void Initialized()
         {
             // Load texture assets
-            ObjectCreation.AddTexturesToAssetMan("LSockTex/", ["Textures", "Npc", "LockSock"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("LSockTex/", ["Textures", "Npc", "LockSock"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "LockSock.json5");
@@ -92,7 +94,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
-            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 scene.potentialNPCs.Add(ObjMan.Get<LockSock>("Npc/LockSock").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {

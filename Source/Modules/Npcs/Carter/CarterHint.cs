@@ -1,7 +1,10 @@
+using MTM101BaldAPI;
+
 using System.Collections;
 using System.Collections.Generic;
-using MTM101BaldAPI;
+
 using TMPro;
+
 using UncertainLuei.CaudexLib.Util.Extensions;
 using UnityEngine;
 

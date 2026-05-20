@@ -1,20 +1,21 @@
-﻿using HarmonyLib;
-
+﻿using AsmResolver.DotNet;
+using BaldisBasicsPlusAdvanced.API;
+using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.Components.Animation;
+using MTM101BaldAPI.Reflection;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
-
-using UnityEngine;
-using BaldisBasicsPlusAdvanced.API;
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.CaudexLib.Util.Extensions;
 using PlusStudioLevelLoader;
-using UncertainLuei.CaudexLib.Util;
-using MTM101BaldAPI.Components.Animation;
 using System;
+using System.Linq;
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -23,10 +24,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Circle from TCMG's Basics in Mods and Edits.", true)]
     public sealed partial class Module_Npc_Circle : RecCharsModule
     {
+        internal override byte IconId => 0;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
-            ObjectCreation.AddTexturesToAssetMan("CircleTex/", ["Textures", "Npc", "Circle"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("CircleTex/", ["Textures", "Npc", "Circle"]);
             ObjectCreation.AddAudioToAssetMan("CircleAud/", ["Audio", "Npc", "Circle"]);
 
             // Load localization
@@ -134,24 +137,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add("Npc/Circle_Unnerfed", unnerfedCircle);
             ObjMan.Add("Comp/CircleRope_Unnferfed", unnerfedJumprope);
 
-            if (!RecommendedCharsConfig.nerfCircle.Value)
-            {
-                ObjMan.Add("Npc/Circle", unnerfedCircle);
-                ObjMan.Add("Comp/CircleRope", unnerfedJumprope);
-            }
-            else
-            {
-                ObjMan.Add("Npc/Circle", circle);
-                ObjMan.Add("Comp/CircleRope", jumprope);
-            }
-
             PineDebugNpcIcons.AddIcon([circle, unnerfedCircle], "BorderCircle.png");
-
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", circle);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle_og", unnerfedCircle);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_circle", circle.Poster);
             NPCMetadata circleMeta = new(Plugin, [circle, unnerfedCircle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
+            SetCirclePrefabs();
+            RecommendedCharsConfig.nerfCircle.SettingChanged += (x, y) =>
+            {
+                SetCirclePrefabs();
+                UpdateCircleInstances();
+            };
         }
 
         /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
@@ -188,7 +185,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {
                     case 0:
                         // A 1 in 1000 chance is kinda impossible to predict so instead it's pretty low weight, also if you have guaranteed spawns it only spawns on F2
-                        if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                        if (!RecommendedCharsConfig.guaranteeSpawnChar)
                             scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc/Circle").Weighted(3));
                         return;
                     case 1:
@@ -201,9 +198,40 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
+        private void SetCirclePrefabs()
+        {
+            ObjMan.Add("Npc/Circle", ObjMan.Get<CircleNpc>(RecommendedCharsConfig.nerfCircle.Value ? "Npc/Circle_Nerfed" : "Npc/Circle_Unnerfed"));
+            ObjMan.Add("Comp/CircleRope", ObjMan.Get<CircleJumprope>(RecommendedCharsConfig.nerfCircle.Value ? "Comp/CircleRope_Nerfed" : "Comp/CircleRope_Unnerfed"));
+            NPCMetaStorage.Instance.Get(CircleNpc.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<CircleNpc>("Npc/Circle").name);
+        }
+
+        private void UpdateCircleInstances()
+        {
+            SceneObject scene;
+            int i, c;
+            foreach (SceneObjectMetadata sceneMeta in SceneObjectMetaStorage.Instance.All().Where(x => x.tags.Contains("endless") == true || x.title.StartsWith("F")))
+            {
+                scene = sceneMeta.value;
+                if (RecommendedCharsConfig.guaranteeSpawnChar)
+                {
+                    for (i = 0, c = scene.forcedNpcs.Length; i < c; i++)
+                    {
+                        if (scene.forcedNpcs[i].character == CircleNpc.charEnum)
+                            scene.forcedNpcs[i] = ObjMan.Get<CircleNpc>("Npc/Circle");
+                    }
+                    continue;
+                }
+                for (i = 0, c = scene.potentialNPCs.Count; i < c; i++)
+                {
+                    if (scene.potentialNPCs[i].selection?.character == CircleNpc.charEnum)
+                        scene.potentialNPCs[i].selection = ObjMan.Get<CircleNpc>("Npc/Circle");
+                }
+            }
+        }
+
         private void AddToNpcs(SceneObject scene, int weight, bool endless = false)
         {
-            if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 scene.potentialNPCs.Add(ObjMan.Get<CircleNpc>("Npc/Circle").Weighted(weight));
             else if (endless || scene.levelNo == 1)
             {

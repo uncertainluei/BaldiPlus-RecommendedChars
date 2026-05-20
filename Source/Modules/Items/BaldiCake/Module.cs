@@ -9,16 +9,12 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelLoader;
 
-using System.Collections.Generic;
-using System.Linq;
-
 using UnityEngine;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
-using UnityEngine.SceneManagement;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -27,6 +23,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Ever wondered what that giant cake tastes like?", true)]
     public sealed partial class Module_Item_BaldiCake : RecCharsModule
     {
+        internal override byte IconId => 18;
+
         protected override void Initialized()
         {
             // Load texture assets

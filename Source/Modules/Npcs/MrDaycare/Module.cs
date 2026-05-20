@@ -24,9 +24,8 @@ using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UnityEngine;
 
 using PlusStudioLevelLoader;
-using MTM101BaldAPI.PlusExtensions;
-using UnityEngine.UI;
 using MTM101BaldAPI.UI;
+using MTM101BaldAPI.Reflection;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -35,11 +34,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Mr. Daycare from Dave's House.", true)]
     public sealed partial class Module_MrDaycare : RecCharsModule
     {
+        internal override byte IconId => 4;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
-            ObjectCreation.AddTexturesToAssetMan("DaycareTex/", ["Textures", "Npc", "Daycare"]);
-            ObjectCreation.AddTexturesToAssetMan("DaycareRoom/", ["Textures", "Environment", "Room", "Daycare"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("DaycareTex/", ["Textures", "Npc", "Daycare"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("DaycareRoom/", ["Textures", "Environment", "Room", "Daycare"]);
             ObjectCreation.AddTexturesToAssetMan("DaycarePoster/", ["Textures", "Environment", "Poster", "Daycare"]);
             ObjectCreation.AddAudioToAssetMan("DaycareAud/", ["Audio", "Npc", "Daycare"]);
 
@@ -191,7 +192,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", unnerfedDaycare);
-            ObjMan.Add("Npc/MrDaycare", RecommendedCharsConfig.nerfMrDaycare.Value ? daycare : unnerfedDaycare);
+            SetMrDaycarePrefab();
+            RecommendedCharsConfig.nerfMrDaycare.SettingChanged += (x, y) =>
+            {
+                SetMrDaycarePrefab();
+                UpdateMrDaycareInstances();
+            };
         }
 
         private void CreateDaycareBlueprint()
@@ -201,7 +207,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             DaycareDoorAssets.template = ObjectCreators.CreateDoorDataObject("DaycareDoor", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Shut"));
             DaycareDoorAssets.locked = ObjectCreators.CreateDoorDataObject("DaycareDoor_Locked", AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Open"), AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Locked"));
 
-            DaycareDoorAssets.mask = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First().mask[0]);
+            StandardDoor door = AssetFinder.FindAllOfType<StandardDoor>(true).First();
+            DaycareDoorAssets.mask = new(door.mask[0]);
             DaycareDoorAssets.mask.name = "DaycareDoor_Mask";
             DaycareDoorAssets.mask.SetMaskTexture(AssetMan.Get<Texture2D>("DaycareRoom/DaveDoor_Mask"));
 
@@ -237,7 +244,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.windowSet.mask.name = "DaycareWindow_Mask";
             daycareRoom.windowChance = 0.35f;
 
-            DaycareNotebookDoor daycareDoor = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardDoor>().First(x => x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<StandardDoor, DaycareNotebookDoor>();
+            DaycareNotebookDoor daycareDoor = GameObject.Instantiate(door, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<StandardDoor, DaycareNotebookDoor>();
             daycareDoor.name = "DaycareNotebookDoor";
             daycareDoor.mask[0] = DaycareDoorAssets.mask;
             daycareDoor.mask[1] = DaycareDoorAssets.mask;
@@ -247,7 +254,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.doorPrefabs.Add("recchars_bookgate", daycareDoor);
             ObjMan.Add("Door_Daycare", daycareDoor);
 
-            DetentionRoomFunction detRoomFunction = Resources.FindObjectsOfTypeAll<DetentionRoomFunction>().First(x => x.name == "OfficeRoomFunction" && x.GetInstanceID() >= 0);
+            DetentionRoomFunction detRoomFunction = AssetFinder.FindOfTypeWithName<DetentionRoomFunction>("OfficeRoomFunction", true);
             detRoomFunction = GameObject.Instantiate(detRoomFunction, MTM101BaldiDevAPI.prefabTransform);
             detRoomFunction.name = "DaycareRoomFunction";
 
@@ -408,7 +415,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (scene.GetMeta()?.tags.Contains("endless") == true)
             {
                 scene.MarkAsNeverUnload();
-                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
@@ -420,7 +427,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title.StartsWith("F"))
             {
                 scene.MarkAsNeverUnload();
-                if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     scene.potentialNPCs.CopyNpcWeight(Character.Beans, ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                 }
@@ -428,6 +435,36 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
+                }
+            }
+        }
+
+        private void SetMrDaycarePrefab()
+        {
+            ObjMan.Add("Npc/MrDaycare", ObjMan.Get<MrDaycare>(RecommendedCharsConfig.nerfMrDaycare.Value ? "Npc/MrDaycare_Nerfed" : "Npc/MrDaycare_Unnerfed"));
+            NPCMetaStorage.Instance.Get(MrDaycare.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<MrDaycare>("Npc/MrDaycare").name);
+        }
+
+        private void UpdateMrDaycareInstances()
+        {
+            SceneObject scene;
+            int i, c;
+            foreach (SceneObjectMetadata sceneMeta in SceneObjectMetaStorage.Instance.All().Where(x => x.tags.Contains("endless") == true || x.title.StartsWith("F")))
+            {
+                scene = sceneMeta.value;
+                if (RecommendedCharsConfig.guaranteeSpawnChar)
+                {
+                    for (i = 0, c = scene.forcedNpcs.Length; i < c; i++)
+                    {
+                        if (scene.forcedNpcs[i].character == MrDaycare.charEnum)
+                            scene.forcedNpcs[i] = ObjMan.Get<MrDaycare>("Npc/MrDaycare");
+                    }
+                    continue;
+                }
+                for (i = 0, c = scene.potentialNPCs.Count; i < c; i++)
+                {
+                    if (scene.potentialNPCs[i].selection?.character == MrDaycare.charEnum)
+                        scene.potentialNPCs[i].selection = ObjMan.Get<MrDaycare>("Npc/MrDaycare");
                 }
             }
         }

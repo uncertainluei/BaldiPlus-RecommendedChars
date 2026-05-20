@@ -28,6 +28,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "Adds Gotta Bully and his closet from Playtime's Swapped Basics.", true)]
     public sealed partial class Module_GottaBully : RecCharsModule
     {
+        internal override byte IconId => 1;
+
         protected override void Initialized()
         {
             // Load texture and audio assets
@@ -103,7 +105,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             bullyRoom.texFloor = AssetMan.Get<Texture2D>("SwapCloset/SwappedFloor");
             bullyRoom.texWall = AssetMan.Get<Texture2D>("SwapCloset/SwappedWall");
-            bullyRoom.texCeil = Resources.FindObjectsOfTypeAll<Texture2D>().First(x => x.name == "Carpet" && x.GetInstanceID() >= 0);
+            bullyRoom.texCeil = AssetFinder.FindOfTypeWithName<Texture2D>("Carpet", true);
             bullyRoom.keepTextures = true;
 
             bullyRoom.doorMats = ObjectCreators.CreateDoorDataObject("SwapDoor", AssetMan.Get<Texture2D>("SwapCloset/SwappedDoor_Open"), AssetMan.Get<Texture2D>("SwapCloset/SwappedDoor_Closed"));
@@ -129,7 +131,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
 
-                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<GottaBully>("Npc/GottaBully"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs-1, 0);
@@ -143,7 +145,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 scene.MarkAsNeverUnload();
 
-                if (!RecommendedCharsConfig.guaranteeSpawnChar.Value)
+                if (!RecommendedCharsConfig.guaranteeSpawnChar)
                 {
                     if (id > 1)
                         scene.potentialNPCs.CopyNpcWeight(Character.LookAt, ObjMan.Get<GottaBully>("Npc/GottaBully"));

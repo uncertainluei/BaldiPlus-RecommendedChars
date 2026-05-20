@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {

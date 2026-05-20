@@ -19,8 +19,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void InitializeStudioCompat()
         {
             // Load texture assets
-            AssetMan.Add("EditorSpr/Npc_Gifter", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Gifter.png"));
-            AssetMan.Add("EditorSpr/Npc_Gifttanynt", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Gifter_Giftanny.png"));
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Gifter", ["Textures", "Compat", "LevelStudio", "Npc", "Gifter.png"]);
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Gifttanynt", ["Textures", "Compat", "LevelStudio", "Npc", "Gifter_Giftanny.png"]);
             AssetMan.Add("EditorSpr/Object_Gift", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "Gift.png"));
             AssetMan.Add("EditorSpr/Object_GiftBomb", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "Gift_Bomb.png"));
 

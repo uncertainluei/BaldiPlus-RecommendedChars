@@ -1,0 +1,94 @@
+{
+	// Options
+	"Opt_RecChars": "Rec. Chars\nPack",
+	 
+	"Opt_RecChars_Modules": "Modules",
+	"Opt_RecChars_Modules_Instructions": "Click on a module to toggle it on/off!",
+	"Tip_RecChars_ApplyModules":"Apply module toggles.\nUnapplied settings will not be saved.",
+	
+	"Tip_RecChars_Modules_Circle": "<b>TCMGBiMaE Circle</b>\n<b>Requester:</b> VerySugaryGoon\nThe speedy, happy-go-lucky shape from\nTCMG's Basics in Mods and Edits!",
+	"Tip_RecChars_Modules_GottaBully": "<b>Gotta Bully</b>\n<b>Requester:</b> VerySugaryGoon\nThe no-good bully broom (and his closet)\nfrom Playtime's Swapped Basics.",
+	"Tip_RecChars_Modules_ArtsWithWires": "<b>Arts with Wires</b>\n<b>Requester:</b> VerySugaryGoon\nThe \"sockpuppet\" from \nPlaytime's Swapped Basics/1st Prize's Mania.",
+	"Tip_RecChars_Modules_Bsodaa": "<b>Eveyone's Bsodaa</b>\n<b>Requester:</b> VerySugaryGoon\nBaldi and Playtime from Eveything is Bsodaa,\nwith their own room and mechanic.",
+	"Tip_RecChars_Modules_MrDaycare": "<b>Mr. Daycare</b>\n<b>Requester:</b> VerySugaryGoon\nThe alien daycare educator from Dave's House,\ndesigned by <color=red>MeltingRED</color>.",
+	"Tip_RecChars_Modules_Gifter": "<b>Gifter</b>\n<b>Requester:</b> idkblue21\nThe gift \"mail-boy\" from LOLdi!",
+	"Tip_RecChars_Modules_LockSock": "<b>Locks and Bolts</b>\n<b>Requester:</b> idkblue21\nThe padlock sockpuppet from\nBaldi's Item and Character Swap.",
+	"Tip_RecChars_Modules_BlueGuy": "<b>Blue, Guy</b>\n<b>Requester:</b> idkblue21\nThe dark blue bevel stickman from LOLdi!\nYes, the comma is intentional.",
+	"Tip_RecChars_Modules_SecondAward": "<b>2nd Award</b>\n<b>Requester:</b> Guymaker\nIt's 1st Prize, but slow and stuns characters.",
+	"Tip_RecChars_Modules_Carter": "<b>Carter</b>\n<b>Requester:</b> ComedicCat\nAn Arts and Crafters OC originating from a\nScratch project shared in 2022.",
+	"Tip_RecChars_Modules_MaintenanceMachine": "<b>Evil Maintenance Machine</b>\n<b>Requester:</b> ComedicCat\nIt's a maintenance machine that's powerful...\n...and EVIL!!",
+	"Tip_RecChars_Modules_Noongus": "<b>Noongus</b>\n<b>Requester:</b> apaswright\nAn unknown creature who loves bricks!",
+	"Tip_RecChars_Modules_Items_NerfGun": "<b>Nerf Gun</b>\n<b>Requester:</b> VerySugaryGoon\nA 'toy' water gun that prematurely ends Circle's game.\n<color=red>(Requires the Circle module to be enabled.)</color>",
+	"Tip_RecChars_Modules_Items_DoorKey": "<b>Door Key</b>\n<b>Requester:</b> VerySugaryGoon\nA three-use key that can unlock anything*.\n<color=#7F7F7F>(*except notebook-locked Daycare doors)</color>",
+	"Tip_RecChars_Modules_Items_Pie": "<b>Pie</b>\nAs seen in Dave's House! Dave couldn't appear here,\nso you might find others to fill in that gap!",
+	"Tip_RecChars_Modules_Items_BsodaMini": "<b>BSODA Mini</b>\nBSODA in small cans, given when yield is short!\n<color=red>(Requires the Eveyone's Bsodaa module to be enabled.)</color>",
+	"Tip_RecChars_Modules_Items_Psoda": "<b>PSODA</b>\nFormerly Cherry BSODA! It's a BSODA, but it bounces off walls.",
+	"Tip_RecChars_Modules_Items_LunchBox": "<b>Lunch Box</b>\n<b>Requester:</b> antoniofigo\nA rare box that can give you random food items.",
+	"Tip_RecChars_Modules_Items_BaldiCake": "<b>Baldi's Birthday Cake</b>\nEver wondered what that giant cake tastes like?\nBy the way, Baldi's too busy to throw a costume party.",
+	
+	"Opt_RecChars_Behaviors": "NPC Behavior",
+	"Opt_RecChars_Behaviors_OnlyOneNpcActivity": "Only 1 NPC Activity",
+	"Opt_RecChars_Behaviors_NerfCircle": "Nerf Circle",
+	"Opt_RecChars_Behaviors_NerfMrDaycare": "Nerf Mr. Daycare",
+	"Opt_RecChars_Behaviors_IntendedWires": "Intended Arts w. Wires",
+	"Opt_RecChars_Behaviors_IntendedGifter": "Intended Gifter",
+	"Tip_RecChars_Behaviors_OnlyOneNpcActivity": "Only lets one in-your-face NPC 'activity' be active at a time.\nExamples: Playtime/Circle's jumprope game, AwW's grabbing sequence.",
+	"Tip_RecChars_Behaviors_NerfCircle": "Nerfs Circle's speed and max jump count, increases his cooldowns,\nand makes the Nerf Gun cheaper and more common.",
+	"Tip_RecChars_Behaviors_NerfMrDaycare": "Nerfs Mr. Daycare's movement speed and guilt sensitivity, and\ncaps his timeout times to be less frustrating.",
+	"Tip_RecChars_Behaviors_IntendedWires": "Arts with Wires will not reset their stare time when\nthe player stops looking at them.",
+	"Tip_RecChars_Behaviors_IntendedGifter": "Gifter will behave almost exactly like his iteration\nfrom LOLdi's Public Alpha (Gifttany from BBRMS).",
+	
+	"Opt_RecChars_Misc": "Miscellaneous",
+	"Opt_RecChars_Misc_PartyMode": "Party Mode",
+	"Opt_RecChars_Misc_PartyMode_DateBased": "Date-Based",
+	"Opt_RecChars_Misc_PartyMode_ForceOff": "Force OFF",
+	"Opt_RecChars_Misc_PartyMode_ForceOn": "Force ON",
+	
+	"Opt_RecChars_Misc_GuaranteeSpawn": "Guarantee NPC Spawns",
+	"Opt_RecChars_Misc_LegacyTextures": "Legacy Textures",
+	"Tip_RecChars_ApplyMisc":"Apply miscellaneous toggles.\nUnapplied settings will not be saved.",
+	"Tip_RecChars_Misc_PartyMode": "Sets how Party Mode will trigger.\nIf date-based, then it will turn on only in May 1st-22nd.\n<color=red>Requires game restart for changes to apply!</color>",
+	"Tip_RecChars_Misc_GuaranteeSpawn": "Makes all the mod's NPCs force-spawn in their earliest floor.\n<color=red>Requires game restart for changes to apply!</color>",
+	"Tip_RecChars_Misc_LegacyTextures": "Reverts texture changes made throughout the mod's development\nto reflect those sent by the requesters.",
+		
+	"Opt_RecChars_RestartRequired": "<color=red>A game restart is required for these options to apply!\nKnowing this, do you wish to close the game?</color>",
+	
+	// SAVE TAGS
+	
+	// Info
+	"Txt_RecChars_InvalidTags": "No save tags!",
+	"Txt_RecChars_Modules": "Modules:",
+
+	"Txt_RecChars_InvalidVersion": "Unrecognized target version!",
+	"Txt_RecChars_Version_0": "v1.1-v1.2.2.3",
+	"Txt_RecChars_Version_1": "v1.3-v1.3.1",
+	"Txt_RecChars_Version_2": "v1.4+",
+
+	// Character Modules
+	"Txt_RecChars_Mdl_Bsodaa": "Eveyone's Bsodaa",
+	"Txt_RecChars_Mdl_Carter": "Carter",
+	"Txt_RecChars_Mdl_Circle": "TCMGBiMaE Circle",
+	"Txt_RecChars_Mdl_LockSock": "Locks and Bolts",
+	"Txt_RecChars_Mdl_MaintenanceMachine": "Evil Maintenance Machine",
+	"Txt_RecChars_Mdl_MrDaycare": "Mr. Daycare",
+	"Txt_RecChars_Mdl_Noongus": "Noongus",
+	"Txt_RecChars_Mdl_SecondAward": "2nd Award",
+	"Txt_RecChars_Mdl_ArtsWithWires": "Arts w. Wires",
+	"Txt_RecChars_Mdl_GottaBully": "Gotta Bully",
+	"Txt_RecChars_Mdl_BlueGuy": "Blue, Guy",
+	"Txt_RecChars_Mdl_Gifter": "Gifter",
+
+	// Item Modules
+	"Txt_RecChars_Mdl_BsodaMini": "BSODA Mini",
+	"Txt_RecChars_Mdl_LunchBox": "Lunch Box",
+	"Txt_RecChars_Mdl_NerfGun": "Nerf Gun",
+	"Txt_RecChars_Mdl_Pie": "Pie",
+	"Txt_RecChars_Mdl_Psoda": "PSODA",
+
+	// Older version module names
+	"Txt_RecChars_Mdl_SwappedDuo": "Swapped Duo",
+	"Txt_RecChars_Mdl_Loldi": "LOLdi Exchanges",
+
+	// Other config tags
+	"Txt_RecChars_Conf_GuaranteedSpawn": "Guaranteed NPC Spawns"
+}

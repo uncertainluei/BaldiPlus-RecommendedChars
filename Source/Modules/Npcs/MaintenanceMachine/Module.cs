@@ -1,5 +1,3 @@
-using HarmonyLib;
-
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
@@ -14,8 +12,6 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.UIElements;
 using System.Linq;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -25,6 +21,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "It's an evil maintenance machine that's powerful... and evil.", true)]
     public sealed partial class Module_MaintenanceMachine : RecCharsModule
     {
+        internal override byte IconId => 10;
+
         protected override void Initialized()
         {
             // Load texture assets
@@ -55,7 +53,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             machine.poster.textData[0].size = new(224, 32);
             PineDebugNpcIcons.AddIcon([machine], "BorderMaintenanceMachine.png");
 
-            machine.navigator.SetSpeed(25);
+            machine.navigator.SetSpeed(machine.normalSpeed);
             machine.navigator.accel = 15f;
 
             machine.spriteRenderer[0].sprite = AssetLoader.SpriteFromTexture2D(
@@ -80,11 +78,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelType.Maintenance.GetMeta().tags.Add("recchars:spawns_maintenance_machine");
         }
 
+        private int _collisionLayerMask;
         private void LoadDropEntities(MaintenanceMachine prefab)
         {
             Sprite[] shapeSprites = AssetLoader.SpritesFromSpritesheet(3, 3, 25f, new Vector2(0.5f, 0f), AssetMan.Get<Texture2D>("MMachineTex/PrimitiveShapes"));
             GameObject.DestroyImmediate(shapeSprites[7]);
             GameObject.DestroyImmediate(shapeSprites[8]);
+            _collisionLayerMask = ((ITM_NanaPeel)ItemMetaStorage.Instance.FindByEnum(Items.NanaPeel).value.item).entity.collisionLayerMask;
 
             // Spike
             PrimitiveDrop_Spike spike = CreateDropEntityBase<PrimitiveDrop_Spike>(shapeSprites[0]);
@@ -93,7 +93,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Cube
             PrimitiveDrop_Cube cube = CreateDropEntityBase<PrimitiveDrop_Cube>(shapeSprites[1]);
-            cube.audSquish = Resources.FindObjectsOfTypeAll<Balder_Entity>().First(x => x.GetInstanceID() >= 0).audSquish;
+            cube.audSquish = AssetFinder.FindAllOfType<Balder_Entity>(true).First().audSquish;
             prefab.entityPres.Add(cube);
 
             // Cylinder
@@ -101,6 +101,26 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             cylinder.audSlipLoop = AssetMan.Get<SoundObject>("Sfx/SlipLoop");
             cylinder.audSlipEnd = AssetMan.Get<SoundObject>("Sfx/Slip");
             prefab.entityPres.Add(cylinder);
+
+            // Dodecahedron
+            Sprite smallDodecahedron = Sprite.Create(shapeSprites[3].texture, shapeSprites[3].rect, new(0.5f, 0f), 40f, 0, SpriteMeshType.FullRect);
+            smallDodecahedron.name = shapeSprites[3].name+"_Small";
+
+            PrimitiveDrop_DodecahedronLarge dodecahedron = CreateDropEntityBase<PrimitiveDrop_DodecahedronLarge>(shapeSprites[3]);
+            dodecahedron.smallPre = CreateDropEntityBase<PrimitiveDrop_Dodecahedron>(smallDodecahedron);
+            dodecahedron.smallPre.coverCloud = GameObject.Instantiate(AssetFinder.FindOfTypeWithName<CoverCloud>("ChalkCloudStartsOff", true), MTM101BaldiDevAPI.prefabTransform);
+            dodecahedron.smallPre.coverCloud.name = "ChalkCloudSmall";
+            dodecahedron.smallPre.coverCloud.gameObject.SetActive(true);
+            ((BoxCollider)dodecahedron.smallPre.coverCloud.trigger).size = new(2.5f, 10f, 2.5f);
+            dodecahedron.smallPre.coverCloud.transform.GetChild(0).GetComponent<BoxCollider>().size = new(2.5f, 10f, 2.5f);
+            ParticleSystem.MainModule particles = dodecahedron.smallPre.coverCloud.particles.main;
+            particles.startSizeMultiplier = 4f;
+            particles.startSizeXMultiplier = 4f;
+            particles.maxParticles = 25;
+            ParticleSystem.ShapeModule shape = dodecahedron.smallPre.coverCloud.particles.shape;
+            shape.scale = new(2.5f, 8f, 2.5f);
+
+            prefab.entityPres.Add(dodecahedron);
 
             // Rounded Cuboid
             PrimitiveDrop_RoundedCuboid rounded = CreateDropEntityBase<PrimitiveDrop_RoundedCuboid>(shapeSprites[4]);
@@ -114,6 +134,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             rounded.entity.renderer = [rounded.sprite, rounded.puddleSprite];
             prefab.entityPres.Add(rounded);
 
+            // Sphere
+            PrimitiveDrop_Sphere sphere = CreateDropEntityBase<PrimitiveDrop_Sphere>(shapeSprites[5]);
+            sphere.popPre = AssetFinder.FindOfTypeWithName<QuickExplosion>("QuickPop", true);
+            prefab.entityPres.Add(sphere);
+
             // Pyramid
             PrimitiveDrop_Pyramid pyramid = CreateDropEntityBase<PrimitiveDrop_Pyramid>(shapeSprites[6]);
             prefab.entityPres.Add(pyramid);
@@ -124,6 +149,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Entity entity = new EntityBuilder()
                 .SetName(typeof(T).Name)
                 .SetBaseRadius(2.5f)
+                .SetLayerCollisionMask(_collisionLayerMask)
                 .AddTrigger(2.5f)
                 .AddDefaultRenderBaseFunction(sprite)
                 .Build();
@@ -146,10 +172,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (lvl.type.GetMeta()?.tags.Contains("recchars:spawns_maintenance_machine") == true)
             {
                 lvl.MarkAsNeverUnload();
-                if (RecommendedCharsConfig.guaranteeSpawnChar.Value)
-                    lvl.GetForcedNpcsInclusive().Add(ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine"));
-                else
-                    lvl.GetPotentialNpcsInclusive().Add(ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine").Weighted(200));
+                lvl.GetPotentialNpcsInclusive().Add(ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine").Weighted(RecommendedCharsConfig.guaranteeSpawnChar ? 9000 : 200));
             }
         }
     }

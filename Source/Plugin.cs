@@ -5,6 +5,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.OptionsAPI;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 
@@ -99,6 +100,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             RecommendedCharsSaveGameIO saveGameSystem = new(Info);
             ModdedSaveGame.AddSaveHandler(saveGameSystem);
             ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
+            CustomOptionsCore.OnMenuInitialize += (menu, handler) => { if (!CoreGameManager.Instance) handler.AddCategory<RecommendedCharsOptionsMenu>("Opt_RecChars").name = "RecChars"; };
 
             MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
         }
@@ -113,7 +115,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Items.json5");
             CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Ui.json5");
-            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "SaveTags.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Options.json5");
 
             // I could've made dummy modules for this but I'd rather spare y'all the drama and just do it here
             if (Chainloader.PluginInfos.ContainsKey(LevelStudioGuid))
@@ -132,15 +134,16 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             yield return "Grabbing base assets";
             
             // Sprite materials
-            Material[] materials = [.. Resources.FindObjectsOfTypeAll<Material>().Where(x => x.GetInstanceID() >= 0)];
+            Material[] materials = [.. AssetFinder.FindAllOfType<Material>(true)];
+            AssetMan.Add("Mat/TileBase", materials.First(x => x.name == "TileBase"));
             AssetMan.Add("Mat/SpriteBillboard", materials.First(x => x.name == "SpriteStandard_Billboard"));
             AssetMan.Add("Mat/SpriteNoBillboard", materials.First(x => x.name == "SpriteStandard_NoBillboard"));
             
             // Sound objects
-            SoundObject[] sounds = [.. Resources.FindObjectsOfTypeAll<SoundObject>().Where(x => x.GetInstanceID() >= 0)];
+            SoundObject[] sounds = [.. AssetFinder.FindAllOfType<SoundObject>(true)];
             AssetMan.Add("Sfx/Silence", sounds.First(x => x.name == "Silence"));
-            AssetMan.Add("Sfx/FoodCrunch", ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat);
 
+            AssetMan.Add("Sfx/FoodCrunch", ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat);
             ITM_NanaPeel banana = (ITM_NanaPeel)ItemMetaStorage.Instance.FindByEnum(Items.NanaPeel).value.item;
             AssetMan.Add("Sfx/Slip", banana.audEnd);
             AssetMan.Add("Sfx/SlipLoop", banana.audSlipping);
@@ -154,7 +157,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator RegisterPost()
         {
-            yield return 2;
+            yield return 3;
             yield return "Setting PineDebug icons";
             PineDebugNpcIcons.SetIcons();
 
@@ -171,10 +174,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 foreach (ItemMetaData itm in ItemMetaStorage.Instance.FindAllWithTags(true, legacyTag))
                 {
                     Log.LogWarning($"Item {itm.value.GetName()} from \"{itm.info.Metadata.Name}\" has legacy tag \"{legacyTag}\". Please replace it with \"{legacyItmTagMap[legacyTag]}\" to ensure compatibility with newer versions!");
-                    itm.tags.Add(legacyItmTagMap[legacyTag]);
                     itm.tags.Remove(legacyTag);
+                    itm.tags.Add(legacyItmTagMap[legacyTag]);
                 }
             }
+
+            yield return "Activating config callbacks";
+            bool editorInstalled = Chainloader.PluginInfos.ContainsKey(LevelStudioGuid);
+            RecommendedCharsConfig.legacyTextures.SettingChanged += (x, y) =>
+            {
+                ObjectCreation.UpdateRequiredTextures();
+                foreach (AbstractCaudexModule module in Info.GetActiveCaudexModules())
+                    ((RecCharsModule)module).LegacyTexturesToggle(editorInstalled);
+            };
         }
     }
 
@@ -220,7 +232,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             tags.Add("Version_"+TagVersion);
             foreach (string module in info.GetActiveCaudexModuleTags())
                 tags.Add(module);
-            if (tags.Count > 0 && RecommendedCharsConfig.guaranteeSpawnChar.Value)
+            if (tags.Count > 0 && RecommendedCharsConfig.guaranteeSpawnChar)
                 tags.Add("GuaranteedSpawn");
 
             return [.. tags];
@@ -252,7 +264,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 if (tags[i] == "GuaranteedSpawn")
                 {
-                    display = $"<b>{"Conf_RecChars_GuaranteedSpawn".Localize()}</b>\n" + display;
+                    display = $"<b>{"Txt_RecChars_Conf_GuaranteedSpawn".Localize()}</b>\n" + display;
                     continue;
                 }
 
@@ -262,7 +274,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 addComma = true;
                 entryCount++;
 
-                display += tags[i].Localize();
+                display += ("Txt_RecChars_"+tags[i]).Localize();
             }
             return display;
         }

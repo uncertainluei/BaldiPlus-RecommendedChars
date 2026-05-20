@@ -18,7 +18,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private static void InitializeStudioCompat()
         {
             // Load icon asset
-            AssetMan.Add("EditorSpr/Npc_ArtsWithWires", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "ArtsWithWires.png"));
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_ArtsWithWires", ["Textures", "Compat", "LevelStudio", "Npc", "ArtsWithWires.png"]);
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]

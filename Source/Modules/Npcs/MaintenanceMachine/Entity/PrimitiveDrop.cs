@@ -8,7 +8,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public AudioManager audMan;
         public SpriteRenderer sprite;
         public Entity entity;
-        private MaintenanceMachine machine;
+        protected MaintenanceMachine machine;
 
         protected float height = 5f, endHeight = 0f, gravity = -25f;
         protected bool Ready {get; private set;} = false;

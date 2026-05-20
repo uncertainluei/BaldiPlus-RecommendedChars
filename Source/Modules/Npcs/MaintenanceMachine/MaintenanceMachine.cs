@@ -8,8 +8,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public AudioManager audMan;
         public SoundObject audOhno, audClean;
         public List<PrimitiveDrop> entityPres = [];
-        public Vector2 delayTimeRange = new(30f, 60f); 
-        public Vector2 activeTimeRange = new(30f, 60f); 
+
+        public float normalSpeed = 25f, cleaningSpeed = 42f;
+        public Vector2 delayTimeRange = new(30f, 60f), activeTimeRange = new(30f, 60f); 
+
         private readonly List<Entity> entitiesSpawned = [];
         private DijkstraMap dijkstraMap;
         private NavigationState_TargetPosition targetState;
@@ -38,8 +40,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 // Destroy if it still exists
                 if (entitiesSpawned[0])
                     Destroy(entitiesSpawned[0].gameObject);
-
-                entitiesSpawned.RemoveAt(0);
             }
         }
 
@@ -55,7 +55,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Destroy(ent.gameObject);
 
             if (entitiesSpawned.Count == 0)
+            {
                 behaviorStateMachine.ChangeState(new MaintenanceMachine_WanderCool(this));
+                return;
+            }
+            TargetNearestEntity();
         }
 
         public void TargetNearestEntity()
@@ -123,6 +127,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Enter()
         {
             base.Enter();
+            machine.Navigator.maxSpeed = machine.normalSpeed;
             ChangeNavigationState(new NavigationState_WanderRandom(npc, 0, true));
         }
 
@@ -176,6 +181,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Initialize()
         {
             base.Initialize();
+            machine.Navigator.maxSpeed = machine.cleaningSpeed;
             machine.audMan.PlaySingle(machine.audOhno);
         }
 

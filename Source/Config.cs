@@ -5,14 +5,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     static class RecommendedCharsConfig
     {
         internal static ConfigEntry<bool> onlyOneNpcActivity;
-
-        internal static ConfigEntry<bool> nerfCircle;
-        internal static ConfigEntry<bool> nerfMrDaycare;
-        internal static ConfigEntry<bool> intendedWiresBehavior;
+        internal static ConfigEntry<bool> nerfCircle, nerfMrDaycare, intendedWires; // intendedGifter
         //internal static ConfigEntry<bool> intendedGifter;
 
         internal static ConfigEntry<PartyModeConfigMode> partyMode;
-        internal static ConfigEntry<bool> guaranteeSpawnChar;
+        internal static bool guaranteeSpawnChar;
+        internal static ConfigEntry<bool> guaranteeSpawnConf, legacyTextures;
 
 
         internal enum PartyModeConfigMode : byte
@@ -39,8 +37,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Behaviors.Nerfs",
                 "MrDaycare",
                 true,
-                "Nerfs Mr. Daycare's movement speed, guilt sensitivity and timeout times to be overall more manageable.");
-            intendedWiresBehavior = config.Bind(
+                "Nerfs Mr. Daycare's movement speed, guilt sensitivity and timeout times to be less frustrating.");
+            intendedWires = config.Bind(
                 "Behaviors",
                 "IntendedWiresBehavior",
                 true,
@@ -58,12 +56,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "Misc",
                 "PartyMode",
                 PartyModeConfigMode.DateBased,
-                "Sets how Party Mode will trigger. If \"DateBased\", then it will turn on only in May 1st-15th.");
-            guaranteeSpawnChar = config.Bind(
+                "Sets how Party Mode will trigger. If \"DateBased\", then it will turn on only in May 1st-22nd.");
+            guaranteeSpawnConf = config.Bind(
                 "Misc",
                 "GuaranteeCharacterSpawn",
                 false,
                 "All added NPCs will be guaranteed to spawn in their designated floor.");
+            guaranteeSpawnChar = guaranteeSpawnConf.Value;
+            legacyTextures = config.Bind(
+                "Misc",
+                "LegacyTextures",
+                false,
+                "Reverts texture changes made throughout the mod's development to reflect those sent by the requesters.");
         }
     }
 }

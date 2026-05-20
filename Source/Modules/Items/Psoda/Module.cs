@@ -24,10 +24,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("PSODA"), CaudexModuleSaveTag("Mdl_Psoda")]
     [CaudexModulePriority(-20)]
     [CaudexModuleConfig("Modules.Items", "Psoda",
-        "PSODA! It's a BSODA, but it bounces. Yes, I know Extra Content has it.", true)]
+        "PSODA (formerly Cherry BSODA)! It's a BSODA, but it bounces.", true)]
     public sealed partial class Module_Item_Psoda : RecCharsSubModule<Module_Item_BsodaMini>
     {
-        public override bool Enabled => true; // Use base.Enabled for adding the PSODA Mini variants
+        internal override byte IconId => 16;
+        public override bool Enabled => Info.ConfigEntry.Value; // Use DependencyExists for adding the PSODA Mini variants
 
         protected override void Initialized()
         {
@@ -73,7 +74,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add("Itm/Psoda", psoda);
 
             // PSODA Machine
-            SodaMachine sodaMachine = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<SodaMachine>().First(x => x.name == "SodaMachine" && x.GetInstanceID() >= 0), MTM101BaldiDevAPI.prefabTransform);
+            SodaMachine sodaMachine = GameObject.Instantiate(AssetFinder.FindOfTypeWithName<SodaMachine>("SodaMachine", true), MTM101BaldiDevAPI.prefabTransform);
             sodaMachine.name = "RecChars PsodaMachine";
             sodaMachine.item = psoda;
             sodaMachine.SetTextures(AssetMan.Get<Texture2D>("VendingTex/PsodaMachine"), AssetMan.Get<Texture2D>("VendingTex/PsodaMachine_Out"));
@@ -81,7 +82,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjMan.Add("Obj/PsodaMachine", sodaMachine);
 
             // PSODA Mini (if BSODA Mini is enabled)
-            if (!base.Enabled) return;
+            if (!DependencyExists) return;
 
             ItemObject miniPsoda = new ItemBuilder(Plugin)
             .SetNameAndDescription("Itm_RecChars_SmallPsoda", "Desc_RecChars_SmallPsoda")

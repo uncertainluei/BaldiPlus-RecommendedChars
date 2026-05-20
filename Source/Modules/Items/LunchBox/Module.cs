@@ -25,6 +25,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         "A rare box that can give you random food items.", true)]
     public sealed partial class Module_Item_LunchBox : RecCharsModule
     {
+        internal override byte IconId => 17;
+
         protected override void Initialized()
         {
             // Load texture assets
