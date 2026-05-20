@@ -89,7 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_secondaward", secondAward);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_secaward", secondAward.Poster);
             ObjMan.Add("Npc/SecondAward", secondAward);
-            NPCMetaStorage.Instance.Add(new(Plugin, [secondAward], secondAward.name, NPCMetaStorage.Instance.Get(Character.Prize).flags, []));
+            NPCMetaStorage.Instance.Add(new(Plugin, [secondAward], secondAward.name, NPCMetaStorage.Instance.Get(Character.Prize).flags, ["adv_exclusion_hammer_weakness"]));
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
