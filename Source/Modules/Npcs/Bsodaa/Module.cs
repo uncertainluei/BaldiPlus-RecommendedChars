@@ -98,7 +98,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CapsuleCollider collider = helper.GetComponent<CapsuleCollider>();
             collider.isTrigger = true;
             collider.height = 2.5f;
-            collider.radius = 0.4f;
+            collider.radius = 2.5f;
             collider.center = Vector3.down;
 
             ObjMan.Add("Npc/BsodaaHelper", helper);
