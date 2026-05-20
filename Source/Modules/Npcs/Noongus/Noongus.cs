@@ -12,6 +12,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override void Initialize()
         {
+            base.Initialize();
             behaviorStateMachine.ChangeState(new Noongus_Wander(this));
         }
     }

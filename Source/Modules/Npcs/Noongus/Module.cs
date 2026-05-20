@@ -52,7 +52,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             noongus.navigator.SetSpeed(20f);
 
             noongus.sprite = noongus.spriteRenderer[0];
-            noongus.sprite.transform.localPosition = Vector3.zero;
+            noongus.sprite.transform.localPosition = Vector3.up * -1.8f;
 
             noongus.sprite.sprite = sprites[0];
             noongus.sprIdle = sprites[0];
