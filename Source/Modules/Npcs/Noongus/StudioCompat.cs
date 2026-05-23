@@ -1,4 +1,5 @@
 ﻿using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.Registers;
 
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;

@@ -31,7 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Initialized()
         {
             // Load texture and audio assets
-            ObjectCreation.AddTexturesToAssetMan("SwapCloset/", ["Textures", "Environment", "Room", "SwapCloset"]);
+            ObjectCreation.AddTexturesToAssetManWLegacy("SwapCloset/", ["Textures", "Environment", "Room", "SwapCloset"]);
             ObjectCreation.AddTexturesToAssetMan("GottaBullyTex/", ["Textures", "Npc", "GottaBully"]);
             ObjectCreation.AddAudioToAssetMan("GottaBullyAud/", ["Audio", "Npc", "GottaBully"]);
             

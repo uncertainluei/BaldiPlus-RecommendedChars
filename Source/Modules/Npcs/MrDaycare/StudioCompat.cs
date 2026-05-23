@@ -8,17 +8,15 @@ using PlusStudioLevelLoader;
 
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_MrDaycare : RecCharsModule
+    [CaudexModule("Mr. Daycare (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_MrDaycare : RecCharsEditorSubModule<Module_MrDaycare>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load texture assets            
             AssetMan.Add("EditorSpr/Npc_MrDaycare", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "MrDaycare.png"));
@@ -37,7 +35,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "MrDaycare.json5");
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_mrdaycare", ObjMan.Get<MrDaycare>("Npc/MrDaycare_Nerfed"));
