@@ -5,23 +5,21 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
 using PlusLevelStudio.Editor;
 
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_MaintenanceMachine : RecCharsModule
+    [CaudexModule("Evil Maintenance Machine (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_MaintenanceMachine : RecCharsEditorSubModule<Module_MaintenanceMachine>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon asset
             AssetMan.Add("EditorSpr/Npc_MaintenanceMachine", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "MaintenanceMachine.png"));
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_maintmachine", ObjMan.Get<MaintenanceMachine>("Npc/MaintMachine"));

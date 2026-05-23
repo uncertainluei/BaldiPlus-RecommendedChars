@@ -7,21 +7,20 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_ArtsWithWires : RecCharsModule
+    [CaudexModule("Arts With Wires (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_ArtsWithWires : RecCharsEditorSubModule<Module_ArtsWithWires>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon asset
             ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_ArtsWithWires", ["Textures", "Compat", "LevelStudio", "Npc", "ArtsWithWires.png"]);
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_artswithwires", ObjMan.Get<ArtsWithWires>("Npc/ArtsWithWires"));

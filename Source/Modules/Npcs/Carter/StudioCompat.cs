@@ -5,23 +5,21 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
 using PlusLevelStudio.Editor;
 
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_Carter : RecCharsModule
+    [CaudexModule("TCMGBiMaE Circle (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_Carter : RecCharsEditorSubModule<Module_Carter>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon asset
             AssetMan.Add("EditorSpr/Npc_Carter", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Carter.png"));
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_carter", ObjMan.Get<Carter>("Npc/Carter"));

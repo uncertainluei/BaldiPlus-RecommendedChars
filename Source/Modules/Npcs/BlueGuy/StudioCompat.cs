@@ -9,11 +9,12 @@ using UnityEngine;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_BlueGuy : RecCharsModule
+    [CaudexModule("Blue, Guy (Editor"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_BlueGuy : RecCharsEditorSubModule<Module_BlueGuy>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_blueguy", ObjMan.Get<BlueGuy>("Npc/BlueGuy"));

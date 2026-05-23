@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Evil Maintenance Machine"), CaudexModuleSaveTag("Mdl_MaintenanceMachine")]
     [CaudexModuleConfig("Modules", "MaintenanceMachine",
         "It's an evil maintenance machine that's powerful... and evil.", true)]
-    public sealed partial class Module_MaintenanceMachine : RecCharsModule
+    public sealed class Module_MaintenanceMachine : RecCharsModule
     {
         internal override byte IconId => 10;
 
@@ -35,6 +35,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             // Add effect icons
             AssetMan.Add("StatusSpr/SpikeSlowdown", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("MMachineTex/SpikeSlowdownIcon"), 1));
             AssetMan.Add("StatusSpr/PyramidFlip", AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("MMachineTex/PyramidFlipIcon"), 1));
+
+            // Load patches
+            Hooks.PatchAll(typeof(MaintenanceMachinePatches));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

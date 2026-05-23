@@ -7,16 +7,15 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_Gifter : RecCharsModule
+    [CaudexModule("Gifter (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_Gifter : RecCharsEditorSubModule<Module_Gifter>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load texture assets
             ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Gifter", ["Textures", "Compat", "LevelStudio", "Npc", "Gifter.png"]);
@@ -28,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Gifter.json5");
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_gifter", ObjMan.Get<Gifter>("Npc/Gifter"));

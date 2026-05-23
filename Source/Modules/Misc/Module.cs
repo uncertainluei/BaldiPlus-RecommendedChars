@@ -4,24 +4,24 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 
+using PlusStudioLevelLoader;
+
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UnityEngine;
-
-using PlusStudioLevelLoader;
 using UnityEngine.AI;
-using System.IO;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Miscellaneous"), CaudexModulePriority(10)]
-    public sealed partial class Module_Misc : RecCharsModule
+    public sealed class Module_Misc : RecCharsModule
     {
         internal override byte IconId => 19;
 

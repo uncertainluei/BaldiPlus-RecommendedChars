@@ -1,24 +1,24 @@
 ﻿using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.Registers;
+
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
+
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UnityEngine;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_Noongus : RecCharsModule
+    [CaudexModule("Noongus (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_Noongus : RecCharsEditorSubModule<Module_Noongus>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon asset
             AssetMan.Add("EditorSpr/Npc_Noongus", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "Noongus.png"));
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_noongus", ObjMan.Get<Noongus>("Npc/Noongus"));

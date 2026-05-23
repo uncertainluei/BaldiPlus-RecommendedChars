@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using BepInEx.Bootstrap;
+using HarmonyLib;
 using MTM101BaldAPI.AssetTools;
 
 using System;
@@ -12,7 +13,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     public abstract class RecCharsModule : AbstractCaudexModule
     {
-        internal abstract byte IconId { get; }
+        internal virtual byte IconId => 0;
 
         internal static HashSet<RecCharsModule> allModulesInConfig = [];
         protected static AssetManager ObjMan => RecommendedCharsPlugin.ObjMan;
@@ -27,20 +28,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (Info.ConfigEntry != null)
                 allModulesInConfig.Add(this);
         }
-
-        internal void LegacyTexturesToggle(bool editorInstalled)
-        {
-            OnLegacyTexturesToggle();
-            if (editorInstalled) OnLegacyTexturesToggleEditor();
-        }
-
-        protected virtual void OnLegacyTexturesToggle() {}
-        protected virtual void OnLegacyTexturesToggleEditor() {}
     }
 
     public abstract class RecCharsSubModule<T> : RecCharsModule where T : RecCharsModule 
     {
-        private bool targetLoaded;
+        protected bool targetLoaded;
 
         protected override void Loaded()
         {
@@ -56,6 +48,22 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public bool DependencyExists => targetLoaded;
         public override bool Enabled => base.Enabled && targetLoaded;
+    }
+
+    /* Thank God someone figured out the one and only fucking way this actually works.
+     * .NET throws a fit if any class with ANYTHING referencing an unavailable assembly gets referenced.
+     * .NET developers would rarely write anything actually useful.
+     * .NET designers are assholes.
+     * If you haven't figured it out yet, it's a copy-pasta.
+     */
+    public abstract class RecCharsEditorSubModule<T> : RecCharsSubModule<T> where T : RecCharsModule
+    {
+        protected override void Loaded()
+        {
+            base.Loaded();
+            if (Chainloader.PluginInfos.ContainsKey(RecommendedCharsPlugin.LevelStudioGuid))
+                targetLoaded = false;
+        }
     }
 
     public abstract class ModuleSaveSystem

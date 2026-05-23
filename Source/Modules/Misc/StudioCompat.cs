@@ -4,22 +4,19 @@ using MTM101BaldAPI.Registers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
+using PlusStudioLevelLoader;
+using PlusStudioLevelFormat;
+
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using PlusStudioLevelLoader;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using PlusStudioLevelFormat;
-
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_Misc : RecCharsModule
+    [CaudexModule("Miscellaneous (Editor)"), CaudexModulePriority(-90)]
+    public sealed class EditorCompat_Misc : RecCharsEditorSubModule<Module_Misc>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load texture assets
             AssetMan.Add("EditorSpr/Poster_bee", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Poster", "bee.png"));
@@ -33,7 +30,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("EditorSpr/Obj_PartyElevator", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "PartyElevator.png"));
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             TextureContainer cafeTextures = LevelStudioPlugin.Instance.defaultRoomTextures["cafeteria"];
@@ -72,10 +69,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ]);
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Post)]
+        [CaudexLoadEvent(LoadingEventOrder.Post)]
         private static void AddFallbacksToMissingChars()
         {
             // TBA!!!!
+            // TODO: Create stuff for the ending
         }
     }
 }

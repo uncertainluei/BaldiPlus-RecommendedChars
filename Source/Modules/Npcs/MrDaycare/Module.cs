@@ -1,16 +1,20 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-
 using BepInEx.Bootstrap;
-
 using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
+using MTM101BaldAPI.UI;
+
+using PlusStudioLevelLoader;
 
 using System.Collections.Generic;
 using System.Linq;
+
+using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers;
@@ -18,21 +22,14 @@ using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
-using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
-
 using UnityEngine;
-
-using PlusStudioLevelLoader;
-using MTM101BaldAPI.UI;
-using MTM101BaldAPI.Reflection;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Mr. Daycare"), CaudexModuleSaveTag("Mdl_MrDaycare")]
     [CaudexModuleConfig("Modules", "MrDaycare",
         "Adds Mr. Daycare from Dave's House.", true)]
-    public sealed partial class Module_MrDaycare : RecCharsModule
+    public sealed class Module_MrDaycare : RecCharsModule
     {
         internal override byte IconId => 4;
 
@@ -90,8 +87,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CreateDaycareBlueprint();
             LoadMrDaycare();
 
-            CaudexEvents.OnItemUse += SetGuiltForItems;
             CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddPosterToLevel);
+
+            CaudexEvents.OnItemUse += (im, itm) => {
+                ItemMetaData meta = itm.GetMeta();
+                if (meta == null || meta.tags.Contains("recchars:daycare_exempt")) return;
+
+                if (meta.tags.Contains("food") && !meta.tags.Contains("drink"))
+                {
+                    DaycareGuiltManager.GetInstance(im.pm).BreakRule("Eating", 0.8f, 0.25f);
+                    return;
+                }
+                if (meta.tags.Contains("recchars:daycare_throwable"))
+                {
+                    DaycareGuiltManager.GetInstance(im.pm).BreakRule("Throwing", 0.8f, 0.25f);
+                    return;
+                }
+                if (meta.tags.Contains("recchars:daycare_loud") &&
+                    !im.pm.ec.silent &&
+                    !im.pm.ec.CellFromPosition(IntVector2.GetGridPosition(im.transform.position)).Silent)
+                {
+                    DaycareGuiltManager.GetInstance(im.pm).BreakRule("LoudSound", 1.5f, 0.5f);
+                    return;
+                }
+            };
         }
         private void LoadMrDaycare()
         {
@@ -475,30 +494,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (gen.Ec.npcsToSpawn.FirstOrDefault(x => x != null && x.Character == MrDaycare.charEnum) == null) return;
 
             gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Rules").Weighted(50));
-        }
-
-        private static void SetGuiltForItems(ItemManager itemMan, ItemObject itm)
-        {
-            ItemMetaData meta = itm.GetMeta();
-            if (meta == null || meta.tags.Contains("recchars:daycare_exempt")) return;
-
-            if (meta.tags.Contains("food") && !meta.tags.Contains("drink"))
-            {
-                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Eating", 0.8f, 0.25f);
-                return;
-            }
-            if (meta.tags.Contains("recchars:daycare_throwable"))
-            {
-                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("Throwing", 0.8f, 0.25f);
-                return;
-            }
-            if (meta.tags.Contains("recchars:daycare_loud") &&
-                !itemMan.pm.ec.silent &&
-                !itemMan.pm.ec.CellFromPosition(IntVector2.GetGridPosition(itemMan.transform.position)).Silent)
-            {
-                DaycareGuiltManager.GetInstance(itemMan.pm).BreakRule("LoudSound", 1.5f, 0.5f);
-                return;
-            }
         }
     }
 }

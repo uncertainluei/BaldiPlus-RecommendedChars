@@ -5,23 +5,18 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelLoader;
-
-using UnityEngine;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Birthday Cake"), CaudexModuleSaveTag("Mdl_BaldiCake")]
     [CaudexModuleConfig("Modules.Items", "BaldiCake",
         "Ever wondered what that giant cake tastes like?", true)]
-    public sealed partial class Module_Item_BaldiCake : RecCharsModule
+    public sealed class Module_Item_BaldiCake : RecCharsModule
     {
         internal override byte IconId => 18;
 
@@ -67,14 +62,5 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/BaldiCake", GenerationStageFlags.Addend);
             lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/BaldiCake").Weighted(RecommendedCharsPlugin.PartyMode ? 65 : 15));
         }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
-        private static void AddEditorContent()
-        {
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_baldicake");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => {
-                EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_zesty", new ItemTool("recchars_baldicake").SetModdedFrame());
-            });
-         }
     }
 }

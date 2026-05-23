@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Blue, Guy"), CaudexModuleSaveTag("Mdl_BlueGuy")]
     [CaudexModuleConfig("Modules", "BlueGuy",
         "Adds \"Blue, Guy\" from LOLdi's Basics.", true)]
-    public sealed partial class Module_BlueGuy : RecCharsModule
+    public sealed class Module_BlueGuy : RecCharsModule
     {
         internal override byte IconId => 7;
 

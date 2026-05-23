@@ -7,21 +7,20 @@ using PlusLevelStudio.Editor;
 
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_SecondAward : RecCharsModule
+    [CaudexModule("2nd Award (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_SecondAward : RecCharsEditorSubModule<Module_SecondAward>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon asset
             AssetMan.Add("EditorSpr/Npc_SecondAward", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "SecondAward.png"));
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_secondaward", ObjMan.Get<SecondAward>("Npc/SecondAward"));

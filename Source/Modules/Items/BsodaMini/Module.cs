@@ -1,12 +1,8 @@
-using HarmonyLib;
-
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelLoader;
 
 using UnityEngine;
@@ -14,7 +10,6 @@ using UnityEngine;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.Advanced;
 using BepInEx.Bootstrap;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -22,7 +17,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModulePriority(-10)]
     [CaudexModuleConfig("Modules.Items", "BsodaMini",
         "BSODA in small cans, given when yield is short!\n(Requires the Eveyone's Bsodaa module to be enabled.)", true)]
-    public sealed partial class Module_Item_BsodaMini : RecCharsSubModule<Module_Bsodaa>
+    public sealed class Module_Item_BsodaMini : RecCharsSubModule<Module_Bsodaa>
     {
         internal override byte IconId => 15;
 
@@ -85,16 +80,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             ObjMan.Get<BsodaaHelper>("Npc/BsodaaHelper").itmSmallBsoda = miniDietBsoda;
             ObjMan.Get<BsodaaHelper>("Npc/BsodaaHelper_Diet").itmSmallBsoda = miniDietBsoda;
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
-        private static void AddEditorContent()
-        {
-            LevelStudioPlugin.Instance.selectableShopItems.AddRange(["recchars_smallbsoda", "recchars_smalldietbsoda"]);
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => {
-                EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_dietbsoda", new ItemTool("recchars_smalldietbsoda").SetModdedFrame());
-                EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_bsoda", new ItemTool("recchars_smallbsoda").SetModdedFrame());
-            });
         }
 
         [CaudexLoadEventMod(RecommendedCharsPlugin.AdvancedGuid, LoadingEventOrder.Post)]

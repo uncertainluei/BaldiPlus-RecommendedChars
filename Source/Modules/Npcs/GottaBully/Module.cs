@@ -6,8 +6,6 @@ using MTM101BaldAPI.Registers;
 
 using PlusStudioLevelLoader;
 
-using System.Linq;
-
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
@@ -26,7 +24,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Gotta Bully"), CaudexModuleSaveTag("Mdl_GottaBully")]
     [CaudexModuleConfig("Modules", "GottaBully",
         "Adds Gotta Bully and his closet from Playtime's Swapped Basics.", true)]
-    public sealed partial class Module_GottaBully : RecCharsModule
+    public sealed class Module_GottaBully : RecCharsModule
     {
         internal override byte IconId => 1;
 
@@ -34,7 +32,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Load texture and audio assets
             ObjectCreation.AddTexturesToAssetMan("SwapCloset/", ["Textures", "Environment", "Room", "SwapCloset"]);
-            ObjectCreation.AddTexturesToAssetMan("SwapClosetPoster/", ["Textures", "Environment", "Poster", "SwapCloset"]);
             ObjectCreation.AddTexturesToAssetMan("GottaBullyTex/", ["Textures", "Npc", "GottaBully"]);
             ObjectCreation.AddAudioToAssetMan("GottaBullyAud/", ["Audio", "Npc", "GottaBully"]);
             
@@ -46,8 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Tapliasmy Chalkboard
-            ObjectCreation.CreatePoster("SwapClosetPoster/SubToTapliasmy", "Sub2Tapliasmy");
-
+            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "SubToTapliasmy"), "Sub2Tapliasmy");
             CreateSwapClosetBlueprint();
             LoadGottaBully();
         }

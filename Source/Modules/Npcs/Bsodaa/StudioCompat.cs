@@ -5,19 +5,17 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
 using PlusLevelStudio.Editor;
 
-using UnityEngine;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+using UnityEngine;
+
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_Bsodaa
+    [CaudexModule("Eveyone's Bsodaa (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_Bsodaa : RecCharsEditorSubModule<Module_Bsodaa>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon assets            
             ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Bsodaa", ["Textures", "Compat", "LevelStudio", "Npc", "Bsodaa.png"]);
@@ -32,7 +30,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Bsodaa.json5");
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_bsodaa", ObjMan.Get<EveyBsodaa>("Npc/Bsodaa"));

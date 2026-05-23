@@ -5,15 +5,12 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelLoader;
 
 using UnityEngine;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -95,13 +92,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Pie", GenerationStageFlags.Addend);
             lvl.MarkAsNeverUnload();
             lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/Pie").Weighted(35));
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
-        private static void AddEditorContent()
-        {
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_pie");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_pie").SetModdedFrame()));
         }
     }
 }

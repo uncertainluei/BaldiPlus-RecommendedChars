@@ -5,28 +5,23 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
-using PlusLevelStudio.Editor;
 using PlusStudioLevelLoader;
 
 using System.Linq;
-
-using UnityEngine;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 using UncertainLuei.CaudexLib.Registers;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
+using UnityEngine;
+
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Nerf Gun"), CaudexModuleSaveTag("Mdl_NerfGun")]
-    [CaudexModulePriority(-1)]
+    [CaudexModulePriority(-10)]
     [CaudexModuleConfig("Modules.Items", "NerfGun",
         "A 'toy' water gun that prematurely ends Circle's game.\n(Requires the Circle module to be enabled.)", true)]
-    public sealed partial class Module_Item_NerfGun : RecCharsSubModule<Module_Npc_Circle>
+    public sealed class Module_Item_NerfGun : RecCharsSubModule<Module_Circle>
     {
         internal override byte IconId => 12;
 
@@ -55,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_nerfgun", nerfGun);
             ObjMan.Add("Itm/NerfGun", nerfGun);
 
-            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "hnt_nerfgun.png"), "NerfGunHint", "nerfgun_hint");
+            ObjectCreation.CreatePoster(ObjectCreation.AddTextureToAssetManWLegacy("PstTex/hnt_nerfgun", ["Textures", "Environment", "Poster", "hnt_nerfgun.png"]), "NerfGunHint", "nerfgun_hint");
             CaudexGeneratorEvents.AddAction(CaudexGeneratorEventType.NpcPrep, AddItemsToLevel);
         }
 
@@ -79,21 +74,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             gen.ld.posters = gen.ld.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/NerfGunHint").Weighted(100));
             gen.ld.potentialItems = gen.ld.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/NerfGun").Weighted(50));
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
-        private static void AddEditorContent()
-        {
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_nerfgun");
-            EditorInterfaceModes.AddModeCallback(AddContentToMode);
-        }
-
-        private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
-        {
-            EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_scissors", new ItemTool("recchars_nerfgun").SetModdedFrame());
-            EditorInterfaceModes.AddToolToCategory(mode, "posters",
-                new PosterTool("recchars_nerfgun_hint").SetModdedFrame()
-            );
         }
     }
 }

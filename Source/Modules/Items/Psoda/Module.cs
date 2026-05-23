@@ -5,16 +5,12 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelLoader;
 
 using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
@@ -138,8 +134,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 if (strct.parameters.prefab == null || strct.parameters.prefab.Length == 0) continue;
                 WeightedGameObject sodaMachine = strct.parameters.prefab.FirstOrDefault(x =>
-                    x.selection?.name == "SodaMachine" &&
-                    x.selection?.GetInstanceID() >= 0);
+                    x.selection &&
+                    x.selection.name == "SodaMachine" &&
+                    x.selection.GetInstanceID() >= 0);
                 if (sodaMachine == null) continue;
 
                 strct.parameters.prefab = strct.parameters.prefab.AddToArray(psodaMachine.Weighted(6));
@@ -147,7 +144,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Post)]
-        private void ModifyRoomAssets()
+        private static void ModifyRoomAssets()
         {
             // Modify RoomAssets containing vending machines to include PSODA machines if possible
             Transform psodaMachine = ObjMan.Get<SodaMachine>("Obj/PsodaMachine").transform;
@@ -166,31 +163,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     swapData.potentialReplacements = swapData.potentialReplacements.AddToArray(psodaMachine.Weighted(6));
                 }
             }
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
-        {
-            // Load icon assets            
-            AssetMan.Add("EditorSpr/Object_PsodaMachine", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "PsodaMachine.png"));
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
-        private static void AddEditorContent()
-        {
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_psoda");
-            EditorInterface.AddObjectVisualWithMeshCollider("recchars_psodamachine", LevelLoaderPlugin.Instance.basicObjects["recchars_psodamachine"], convex: true);
-
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => {
-                EditorInterfaceModes.InsertToolInCategory(mode, "items", ObjMan.ContainsKey("Itm/PsodaMini") ? "item_recchars_smallbsoda" : "item_bsoda", new ItemTool("recchars_psoda").SetModdedFrame());
-                EditorInterfaceModes.InsertToolInCategory(mode, "objects", "object_bsodamachine", new ObjectTool("recchars_psodamachine", AssetMan.Get<Sprite>("EditorSpr/Object_PsodaMachine")).SetModdedFrame());
-            });
-
-            // PSODA Mini
-            if (!ObjMan.ContainsKey("Itm/PsodaMini")) return;
-
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_smallpsoda");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_recchars_psoda", new ItemTool("recchars_smallpsoda").SetModdedFrame()));
         }
     }
 }

@@ -5,25 +5,20 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using PlusLevelStudio;
-using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelLoader;
 
 using System.Collections.Generic;
 
-using UnityEngine;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("DoorKey"), CaudexModuleSaveTag("Mdl_DoorKey")]
     [CaudexModuleConfig("Modules.Items", "DoorKey",
         "A three-use key that can unlock anything*. (*notebook-locked Daycare doors not included)", true)]
-    public sealed partial class Module_Item_DoorKey : RecCharsModule
+    public sealed class Module_Item_DoorKey : RecCharsModule
     {
         internal override byte IconId => 13;
 
@@ -82,13 +77,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             lvl.MarkAsNeverUnload();
             lvl.potentialItems = lvl.potentialItems.AddToArray(ObjMan.Get<ItemObject>("Itm/DoorKey").Weighted(10));
-        }
-
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
-        private static void AddEditorContent()
-        {
-            LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_doorkey");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_keys", new ItemTool("recchars_doorkey").SetModdedFrame()));
         }
     }
 }

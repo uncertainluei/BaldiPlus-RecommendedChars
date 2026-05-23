@@ -1,5 +1,4 @@
-﻿using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.Registers;
+﻿using MTM101BaldAPI.Registers;
 
 using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
@@ -8,16 +7,15 @@ using PlusLevelStudio.Editor;
 using UnityEngine;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
 using UncertainLuei.CaudexLib.Util;
 using System.Collections.Generic;
 
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_Npc_Circle : RecCharsModule
+    [CaudexModule("TCMGBiMaE Circle (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_Circle : RecCharsEditorSubModule<Module_Circle>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load texture assets
             ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Circle", ["Textures", "Compat", "LevelStudio", "Npc", "Circle.png"]);
@@ -27,7 +25,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Compat", "LevelStudio", "Circle.json5");
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_circle", ObjMan.Get<CircleNpc>("Npc/Circle_Nerfed"));

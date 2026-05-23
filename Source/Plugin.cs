@@ -181,12 +181,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             yield return "Activating config callbacks";
             bool editorInstalled = Chainloader.PluginInfos.ContainsKey(LevelStudioGuid);
-            RecommendedCharsConfig.legacyTextures.SettingChanged += (x, y) =>
-            {
-                ObjectCreation.UpdateRequiredTextures();
-                foreach (AbstractCaudexModule module in Info.GetActiveCaudexModules())
-                    ((RecCharsModule)module).LegacyTexturesToggle(editorInstalled);
-            };
+            RecommendedCharsConfig.legacyTextures.SettingChanged += (x, y) => ObjectCreation.UpdateRequiredTextures();
         }
     }
 

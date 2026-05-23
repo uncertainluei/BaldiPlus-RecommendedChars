@@ -1,28 +1,32 @@
 ﻿using AsmResolver.DotNet;
 using BaldisBasicsPlusAdvanced.API;
 using HarmonyLib;
+
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components.Animation;
 using MTM101BaldAPI.Reflection;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
+
 using PlusStudioLevelLoader;
+
 using System;
 using System.Linq;
+
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("TCMGBiMaE Circle"), CaudexModuleSaveTag("Mdl_Circle")]
     [CaudexModuleConfig("Modules", "Circle",
         "Adds Circle from TCMG's Basics in Mods and Edits.", true)]
-    public sealed partial class Module_Npc_Circle : RecCharsModule
+    public sealed class Module_Circle : RecCharsModule
     {
         internal override byte IconId => 0;
 

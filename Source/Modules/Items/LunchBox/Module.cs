@@ -5,25 +5,25 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
-using UnityEngine;
+using PlusStudioLevelLoader;
+
+using System.Linq;
+using System.Collections.Generic;
+using System.IO;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
-
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
 
-using PlusStudioLevelLoader;
-using System.Linq;
-using System.Collections.Generic;
-using System.IO;
+using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Lunch Box"), CaudexModuleSaveTag("Mdl_LunchBox")]
     [CaudexModuleConfig("Modules.Items", "LunchBox",
         "A rare box that can give you random food items.", true)]
-    public sealed partial class Module_Item_LunchBox : RecCharsModule
+    public sealed class Module_Item_LunchBox : RecCharsModule
     {
         internal override byte IconId => 17;
 

@@ -9,8 +9,6 @@ using MTM101BaldAPI;
 
 using PlusStudioLevelLoader;
 
-using System.Linq;
-
 using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
@@ -29,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Eveyone's Bsodaa"), CaudexModuleSaveTag("Mdl_Bsodaa")]
     [CaudexModuleConfig("Modules", "Bsodaa",
         "Adds Baldi and Playtime from Eveything is Bsodaa, with their own room and mechanic.", true)]
-    public sealed partial class Module_Bsodaa : RecCharsModule
+    public sealed class Module_Bsodaa : RecCharsModule
     {
         internal override byte IconId => 3;
 

@@ -23,7 +23,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Carter"), CaudexModuleSaveTag("Mdl_Carter")]
     [CaudexModuleConfig("Modules", "Carter",
         "Adds Carter, an Arts and Crafters OC originating from a scratch project shared in 2022.", true)]
-    public sealed partial class Module_Carter : RecCharsModule
+    public sealed class Module_Carter : RecCharsModule
     {
         internal override byte IconId => 9;
 

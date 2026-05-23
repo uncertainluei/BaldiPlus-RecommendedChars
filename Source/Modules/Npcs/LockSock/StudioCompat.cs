@@ -4,23 +4,21 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor.Tools;
 using PlusLevelStudio.Editor;
 
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UnityEngine;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio;
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-
-namespace UncertainLuei.BaldiPlus.RecommendedChars
+namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
-    public partial class Module_LockSock : RecCharsModule
+    [CaudexModule("Locks and Bolts (Editor)"), CaudexModulePriority(-100)]
+    public sealed class EditorCompat_LockSock : RecCharsEditorSubModule<Module_LockSock>
     {
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Start)]
-        private static void InitializeStudioCompat()
+        protected override void Initialized()
         {
             // Load icon asset
             ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_LockSock", ["Textures", "Compat", "LevelStudio", "Npc", "LockSock.png"]);
         }
 
-        [CaudexLoadEventMod(RecommendedCharsPlugin.LevelStudioGuid, LoadingEventOrder.Pre)]
+        [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private static void AddEditorContent()
         {
             EditorInterface.AddNPCVisual("recchars_locksock", ObjMan.Get<LockSock>("Npc/LockSock"));

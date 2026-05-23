@@ -6,7 +6,6 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 
 using PlusStudioLevelLoader;
-using System.Linq;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
@@ -19,7 +18,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Gifter"), CaudexModuleSaveTag("Mdl_Gifter")]
     [CaudexModuleConfig("Modules", "Gifter",
         "Adds Gifter from LOLdi's Basics Public Alpha.", true)]
-    public sealed partial class Module_Gifter : RecCharsModule
+    public sealed class Module_Gifter : RecCharsModule
     {
         internal override byte IconId => 5;
 

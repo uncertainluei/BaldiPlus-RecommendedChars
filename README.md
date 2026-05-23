@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
 ![Version](https://img.shields.io/badge/version-1.4-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.14.1-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![BB+ version](https://img.shields.io/badge/bb+-0.14.2-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.3) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
@@ -8,7 +8,18 @@
 
 A decently sized and modular Baldi's Basics Plus mod that adds content with no rhyme or reason, usually requested by members in the Baldi GameBanana section and/or reinterpretations of characters from mods/fan games from the past.
 
+**Requests included in the mod:**
+- [Circle (TBIMAE) in Plus](https://gamebanana.com/requests/59865)
+- [Gotta Bully and Arts With Wires in Plus](https://gamebanana.com/requests/75363)
+- [Mr. Daycare and Eveyone's Bsodaa (and also Bsodaa Helper ig) in Plus](https://gamebanana.com/requests/75637)
+- [2nd Award in BB+](https://gamebanana.com/requests/75616)
+- [Blue Guy, Gifter and Locks n' Bolts in BB+](https://gamebanana.com/requests/78660)
+- [Lunch Box Item in BB+](https://gamebanana.com/requests/80350)
+- [A Somewhat Eventful Request (only Evil Maintenance Machine and Carter)](https://gamebanana.com/requests/80398)
+- [Noongus (Baldi's Basics Plus Character Idea) ](https://gamebanana.com/requests/91150)
+
 # Licensing and Credits
+The "Program" portion of the mod (the source code and the compiled library files) is licensed under the [Apache License, Version 2](LICENSE). <br>
 All code, unless stated otherwise, is licensed under the [GNU General Public License v3](LICENSE). Credits for other non-free assets can be seen [here](CREDITS.md).
 
 # Dependencies

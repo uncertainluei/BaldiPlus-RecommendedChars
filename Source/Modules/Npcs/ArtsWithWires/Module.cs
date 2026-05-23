@@ -6,22 +6,22 @@ using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
-using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using PlusStudioLevelLoader;
 
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+using UncertainLuei.CaudexLib.Registers.ModuleSystem;
+using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UnityEngine;
 using UnityEngine.UI;
-using UncertainLuei.CaudexLib.Util.Extensions;
-using PlusStudioLevelLoader;
-using UncertainLuei.CaudexLib.Util;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Arts with Wires"), CaudexModuleSaveTag("Mdl_ArtsWithWires")]
     [CaudexModuleConfig("Modules", "ArtsWithWires",
         "Adds Arts with Wires from Playtime's Swapped Basics/1st Prize's Mania.", true)]
-    public sealed partial class Module_ArtsWithWires : RecCharsModule
+    public sealed class Module_ArtsWithWires : RecCharsModule
     {
         internal override byte IconId => 2;
 

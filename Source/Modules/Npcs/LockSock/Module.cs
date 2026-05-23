@@ -20,7 +20,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     [CaudexModule("Locks and Bolts"), CaudexModuleSaveTag("Mdl_LockSock")]
     [CaudexModuleConfig("Modules", "LockSock",
         "Adds a padlock sockpuppet.", true)]
-    public sealed partial class Module_LockSock : RecCharsModule
+    public sealed class Module_LockSock : RecCharsModule
     {
         internal override byte IconId => 6;
 
