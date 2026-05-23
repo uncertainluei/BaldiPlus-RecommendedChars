@@ -19,8 +19,10 @@ A decently sized and modular Baldi's Basics Plus mod that adds content with no r
 - [Noongus (Baldi's Basics Plus Character Idea) ](https://gamebanana.com/requests/91150)
 
 # Licensing and Credits
-The "Program" portion of the mod (the source code and the compiled library files) is licensed under the [Apache License, Version 2](LICENSE). <br>
-All code, unless stated otherwise, is licensed under the [GNU General Public License v3](LICENSE). Credits for other non-free assets can be seen [here](CREDITS.md).
+The "Program" portion of the mod (the source code and the compiled library files) is licensed under the [Apache License, Version 2](LICENSE).
+
+The "Assets" portion [(anything in the Resources directory)](Resources/uncertainluei/recommendedchars) is comprised of both files created/edited by myself and assets ripped from other projects or contributed to by other individuals. <br>
+As per [the notice](Resources/uncertainluei/recommendedchars/NOTICE), any assets I've created are licensed under the [CC BY-NC-SA 4.0 license](Resources/uncertainluei/recommendedchars/LICENSE).
 
 # Dependencies
 
