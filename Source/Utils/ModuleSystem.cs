@@ -61,7 +61,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         protected override void Loaded()
         {
             base.Loaded();
-            if (Chainloader.PluginInfos.ContainsKey(RecommendedCharsPlugin.LevelStudioGuid))
+            if (!Chainloader.PluginInfos.ContainsKey(RecommendedCharsPlugin.LevelStudioGuid))
                 targetLoaded = false;
         }
     }

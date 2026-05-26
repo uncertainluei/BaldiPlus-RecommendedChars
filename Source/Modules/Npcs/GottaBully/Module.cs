@@ -43,7 +43,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void Load()
         {
             // Tapliasmy Chalkboard
-            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "SubToTapliasmy"), "Sub2Tapliasmy");
+            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "SubToTapliasmy.png"), "Sub2Tapliasmy");
             CreateSwapClosetBlueprint();
             LoadGottaBully();
         }

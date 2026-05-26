@@ -30,7 +30,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public override void Build()
         {
-
             pageTitle = CreateText("PageTitle", "Page", new Vector3(0, 56), BaldiFonts.ComicSans24, TextAlignmentOptions.Center, new Vector2(224, 28), Color.black, false);
             CreateButton(() => ChangePage(-1), menuArrowLeft, menuArrowLeftHighlight, "PrevPage", new(-112, 56), null);
             CreateButton(() => ChangePage(1), menuArrowRight, menuArrowRightHighlight, "NextPage", new(112, 56), null);
