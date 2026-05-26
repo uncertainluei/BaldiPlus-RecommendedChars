@@ -28,6 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             // Load texture assets
             ObjectCreation.AddTexturesToAssetManWLegacy("NoonTex/", ["Textures", "Npc", "Noongus"]);
+            ObjectCreation.AddAudioToAssetMan("NoonAud/", ["Audio", "Npc", "Noongus"]);
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Noongus.json5");
@@ -64,11 +65,47 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             noongus.audMan.usesSfx = true;
             noongus.audMan.usesVfx = true;
 
+            noongus.audIdle = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NoonAud/Noon_Idle"), "Vfx_RecChars_Noongus_Idle", SoundType.Voice, noongus.audMan.subtitleColor);
+            noongus.audSpotted = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NoonAud/Noon_Spotted"), "Vfx_RecChars_Noongus_Spotted", SoundType.Voice, noongus.audMan.subtitleColor);
+            noongus.audThrow = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NoonAud/BricksLanding"), "Sfx_RecChars_BricksLand", SoundType.Effect, Color.white);
+
+            LoadBricks(noongus);
+
             CharacterRadarColorPatch.colors.Add(noongus.character, noongus.audMan.subtitleColor);
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_noongus", noongus);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_noongus", noongus.Poster);
             ObjMan.Add("Npc/Noongus", noongus);
+        }
+
+        private void LoadBricks(Noongus prefab)
+        {
+            prefab.brickPre = new ITM_NanaPeel[2];
+
+            ITM_NanaPeel nana = (ITM_NanaPeel)ItemMetaStorage.Instance.FindByEnum(Items.NanaPeel).value.item;
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 30f, new Vector2(0.5f, 0f), AssetMan.Get<Texture2D>("NoonTex/NoongusBricks"));
+
+            Entity entity = new EntityBuilder()
+                .SetName("NoongusBrick_Red")
+                .SetBaseRadius(2f)
+                .SetLayerCollisionMask(nana.entity.collisionLayerMask)
+                .AddTrigger(2f)
+                .AddDefaultRenderBaseFunction(sprites[0])
+                .Build();
+            prefab.brickPre[0] = entity.gameObject.AddComponent<ITM_NanaPeel>();
+            prefab.brickPre[0].entity = entity;
+            prefab.brickPre[0].endAngle = 181f;
+            prefab.brickPre[0].speed = 26f;
+
+            PropagatedAudioManager audMan = entity.gameObject.AddComponent<PropagatedAudioManager>();
+            audMan.maxDistance = 80f;
+            prefab.brickPre[0].audEnd = nana.audEnd;
+            prefab.brickPre[0].audSlipping = nana.audSlipping;
+            prefab.brickPre[0].audSplat = AssetMan.Get<SoundObject>("Sfx/Silence");
+
+            prefab.brickPre[1] = GameObject.Instantiate(prefab.brickPre[0], MTM101BaldiDevAPI.prefabTransform);
+            prefab.brickPre[1].name = "NoongusBrick_Blue";
+            prefab.brickPre[1].GetComponentInChildren<SpriteRenderer>().sprite = sprites[1];
         }
 
         //[CaudexGenModEvent(GenerationModType.Addend)]

@@ -50,7 +50,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         }
 
         public float idleSoundChance = 0.1f;
-        public void HummingChance()
+        public void IdleSoundChance()
         {
             if (!audMan.QueuedAudioIsPlaying && Random.value <= idleSoundChance)
                 audMan.PlaySingle(audHumming);
@@ -107,7 +107,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void DestinationEmpty()
         {
             base.DestinationEmpty();
-            gifter.HummingChance();
+            gifter.IdleSoundChance();
         }
 
         public override void Update()

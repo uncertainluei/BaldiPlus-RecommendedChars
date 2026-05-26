@@ -19,6 +19,8 @@
 			https://nuget.bepinex.dev/v3/index.json;
 			https://nuget.samboy.dev/v3/index.json
 		</RestoreAdditionalProjectSources>
+
+		<BaseOutputPath>../Build/bin</BaseOutputPath>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -87,4 +89,27 @@
 			<HintPath>../Dependencies/Unity.TextMeshPro.dll</HintPath>
 		</Reference>
 	</ItemGroup>
+
+	<!--Release packaging-->
+	<Target Name="Package" AfterTargets="Build;Publish">
+		<PropertyGroup>
+			<ArchivePath>$(MSBuildProjectDirectory)/../Build/archive/$(Configuration)/</ArchivePath>
+			<ResourcesPath>$(ArchivePath)BALDI_Data/StreamingAssets/Modded</ResourcesPath>
+			<PluginsPath>$(ArchivePath)BepInEx/plugins</PluginsPath>
+		</PropertyGroup>
+		<ItemGroup>
+			<ResourcesDir Include="$(MSBuildProjectDirectory)/../Resources/**/*.*" />
+		</ItemGroup>
+		
+		<MakeDir Directories="$(ResourcesPath);$(PluginsPath)" />
+		<Copy SourceFiles="@(ResourcesDir)" DestinationFolder="$(ResourcesPath)/%(RecursiveDir)" />
+		<Copy SourceFiles=
+			  "$(OutputPath)$(AssemblyName).dll;
+			  $(OutputPath)$(AssemblyName).pdb;
+			  $(MSBuildProjectDirectory)/../LICENSE;
+			  $(MSBuildProjectDirectory)/../NOTICE;"
+		DestinationFolder="$(PluginsPath)" />
+		
+		<ZipDirectory SourceDirectory="$(ArchivePath)" DestinationFile="$(MSBuildProjectDirectory)/../build/$(AssemblyName)-v$(Version).zip" Overwrite="true" />
+	</Target>
 </Project>
