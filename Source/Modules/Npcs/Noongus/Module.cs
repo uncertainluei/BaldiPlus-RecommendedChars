@@ -44,6 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .AddMetaFlag(NPCFlags.Standard)
                 .SetMetaTags(["adv_exclusion_hammer_weakness"])
                 .AddTrigger()
+                .AddLooker()
                 .Build();
 
             PineDebugNpcIcons.AddIcon([noongus], "BorderNoongus.png");
@@ -83,7 +84,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             prefab.brickPre = new ITM_NanaPeel[2];
 
             ITM_NanaPeel nana = (ITM_NanaPeel)ItemMetaStorage.Instance.FindByEnum(Items.NanaPeel).value.item;
-            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 30f, new Vector2(0.5f, 0f), AssetMan.Get<Texture2D>("NoonTex/NoongusBricks"));
+            Sprite[] sprites = AssetLoader.SpritesFromSpritesheet(2, 1, 35f, new Vector2(0.5f, 0f), AssetMan.Get<Texture2D>("NoonTex/NoongusBricks"));
 
             Entity entity = new EntityBuilder()
                 .SetName("NoongusBrick_Red")
@@ -95,10 +96,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             prefab.brickPre[0] = entity.gameObject.AddComponent<ITM_NanaPeel>();
             prefab.brickPre[0].entity = entity;
             prefab.brickPre[0].endAngle = 181f;
+            prefab.brickPre[0].gravity = 25f;
+            prefab.brickPre[0].startHeight = 4f;
+            prefab.brickPre[0].endHeight = 0f;
+            prefab.brickPre[0].maxTime = 5f;
             prefab.brickPre[0].speed = 26f;
 
             PropagatedAudioManager audMan = entity.gameObject.AddComponent<PropagatedAudioManager>();
             audMan.maxDistance = 80f;
+            prefab.brickPre[0].audioManager = audMan;
             prefab.brickPre[0].audEnd = nana.audEnd;
             prefab.brickPre[0].audSlipping = nana.audSlipping;
             prefab.brickPre[0].audSplat = AssetMan.Get<SoundObject>("Sfx/Silence");

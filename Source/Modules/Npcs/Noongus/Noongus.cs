@@ -15,7 +15,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public ITM_NanaPeel[] brickPre;
 
-        public Vector2 brickThrowRange = new(4f, 9f);
+        public Vector2 brickThrowSpeedRange = new(20f, 50f);
+        public float coolDown = 20f, idleSoundChance = 0.01f;
 
         internal DijkstraMap dijkstraMap;
 
@@ -26,10 +27,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new Noongus_Wander(this));
         }
 
-        public float idleSoundChance = 0.15f;
         public void IdleSoundChance()
         {
-            if (!audMan.QueuedAudioIsPlaying && Random.value <= idleSoundChance)
+            if (!audMan.AnyAudioIsPlaying && Random.value <= idleSoundChance)
                 audMan.PlaySingle(audIdle);
         }
 
@@ -49,7 +49,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public void ThrowBricks(Vector3 forward)
         {
             audMan.PlaySingle(audThrow);
-
             Vector3 right = new(forward.z, 0, forward.x);
 
             List<Collider> colliders = [];
@@ -62,7 +61,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             {
                 ITM_NanaPeel brick = Instantiate(brickPre[Random.Range(0, brickPre.Length)], ec.transform);
                 brick.Spawn(ec, transform.position + right*4f*(Random.value - 0.5f),
-                    (forward + right*0.5f*(Random.value - 0.5f)).normalized, Random.Range(brickThrowRange.x, brickThrowRange.y));
+                    (forward + right*0.5f*(Random.value - 0.5f)).normalized, Random.Range(brickThrowSpeedRange.x, brickThrowSpeedRange.y));
                 dijkstraMap.targets.Add(brick.transform);
 
                 foreach (Collider collider in colliders)
@@ -137,7 +136,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Update()
         {
             base.Update();
-            if (noon.dijkstraMap.Value(IntVector2.GetGridPosition(noon.transform.position)) <= 3)
+            if (player.dijkstraMap.Value(IntVector2.GetGridPosition(noon.transform.position)) <= 3)
                 noon.behaviorStateMachine.ChangeState(new Noongus_ThrowBricks(noon, targetPos));
         }
 
@@ -152,7 +151,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void PlayerLost(PlayerManager player)
         {
             base.PlayerLost(player);
-            noon.audMan.FlushQueue(true);
             noon.behaviorStateMachine.ChangeState(new Noongus_Wander(noon));
         }
     }
@@ -166,7 +164,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Initialize()
         {
             base.Initialize();
-            direction = (direction-noon.transform.position).normalized;
+            direction = Directions.DirFromVector3(direction-noon.transform.position, 45).ToVector3();
             ChangeNavigationState(new NavigationState_DoNothing(noon, 0));
         }
 
@@ -207,7 +205,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ChangeNavigationState(new NavigationState_WanderFleeTriggerState(noon, 0, noon.dijkstraMap));
         }
 
-        private void Wander() => noon.behaviorStateMachine.ChangeState(new Noongus_Wander(noon, 30f));
+        private void Wander() => noon.behaviorStateMachine.ChangeState(new Noongus_Wander(noon, noon.coolDown));
 
         public override void DestinationEmpty()
         {
