@@ -16,7 +16,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public ITM_NanaPeel[] brickPre;
 
         public Vector2 brickThrowSpeedRange = new(20f, 50f);
-        public float coolDown = 20f, idleSoundChance = 0.01f;
+        public float coolDown = 20f, idleSoundChance = 0.09f;
 
         internal DijkstraMap dijkstraMap;
 
@@ -27,9 +27,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new Noongus_Wander(this));
         }
 
+        private float idleSoundDelay = 1f;
         public void IdleSoundChance()
         {
-            if (!audMan.AnyAudioIsPlaying && Random.value <= idleSoundChance)
+            idleSoundDelay -= Time.deltaTime * TimeScale;
+            if (idleSoundDelay > 0f || audMan.AnyAudioIsPlaying) return;
+
+            idleSoundDelay = 1f;
+            if (Random.value <= idleSoundChance)
                 audMan.PlaySingle(audIdle);
         }
 
@@ -136,7 +141,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void Update()
         {
             base.Update();
-            if (player.dijkstraMap.Value(IntVector2.GetGridPosition(noon.transform.position)) <= 3)
+            if (player.dijkstraMap.Value(IntVector2.GetGridPosition(noon.transform.position)) <= 2)
                 noon.behaviorStateMachine.ChangeState(new Noongus_ThrowBricks(noon, targetPos));
         }
 
