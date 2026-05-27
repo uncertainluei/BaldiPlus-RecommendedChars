@@ -97,7 +97,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class Gifter_Wander(Gifter gifter) : Gifter_StateBase(gifter)
     {
-
         public override void Enter()
         {
             base.Enter();
