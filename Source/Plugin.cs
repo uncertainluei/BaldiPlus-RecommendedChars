@@ -150,10 +150,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             AssetMan.Add("Sfx/SlipLoop", banana.audSlipping);
 
             yield return "Loading generic sounds";
-            AssetMan.Add("Sfx/FoodSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodSplat.ogg"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
-            AssetMan.Add("Sfx/CartoonEating", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodEatShort.ogg"), "Sfx_RecChars_EatingShort", SoundType.Effect, Color.white));
-            AssetMan.Add("Sfx/Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "Boing.ogg"), "Sfx_RecChars_Boing", SoundType.Effect, Color.white));            
-            AssetMan.Add("Sfx/FakeShatter", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FakeShatter.ogg"), "Sfx_GlassBreak", SoundType.Effect, Color.white, 0));
+            AssetMan.Add("Sfx/FoodSplat", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodSplat.wav"), "Sfx_RecChars_PieSplat", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/CartoonEating", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FoodEatShort.wav"), "Sfx_RecChars_EatingShort", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/Boing", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "Boing.wav"), "Sfx_RecChars_Boing", SoundType.Effect, Color.white));            
+            AssetMan.Add("Sfx/FakeShatter", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(this, "Audio", "Sfx", "FakeShatter.wav"), "Sfx_GlassBreak", SoundType.Effect, Color.white, 0));
         }
 
         private IEnumerator RegisterPost()

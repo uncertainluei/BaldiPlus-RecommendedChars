@@ -28,8 +28,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjectCreation.AddTexturesToAssetManWLegacy("GifterTex/", ["Textures", "Npc", "Gifter"]);
             ObjectCreation.AddAudioToAssetMan("GifterAud/", ["Audio", "Npc", "Gifter"]);
 
-            AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.ogg"), "Sfx_RecChars_GiftUnwrap", SoundType.Effect, Color.white));
-            AssetMan.Add("Sfx/BombFuse", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "BombFuse.ogg"), "Sfx_RecChars_BombFuse", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/GiftUnwrap", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "GiftUnwrap.wav"), "Sfx_RecChars_GiftUnwrap", SoundType.Effect, Color.white));
+            AssetMan.Add("Sfx/BombFuse", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "BombFuse.wav"), "Sfx_RecChars_BombFuse", SoundType.Effect, Color.white));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Gifter.json5");
