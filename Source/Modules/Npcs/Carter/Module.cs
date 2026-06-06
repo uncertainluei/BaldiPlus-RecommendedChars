@@ -35,10 +35,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             AssetMan.Add("CarterPst/ClassicCarterMissing", AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "ClassicCarterMissing.png"));
 
-            AssetMan.Add("Sfx/MapZoom", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_ZoomIn.wav"), "", SoundType.Effect, Color.white, 0));
-            AssetMan.Add("Sfx/MapWhoosh", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Whoosh.wav"), "", SoundType.Effect, Color.white, 0));
-            AssetMan.Add("Sfx/MapThump", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Thump.wav"), "", SoundType.Effect, Color.white, 0));
-            AssetMan.Add("Sfx/MapTurn", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Turn.wav"), "", SoundType.Effect, Color.white, 0));
+            AssetMan.Add("Sfx/MapZoom", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_ZoomIn.ogg"), "", SoundType.Effect, Color.white, 0));
+            AssetMan.Add("Sfx/MapWhoosh", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Whoosh.ogg"), "", SoundType.Effect, Color.white, 0));
+            AssetMan.Add("Sfx/MapThump", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Thump.ogg"), "", SoundType.Effect, Color.white, 0));
+            AssetMan.Add("Sfx/MapTurn", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "MapPage_Turn.ogg"), "", SoundType.Effect, Color.white, 0));
 
             // Load localization
             CaudexAssetLoader.LocalizationFromMod(Language.English, BasePlugin, "Lang", "English", "Npc", "Carter.json5");

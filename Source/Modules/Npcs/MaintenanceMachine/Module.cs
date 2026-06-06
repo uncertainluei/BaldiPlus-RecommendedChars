@@ -92,7 +92,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Spike
             PrimitiveDrop_Spike spike = CreateDropEntityBase<PrimitiveDrop_Spike>(shapeSprites[0]);
-            spike.audTouch = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "SourPlink.wav"), "Sfx_RecChars_SourPlink", SoundType.Effect, Color.white, 0);
+            spike.audTouch = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "SourPlink.ogg"), "Sfx_RecChars_SourPlink", SoundType.Effect, Color.white, 0);
             prefab.entityPres.Add(spike);
 
             // Cube

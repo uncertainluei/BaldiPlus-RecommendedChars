@@ -27,7 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjectCreation.AddTexturesToAssetMan("PieItm/", ["Textures", "Item", "Pie"]);
 
             // Load throw sound
-            AssetMan.Add("Sfx/PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.wav"), "", SoundType.Effect, Color.white, 0f));
+            AssetMan.Add("Sfx/PieThrow", ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "PieThrow.ogg"), "", SoundType.Effect, Color.white, 0f));
         }
 
         [CaudexLoadEvent(LoadingEventOrder.Pre)]

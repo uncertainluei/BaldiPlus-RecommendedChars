@@ -50,10 +50,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         internal static void AddAudioToAssetMan(string prefix, string[] paths)
         {
-            string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths)), "*.wav");
+            string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths)), "*.ogg");
             for (int i = 0; i < files.Length; i++)
             {
-                AudioClip aud = AssetLoader.AudioClipFromFile(files[i], AudioType.WAV);
+                AudioClip aud = AssetLoader.AudioClipFromFile(files[i], AudioType.OGGVORBIS);
                 RecommendedCharsPlugin.AssetMan.Add(prefix + aud.name, aud);
                 aud.name = "RecChars_" + aud.name;
             }
