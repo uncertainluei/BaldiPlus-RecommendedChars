@@ -6,13 +6,11 @@ using MTM101BaldAPI.Registers;
 
 using PlusStudioLevelLoader;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util;
 using UncertainLuei.CaudexLib.Util.Extensions;
-
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
-using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UnityEngine;
 
@@ -91,6 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/SwapCloset"), "SwapCloset");
 
             ObjMan.Add("Npc/GottaBully", gottaBully);
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(gottaBully, ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_Surprise"), "Vfx_RecChars_GBully_Surprise", SoundType.Voice, gottaBully.audMan.subtitleColor)));
             NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(gottaBullyMeta);
         }
@@ -114,7 +113,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             bullyRoom.posterChance = 0.25f;
             bullyRoom.posters = bullyRoomPoster;
 
-            LevelLoaderCompatHelper.AddRoom(bullyRoom, "recchars_swapcloset");
+            ObjectCreation.AddRoom(bullyRoom, "recchars_swapcloset");
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapflor", bullyRoom.texFloor);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_swapwall", bullyRoom.texWall);
             ObjMan.Add("Room/SwapCloset", bullyRoom);

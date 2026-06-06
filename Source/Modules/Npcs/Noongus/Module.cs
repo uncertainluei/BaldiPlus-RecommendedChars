@@ -76,6 +76,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_noongus", noongus);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_noongus", noongus.Poster);
+
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(noongus, sprites[2], noongus.audSpotted));
             ObjMan.Add("Npc/Noongus", noongus);
         }
 

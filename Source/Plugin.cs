@@ -116,6 +116,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Items.json5");
             CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Ui.json5");
             CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Options.json5");
+            CaudexAssetLoader.LocalizationFromMod(Language.English, this, "Lang", "English", "Spoiler.json5");
 
             // I could've made dummy modules for this but I'd rather spare y'all the drama and just do it here
             if (Chainloader.PluginInfos.ContainsKey(LevelStudioGuid))

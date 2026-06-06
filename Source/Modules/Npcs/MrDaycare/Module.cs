@@ -13,9 +13,9 @@ using PlusStudioLevelLoader;
 using System.Collections.Generic;
 using System.Linq;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
-using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
+using TMPro;
 
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
@@ -61,7 +61,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 textKey = "PST_RecChars_DaycareRules",
                 font = BaldiFonts.ComicSans12.FontAsset(),
                 fontSize = 12,
-                alignment = TMPro.TextAlignmentOptions.Center,
+                alignment = TextAlignmentOptions.Center,
                 position = new(55,31),
                 size = new(145,196)
             });
@@ -70,7 +70,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 textKey = "PST_RecChars_DaycareInfo1",
                 font = BaldiFonts.ComicSans18.FontAsset(),
                 fontSize = 18,
-                alignment = TMPro.TextAlignmentOptions.Center,
+                alignment = TextAlignmentOptions.Center,
                 position = new(57,177),
                 size = new(140,48)
             }, new PosterTextData() {
@@ -78,7 +78,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 textKey = "PST_RecChars_DaycareInfo2",
                 font = BaldiFonts.ComicSans12.FontAsset(),
                 fontSize = 12,
-                alignment = TMPro.TextAlignmentOptions.Center,
+                alignment = TextAlignmentOptions.Center,
                 position = new(57,37),
                 size = new(140,144)
             });
@@ -212,6 +212,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", unnerfedDaycare);
             SetMrDaycarePrefab();
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(daycare));
             RecommendedCharsConfig.nerfMrDaycare.SettingChanged += (x, y) =>
             {
                 SetMrDaycarePrefab();
@@ -300,7 +301,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.functionContainer.AddChalkboardBuilder(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Rules"));
             daycareRoom.functionContainer.AddChalkboardBuilder(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Clock"));
 
-            LevelLoaderCompatHelper.AddRoom(daycareRoom);
+            ObjectCreation.AddRoom(daycareRoom);
 
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycareflor", daycareRoom.texFloor);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycarewall", daycareRoom.texWall);

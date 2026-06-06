@@ -4,6 +4,8 @@
 	"Ed_Tool_room_recchars_partycafeteria_Desc": "Bananas and balloons are littered across the floor in this room.",
 	"Ed_Tool_room_recchars_partycafeterianonanas_Title": "Party Cafeteria (No 'Nanas)",
 	"Ed_Tool_room_recchars_partycafeterianonanas_Desc": "Only balloons spawn in this room.",
+	"Ed_Tool_room_recchars_partycafeteriawin_Title": "Party Cafeteria (Ending)",
+	"Ed_Tool_room_recchars_partycafeteriawin_Desc": "Exclusively for use in the Ending.",
 
 	// Cake
 	"Ed_Tool_object_recchars_cake_Title": "Giant Cake",
@@ -31,5 +33,15 @@
 	"Ed_Tool_object_recchars_painting6_Title": "Losky Painting",
 	"Ed_Tool_object_recchars_painting6_Desc": "Why couldn't he be my teacher?",
 	"Ed_Tool_object_recchars_painting7_Title": "Corrupted Painting",
-	"Ed_Tool_object_recchars_painting7_Desc": "..."
+	"Ed_Tool_object_recchars_painting7_Desc": "...",
+	
+	// Invisible Wall
+	"Ed_Tool_object_recchars_invisiblewall_Title": "Invisible Wall",
+	"Ed_Tool_object_recchars_invisiblewall_Desc": "The theme tune of the Invisible Wall:\nIt's an invisible wall, that's invisible, and a wall.",
+
+	// Surprise NPCs
+	"Ed_Tool_object_recchars_surprisebaldi_Title": "Surprise Baldi",
+	"Ed_Tool_object_recchars_surprisebaldi_Desc": "\"Surprise! Go on, blow out the candle!\"",
+	"Ed_Tool_object_recchars_surprisenpc_Title": "Surprise NPC",
+	"Ed_Tool_object_recchars_surprisenpc_Desc": "Is picked by the Party Cafeteria ending"
 }

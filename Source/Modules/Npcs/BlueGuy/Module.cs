@@ -74,6 +74,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_blueguy", bluGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_blueguy", bluGuy.Poster);
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(bluGuy, sprites[1]));
             ObjMan.Add("Npc/BlueGuy", bluGuy);
         }
 

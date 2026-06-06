@@ -19,9 +19,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
         {
             // Load icon assets            
             ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_Bsodaa", ["Textures", "Compat", "LevelStudio", "Npc", "Bsodaa.png"]);
-
-            AssetMan.Add("EditorSpr/Npc_BsodaaHelper", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "BsodaaHelper.png"));
-            AssetMan.Add("EditorSpr/Npc_BsodaaHelper_Diet", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Npc", "BsodaaHelper_Diet.png"));
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_BsodaaHelper", ["Textures", "Compat", "LevelStudio", "Npc", "BsodaaHelper.png"]);
+            ObjectCreation.AddSpriteToAssetManWLegacy("EditorSpr/Npc_BsodaaHelper_Diet", ["Textures", "Compat", "LevelStudio", "Npc", "BsodaaHelper_Diet.png"]);
 
             AssetMan.Add("EditorSpr/Room_BsodaaRoom", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Room", "BsodaaRoom.png"));
             AssetMan.Add("EditorSpr/Light_Bsodaa", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Light", "Bsodaa.png"));

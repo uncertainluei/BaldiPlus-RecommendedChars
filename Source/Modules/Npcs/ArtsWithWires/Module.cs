@@ -107,6 +107,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_artswithwires", artsWithWires);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_wires", artsWithWires.Poster);
             ObjMan.Add("Npc/ArtsWithWires", artsWithWires);
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(artsWithWires, sprites[1]));
 
             RecommendedCharsConfig.intendedWires.SettingChanged += (x,y) => artsWithWires.stareStacks = RecommendedCharsConfig.intendedWires.Value;
         }

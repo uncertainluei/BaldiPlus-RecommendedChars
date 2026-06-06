@@ -103,6 +103,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_gifter", gifter.Poster);
 
             PineDebugNpcIcons.AddIcon([gifter], "BorderGifter.png");
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(gifter, gifter.audGift[1]));
             ObjMan.Add("Npc/Gifter", gifter);
         }
 

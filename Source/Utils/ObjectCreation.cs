@@ -101,6 +101,41 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 UpdateTextureInAssetMan(info.key, info.path, info.legacyPath);
         }
 
+        internal static Texture2D OverlayTexture(this Texture2D copyTo, Texture2D copyFrom, Rect? rect, Color maskColor, Color? stopColor)
+        {
+            bool hasStopColor = stopColor != null;
+            rect ??= new(0, 0, copyFrom.width, copyFrom.height);
+            Color[] overlayPixels = copyTo.GetPixels();
+
+            RenderTexture temporary = RenderTexture.GetTemporary(copyFrom.width, copyFrom.height, 24);
+            Graphics.Blit(copyFrom, temporary);
+            temporary.filterMode = copyTo.filterMode;
+            copyTo.ReadPixels(rect.Value, 0, 0);
+            RenderTexture.ReleaseTemporary(temporary);
+
+            Color[] newPixels = copyTo.GetPixels();
+
+            for (int i = 0, c = newPixels.Length; i < c; i++)
+            {
+                if (hasStopColor && overlayPixels[i] == stopColor)
+                    break;
+                if (overlayPixels[i] != maskColor)
+                    newPixels[i] = overlayPixels[i];
+            }
+            copyTo.SetPixels(newPixels);
+            copyTo.Apply();
+            return copyTo;
+        }
+
+        internal static Texture2D OverlayTexture(this Texture2D copyTo, Sprite copyFrom, Color maskColor, Color? stopColor)
+            => copyTo.OverlayTexture(copyFrom.texture, copyFrom.rect, maskColor, stopColor);
+
+        internal static Texture2D OverlayTexture(this Texture2D copyTo, Sprite copyFrom, Color? maskColor = null)
+        {
+            maskColor ??= Color.clear;
+            return copyTo.OverlayTexture(copyFrom, maskColor.Value, Color.magenta);
+        }
+
         /*internal static void UpdateTexturesInAssetMan(string prefix, string[] paths)
         {
             string[] files = Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), Path.Combine(paths), "Legacy"), "*.png");
@@ -133,7 +168,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             tex.LoadImage(File.ReadAllBytes(path));
         }
 
-        
+        internal static void AddRoom(CaudexRoomBlueprint blueprint) => AddRoom(blueprint, "recchars_" + blueprint.name.ToLower());
+        internal static void AddRoom(CaudexRoomBlueprint blueprint, string id)
+        {
+            RoomSettings settings = new(blueprint.category, blueprint.type, blueprint.color, blueprint.doorMats, blueprint.mapMaterial);
+            settings.container = blueprint.functionContainer;
+            LevelLoaderPlugin.Instance.roomSettings.Add(id, settings);
+        }
 
         internal static WeightedRoomAsset[] RoomAssetsFromDirectory(string dir, params int[] weights)
             => RoomAssetsFromDirectory(null, dir, weights);
@@ -180,6 +221,19 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
             return rooms.ToArray();
         }
+
+        private static BaldiLevel GetLevelData(params string[] paths)
+        {
+            string path = Path.Combine(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Layouts"), Path.Combine(paths));
+            BinaryReader reader = new(File.OpenRead(path));
+            return BaldiLevel.Read(reader);
+        }
+
+        internal static LevelAsset LevelAssetFromPath(params string[] paths)
+            => LevelImporter.LoadLevelAsset(GetLevelData(paths));
+
+        internal static SceneObject SceneObjectFromPath(params string[] paths)
+            => LevelImporter.CreateSceneObject(GetLevelData(paths));
 
         internal static X SwapComponentSimple<T, X>(this T original) where T : MonoBehaviour where X : T
             => original.gameObject.SwapComponent<T, X>(original, false);

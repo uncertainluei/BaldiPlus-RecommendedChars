@@ -170,6 +170,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_carter", carter);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_carter", carter.Poster);
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(carter));
             ObjMan.Add("Npc/Carter", carter);
         }
 

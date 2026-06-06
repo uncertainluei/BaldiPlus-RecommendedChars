@@ -13,7 +13,9 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Quaternion zero = Quaternion.Euler(new());
             for (int i = 0; i < balloonCount; i++)
             {
-                Instantiate(balloonPres[Random.Range(0, balloonPres.Length)], room.ec.RealRoomRand(room), zero, room.ec.transform).Initialize(room);
+                Instantiate(balloonPres[Random.Range(0, balloonPres.Length)],
+                    room.ec.CellFromPosition(room.entitySafeCells[Random.Range(0, room.entitySafeCells.Count)]).CenterWorldPosition,
+                    zero, room.ec.transform).Initialize(room);
             }
         }
     }

@@ -9,7 +9,6 @@ using MTM101BaldAPI;
 
 using PlusStudioLevelLoader;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 
 using UncertainLuei.CaudexLib.Objects;
@@ -117,7 +116,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             dummy.potentialRoomAssets = [];
             dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "PST_PRI_RecChars_BsodaaHelper1", "PST_PRI_RecChars_BsodaaHelper2");
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaahelper", dummy.Poster);
-            
+
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(sprites[0], helper.sprite.transform.localPosition.y, (PropagatedAudioManager)helper.audMan, helper.audLaugh));
             ObjMan.Add("Npc/BsodaaHelperDummy", dummy);
         }
 
@@ -141,6 +141,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             bsodaaGuy.spriteRenderer[0].transform.localPosition = Vector3.up * -1.08f;
             bsodaaGuy.spriteRenderer[0].sprite = sprites[0];
+            Sprite happySprite = sprites[1];
 
             bsodaaGuy.navigator.accel = 10f;
             bsodaaGuy.navigator.speed = 14f;
@@ -191,6 +192,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(bsodaaGuy, happySprite, bsodaaGuy.audSuccess[0]));
 
             bsodaaGuy.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Bsodaa"), "Bsodaa",
                 50, 50, 50, 25, 25, 25, 25, 150);
@@ -231,7 +233,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 roomFunction.GetComponent<BsodaaRoomFunction>()
             ];
 
-            LevelLoaderCompatHelper.AddRoom(bsodaaRoom);
+            ObjectCreation.AddRoom(bsodaaRoom);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaflor", bsodaaRoom.texFloor);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaawall", bsodaaRoom.texWall);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_bsodaaceil", bsodaaRoom.texCeil);

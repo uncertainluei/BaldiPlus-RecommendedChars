@@ -2,15 +2,18 @@
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.ObjectCreation;
+using MTM101BaldAPI.PlusExtensions;
 using MTM101BaldAPI.Registers;
-
+using MTM101BaldAPI.UI;
 using PlusStudioLevelLoader;
-
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using TMPro;
 
-using UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelLoader;
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Objects;
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
 using UncertainLuei.CaudexLib.Util.Extensions;
@@ -27,9 +30,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected override void Initialized()
         {
-            // Load texture assets
+            // Load texture and audio assets
             ObjectCreation.AddTexturesToAssetMan("CakeTex/", ["Textures", "Environment", "Structure", "Cake"]);
             ObjectCreation.AddTexturesToAssetMan("PartyElevateTex/", ["Textures", "Environment", "Structure", "PartyElevator"]);
+            ObjectCreation.AddTexturesToAssetMan("SecretPstTex/", ["Textures", "Environment", "Poster", "Secret"]);
+            ObjectCreation.AddTexturesToAssetMan("SecretAreaTex/", ["Textures", "Environment", "Room", "Secret"]);
+            ObjectCreation.AddTexturesToAssetMan("NpcOverlays/", ["Textures", "Npc", "Overlays"]);
+            ObjectCreation.AddAudioToAssetMan("NpcSurprises/", ["Audio", "Npc", "Misc"]);
+
+            // Load patches
+            Hooks.PatchAll(typeof(SpoilerAreaPatches));
+            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.Name == "Raycast" && x.GetParameters().Length == 5 && x.GetParameters()[4].IsOut), new HarmonyMethod(AccessTools.Method(typeof(SpoilerAreaPatches), "LookerRaycast")));
         }
 
         private WeightedRoomAsset[] newCafeterias;
@@ -37,59 +48,227 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexLoadEvent(LoadingEventOrder.Pre)]
         private void Load()
         {
-            // bee poster
-            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "bee.png"), "bee");
+            LoadPosters();
 
-            // BBCR Party Style Objects
             _baseMat = AssetMan.Get<Material>("Mat/TileBase");
             _baseShader = AssetFinder.FindOfTypeWithName<Shader>("Shader Graphs/Standard", true);
 
+            // BBCR Party Style Objects
             LoadCakeObj(
                 CreateMaterial("CakeTex/CakeSide"),
                 CreateMaterial("CakeTex/CakeTop"),
                 CreateMaterial("CakeTex/Candle")
             );
             LoadPartyElevatorObj(
-                CreateMaterial(AssetFinder.FindOfTypeWithName<Texture2D>("DiamongPlateFloor", true), "DiamondPlateFloor"),
+                CreateMaterial(AssetFinder.FindOfTypeWithName<Texture2D>("DiamongPlateFloor", true), "DiamondPlateFloor", true),
                 CreateMaterial("PartyElevateTex/PantographSide"),
                 CreateMaterial("PartyElevateTex/PantographFront"),
-                CreateMaterial("PartyElevateTex/MetalFence")
+                CreateMaterial("PartyElevateTex/MetalFence", true)
             );
             LoadArtPaintings();
 
-            Balloon[] balloons = ((PartyEvent)RandomEventMetaStorage.Instance.Get(RandomEventType.Party).value).balloon;
+            CreatePartyRooms();
+            CreatePartyWinObjects();
+            CreatePartyWinSurpriseNpcs();
 
-            // Party Cafeteria
-            RoomAsset cafeteria = Resources.FindObjectsOfTypeAll<RoomAsset>().First(x => x.GetInstanceID() >= 0 && x.roomFunctionContainer != null && x.roomFunctionContainer.name.StartsWith("Cafeteria"));
-            CaudexRoomBlueprint cafeBlueprint = new(Plugin, "PartyCafeteria", cafeteria);
-            ObjMan.Add("Room/CafeParty", cafeBlueprint);
-            cafeBlueprint.functionContainer = GameObject.Instantiate(cafeBlueprint.functionContainer, MTM101BaldiDevAPI.prefabTransform);
-            cafeBlueprint.functionContainer.name = "CafeteriaPartyRoomFunction";
-            BalloonRoomFunction balloonFunction = cafeBlueprint.functionContainer.AddFunction<BalloonRoomFunction>();
-            balloonFunction.balloonCount = 10;
-            balloonFunction.balloonPres = balloons;
-            LevelLoaderCompatHelper.AddRoom(cafeBlueprint);
+            LoadPartyWinLevel();
+        }
 
-            newCafeterias = ObjectCreation.RoomAssetsFromDirectory(cafeBlueprint, Path.Combine("Cafeteria", "Party"));
+        private void LoadPosters()
+        {
+            // bee poster
+            ObjectCreation.CreatePoster(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Environment", "Poster", "bee.png"), "bee");
 
-            LevelLoaderCompatHelper.AddRoom(cafeBlueprint, "recchars_partycafeterianonanas");
-            RoomFunctionContainer noNanasFunction = GameObject.Instantiate(cafeBlueprint.functionContainer, MTM101BaldiDevAPI.prefabTransform);
-            noNanasFunction.name = "CafeteriaPartyRoomFunction_NoNanas";
-            noNanasFunction.RemoveFunction<NanaPeelRoomFunction>();
-            LevelLoaderPlugin.Instance.roomSettings["recchars_partycafeterianonanas"].container = noNanasFunction;
+            // Ending level posters
+            ObjectCreation.CreatePoster("SecretPstTex/FerrisWheel", "FerrisWheel");
+            ObjectCreation.CreatePoster("SecretPstTex/MagicEDwayne", "MagicEDwayne");
+            ObjectCreation.CreatePoster("SecretPstTex/JonJedi", "JonJedi");
+            ObjectCreation.CreatePoster("SecretPstTex/TheSun", "TheSun");
+
+            ObjectCreation.CreatePoster("SecretPstTex/Meaning", "Meaning", new PosterTextData()
+            {
+                color = Color.black,
+                textKey = "PST_RecChars_Meaning_1",
+                font = BaldiFonts.ComicSans18.FontAsset(),
+                fontSize = 18,
+                alignment = TextAlignmentOptions.Top,
+                position = new(0, 184),
+                size = new(256, 72)
+            }, new PosterTextData()
+            {
+                color = Color.black,
+                textKey = "PST_RecChars_Meaning_2",
+                font = BaldiFonts.ComicSans18.FontAsset(),
+                fontSize = 18,
+                alignment = TextAlignmentOptions.Bottom,
+                position = new(0, 0),
+                size = new(256, 72)
+            });
+
+            PosterObject comic = ObjectCreation.CreatePoster("SecretPstTex/Comic_Andy1", "Comic_Andy", "andycomic", new PosterTextData()
+            {
+                color = Color.gray,
+                textKey = "PST_RecChars_Comic_Andy1_1",
+                font = BaldiFonts.ComicSans12.FontAsset(),
+                fontSize = 12,
+                alignment = TextAlignmentOptions.TopLeft,
+                position = new(32, 180),
+                size = new(192, 12)
+            }, new PosterTextData()
+            {
+                color = Color.black,
+                textKey = "PST_RecChars_Comic_Andy1_2",
+                font = BaldiFonts.ComicSans12.FontAsset(),
+                fontSize = 12,
+                alignment = TextAlignmentOptions.Center,
+                position = new(100, 160),
+                size = new(50, 12)
+            }, new PosterTextData()
+            {
+                color = Color.black,
+                textKey = "PST_RecChars_Comic_Andy1_3",
+                font = BaldiFonts.ComicSans12.FontAsset(),
+                fontSize = 12,
+                alignment = TextAlignmentOptions.Top,
+                position = new(140, 80),
+                size = new(64, 32)
+            });
+            comic.multiPosterArray = new PosterObject[4];
+            comic.multiPosterArray[0] = comic;
+            comic.multiPosterArray[1] = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("SecretPstTex/Comic_Andy2"), 
+            [
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_Comic_Andy2_1",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Top,
+                    position = new(32, 166),
+                    size = new(112, 26)
+                }, 
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_Comic_Andy2_2",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Center,
+                    position = new(86, 64),
+                    size = new(69, 46)
+                }
+            ]);
+            comic.multiPosterArray[1].name = "Comic_Andy2";
+            comic.multiPosterArray[2] = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("SecretPstTex/Comic_Andy3"),
+            [
+                new()
+                {
+                    color = Color.gray,
+                    textKey = "PST_RecChars_Comic_Andy3_1",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.TopLeft,
+                    position = new(32, 180),
+                    size = new(144, 12)
+                },
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_Comic_Andy3_2",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Center,
+                    position = new(32, 136),
+                    size = new(75, 40)
+                },
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_Comic_Andy3_3",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Center,
+                    position = new(128, 144),
+                    size = new(40, 32)
+                }
+            ]);
+            comic.multiPosterArray[2].name = "Comic_Andy3";
+            comic.multiPosterArray[3] = ObjectCreators.CreatePosterObject(AssetMan.Get<Texture2D>("SecretPstTex/Comic_Andy4"),
+            [
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_Comic_Andy4_1",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Left,
+                    position = new(32, 166),
+                    size = new(64, 26)
+                },
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_Comic_Andy4_2",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Right,
+                    position = new(160, 176),
+                    size = new(64, 16)
+                },
+            ]);
+            comic.multiPosterArray[3].name = "Comic_Andy4";
+
+            PosterObject activityPoster = AssetFinder.FindOfTypeWithName<PosterObject>("Chk_Act_MathMachine", true);
+            activityPoster = GameObject.Instantiate(activityPoster);
+            activityPoster.name = "Chk_Act_Paintings";
+            activityPoster.textData[0].textKey = "PST_RecChars_CHK_PaintingsTitle";
+            activityPoster.textData[1].textKey = "PST_RecChars_CHK_PaintingsDesc";
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_chk_paintings", activityPoster);
+
+            ExtendedPosterObject wantedPoster = ScriptableObject.CreateInstance<ExtendedPosterObject>();
+            wantedPoster.name = "WantedBulletin";
+            wantedPoster.baseTexture = AssetFinder.FindOfTypeWithName<Texture2D>("BulletinBoard_Blank", true);
+            wantedPoster.overlayData = [new(AssetMan.Get<Texture2D>("SecretPstTex/WantedOverlay"), new(0,0))];
+            wantedPoster.textData = [
+                new()
+                {
+                    color = Color.black,
+                    style = FontStyles.Bold,
+                    textKey = "PST_RecChars_WantedBulletin_1",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Bottom,
+                    position = new(68, 184),
+                    size = new(110, 12)
+                },
+                new()
+                {
+                    color = Color.black,
+                    textKey = "PST_RecChars_WantedBulletin_2",
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = 12,
+                    alignment = TextAlignmentOptions.Top,
+                    position = new(70, 60),
+                    size = new(110, 50)
+                }
+            ];
+            LevelLoaderPlugin.Instance.posterAliases.Add("recchars_wantedbulletin", wantedPoster);
         }
 
         private Material _baseMat;
         private Shader _baseShader;
-        private Material CreateMaterial(Texture2D tex, string name)
+        private Material CreateMaterial(Texture2D tex, string name, bool zWrite = false)
         {
             Material newMat = new(_baseMat) { name = name };
             newMat.shader = _baseShader;
             newMat.SetMainTexture(tex);
+            newMat.enableInstancing = false;
+            if (zWrite)
+                newMat.SetFloat("_Offset", 0.015f);
             return newMat;
         }
-        private Material CreateMaterial(string path)
-            => CreateMaterial(AssetMan.Get<Texture2D>(path), Path.GetFileNameWithoutExtension(path));
+        private Material CreateMaterial(string path, bool zWrite = false)
+            => CreateMaterial(AssetMan.Get<Texture2D>(path), Path.GetFileNameWithoutExtension(path), zWrite);
 
         private void LoadCakeObj(params Material[] mats)
         {
@@ -149,10 +328,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private void LoadArtPaintings()
         {
-            Sprite[] paintingSprites = AssetLoader.SpritesFromSpritesheet(
-                2, 4, 70f, Vector2.one*0.5f,
-                AssetLoader.TextureFromMod(BasePlugin,"Textures","Environment","Room","Classroom","ArtPaintings.png")
-            );
+            Sprite[] paintingSprites = AssetLoader.SpritesFromSpritesheet(2, 4, 70f, Vector2.one*0.5f, AssetMan.Get<Texture2D>("SecretAreaTex/ArtPaintings"));
 
             Notebook notebookObj = GameObject.Instantiate(AssetFinder.FindAllOfType<Notebook>(true).First(), MTM101BaldiDevAPI.prefabTransform);
             Painting paintingObj = notebookObj.gameObject.AddComponent<Painting>();
@@ -174,6 +350,223 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
+        private void CreatePartyRooms()
+        {
+            Balloon[] balloons = ((PartyEvent)RandomEventMetaStorage.Instance.Get(RandomEventType.Party).value).balloon;
+
+            RoomAsset cafeteria = Resources.FindObjectsOfTypeAll<RoomAsset>().First(x => x.GetInstanceID() >= 0 && x.roomFunctionContainer != null && x.roomFunctionContainer.name.StartsWith("Cafeteria"));
+            CaudexRoomBlueprint cafeBlueprint = new(Plugin, "PartyCafeteria", cafeteria);
+            ObjMan.Add("Room/CafeParty", cafeBlueprint);
+            cafeBlueprint.functionContainer = GameObject.Instantiate(cafeBlueprint.functionContainer, MTM101BaldiDevAPI.prefabTransform);
+            cafeBlueprint.functionContainer.name = "CafeteriaPartyRoomFunction";
+            BalloonRoomFunction balloonFunction = cafeBlueprint.functionContainer.AddFunction<BalloonRoomFunction>();
+            balloonFunction.balloonCount = 10;
+            balloonFunction.balloonPres = balloons;
+            ObjectCreation.AddRoom(cafeBlueprint);
+
+            newCafeterias = ObjectCreation.RoomAssetsFromDirectory(cafeBlueprint, Path.Combine("Cafeteria", "Party"));
+
+            ObjectCreation.AddRoom(cafeBlueprint, "recchars_partycafeterianonanas");
+            RoomFunctionContainer noNanasFunction = GameObject.Instantiate(cafeBlueprint.functionContainer, MTM101BaldiDevAPI.prefabTransform);
+            noNanasFunction.name = "CafeteriaPartyRoomFunction_NoNanas";
+            noNanasFunction.RemoveFunction<NanaPeelRoomFunction>();
+            LevelLoaderPlugin.Instance.roomSettings["recchars_partycafeterianonanas"].container = noNanasFunction;
+
+            // Ending Variant
+            ObjectCreation.AddRoom(cafeBlueprint, "recchars_partycafeteriawin");
+            noNanasFunction = GameObject.Instantiate(noNanasFunction, MTM101BaldiDevAPI.prefabTransform);
+            noNanasFunction.name = "CafeteriaPartyRoomFunction_Win";
+            noNanasFunction.AddFunction<PartyWinRoomFunction>();
+            LevelLoaderPlugin.Instance.roomSettings["recchars_partycafeteriawin"].container = noNanasFunction;
+        }
+
+        private void CreatePartyWinObjects()
+        {
+            // Invisible Wall
+            GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            newObject.name = "InvisibleWall";
+            newObject.ConvertToPrefab(true);
+            MeshRenderer renderer = newObject.GetComponent<MeshRenderer>();
+            renderer.sharedMaterial = CreateMaterial(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Compat", "LevelStudio", "InvisWallPlaceholder.png"),
+                "InvisibleWall");
+            renderer.enabled = false;
+            newObject.transform.localScale = Vector3.one*10f;
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_invisiblewall", newObject);
+
+            // Triggers
+            newObject = new("ElevatorTrigger", typeof(PartyLiftTrigger), typeof(BoxCollider));
+            newObject.ConvertToPrefab(true);
+            BoxCollider trigger = newObject.GetComponent<BoxCollider>();
+            trigger.size = Vector3.one*5f;
+            trigger.isTrigger = true;
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_elevatortrigger", newObject);
+            AssetMan.Add("Mat/ElevatorTrigger", CreateMaterial(AssetLoader.TextureFromMod(BasePlugin, "Textures", "Compat", "LevelStudio", "TriggerPlaceholder.png"),
+                "ElevatorTrigger"));
+
+            newObject = new("CandleTrigger", typeof(PartyBlowTrigger), typeof(BoxCollider));
+            newObject.ConvertToPrefab(true);
+            trigger = newObject.GetComponent<BoxCollider>();
+            trigger.size = Vector3.one * 3f;
+            trigger.isTrigger = true;
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_candletrigger", newObject);
+
+            // Baldi's Office Room
+            RoomFunctionContainer container = new GameObject("BaldiOfficeRoomFunction", typeof(RoomFunctionContainer)).GetComponent<RoomFunctionContainer>();
+            container.gameObject.ConvertToPrefab(true);
+            container.functions = [];
+            Balloon[] balloons = ObjMan.Get<CaudexRoomBlueprint>("Room/CafeParty").functionContainer.GetComponent<BalloonRoomFunction>().balloonPres;
+            container.AddFunction<BalloonRoomFunction>().balloonPres = balloons;
+            StandardDoorMats doorMat = AssetFinder.FindOfTypeWithName<StandardDoorMats>("BaldiLabDoorSet", true);
+            doorMat = ObjectCreators.CreateDoorDataObject("BaldiOfficeDoor",
+                AssetMan.Get<Texture2D>("SecretAreaTex/BaldiOfficeDoor_Open").OverlayTexture((Texture2D)doorMat.open.mainTexture, null, Color.clear, Color.magenta),
+                AssetMan.Get<Texture2D>("SecretAreaTex/BaldiOfficeDoor_Shut").OverlayTexture((Texture2D)doorMat.shut.mainTexture, null, Color.clear, Color.magenta)
+            );
+            RoomSettings settings = new(RoomCategory.Office, RoomType.Room, Color.yellow, doorMat);
+            settings.container = container;
+            LevelLoaderPlugin.Instance.roomSettings.Add("recchars_baldioffice", settings);
+
+            // Baldloons + Spawner
+            Sprite[] sprites = AssetLoader.SpritesFromSpriteSheetCount(AssetMan.Get<Texture2D>("SecretAreaTex/Baldloons"), 128, 256, 32, 5);
+            Balloon[] baldloons = new Balloon[4];
+            SpriteRenderer spriteImg;
+            for (int i = 0; i < 4; i++)
+            {
+                baldloons[i] = GameObject.Instantiate(balloons[0], MTM101BaldiDevAPI.prefabTransform);
+                baldloons[i].name = "Baldloon_"+i;
+                spriteImg = baldloons[i].GetComponentInChildren<SpriteRenderer>();
+                spriteImg.sprite = sprites[i];
+                spriteImg.transform.localPosition = Vector3.up * -0.54f;
+            }
+
+            newObject = new GameObject("Structure_PartyWinBalloonSpawner", typeof(BalloonSpawnerStructure));
+            newObject.ConvertToPrefab(true);
+            ObjMan.Add("Strct/PartyWinBaldloonSpawner", new StructureWithParameters()
+            {
+                prefab = newObject.GetComponent<BalloonSpawnerStructure>(),
+                parameters = new() { prefab = baldloons.Select(x => x.gameObject.Weighted(100)).ToArray(), minMax = [new(3,9)]}
+            });
+        }
+
+        private void CreatePartyWinSurpriseNpcs()
+        {
+            Sprite[] vanillaSprites = AssetFinder.FindAllOfType<Sprite>(true);
+
+            // Surprise Baldi
+            ClickableSpecialFunctionTrigger tutorialBaldi = AssetFinder.FindOfTypeWithName<ClickableSpecialFunctionTrigger>("Baldi_Tutorial_27", true);
+            tutorialBaldi = GameObject.Instantiate(tutorialBaldi, MTM101BaldiDevAPI.prefabTransform);
+            tutorialBaldi.name = "SurpriseBaldi";
+            GameObject baldiObject = tutorialBaldi.gameObject;
+            GameObject.DestroyImmediate(tutorialBaldi);
+            GameObject.DestroyImmediate(baldiObject.transform.GetChild(1).gameObject); // Capsule collider
+            GameObject.DestroyImmediate(baldiObject.GetComponent<Rigidbody>());
+            Entity entity = baldiObject.GetComponent<Entity>();
+            GameObject.DestroyImmediate(entity.trigger);
+            GameObject.DestroyImmediate(entity.collider);
+            GameObject.DestroyImmediate(entity.externalActivity);
+            GameObject.DestroyImmediate(entity);
+            SpriteRenderer spriteRenderer = baldiObject.GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer.sprite = vanillaSprites.First(x => x.name == "Baldi_Talk_Standing_Sheet_0");
+            spriteRenderer.material = AssetMan.Get<Material>("Mat/SpriteNoBillboard");
+            GameObject spriteObject = spriteRenderer.gameObject;
+            spriteRenderer = GameObject.Instantiate(spriteRenderer, spriteRenderer.transform, false);
+            spriteRenderer.name = "PartyHat";
+            spriteRenderer.transform.localPosition = Vector3.back * 0.001f;
+            spriteRenderer.sprite = AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Baldi"), 32f);
+            spriteObject.AddComponent<BillboardUpdater>();
+            SurpriseNpcBase supriseBaldi = baldiObject.AddComponent<SurpriseNpcBase>();
+            supriseBaldi.audMan = supriseBaldi.GetComponent<PropagatedAudioManager>();
+            supriseBaldi.audSurprise = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/BAL_Surprise"), "Vfx_BAL_PartySurprise1", SoundType.Voice, Color.green, 6.98f);
+            supriseBaldi.audSurprise.additionalKeys = [new() { key = "Vfx_BAL_PartySurprise2", time = 3f }];
+            baldiObject.SetActive(false);
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_surprisebaldi", baldiObject);
+
+            // Random Surprise NPC
+            GameObject surpriseObject = new("SurpriseNpc_Random", typeof(SurpriseNpc));
+            surpriseObject.ConvertToPrefab(true);
+            surpriseObject.SetActive(false);
+            GameObject rendererBase = new("RendererBase");
+            rendererBase.transform.parent = surpriseObject.transform;
+            spriteRenderer = ObjectCreation.CreateSpriteBillboard(AssetLoader.SpriteFromMod(BasePlugin, Vector2.one / 2f, 15f, "Textures", "Compat", "LevelStudio", "SupriseNpcPlaceholder.png"), default, rendererBase.transform);
+            SurpriseNpc surpriseNpc = surpriseObject.GetComponent<SurpriseNpc>();
+            surpriseNpc.audMan = surpriseObject.AddComponent<PropagatedAudioManager>();
+            surpriseNpc.audMan.usesVfx = true;
+            surpriseNpc.audMan.overrideSubtitleColor = true;
+            surpriseNpc.rendererBase = rendererBase;
+            surpriseNpc.spriteRenderer = spriteRenderer;
+            LevelLoaderPlugin.Instance.basicObjects.Add("recchars_surprisenpc", surpriseObject);
+
+            // Vanilla Surprise NPC variants
+            Principal principal = (Principal)NPCMetaStorage.Instance.Get(Character.Principal).value;
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+                principal,
+                AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Principal").OverlayTexture(principal.chasingSprite), new Vector2(0.5f, 0.4f), 65f),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/PRI_NoSurprises"), "Vfx_PRI_NoSurprises", SoundType.Voice, new(0f, 30 / 255f, 123 / 255f), 1.75f)
+            ));
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+                NPCMetaStorage.Instance.Get(Character.Playtime).value,
+                AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Playtime").OverlayTexture(vanillaSprites.First(x => x.name == "Playtime_6")), 100f),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/PT_Surprise"), "Vfx_Playtime_Surprise", SoundType.Voice, Color.red, 2.38f)
+            ));
+            ArtsAndCrafters crafters = (ArtsAndCrafters)NPCMetaStorage.Instance.Get(Character.Crafters).value;
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(
+                crafters, crafters.angrySprite,
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/CFT_Parrot"), "Vfx_Crafters_Parrot", SoundType.Voice, Color.white)
+            ));
+            LookAtGuy theTest = (LookAtGuy)NPCMetaStorage.Instance.Get(Character.LookAt).value;
+            Vector3 pos = theTest.headTransform.localPosition;
+            pos.y = theTest.maxHeadHeight;
+            theTest.headTransform.localPosition = pos;
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(
+                theTest, theTest.audActivate
+            ));
+            NPC npc = NPCMetaStorage.Instance.Get(Character.Bully).value;
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+                npc,
+                AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Bully").OverlayTexture(npc.spriteRenderer[0].sprite, Color.green), 26f),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/BUL_Gift"), "Vfx_Bully_Gift", SoundType.Voice, new(1f, 162 / 255f, 0f), 6.84f)
+            ));
+            npc = NPCMetaStorage.Instance.Get(Character.Sweep).value;
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+                npc,
+                AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/GottaSweep").OverlayTexture(npc.spriteRenderer[0].sprite), 26f),
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/GS_Surprise"), "Vfx_Sweep_Surprise", SoundType.Voice, new(0f, 159 / 255f, 16 / 255f), 2.42f)
+            ));
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(
+                NPCMetaStorage.Instance.Get(Character.Prize).value,
+                ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/1PR_Surprise"), "Vfx_Prize_Surprise", SoundType.Voice, new(0f, 223 / 255f, 1f), 2.44f)
+            ));
+
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Cumulo).value));
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Pomp).value));
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.DrReflex).value));
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Beans).value));
+        }
+
+        private void LoadPartyWinLevel()
+        {
+            PartyWinManager winManager = new BaseGameManagerBuilder<PartyWinManager>()
+                .SetObjectName("PartyWinManager")
+                .SetNPCSpawnMode(GameManagerNPCAutomaticSpawn.Never)
+                .SetLevelFinishDelay(10)
+                .Build();
+            winManager.endingEnvironment = AssetFinder.FindAllOfType<EnvironmentController>(true).First();
+            winManager.levelLoader = AssetFinder.FindAllOfType<LevelLoader>(true).First();
+            winManager.endingLevel = ObjectCreation.LevelAssetFromPath("Secret", "PartyEndingTop.bpl");
+            winManager.endingLevel.randomGenStructures = [ObjMan.Get<StructureWithParameters>("Strct/PartyWinBaldloonSpawner")];
+
+            SceneObject scene = ObjectCreation.SceneObjectFromPath("Secret", "PartyEnding.bpl");
+            scene.manager = winManager;
+            winManager.endingLevelExtra = scene.extraAsset;
+            scene.levelNo = 99;
+            scene.skippable = false;
+            scene.usesMap = false;
+            scene.skybox = LevelLoaderPlugin.Instance.skyboxAliases["twilight"];
+
+            SceneObjectMetadata meta = new(Plugin, scene);
+            SceneObjectMetaStorage.Instance.Add(meta);
+            ObjMan.Add("Scene/PartyWin", scene);
+        }
+
         [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
         {
@@ -184,6 +577,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Spawn the BEE in literally any floor
             lvl.posters = lvl.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/bee").Weighted(1));
+        }
+
+        [CaudexGenModEvent(GenerationModType.Finalizer)]
+        private void FloorFinalizer(string title, int num, SceneObject scene)
+        {
+            if (RecommendedCharsPlugin.PartyMode && scene.nextLevel?.levelTitle == "YAY")
+                scene.nextLevel = ObjMan.Get<SceneObject>("Scene/PartyWin");
         }
 
         [CaudexGenModEvent(GenerationModType.Finalizer)]

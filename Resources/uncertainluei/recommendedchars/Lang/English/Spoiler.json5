@@ -1,16 +1,34 @@
 {
 	// Posters
-	"PST_RecChars_Comic_Andy1_1": "#unmoderated-roleplay",
-	"PST_RecChars_Comic_Andy1_2": "luis",
-	"PST_RecChars_Comic_Andy1_3": "(location of his five gfs)",
-	"PST_RecChars_Comic_Andy2_1": "ACK!! I GONNA KILL YOU",
-	"PST_RecChars_Comic_Andy2_2": "Curse you, go find my evil factory skrub",
+	"PST_RecChars_Meaning_1": "Unnamed and unloved,\nthe developer drew this figure and left it inside their drive.",
+	"PST_RecChars_Meaning_2": "Despite all that, there's still a meaning to the figure.\nRemember, you have one too!",
+	
+	"PST_RecChars_Comic_Andy1_1": "December 26th, 2019",
+	"PST_RecChars_Comic_Andy1_2": "mikel",
+	"PST_RecChars_Comic_Andy1_3": "(location of his five friends)",
+	"PST_RecChars_Comic_Andy2_1": "ACK!! I'M GONNA END YOU",
+	"PST_RecChars_Comic_Andy2_2": "Haha,\nfind my evil factory, lul!",
 	"PST_RecChars_Comic_Andy3_1": "(in the factory)",
-	"PST_RecChars_Comic_Andy3_2": "Time to <b>END</b> you!",
+	"PST_RecChars_Comic_Andy3_2": "Time to finish you off!",
 	"PST_RecChars_Comic_Andy3_3": "Go ahead",
 	"PST_RecChars_Comic_Andy4_1": "Do you feel something?",
 	"PST_RecChars_Comic_Andy4_2": "Yes, why?",
 	
 	"PST_RecChars_CHK_PaintingsTitle": "Art Paintings",
 	"PST_RecChars_CHK_PaintingsDesc": "One of our students has painted the lot of these! She's given us explicit permission to put these here!\n<color=red><b>DO. NOT. TOUCH!!</b></color>",
+	
+	"PST_RecChars_WantedBulletin_1": "WANTED",
+	"PST_RecChars_WantedBulletin_2": "<b>Dead w. proof</b>\n[Names redacted]\n<b>Reward:</b> 42.",
+	
+	// Character surprises
+	"Vfx_BAL_PartySurprise1": "SurprIIIse!",
+	"Vfx_BAL_PartySurprise2": "Go on! Blow out the candle!",
+	
+	"Vfx_PRI_NoSurprises": "No surprises in the halls!",
+	"Vfx_Playtime_Surprise": "Surpriiiiise!",
+	"Vfx_Bully_Gift": "Give me your gift...",
+	"Vfx_Sweep_Surprise": "Surprise!",
+	"Vfx_Prize_Surprise": "SU-U-U-UR-PRI-IZE!",
+	"Vfx_Crafters_Parrot": "Can the parrot sound like me?!?!?!",
+	
 }

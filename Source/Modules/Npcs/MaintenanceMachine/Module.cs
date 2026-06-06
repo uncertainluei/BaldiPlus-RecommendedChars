@@ -64,7 +64,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             machine.spriteRenderer[0].transform.localPosition = Vector3.down;
 
             machine.audMan = machine.GetComponent<AudioManager>();
-            ((PropagatedAudioManager)machine.audMan).maxDistance = 300;
+            ((PropagatedAudioManager)machine.audMan).maxDistance = 300f;
             machine.audMan.subtitleColor = new(194/255f, 48/255f, 49/255f);
             machine.audClean = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("MMachineAud/EMM_Cleaning"), "Vfx_RecChars_MaintMachine_Cleaning", SoundType.Voice, machine.audMan.subtitleColor);
             machine.audOhno = ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("MMachineAud/EMM_OhNo"), "Vfx_RecChars_MaintMachine_OhNo", SoundType.Voice, machine.audMan.subtitleColor);
@@ -75,6 +75,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_maintmachine", machine);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_maintmachine", machine.Poster);
+            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(machine));
             ObjMan.Add("Npc/MaintMachine", machine);
 
             // Add spawn tag for the maintenance level type

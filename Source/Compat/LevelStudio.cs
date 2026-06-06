@@ -1,5 +1,5 @@
 ﻿using BepInEx;
-
+using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 
@@ -74,6 +74,23 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
         {
             if (!base.ValidLocation(pos)) return false;
             return allowedRoomIds.Contains(EditorController.Instance.levelData.RoomFromPos(pos, forEditor: true).roomType);
+        }
+    }
+
+    internal class ExtInvisibleWallTool(string id, Sprite spr) : ObjectTool(id, spr, 5f)
+    {
+        protected override bool TryPlace(IntVector2 position, Direction dir)
+        {
+            EditorController.Instance.AddUndo();
+            BasicObjectLocation local = new();
+            local.prefab = type;
+            local.position = position.ToWorld();
+            local.position += (Vector3.up+dir.ToVector3()) * verticalOffset;
+            local.rotation = dir.GetOpposite().ToRotation();
+            EditorController.Instance.levelData.objects.Add(local);
+            EditorController.Instance.AddVisual(local);
+            SoundPlayOneshot("Slap");
+            return true;
         }
     }
 }
