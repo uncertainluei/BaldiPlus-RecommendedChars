@@ -40,7 +40,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Load patches
             Hooks.PatchAll(typeof(SpoilerAreaPatches));
-            Hooks.Patch(typeof(Looker).GetRuntimeMethods().First(x => x.Name == "Raycast" && x.GetParameters().Length == 5 && x.GetParameters()[4].IsOut), new HarmonyMethod(AccessTools.Method(typeof(SpoilerAreaPatches), "LookerRaycast")));
         }
 
         private WeightedRoomAsset[] newCafeterias;
@@ -445,6 +444,67 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 prefab = newObject.GetComponent<BalloonSpawnerStructure>(),
                 parameters = new() { prefab = baldloons.Select(x => x.gameObject.Weighted(100)).ToArray(), minMax = [new(3,9)]}
             });
+
+            // Secret ending tape
+            ItemObject baseTape = ItemMetaStorage.Instance.FindByEnum(Items.Tape).value;
+            
+            ItemObject endingItem = new ItemBuilder(Plugin)
+                .SetNameAndDescription("Itm_RecChars_Tape", "Desc_Nothing")
+                .SetSprites(baseTape.itemSpriteSmall, baseTape.itemSpriteLarge)
+                .SetShopPrice(0)
+                .SetEnum("RecChars_EndingTape")
+                .SetMeta(ItemFlags.Unobtainable, [])
+                .SetItemComponent<ITM_PartySecretTape>()
+                .Build();
+            LevelLoaderPlugin.Instance.itemObjects.Add("recchars_endingtape", endingItem);
+            
+            string key = "Vfx_RecChars_SecretTape"; // Technically unnecessary but this is done for readability sake
+
+            ITM_PartySecretTape.speech = ObjectCreators.CreateSoundObject(null, key+"1", SoundType.Voice, Color.white, 166.87f);
+            ITM_PartySecretTape.speech.encrypted = true;
+            ITM_PartySecretTape.speech.additionalKeys = [
+                new() {encrypted = true, key = key+2, time = 2.17f},
+                new() {encrypted = true, key = key+3, time = 3.8f},
+                new() {encrypted = true, key = key+4, time = 7.7f},
+                new() {encrypted = true, key = key+5, time = 9.85f},
+                new() {encrypted = true, key = key+6, time = 13.52f},
+                new() {encrypted = true, key = key+7, time = 16.84f},
+                new() {encrypted = true, key = key+2, time = 20.2f},
+                new() {encrypted = true, key = key+8, time = 21.2f},
+                new() {encrypted = true, key = key+9, time = 29.5f},
+                new() {encrypted = true, key = key+10, time = 35.5f},
+                new() {encrypted = true, key = key+11, time = 41.6f},
+                new() {encrypted = true, key = key+12, time = 49f},
+                new() {encrypted = true, key = key+13, time = 52.5f},
+                new() {encrypted = true, key = key+14, time = 55.65f},
+                new() {encrypted = true, key = key+15, time = 58.9f},
+                new() {encrypted = true, key = key+16, time = 63.7f},
+                new() {encrypted = true, key = key+17, time = 67.86f},
+                new() {encrypted = true, key = key+18, time = 73.5f},
+                new() {encrypted = true, key = key+19, time = 74.62f},
+                new() {encrypted = true, key = key+20, time = 79.5f},
+                new() {encrypted = true, key = key+21, time = 85.6f},
+                new() {encrypted = true, key = key+22, time = 89.96f},
+                new() {encrypted = true, key = key+23, time = 92.6f},
+                new() {encrypted = true, key = key+24, time = 96.8f},
+                new() {encrypted = true, key = key+25, time = 100f},
+                new() {encrypted = true, key = key+26, time = 104.4f},
+                new() {encrypted = true, key = key+2, time = 108.3f},
+                new() {encrypted = true, key = key+27, time = 109.7f},
+                new() {encrypted = true, key = key+28, time = 116f},
+                new() {encrypted = true, key = key+29, time = 117.86f},
+                new() {encrypted = true, key = key+30, time = 122.3f},
+                new() {encrypted = true, key = key+31, time = 127.3f},
+                new() {encrypted = true, key = key+32, time = 132f},
+                new() {encrypted = true, key = key+33, time = 134.8f},
+                new() {encrypted = true, key = key+34, time = 137.6f},
+                new() {encrypted = true, key = key+35, time = 141.8f},
+                new() {encrypted = true, key = key+36, time = 148f},
+                new() {encrypted = true, key = key+37, time = 152.7f},
+                new() {encrypted = true, key = key+38, time = 157.4f},
+                new() {encrypted = true, key = key+39, time = 159.4f},
+                new() {encrypted = true, key = key+40, time = 162.58f}
+            ];
         }
 
         private void CreatePartyWinSurpriseNpcs()
@@ -557,13 +617,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             SceneObject scene = ObjectCreation.SceneObjectFromPath("Secret", "PartyEnding.bpl");
             scene.manager = winManager;
             winManager.endingLevelExtra = scene.extraAsset;
+            winManager.glambience = ScriptableObject.CreateInstance<LoopingSoundObject>();
+            winManager.glambience.clips = [AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "Glambience_Siren.ogg")];
             scene.levelNo = 99;
             scene.skippable = false;
             scene.usesMap = false;
             scene.skybox = LevelLoaderPlugin.Instance.skyboxAliases["twilight"];
 
-            SceneObjectMetadata meta = new(Plugin, scene);
-            SceneObjectMetaStorage.Instance.Add(meta);
+            scene.AddMeta(BasePlugin, ["ending", "found_on_main"]);
             ObjMan.Add("Scene/PartyWin", scene);
         }
 
@@ -582,7 +643,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [CaudexGenModEvent(GenerationModType.Finalizer)]
         private void FloorFinalizer(string title, int num, SceneObject scene)
         {
-            if (RecommendedCharsPlugin.PartyMode && scene.nextLevel?.levelTitle == "YAY")
+            if (RecommendedCharsPlugin.PartyMode && scene.nextLevel?.GetMeta()?.tags.Contains("ending") == true)
                 scene.nextLevel = ObjMan.Get<SceneObject>("Scene/PartyWin");
         }
 

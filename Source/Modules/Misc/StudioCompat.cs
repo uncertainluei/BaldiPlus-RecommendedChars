@@ -8,9 +8,7 @@ using PlusStudioLevelLoader;
 using PlusStudioLevelFormat;
 
 using UncertainLuei.CaudexLib.Registers.ModuleSystem;
-
 using UnityEngine;
-using MTM101BaldAPI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 {
@@ -101,6 +99,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             ]);
             EditorInterfaceModes.InsertToolsInCategory(mode, "rooms", "room_office", [
                 new RoomTool("recchars_baldioffice", null).SetModdedFrame(),
+            ]);
+
+            EditorInterfaceModes.InsertToolsInCategory(mode, "items", "item_tape", [
+                new ItemTool("recchars_endingtape").SetModdedFrame(),
             ]);
 
             Sprite[] paintingSprites = AssetMan.Get<Sprite[]>("EditorSpr/Obj_ArtPaintings");

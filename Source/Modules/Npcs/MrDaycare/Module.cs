@@ -119,7 +119,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_MrDaycare")
                 .SetPoster(AssetMan.Get<Texture2D>("DaycareTex/pri_daycare"), "PST_PRI_RecChars_Daycare1", "PST_PRI_RecChars_Daycare2")
                 .AddMetaFlag(NPCFlags.Standard | NPCFlags.MakeNoise)
-                .SetMetaTags(["faculty", "no_balloon_frenzy"])
+                .SetMetaTags(["faculty", "no_balloon_frenzy", "ignoreGabby", "RebProtection"])
                 .AddLooker()
                 .AddTrigger()
                 .AddHeatmap()

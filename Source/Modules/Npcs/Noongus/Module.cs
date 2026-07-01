@@ -116,7 +116,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             prefab.brickPre[1].GetComponentInChildren<SpriteRenderer>().sprite = sprites[1];
         }
 
-        //[CaudexGenModEvent(GenerationModType.Addend)]
+        [CaudexGenModEvent(GenerationModType.Addend)]
         private void FloorAddend(string title, int id, SceneObject scene)
         {
             if (scene.GetMeta()?.tags.Contains("endless") == true)
@@ -128,7 +128,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (title.StartsWith("F") && id > 0 && id < 3)
             {
                 scene.MarkAsNeverUnload();
-                AddToNpcs(scene, 150);
+                AddToNpcs(scene, 125);
             }
         }
 

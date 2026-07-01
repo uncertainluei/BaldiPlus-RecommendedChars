@@ -48,7 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_MaintMachine")
                 .SetPoster(AssetMan.Get<Texture2D>("MMachineTex/pri_emm"), "PST_PRI_RecChars_MaintMachine1", "PST_PRI_RecChars_MaintMachine2")
                 .AddMetaFlag(NPCFlags.Standard & ~NPCFlags.CanSee)
-                .SetMetaTags(["adv_exclusion_hammer_weakness"])
+                .SetMetaTags(["adv_exclusion_hammer_weakness", "RebProtection"])
                 .AddTrigger()
                 .Build();
 

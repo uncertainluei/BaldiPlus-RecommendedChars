@@ -12,6 +12,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         {
             PlayerManager pm = CoreGameManager.Instance.GetPlayer(player);
             CoreGameManager.Instance.audMan.PlaySingle(audShatter);
+
+            if (BaseGameManager.Instance is PartyWinManager partyWin)
+                partyWin.PaintingTouched();
+
             // Anger Baldi and make noise as if the player got an activity incorrect
             BaseGameManager.Instance.AngerBaldi(1f);
             pm.ec.MakeNoise(transform.position, 126);

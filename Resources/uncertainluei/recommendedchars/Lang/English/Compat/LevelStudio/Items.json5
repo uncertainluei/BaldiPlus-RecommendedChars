@@ -30,5 +30,8 @@
 	"Ed_Tool_item_recchars_smallpsoda_Desc": "Pushes away entities (including the player) and bounces off walls.\nLasts 30 seconds and travels 25% slower compared to its original size.",
 
 	"Ed_Tool_object_recchars_psodamachine_Title": "PSODA Machine",
-	"Ed_Tool_object_recchars_psodamachine_Desc": "Gives you a PSODA when you put a quarter in! Boing!"
+	"Ed_Tool_object_recchars_psodamachine_Desc": "Gives you a PSODA when you put a quarter in! Boing!",
+
+	// Ending Tape
+	"Ed_Tool_item_recchars_endingtape_Desc": "When put in a tape player, it'll spew out \"lore\" that's definitely not relevant.",
 }

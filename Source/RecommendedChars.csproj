@@ -110,6 +110,6 @@
 			  $(MSBuildProjectDirectory)/../NOTICE;"
 		DestinationFolder="$(PluginsPath)" />
 		
-		<ZipDirectory SourceDirectory="$(ArchivePath)" DestinationFile="$(MSBuildProjectDirectory)/../build/$(AssemblyName)-v$(Version).zip" Overwrite="true" />
+		<ZipDirectory SourceDirectory="$(ArchivePath)" DestinationFile="$(MSBuildProjectDirectory)/../Build/$(AssemblyName)-v$(Version).zip" Overwrite="true" />
 	</Target>
 </Project>

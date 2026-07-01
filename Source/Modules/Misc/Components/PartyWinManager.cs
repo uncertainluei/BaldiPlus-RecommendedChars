@@ -1,4 +1,7 @@
 ﻿using System.Collections;
+using BaldisBasicsPlusAdvanced.API;
+using TMPro;
+using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Components;
 using UncertainLuei.CaudexLib.Util;
 using UnityEngine;
@@ -12,9 +15,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [SerializeField] internal LevelAsset endingLevel;
         [SerializeField] internal ExtraLevelDataAsset endingLevelExtra;
 
-        [SerializeField] internal GameObject winScreen, blackScreen;
+        [SerializeField] internal LoopingSoundObject glambience;
+        [SerializeField] internal SoundObject audBuzz, audWow;
+        [SerializeField] internal GameObject promptScreen, blackScreen;
+        private TMP_Text promptText;
 
-        private bool limbo;
+        private byte paintingCount;
+
         private MovementModifier moveMod = new(default, 0f);
         private SurpriseNpcBase[] surpriseNpcs;
         private PlayerManager liftedPlayer;
@@ -32,18 +39,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 Destroy(gameObject);
                 return;
             }
-            // Am I in Limbo?
-            limbo = false;
-            if (CoreGameManager.Instance.inventoryChallenge &&
-                CoreGameManager.Instance.mapChallenge &&
-                CoreGameManager.Instance.timeLimitChallenge &&
-                CoreGameManager.Instance.lifeMode == LifeMode.Intense)
-                limbo = true;
 
             base.Initialize();
             CoreGameManager.Instance.SaveEnabled = false;
             CoreGameManager.Instance.readyToStart = false;
             CoreGameManager.Instance.environmentToSpawn = ec;
+            SpoilerAreaPatches.surpressDijkstraOOB = true;
 
             specialManagerFunction =
             [
@@ -69,6 +70,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             StartCoroutine(WaitForLoader());
         }
 
+        private new void OnDestroy()
+        {
+            base.OnDestroy(); // This wouldn't be needed if mystman knew to use the boolean cast!!!
+            SpoilerAreaPatches.surpressDijkstraOOB = false;
+        }
+
         private IEnumerator WaitForLoader()
         {
             levelLoader.StartGenerate();
@@ -79,11 +86,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             endingEnvironment.gameObject.SetActive(false);
             endingEnvironment.height = 30f;
             endingEnvironment.transform.position = Vector3.up * 30f;
-            ec.GetComponent<LightmapModHolder>().ForceUpdateLightmap();
 
+            ec.GetComponent<LightmapModHolder>().ForceUpdateLightmap();
             CoreGameManager.Instance.readyToStart = true;
         }
-
         public override void BeginPlay()
         {
             base.BeginPlay();
@@ -148,6 +154,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             GameCamera.dijkstraMap.Activate();
             GameCamera.dijkstraMap.QueueUpdate();
 
+            MusicManager.Instance.StopMidi();
+            MusicManager.Instance.StopFile();
+            MusicManager.Instance.QueueFile(glambience, true);
+
             StartCoroutine(UpdateEndingArea());
         }
 
@@ -158,6 +168,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             foreach (Elevator elevate in endingEnvironment.Elevators)
                 elevate.SetState(ElevatorState.NoPower);
+
+            yield return null;
+
+            ec.lightingOverride = true;
+            endingEnvironment.lightingOverride = false;
+            for (int x = 0; x > ec.levelSize.x; x++)
+            {
+                for (int y = 0; y > ec.levelSize.z; y++)
+                {
+                    if (ec.CellFromPosition(x,y).Null) continue;
+                    foreach (LightData light in ec.lightMap[x,y].lightSources)
+                        endingEnvironment.lightMap[x,y].AddSource(light.source, light.distance);
+
+                    yield return null;
+                }
+            }
+
+            //ec.GetComponent<LightmapModHolder>().ForceUpdateLightmap();
+
+        }
+
+        public void PaintingTouched()
+        {
+            paintingCount++;
         }
     }
 }
