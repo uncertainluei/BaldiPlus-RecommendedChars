@@ -1,9 +1,12 @@
-﻿using System.Collections;
-using BaldisBasicsPlusAdvanced.API;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UncertainLuei.BaldiPlus.RecommendedChars.Patches;
 using UncertainLuei.CaudexLib.Components;
-using UncertainLuei.CaudexLib.Util;
+using UncertainLuei.CaudexLib.Registers;
+using UncertainLuei.CaudexLib.Util.Extensions;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -16,18 +19,21 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         [SerializeField] internal ExtraLevelDataAsset endingLevelExtra;
 
         [SerializeField] internal LoopingSoundObject glambience;
-        [SerializeField] internal SoundObject audBuzz, audWow;
-        [SerializeField] internal GameObject promptScreen, blackScreen;
-        private TMP_Text promptText;
+        [SerializeField] internal SoundObject audBlow, audBuzz, audWow;
+        [SerializeField] internal GameObject promptScreen, blackScreen, winScreen;
+        [SerializeField] internal TMP_Text promptText;
 
         private byte paintingCount;
+        
 
         private MovementModifier moveMod = new(default, 0f);
         private SurpriseNpcBase[] surpriseNpcs;
         private PlayerManager liftedPlayer;
+        private List<Cell> lights;
 
         internal Transform partyElevator;
         internal PartyWinRoomFunction cafeteria;
+        internal RoomController teleporterRoom;
         internal GameObject candle;
 
         public override void Initialize()
@@ -45,6 +51,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CoreGameManager.Instance.readyToStart = false;
             CoreGameManager.Instance.environmentToSpawn = ec;
             SpoilerAreaPatches.surpressDijkstraOOB = true;
+            GameCamera.dijkstraMap.environment = ec;
+            CaudexEvents.OnItemUse += TeleporterFeedback;
 
             specialManagerFunction =
             [
@@ -73,7 +81,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private new void OnDestroy()
         {
             base.OnDestroy(); // This wouldn't be needed if mystman knew to use the boolean cast!!!
+            Debug.LogError("HELLO!");
             SpoilerAreaPatches.surpressDijkstraOOB = false;
+            CaudexEvents.OnItemUse -= TeleporterFeedback;
+            Entity.physicalHeight = 5f; // Fixes edge case of entities suddenly being all the way up afterwards in certain scenarios
         }
 
         private IEnumerator WaitForLoader()
@@ -83,9 +94,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             yield return new WaitWhile(() => levelLoader.levelInProgress && !levelLoader.levelCreated);
 
             endingEnvironment.Active = false;
-            endingEnvironment.gameObject.SetActive(false);
+            //endingEnvironment.gameObject.SetActive(false);
             endingEnvironment.height = 30f;
             endingEnvironment.transform.position = Vector3.up * 30f;
+
+            foreach (Pickup pickup in ec.items)
+            {
+                if (pickup && pickup.item.itemType == ITM_PartySecretTape.itemEnum)
+                    pickup.OnItemCollected += (x,y) => StartCoroutine(PromptTransition("Tfx_Enc_RecChars_PartyWin_Tape"));
+            }
 
             ec.GetComponent<LightmapModHolder>().ForceUpdateLightmap();
             CoreGameManager.Instance.readyToStart = true;
@@ -104,13 +121,72 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 player.itm.Disable(true);
             }
 
+            foreach (Elevator elevate in ec.Elevators)
+                elevate.SetState(ElevatorState.NoPower);
+
             PlayerFileManager.Instance.savedGameData.saveAvailable = false;
             PlayerFileManager.Instance.Save();
         }
 
+        public override void LoadNextLevel()
+        {
+            GlobalCam.Instance.SetListener(true);
+            SubtitleManager.Instance.DestroyAll();
+            CoreGameManager.Instance.audMan.PlaySingle(audWow);
+            winScreen.SetActive(true);
+            GlobalCam.Instance.FadeIn(UiTransition.Dither, 1/30f);
+            StartCoroutine(WinTransition());
+        }
+
+        private IEnumerator WaitForInteraction()
+            => new WaitWhile(() => !Input.anyKeyDown && !InputManager.Instance.GetDigitalInput("MouseSubmit", true) && !InputManager.Instance.GetDigitalInput("Pause", true) && !InputManager.Instance.AnyButton(true));
+
+        private IEnumerator WinTransition()
+        {
+            yield return new WaitWhile(() => GlobalCam.Instance.TransitionActive);
+            yield return WaitForInteraction();
+            
+            winScreen.SetActive(false);
+            blackScreen.SetActive(true);
+            CoreGameManager.Instance.ReturnToMenu();
+        }
+
+        private IEnumerator PromptTransition(params string[] messages)
+        {
+            CoreGameManager.Instance.disablePause = true;
+            Time.timeScale = 0f;
+            promptScreen.SetActive(true);
+            promptText.text = messages[0].Localize();
+            GlobalCam.Instance.FadeIn(UiTransition.Dither, 1/60f);
+            for (int i = 0, c = messages.Length; i < c; i++)
+            {
+                promptText.text = messages[i].Localize();
+                yield return new WaitWhile(() => GlobalCam.Instance.TransitionActive);
+                yield return WaitForInteraction();
+            }
+            GlobalCam.Instance.Transition(UiTransition.Dither, 1/60f);
+            promptScreen.SetActive(false);
+            yield return new WaitWhile(() => GlobalCam.Instance.TransitionActive);
+            CoreGameManager.Instance.disablePause = false;
+            Time.timeScale = 1f;
+        }
+
+        private void TeleporterFeedback(ItemManager im, ItemObject itm)
+        {
+            if (itm.itemType != Items.Teleporter) return;
+            StartCoroutine(TeleporterUsed());
+        }
+
+        private IEnumerator TeleporterUsed()
+        {
+            CoreGameManager.Instance.disablePause = true;
+            yield return new WaitForSeconds(0.2f);
+            yield return PromptTransition("Tfx_Enc_RecChars_PartyWin_Teleport_1", "Tfx_Enc_RecChars_PartyWin_Teleport_2", "Tfx_Enc_RecChars_PartyWin_Teleport_3");
+        }
+
         public void Surprise()
         {
-            MusicManager.Instance.PlayMidi("DanceV0_5", true);
+            MusicManager.Instance.PlayMidi("DanceV0_5", false);
         }
 
         public IEnumerator Lift(PlayerManager player)
@@ -154,6 +230,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             GameCamera.dijkstraMap.Activate();
             GameCamera.dijkstraMap.QueueUpdate();
 
+            CoreGameManager.Instance.audMan.PlaySingle(audBlow);
+
             MusicManager.Instance.StopMidi();
             MusicManager.Instance.StopFile();
             MusicManager.Instance.QueueFile(glambience, true);
@@ -163,8 +241,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private IEnumerator UpdateEndingArea()
         {
+            lights = [];  
+            cafeteria.room.entitySafeCells.Clear();
+            teleporterRoom = endingEnvironment.rooms.First(x => x.name.EndsWith("TeleporterRoom"));
+
             yield return new WaitForEndOfFrame();
             yield return new WaitForFixedUpdate();
+
+            foreach (Door door in teleporterRoom.doors)
+                door.Lock(true);
 
             foreach (Elevator elevate in endingEnvironment.Elevators)
                 elevate.SetState(ElevatorState.NoPower);
@@ -179,7 +264,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {
                     if (ec.CellFromPosition(x,y).Null) continue;
                     foreach (LightData light in ec.lightMap[x,y].lightSources)
+                    {
+                        lights.Add(light.source);
                         endingEnvironment.lightMap[x,y].AddSource(light.source, light.distance);
+                    }
 
                     yield return null;
                 }
@@ -189,9 +277,27 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         }
 
-        public void PaintingTouched()
+        public void PaintingTouched(PlayerManager player)
         {
+            
             paintingCount++;
+
+            if (player.plm.stamina < player.plm.StaminaMax)
+                player.plm.stamina = player.plm.StaminaMax;
+
+            switch (paintingCount)
+            {
+                case 8:
+                    return;
+                case 7:
+                    // Blah blah blah, I know, hardcoded schlock.
+                    endingEnvironment.CellFromPosition(new IntVector2(1, 16)).SetShape(0, TileShapeMask.Open);
+
+                    foreach (Door door in teleporterRoom.doors)
+                        door.Unlock(); 
+                    break;
+            }
+            StartCoroutine(PromptTransition($"Tfx_Enc_RecChars_PartyWin_{paintingCount}"));
         }
     }
 }

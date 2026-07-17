@@ -90,19 +90,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
                 new PosterTool("recchars_andycomic").SetModdedFrame(),
                 new PosterTool("recchars_chk_paintings").SetModdedFrame(),
                 new PosterTool("recchars_wantedbulletin").SetModdedFrame(),
+                new PosterTool("recchars_endofline").SetModdedFrame(),
             ]);
 
             EditorInterfaceModes.InsertToolsInCategory(mode, "rooms", "room_cafeteria", [
                 new RoomTool("recchars_partycafeteria", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteria")).SetModdedFrame(),
                 new RoomTool("recchars_partycafeterianonanas", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaNoNanas")).SetModdedFrame(),
-                new RoomTool("recchars_partycafeteriawin", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaNoNanas")).SetModdedFrame()
+                //new RoomTool("recchars_partycafeteriawin", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaNoNanas")).SetModdedFrame()
             ]);
             EditorInterfaceModes.InsertToolsInCategory(mode, "rooms", "room_office", [
-                new RoomTool("recchars_baldioffice", null).SetModdedFrame(),
+                //new RoomTool("recchars_baldioffice", null).SetModdedFrame(),
             ]);
 
             EditorInterfaceModes.InsertToolsInCategory(mode, "items", "item_tape", [
-                new ItemTool("recchars_endingtape").SetModdedFrame(),
+                //new ItemTool("recchars_endingtape").SetModdedFrame(),
             ]);
 
             Sprite[] paintingSprites = AssetMan.Get<Sprite[]>("EditorSpr/Obj_ArtPaintings");
@@ -115,11 +116,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
                 new ObjectToolNoRotation("recchars_cake", AssetMan.Get<Sprite>("EditorSpr/Obj_Cake")).SetModdedFrame(),
                 new ObjectToolNoRotation("recchars_cakewcandle", AssetMan.Get<Sprite>("EditorSpr/Obj_CakeWCandle")).SetModdedFrame(),
                 new ObjectTool("recchars_partyelevator", AssetMan.Get<Sprite>("EditorSpr/Obj_PartyElevator")).SetModdedFrame(),
-                new ExtInvisibleWallTool("recchars_invisiblewall", AssetMan.Get<Sprite>("EditorSpr/Obj_InvisibleWall")).SetModdedFrame(),
-                new ObjectTool("recchars_elevatortrigger", null, 5).SetModdedFrame(),
-                new ObjectTool("recchars_candletrigger", null, 35).SetModdedFrame(),
-                new ExtRoomObjectTool("recchars_surprisebaldi", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseBaldi"), "recchars_partycafeteriawin").SetModdedFrame(),
-                new ExtRoomObjectTool("recchars_surprisenpc", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseNpc"), "recchars_partycafeteriawin").SetModdedFrame()
+                //new ExtInvisibleWallTool("recchars_invisiblewall", AssetMan.Get<Sprite>("EditorSpr/Obj_InvisibleWall")).SetModdedFrame(),
+                //new ObjectTool("recchars_elevatortrigger", null, 5).SetModdedFrame(),
+                //new ObjectTool("recchars_candletrigger", null, 35).SetModdedFrame(),
+                //new ExtRoomObjectTool("recchars_surprisebaldi", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseBaldi"), "recchars_partycafeteriawin").SetModdedFrame(),
+                //new ExtRoomObjectTool("recchars_surprisenpc", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseNpc"), "recchars_partycafeteriawin").SetModdedFrame()
             ]);
         }
 

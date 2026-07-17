@@ -148,7 +148,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             NPCMetadata circleMeta = new(Plugin, [circle, unnerfedCircle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
             SetCirclePrefabs();
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(circle, circle.audGo));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(circle, circle.audGo));
 
             RecommendedCharsConfig.nerfCircle.SettingChanged += (x, y) =>
             {

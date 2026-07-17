@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    public abstract class SurpriseNpcVisual : MonoBehaviour
+    public abstract class SurpriseNpcVisual
     {
         public float audMaxDistance = -1f;
         public Color audSubtitleColor;
@@ -71,8 +71,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         protected override void SetVisual(SurpriseNpc npc)
         {
-            DestroyImmediate(npc.rendererBase);
-            npc.rendererBase = Instantiate(rendererBase, npc.transform);
+            GameObject.DestroyImmediate(npc.rendererBase);
+            npc.rendererBase = GameObject.Instantiate(rendererBase, npc.transform);
             npc.spriteRenderer = npc.rendererBase.GetComponentInChildren<SpriteRenderer>();
             if (npc.spriteRenderer && sprite)
                 npc.spriteRenderer.sprite = sprite;
@@ -109,6 +109,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public IEnumerator Float()
         {
+            audMan.FlushQueue(true);
             Vector3 spot = room.cells[Random.Range(0, room.cells.Count)].CenterWorldPosition+new Vector3(Random.Range(-2.5f,2.5f),0f,Random.Range(-2.5f, 2.5f));
             spot.y = 5f;
             transform.position = spot;
@@ -123,7 +124,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
     public class SurpriseNpc : SurpriseNpcBase
     {
-        public static readonly HashSet<SurpriseNpcVisual> possibleVisuals = [];
+        internal static readonly List<SurpriseNpcVisual> possibleVisuals = [];
+        public static void AddVisual(SurpriseNpcVisual visual)
+        {
+            if (!possibleVisuals.Contains(visual))
+                possibleVisuals.Add(visual);
+        }
 
         [SerializeField] internal SpriteRenderer spriteRenderer;
         [SerializeField] internal GameObject rendererBase;

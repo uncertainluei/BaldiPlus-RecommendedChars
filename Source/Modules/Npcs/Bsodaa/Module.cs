@@ -117,7 +117,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             dummy.poster = ObjectCreators.CreateCharacterPoster(AssetMan.Get<Texture2D>("BsodaaTex/pri_bsodaahelper"), "PST_PRI_RecChars_BsodaaHelper1", "PST_PRI_RecChars_BsodaaHelper2");
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaahelper", dummy.Poster);
 
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(sprites[0], helper.sprite.transform.localPosition.y, (PropagatedAudioManager)helper.audMan, helper.audLaugh));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(sprites[0], helper.sprite.transform.localPosition.y, (PropagatedAudioManager)helper.audMan, helper.audLaugh));
             ObjMan.Add("Npc/BsodaaHelperDummy", dummy);
         }
 
@@ -192,7 +192,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_bsodaa", bsodaaGuy);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_bsodaa", bsodaaGuy.Poster);
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(bsodaaGuy, happySprite, bsodaaGuy.audSuccess[0]));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(bsodaaGuy, happySprite, bsodaaGuy.audSuccess[0]));
 
             bsodaaGuy.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Bsodaa"), "Bsodaa",
                 50, 50, 50, 25, 25, 25, 25, 150);

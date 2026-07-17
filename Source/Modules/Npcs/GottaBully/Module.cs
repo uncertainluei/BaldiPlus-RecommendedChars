@@ -89,7 +89,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             gottaBully.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/SwapCloset"), "SwapCloset");
 
             ObjMan.Add("Npc/GottaBully", gottaBully);
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(gottaBully, ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_Surprise"), "Vfx_RecChars_GBully_Surprise", SoundType.Voice, gottaBully.audMan.subtitleColor)));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(gottaBully, ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("GottaBullyAud/GB_Surprise"), "Vfx_RecChars_GBully_Surprise", SoundType.Voice, gottaBully.audMan.subtitleColor)));
             NPCMetadata gottaBullyMeta = new(Plugin, [gottaBully], gottaBully.name, NPCMetaStorage.Instance.Get(Character.Sweep).flags | NPCFlags.MakeNoise, ["adv_first_prize_immunity", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(gottaBullyMeta);
         }

@@ -4,8 +4,8 @@
 	"PST_RecChars_Meaning_2": "Despite all that, there's still a meaning to the figure.\nRemember, you have one too!",
 	
 	"PST_RecChars_Comic_Andy1_1": "December 26th, 2019",
-	"PST_RecChars_Comic_Andy1_2": "mikel",
-	"PST_RecChars_Comic_Andy1_3": "(location of his five friends)",
+	"PST_RecChars_Comic_Andy1_2": "luis",
+	"PST_RecChars_Comic_Andy1_3": "(location of his five gals)",
 	"PST_RecChars_Comic_Andy2_1": "ACK!! I'M GONNA END YOU",
 	"PST_RecChars_Comic_Andy2_2": "Haha,\nfind my evil factory, lul!",
 	"PST_RecChars_Comic_Andy3_1": "(in the factory)",
@@ -19,6 +19,8 @@
 	
 	"PST_RecChars_WantedBulletin_1": "WANTED",
 	"PST_RecChars_WantedBulletin_2": "<b>Dead w. proof</b>\n[Names redacted]\n<b>Reward:</b> 42.",
+
+	"PST_RecChars_EndOfLine": "The ending scene ends here.",
 	
 	// Character surprises
 	"Vfx_BAL_PartySurprise1": "SurprIIIse!",
@@ -30,5 +32,72 @@
 	"Vfx_Sweep_Surprise": "Surprise!",
 	"Vfx_Prize_Surprise": "SU-U-U-UR-PRI-IZE!",
 	"Vfx_Crafters_Parrot": "Can the parrot sound like me?!?!?!",
+
+	// Ending sequence
+	"Itm_RecChars_Tape": "Unnamed Cassette Tape",
+	"Tfx_RecChars_PartyWin": "THANK YOU FOR PLAYING!",
+
+	// Look, I wasn't bothered to encrypt these, I can't get this ending complete in time so you can read this if you want
+	"Tfx_Enc_RecChars_PartyWin_1": "OH, LOOK AT THAT\n\nYOU'VE BROKEN IT\n\nDO YOU EVEN KNOW HOW VALUABLE THOSE WERE?",
+	"Tfx_Enc_RecChars_PartyWin_2": "I GET IT\n\nI KNOW YOU'VE BEEN PROMISED MUCH MORE\n\nI APOLOGIZE THAT I'VE BEEN OVERDUE AND THAT I COULD NOT DELIVER THIS IN TIME",
+	"Tfx_Enc_RecChars_PartyWin_3": "HOW ABOUT THIS?\n\nI WILL EXCHANGE A BIT OF EXTRA INFORMATION THAT MIGHT HELP\n\nFOR BOTH YOU IN YOUR FULFILLMENT OF THIS MODIFICATION,\nAND ME ON MY PERSONAL JOURNEY",
+	"Tfx_Enc_RecChars_PartyWin_4": "ALRIGHT\n\nTHIS \"MOD\" IS IN A HALT.\n\nALL MAIN \"CONTENT\" IN IT IS WHAT YOU'LL GET\n\n(IN OTHER WORDS, DO NOT EXPECT \"UPDATES\" THAT ADD CONTENT, ESPECIALLY OF THIS SCALE. OUTSIDE CONTRIBUTIONS ARE WELCOME IF THEY DO HAPPEN)",
+	"Tfx_Enc_RecChars_PartyWin_5": "GREENER PASTURES ARE NEEDED.\nFRESHER IDEAS.\n\nMAYBE A NEW MINDSET ALTOGETHER\n\nTHESE POSTERS ARE A MICROCOSM OF WHAT WAS ON MY HEAD, DON'T TAKE THEM FOR GRANTED",
+	"Tfx_Enc_RecChars_PartyWin_6": "IT'D BE MONOTONOUS TO KEEP CREATING FOR A CREATION I NO LONGER AM INTERESTED\n\nFOR SOMETHING THAT KEEPS ME OUT FROM DOING WHAT I WANT",
+	"Tfx_Enc_RecChars_PartyWin_7": "EVENTUALLY YOU WILL GET THE BIGGER PICTURE.\n\nTODAY'S NOT THAT DAY\n\nA HALLWAY HAS BEEN REVEALED NEXT TO THAT DRAWING AT THE DEAD-END, THE FINAL PIECE IS WHAT'S LEFT",
 	
+	"Tfx_Enc_RecChars_PartyWin_Teleport_1": "OH, YOU CLEVER BEING",
+	"Tfx_Enc_RecChars_PartyWin_Teleport_2": "UNFORTUNATELY, THERE IS NOTHING ELSE IN THIS \"SCENEOBJECT\"",
+	"Tfx_Enc_RecChars_PartyWin_Teleport_3": "JUST CLOSE THE PROGRAM WHILE YOU'RE AT IT",
+	
+	"Tfx_Enc_RecChars_PartyWin_Tape": "DON'T SAY I DIDN'T WARN YOU",
+	
+	"Tfx_Enc_RecChars_PartyWin_End_1": "SPLENDID.",
+	"Tfx_Enc_RecChars_PartyWin_End_2": "THERE IS NOTHING LEFT HERE TO TOUCH\n\nTHERE IS NOTHING LEFT HERE TO SEE\n\nTHERE IS NOTHING LEFT HERE TO DO",
+	"Tfx_Enc_RecChars_PartyWin_End_3": "YOU HAVE REACHED THE END.",
+	"Tfx_Enc_RecChars_PartyWin_End_4": "NOW IT'S TIME FOR THE GAME TO HALT.",
+	"Tfx_Enc_RecChars_PartyWin_End_5": "GOODBYE.\n\nWE WON'T MISS YOU.",
+	
+	// Hello. If you wanna decode this, it's the same as decrypting Null's messages in BBCR. If you know, you know
+	// As a result, these must be encoded back in order to display properly
+	"Vfx_RecChars_SecretTape1": "S1zJZExgqihBsbojiKkpK2uvt2jBPx+hZ3AWfc5kzzQbKmjC3Y5okISeeJuIsjqT61mqv1uoZgU5RYX9MV7Cf5Qeqw7shuJbGHgkD3BAxVFZQdmvG7zoXLsav3UZ2/2V",
+	"Vfx_RecChars_SecretTape2": "k64a5WWFcFdw7zWEUSgt3rF+HmOopwDzm9D5HePPrLXlp6Wt+h8eLPw8fG9DkPHZWGKbKuNKruYwrJjAylf5MEA2JXDAg3TxsT3i+IjQuZ8IC61lHXbGThbVU10lrRUn",
+	"Vfx_RecChars_SecretTape3": "ZhOaNVXnCosOyV8HwzpaJQG4kZUxBQltIZ9SwthwsFLhi20qXxBMHwZh98l8kydlnYCWAFxPeYeilro9JtdDJZsP1floa5hFbEyAe7xVpErgKtkVBflxqTc1d1KdEOZHJvGEBi/HHCyuyl9y/QL2wwY2K8uP1PEwy+a1IFvnDro=",
+	"Vfx_RecChars_SecretTape4": "qirx864yzH2i0YwhFxTxqg3TCp/6n0iY+h8vpL3206gM1jwEFCccPm4PX+y8Br56yntvykbmYELY4BVeboFUpdXNam+hB82LACjAD/iL9aq28rPdbRvML3RwhxbPYVde",
+	"Vfx_RecChars_SecretTape5": "0zByWdG7pna1PeGSFckHQUmhi3oQaXdWOtr4+Dxn8AHs0ggbuJdFTpOXsB0Y23mF72II7UjNs1YN1+KZeV1Y1kJJvkd4c811g667MQZ30Es7rdmHaEV2A3FekB+RiUjGu/J80I5+Gf4fvi/gFPCNAxpBhZQTZoIW1eca3AEOgiA=",
+	"Vfx_RecChars_SecretTape6": "npiCi6aEXRSx9ZSKQgSZOWTeYhQG+rp41wY5Ta9Z6vUMUCvpHVFop2ghN8Wi+dZdS1qEdeCE7fA7/MY2VOJufvE1VhpsMXDOzpQ+lzHQPmFiBzNx4pcPIyPUjUqn/xbBXpAcWfvKQtPK7bzKfQutwVEbm7cHKWWwObvvQ3yS98c=" ,
+	"Vfx_RecChars_SecretTape7": "YBt46gS7YIyDAbcxY7ujHCfDUGT1gWXleg2FJxVFpJGppT1D9/WxS39/S1mdw1MHGvLTtZTgbdpDn/LhC+9akaeyeMV+kPvL1Jl5WXhpXP08nvySQhPw90aPodWmIV4YKv6tUijWYFKPS0giQUU+lCS9SMl0mOWHbwZDA9QhQwI=",
+	"Vfx_RecChars_SecretTape8": "UUa6NzDRTuLtgSOLEweemr/+YP1ztEhA/O1/cW4rMhn8UYzxlOpE6oePXIogQLe5NWq5OLSvFHqMdAYDkzvZP2zAQ0IFC0eOP8Q19/T60EM0+jRWmmwaFRyxQdBUfmbJYFwaZRRnnWZwPlyVFRXPm98bZzGDvvwVbMatWOrS21SQJ0Q7VoeIfM4YzhDcbXT5g+Z88jasmoOPtjMFGjqb7g==",
+	"Vfx_RecChars_SecretTape9": "nZFWQAOc0Rd+wmBRwogh/65XplW62Nhp0Nh1epLbdxE5z4vz/QpTvOqz8QpUt1QylSHGGP+CoYH4fvnqzEZgOFYHVlEAnFd/buttmQiUHPvsdfa3V/8eVumVZTBvVN4tzTkD8kFbeQ+F0Lfg3ONT08w8iIgEq1S9goJRPs6u4EbWbTiw6t5h15MAvoeuD4Lrtk2lJuphPyyzeSZt17VMfA==",
+	"Vfx_RecChars_SecretTape10": "aNYKuiat3n+5oPrOEQ0et9pcHBI8oC2moTA1AbmZJ+f4/g8Mj04nbKQxVGlto+J0mtSd0Cs5KqBa1pPT7aDfe/DHmFB8oSNuDY3B4z6PzYJmWWDgJdElDBsdzAZTNJxTUyrHILrccvXKDO+C87aCl0vV64yKFSq7zUgsvf6RAv8=",
+	"Vfx_RecChars_SecretTape11": "XWPeuZssVjpuZDCMs11+n3bpPo6zaVmI9Sg87wAOl6omDJkEaaTQqt4eRdkoALRq+jzlNACIu50k3HVMgpQUk5+3lRZ0/bO3FoFAjPgfHWvnEnB2HSJaOx1JGZ3Ctn+TBw4vw9VzUTq6kZYDXUu1Eifzrw28XE0ljIV7SzvRyx4lstBC6af/p10D77llrM1pnNJYcXYHto23exVWDB5WNQ==",
+	"Vfx_RecChars_SecretTape12": "cOA/EvbBi1ogrp3ajKPfjh+E5eHziwkUw1o/bmWMtwbTr9yQs24srlsrDjB2JMiI8hyFA0KKCSXdRLE77i+OzFnSTlQc3tvSby23088eKjWuJoDbq0MsXnbfKMcFX4/92RsPOmIfD9An4uEITT6bPA44Bw1boujEum+Syygf4LA=",
+	"Vfx_RecChars_SecretTape13": "7zymgVRzBIsMgKpbkGXFEiBe+VdxcTPNph3vAKKGWoUI4hRq8hVzN6L8kMmKPkHns50Unk0g/FSc+Z2MSeQVf9HryzAfjoRTtFJRh4biSaGhAJd5mqFLgO7CVucvF2TW7sL4ZoP3G9Vr4Kll5+6hpOYK19ZaPhq+WbhuEozJjDI=",
+	"Vfx_RecChars_SecretTape14": "tlOQFgBZod/SsJfNKwOk8BawVLdhNCOOY2J+sfpRLLazDpbsM1aXpPadVjSnej5Fop5O2IjgBipRBptnhQ896SPBAhp7d4p6GpZREiqTmjNQjAJVgSqSGuUsW1V2tNQd3p+xs7I3fswnWzmSorj+RJYIwvZ+0CnxV2QaWR5alcE=",
+	"Vfx_RecChars_SecretTape15": "ri1XSFjqO/LpNo4PGuY5iAEKaUCiSTT0ElGasaS0JdR3j0s5neqrqgR/pZPB2kfmsriiAgAUVdmzqohMLcoZdXuUedF057aeKgNq0vKouuBaQ++yuyUs5q7eB+s2sDSz",
+	"Vfx_RecChars_SecretTape16": "f3rT0mLv2iA30g8rAUcDsXAWlLH7upB54pDkTkZwy1sYXPPb2g+CmbZ1LImVX2OJJHEsyIIGOqCXo9oKkgaZkQUsXdgi52qLcLpCaCRZJ6fmPVTvgoNPOVsDloNh6bX1WeNWXMIi6PVivJ30U+LUf12MwVdLrKLBeOkAiQe2OIA=",
+	"Vfx_RecChars_SecretTape17": "CF/bo4imDRRhire603ZL62TqoBBzi8AS6iNME3dCkH4LpFm7kPoDArhCkffz/jvQ+4dx27bvrnipuC5W4UkSpEX24tGT/0YO/mmHtcLc+EAD0S/tan/+dkDgFdGekUnepMNl0hCPemOdc2dC97XWFpTvLNVu5QPHtG0s2QDl9EuedSM27zYip88yraixaiWD+i1hmpeQswp0EYsfR61LzhtJ3orzci41hFLxyOq8fr26EnTj1NelRjG35c9LdL93",
+	"Vfx_RecChars_SecretTape18": "nNy0s58ca0r19SLlgpgShcS8iIn1DtegaLlP6xI8t9SHBd1fNrNTxuzU4zJZctopYrMY8Gde0Fk/EIwVGg8Hs7w0RHWKZ0a7kO79p0nNhcFOzZb0njxP+iP+XjHpB7Pn",
+	"Vfx_RecChars_SecretTape19": "C+sWU2v8L0qxIvqXlXxqVscr1c6Vn0emb+/PEHFYRatBjBNzUYlYeyGJpjZQLsR4aPYiHQhf+l0uuHR85H7wynOjgxIy1BxDOUpRNj/0H02JprjN/W1Mf1tl7L1JRpI/YEspvyX43eqjWT0rbLMQjRxcb6sDyqMksBq6ePKgc5A=",
+	"Vfx_RecChars_SecretTape20": "D3id9iyHCB3Oc0ELhiQ+YaX0rGLLreYXruDvh2Ygi/xr9YolNDNLtGR+CDZrHinxVPr0CkiZhIEDxzKdJS5qoXW7dQN55bLBFyMuvaCliamwJGH+iCnEtkDiFD+c4oW4tUKXryGevCrfJz4c3/1qmCZxl0mkAK9r15N8im8KtFs=",
+	"Vfx_RecChars_SecretTape21": "jWtRV6SmJSvKhlS7AZ43ExzBGE/LMi3tXjgLs94Y0muWfs+jzu1b85gTGQMIWNMCYyCc61Iq53G/z1NQ5EyTXfwxNCOQZxmM4fwYipVTE8wXHnmRPyzAJY0qKlFI0ft63kC4v3Jsa76iaZ0jgp0nW5qDBR6pmx4KN6gttv9ujy0=",
+	"Vfx_RecChars_SecretTape22": "LaeMT8bAg3a7e75VDcKbTp+qKSlSJbZcF8B4a1YXswCQfKKwYbSUbaHn9H/qS82u56Rh5Rq2mHeCeYKmFv7iUkn65YGBJ+5gf0YFEf4VNoakRfCAa32yE7elTRmDwLlowqdgkv+QTXcR50RVYBoYcU30b06qUbMmzt5PlHcV3zE=",
+	"Vfx_RecChars_SecretTape23": "YUd+NZKKldUD9M4rZUyu62bkuKURQOBq5OsesUBoXIZm7DouebJNFd1mnyvmlDz18ywRUZE5T6Cvi8bRsLWNkz2Vm/+uB0tkd8J4fofSM3TXIQWIpK9o5MFHQdQIdAOPTtQAcpqFJu9O4UZUS++g2od/bPhP9I8msbsX7f5hh4s=",
+	"Vfx_RecChars_SecretTape24": "of9DxFtWMv176Y1hyp0VZQn6bGD7Ojz77Ja37tu7pqLeUzmhdNEPsj5Ph+DSFzVFmPLsBhKXRXZIzdsiMpe4Q1Sng1qXkxsui0b5DpozLK8SBWrq9rS4QcTpuZ6Y2MvA",
+	"Vfx_RecChars_SecretTape25": "y24V4V/PbLPNAX68KQzYxOLgoTZKQ7rrDz8baAgUDN3IYriimOqYAVXlWxlmQNrO/Rx8cKNkmD15uqG9lKF9i6xIW/NgldOU00PW2Eo/9nBnsHAUPZQBNGux5BqajZbSREJluqo0TPXA7hPPOthd3YZrKhK5Sq3QhIepkSOfKOY=",
+	"Vfx_RecChars_SecretTape26": "YVqaWSYuK7d2NbJmSqIxDob7A2mQv471hDm4X3t2NeUFWkdak4OZGjY72X1kDtcvSqNSZzuMlnYqBACE3mbANrN65KnaushEUwO/aiUe1xIodUtyr3dJ+97wg687thE+ZA66lcqXGsA/m6WhXk9R5YrbdmHjVR6mKZX/9/bzAfc=",
+	"Vfx_RecChars_SecretTape27": "qMB6Qz4VEsjff/Vj+O5RL+HwNxCTsplIl6NG+wgw3RU1vquhsuyAgnx1iw/1ckDbv4hD+GWApTbgpTRZcRcGyHJpLdTLnnI4lWZwKlTFB9VIc0oTY54FNzpmhzrdn32ZA0wyWMe2PGsLX2KGs0/KvHVYueWJ97P0dm0YCqNKysekXt/aLqBQJjUcogoDI+blLzJN2vl0+1T/NJZCNZZ72Q==",
+	"Vfx_RecChars_SecretTape28": "8lo/zMWSM/3Ytv5N38Hg6utHf4Jv57aYLrkgzOSGnpHWryQ0Vo3emhifnRj5hGEkBhs/ySqdnuT4DRFYT+ouX4jHVkMNkuDW/iOUPkFCumZ1bGsvg/vnBpY4RUXW79yY",
+	"Vfx_RecChars_SecretTape29": "JNM/FFyViaTtOmQXkLEqVcUSJXS71Fx384nLVHNYO471CsPy8BcmeQBcjPMaWvwF18Uf1g8jXdJrpnFyC2R5R+i2TJ0ePGqB+yVyaB7Su/ApypaLH5B6hwVrfbptIk3qebnu19YJ9AhSiY9X/VqFmOWAk1Pa5M/Q/BV0bow+3xU=",
+	"Vfx_RecChars_SecretTape30": "N1QVRFmQraadaSQoLGduZuhlqsgVk8LSSQr6Rog/yRU9wEMr4wFE5PDVDJ2UswGiJkCHd40qFOpRX4e6pR7KaaDLR4b6UVb+GPHJuw8lAhgluHIU7AFzbjoAvVg3CdCP8NLZEhTc3/UzuWMvcHkkepaVF6pb0HmZBjWCF1x+7og=",
+	"Vfx_RecChars_SecretTape31": "EOPxuHGV7Y+d1raa2CjWE5zd179kYaLsWJOIReRZL10GMkBbRi2p3ejjiStUj8DPvWENMWWBuVxXCYI2aic//crdisUCZrBw6M5hqIexrTXUb53pKgpgezYgOtZ2pmXv4Z1QYSh6dRjBRIXTGc/0YCnCE46vSfhvDMnc3KwIDpA=",
+	"Vfx_RecChars_SecretTape32": "bvX4jkjM0THk+0i78xO6lBwtumdI5r47cxnNPhQMZNfvO5fX6A7dwX+lSCgWQ9anmaERLzmPs4wYdBxeAKEZWlJlvI+kYXf3/KXVZtaOfkHh+CVVacDKVSdZ9BcWV+Os6zdu7EUDGXJ0F5NUpD88z7F5h88ouBJwB8A2Cczmkd4=",
+	"Vfx_RecChars_SecretTape33": "AieyRabzqwIs8xlQ8c0cVXq2tK7l2qQP/HWJhyjpax/dlGplOqJJS6BwEnlNnCiCXSumWBXcZkI5JK+MmhV4bnAzeEo2FlA1R5XvrJZvqRl5zl9Q/wKZuRVPP1NC1g1U",
+	"Vfx_RecChars_SecretTape34": "mp3kkfvwTY0pcEHDijw7ioWoypm/1LJ4bUCZfFzw3cDusiEcStA7IFAKKsXFUWd3gfQL/QkHHH+/t62IC88hG51+q0Zu5xI48yPYqOwNniCrbp9dEqrQ7BzTfd6nkBdIM+hV3LhjgkxJcg2gF4YJTQ/DQEGq0T2+kfr2YoctEi8=",
+	"Vfx_RecChars_SecretTape35": "DexySKpusuSt0zouw7JI10+SqBTOd7RsJElaClEK7IBBf3bVEzGVd/6NoEoVJZxuiLccRPDWms/w/8kmWUebpgZyGbrv7iFT+FsNNTe+7ttUnXTjyX1kKQZJ4WMJ9zXL7TYfnt51oGJLvNrNDdgZ1fhWP/uWWhuULoMYk+9lxvRopuxzk/satHwuLcbQkjehBXc+EdWVkI4NbQdmghDs9g==",
+	"Vfx_RecChars_SecretTape36": "5wi9oUAH58eXRxaNesBgN6/k4j1vUdpBJF57pglxegzK+5SF4+4YMJonWvSiS0QUu+VRfHOxpMuZKlufRiHToKpQYshWr0o/qihDfDOE2mWtJwgspenzLJFUrZqpNiT6iEHKjPqPNIHiYn6ZUggQoOcVpjBhz/Z72oxvd+U8SUA=",
+	"Vfx_RecChars_SecretTape37": "eLYsyXpw872NxOIzoTczXKNgKBfeb1F1NKVF5yY6Si2mFzPciqbXRugAm7i4YmVdyq08KhnTlcJRdMLNyj6aOo82IJF9KAVEpr+/tIojsCeSvcd6fUmpiczHg9ogou13XGPf2y3eSjIsBu8V5GUgMvW5f1a5NWELHmlco6pc2hs=",
+	"Vfx_RecChars_SecretTape38": "Xa9XujyfAXjmjT7RYkXxNzGbePx6MqmRcmm+zBrDsIAe4yaImn37MavsTjIhOUTJuHiz+FGepEZKecm66LLbuek2K219TEmqqYyoefvVGecMQWgwhTD3fb1OzMM222U2",
+	"Vfx_RecChars_SecretTape39": "EjO8woOo313hSfZ7hLSsFTAX/khwSboIEgBsLrXNOSnpOZ/Rk5QlZvPKp3zRKJK1wsY3aTuJn6GV76gSguZGm5oNCRrhJoXvoRgpiXYt8vv+6C77VxebrtBkTqwCLTHZ",
+	"Vfx_RecChars_SecretTape40": "PYSkGmNABwUsB1fJQYj2qr7TTwk8ZiY1Eu5hFJAvWQOZKCV2wUTcdPELm2fuKI8ut/bi3VSYKzNfrrnQhXSwMecxjmGp92k9/vgYi4cC3wUD/3qX6Cox2a9wIYuTx/Cp"
 }

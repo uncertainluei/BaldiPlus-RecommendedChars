@@ -14,14 +14,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CoreGameManager.Instance.audMan.PlaySingle(audShatter);
 
             if (BaseGameManager.Instance is PartyWinManager partyWin)
-                partyWin.PaintingTouched();
+                partyWin.PaintingTouched(pm);
 
             // Anger Baldi and make noise as if the player got an activity incorrect
             BaseGameManager.Instance.AngerBaldi(1f);
             pm.ec.MakeNoise(transform.position, 126);
 
-            int shardCount = Random.Range(10,16); //10-15 shards
-            for (; shardCount > 0; shardCount--)
+            for (int c = Random.Range(10,16); c > 0; c--) //10-15 shards
                 Instantiate(particlePre, transform.parent).Initialize(transform.position, sprite.sprite, pm.ec);
             Destroy(gameObject);
         }

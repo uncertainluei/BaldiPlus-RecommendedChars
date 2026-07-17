@@ -20,6 +20,7 @@ using UncertainLuei.CaudexLib.Util.Extensions;
 
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
@@ -39,7 +40,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ObjectCreation.AddAudioToAssetMan("NpcSurprises/", ["Audio", "Npc", "Misc"]);
 
             // Load patches
-            Hooks.PatchAll(typeof(SpoilerAreaPatches));
+            // Hooks.PatchAll(typeof(SpoilerAreaPatches));
         }
 
         private WeightedRoomAsset[] newCafeterias;
@@ -70,7 +71,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             CreatePartyWinObjects();
             CreatePartyWinSurpriseNpcs();
 
-            LoadPartyWinLevel();
+            //LoadPartyWinLevel();
         }
 
         private void LoadPosters()
@@ -252,6 +253,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 }
             ];
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_wantedbulletin", wantedPoster);
+
+            ObjectCreation.CreatePoster(AssetFinder.FindOfTypeWithName<Texture2D>("pst_black", true), "EndOfLine", [new()
+            {
+                color = Color.white,
+                textKey = "PST_RecChars_EndOfLine",
+                font = BaldiFonts.ComicSans36.FontAsset(),
+                fontSize = 36,
+                alignment = TextAlignmentOptions.Center,
+                position = new(16, 16),
+                size = new(224, 224)
+            }]);
         }
 
         private Material _baseMat;
@@ -376,6 +388,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             noNanasFunction = GameObject.Instantiate(noNanasFunction, MTM101BaldiDevAPI.prefabTransform);
             noNanasFunction.name = "CafeteriaPartyRoomFunction_Win";
             noNanasFunction.AddFunction<PartyWinRoomFunction>();
+            SkyboxRoomFunction skyboxFunc = noNanasFunction.GetComponent<SkyboxRoomFunction>();
+            noNanasFunction.functions.Remove(skyboxFunc);
+            skyboxFunc = skyboxFunc.gameObject.SwapComponent<SkyboxRoomFunction, PartyWinSkyboxRoomFunction>(false);
+            noNanasFunction.AddFunction(skyboxFunc);
+            skyboxFunc.skybox.modifiedMeshHeight = 2;
+
             LevelLoaderPlugin.Instance.roomSettings["recchars_partycafeteriawin"].container = noNanasFunction;
         }
 
@@ -458,8 +476,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .Build();
             LevelLoaderPlugin.Instance.itemObjects.Add("recchars_endingtape", endingItem);
             
+            
             string key = "Vfx_RecChars_SecretTape"; // Technically unnecessary but this is done for readability sake
 
+            ITM_PartySecretTape.itemEnum = endingItem.itemType;
+            
             ITM_PartySecretTape.speech = ObjectCreators.CreateSoundObject(null, key+"1", SoundType.Voice, Color.white, 166.87f);
             ITM_PartySecretTape.speech.encrypted = true;
             ITM_PartySecretTape.speech.additionalKeys = [
@@ -557,18 +578,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             // Vanilla Surprise NPC variants
             Principal principal = (Principal)NPCMetaStorage.Instance.Get(Character.Principal).value;
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(
                 principal,
                 AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Principal").OverlayTexture(principal.chasingSprite), new Vector2(0.5f, 0.4f), 65f),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/PRI_NoSurprises"), "Vfx_PRI_NoSurprises", SoundType.Voice, new(0f, 30 / 255f, 123 / 255f), 1.75f)
             ));
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(
                 NPCMetaStorage.Instance.Get(Character.Playtime).value,
                 AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Playtime").OverlayTexture(vanillaSprites.First(x => x.name == "Playtime_6")), 100f),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/PT_Surprise"), "Vfx_Playtime_Surprise", SoundType.Voice, Color.red, 2.38f)
             ));
             ArtsAndCrafters crafters = (ArtsAndCrafters)NPCMetaStorage.Instance.Get(Character.Crafters).value;
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(
                 crafters, crafters.angrySprite,
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/CFT_Parrot"), "Vfx_Crafters_Parrot", SoundType.Voice, Color.white)
             ));
@@ -576,34 +597,36 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Vector3 pos = theTest.headTransform.localPosition;
             pos.y = theTest.maxHeadHeight;
             theTest.headTransform.localPosition = pos;
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(
                 theTest, theTest.audActivate
             ));
             NPC npc = NPCMetaStorage.Instance.Get(Character.Bully).value;
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(
                 npc,
                 AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/Bully").OverlayTexture(npc.spriteRenderer[0].sprite, Color.green), 26f),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/BUL_Gift"), "Vfx_Bully_Gift", SoundType.Voice, new(1f, 162 / 255f, 0f), 6.84f)
             ));
             npc = NPCMetaStorage.Instance.Get(Character.Sweep).value;
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(
                 npc,
                 AssetLoader.SpriteFromTexture2D(AssetMan.Get<Texture2D>("NpcOverlays/GottaSweep").OverlayTexture(npc.spriteRenderer[0].sprite), 26f),
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/GS_Surprise"), "Vfx_Sweep_Surprise", SoundType.Voice, new(0f, 159 / 255f, 16 / 255f), 2.42f)
             ));
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(
                 NPCMetaStorage.Instance.Get(Character.Prize).value,
                 ObjectCreators.CreateSoundObject(AssetMan.Get<AudioClip>("NpcSurprises/1PR_Surprise"), "Vfx_Prize_Surprise", SoundType.Voice, new(0f, 223 / 255f, 1f), 2.44f)
             ));
 
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Cumulo).value));
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Pomp).value));
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.DrReflex).value));
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Beans).value));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Cumulo).value));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Pomp).value));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.DrReflex).value));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualRenderer(NPCMetaStorage.Instance.Get(Character.Beans).value));
         }
 
         private void LoadPartyWinLevel()
         {
+            PlaceholderWinManager placeholderWin = AssetFinder.FindAllOfType<PlaceholderWinManager>(true).First();
+
             PartyWinManager winManager = new BaseGameManagerBuilder<PartyWinManager>()
                 .SetObjectName("PartyWinManager")
                 .SetNPCSpawnMode(GameManagerNPCAutomaticSpawn.Never)
@@ -612,6 +635,28 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             winManager.endingEnvironment = AssetFinder.FindAllOfType<EnvironmentController>(true).First();
             winManager.levelLoader = AssetFinder.FindAllOfType<LevelLoader>(true).First();
             winManager.endingLevel = ObjectCreation.LevelAssetFromPath("Secret", "PartyEndingTop.bpl");
+            winManager.blackScreen = GameObject.Instantiate(placeholderWin.blackScreen, winManager.transform);
+
+            winManager.promptScreen = GameObject.Instantiate(placeholderWin.endingError, winManager.transform);
+            winManager.promptScreen.name = "PromptScreen";
+            winManager.promptScreen.GetComponentInChildren<Image>().sprite = AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1, "Textures", "Gui", "BooScaryImage.png");
+            winManager.promptText = winManager.promptScreen.GetComponentInChildren<TMP_Text>();
+            winManager.promptText.alignment = TextAlignmentOptions.TopLeft;
+            winManager.promptText.fontSize = 24;
+            winManager.promptText.font = AssetFinder.FindOfTypeWithName<TMP_FontAsset>("SANS_SERIF_24_Pro", true);
+            winManager.promptText.color = Color.white;
+
+            winManager.winScreen = GameObject.Instantiate(placeholderWin.endingError, winManager.transform);
+            winManager.winScreen.name = "WinScreen";
+            winManager.winScreen.GetComponentInChildren<Image>().sprite = AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1, "Textures", "Gui", "WinImage.png");
+            TMP_Text winText = winManager.winScreen.GetComponentInChildren<TMP_Text>();
+            ((RectTransform)winText.transform).sizeDelta = new(480, 340);
+            winText.fontSize = 36;
+            winText.font = BaldiFonts.ComicSans36.FontAsset();
+            winText.color = Color.white;
+
+            winManager.audBlow = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "BlowCandle.wav"), "", SoundType.Effect, Color.white, 0);
+            winManager.audWow = AssetMan.Get<SoundObject>("Sfw/BaldWow");
             winManager.endingLevel.randomGenStructures = [ObjMan.Get<StructureWithParameters>("Strct/PartyWinBaldloonSpawner")];
 
             SceneObject scene = ObjectCreation.SceneObjectFromPath("Secret", "PartyEnding.bpl");
@@ -640,7 +685,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             lvl.posters = lvl.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/bee").Weighted(1));
         }
 
-        [CaudexGenModEvent(GenerationModType.Finalizer)]
+        //[CaudexGenModEvent(GenerationModType.Finalizer)]
         private void FloorFinalizer(string title, int num, SceneObject scene)
         {
             if (RecommendedCharsPlugin.PartyMode && scene.nextLevel?.GetMeta()?.tags.Contains("ending") == true)

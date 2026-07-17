@@ -34,6 +34,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class ITM_PartySecretTape : Item
     {
         private RaycastHit hit;
+        internal static Items itemEnum;
         internal static SoundObject speech;
 
         public override bool Use(PlayerManager pm)
@@ -61,10 +62,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             # if DEBUG
             string path = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Audio", "Sfx", "SecretMessage.ogg");
-            byte[] data = RijndaelEncryption.Encrypt(File.ReadAllBytes(path), "1999");
-            File.WriteAllBytes(path+"_enc", data);
+            if (!File.Exists(path+"_enc"))
+            {
+                byte[] data = RijndaelEncryption.Encrypt(File.ReadAllBytes(path), "1999");
+                File.WriteAllBytes(path+"_enc", data);
+            }
             #endif
 
+            if (!speech)
+            {
+                RecommendedCharsPlugin.Log.LogError("Tried playing the secret message when it doesn't exist. You are not slick, buddy.");
+                yield break;
+            }
             if (!speech.soundClip)
             {
                 string pathToDecrypt = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Audio", "Sfx", "SecretMessage.ogg_enc");

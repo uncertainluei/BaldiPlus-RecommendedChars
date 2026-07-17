@@ -73,7 +73,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_locksock", lockSock);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_locksock", lockSock.Poster);
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(lockSock));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(lockSock));
             ObjMan.Add("Npc/LockSock", lockSock);
         }
 

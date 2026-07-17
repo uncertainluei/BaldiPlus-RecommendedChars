@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
@@ -32,7 +30,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
 
             List<SurpriseNpcVisual> possibleVisuals = new(SurpriseNpc.possibleVisuals);
-            RecommendedCharsPlugin.Log.LogDebug($"Party Win Room has {room.objectObject.transform.childCount} children");
             surpriseNpcs = room.objectObject.GetComponentsInChildren<SurpriseNpcBase>(true);
             SurpriseNpc[] npcs = room.objectObject.GetComponentsInChildren<SurpriseNpc>(true);
             int roll;
@@ -71,6 +68,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 light.SetLight(false);
             foreach (SurpriseNpcBase npc in surpriseNpcs)
                 npc.StartCoroutine(npc.Float());
+        }
+    }
+
+    public class PartyWinSkyboxRoomFunction : SkyboxRoomFunction
+    {
+        public override void Initialize(RoomController room)
+        {
+            base.Initialize(room);
+            Vector3 vector = skybox.transform.localScale;
+            vector.y = 2/3f;
+            skybox.transform.localScale = vector;
+            skybox.transform.position -= Vector3.up * 5f;
         }
     }
 }

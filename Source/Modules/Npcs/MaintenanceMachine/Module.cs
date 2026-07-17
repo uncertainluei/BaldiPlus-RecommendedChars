@@ -48,7 +48,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 .SetEnum("RecChars_MaintMachine")
                 .SetPoster(AssetMan.Get<Texture2D>("MMachineTex/pri_emm"), "PST_PRI_RecChars_MaintMachine1", "PST_PRI_RecChars_MaintMachine2")
                 .AddMetaFlag(NPCFlags.Standard & ~NPCFlags.CanSee)
-                .SetMetaTags(["adv_exclusion_hammer_weakness", "RebProtection"])
+                .SetMetaTags(["adv_exclusion_hammer_weakness", "RebProtection", "custom_mode_force_npc_in_list"])
                 .AddTrigger()
                 .Build();
 
@@ -75,7 +75,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_maintmachine", machine);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_maintmachine", machine.Poster);
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(machine));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(machine));
             ObjMan.Add("Npc/MaintMachine", machine);
 
             // Add spawn tag for the maintenance level type

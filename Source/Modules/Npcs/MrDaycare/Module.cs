@@ -212,7 +212,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", unnerfedDaycare);
             SetMrDaycarePrefab();
-            SurpriseNpc.possibleVisuals.Add(new SurpriseNpcVisualSprite(daycare));
+            SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(daycare));
             RecommendedCharsConfig.nerfMrDaycare.SettingChanged += (x, y) =>
             {
                 SetMrDaycarePrefab();
