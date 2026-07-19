@@ -93,23 +93,28 @@
 	<!--Release packaging-->
 	<Target Name="Package" AfterTargets="Build;Publish">
 		<PropertyGroup>
-			<ArchivePath>$(MSBuildProjectDirectory)/../Build/archive/$(Configuration)/</ArchivePath>
-			<ResourcesPath>$(ArchivePath)BALDI_Data/StreamingAssets/Modded</ResourcesPath>
-			<PluginsPath>$(ArchivePath)BepInEx/plugins</PluginsPath>
+			<ArchivePath>$(MSBuildProjectDirectory)/../Build/archive/$(Configuration)</ArchivePath>
+			<ResourcesPath>$(ArchivePath)/BALDI_Data/StreamingAssets/Modded</ResourcesPath>
+			<PluginsPath>$(ArchivePath)/BepInEx/plugins</PluginsPath>
+			<GmpSettingsPath>$(ArchivePath)/.gmp</GmpSettingsPath>
 		</PropertyGroup>
 		<ItemGroup>
 			<ResourcesDir Include="$(MSBuildProjectDirectory)/../Resources/**/*.*" />
+			<GmpSettingsDir Include="$(MSBuildProjectDirectory)/../Gmp/*.*" />
 		</ItemGroup>
 		
-		<MakeDir Directories="$(ResourcesPath);$(PluginsPath)" />
+		<MakeDir Directories="$(ResourcesPath);$(PluginsPath);$(GmpSettingsPath)" />
 		<Copy SourceFiles="@(ResourcesDir)" DestinationFolder="$(ResourcesPath)/%(RecursiveDir)" />
+		<Copy SourceFiles="@(GmpSettingsDir)" DestinationFolder="$(GmpSettingsPath)" />
 		<Copy SourceFiles=
 			  "$(OutputPath)$(AssemblyName).dll;
-			  $(OutputPath)$(AssemblyName).pdb;
-			  $(MSBuildProjectDirectory)/../LICENSE;
-			  $(MSBuildProjectDirectory)/../NOTICE;"
+			  $(OutputPath)$(AssemblyName).pdb;"
 		DestinationFolder="$(PluginsPath)" />
+		<Copy SourceFiles=
+			  "$(MSBuildProjectDirectory)/../LICENSE;
+			  $(MSBuildProjectDirectory)/../NOTICE;"
+		DestinationFolder="$(ArchivePath)" />
 		
-		<ZipDirectory SourceDirectory="$(ArchivePath)" DestinationFile="$(MSBuildProjectDirectory)/../Build/$(AssemblyName)-v$(Version).zip" Overwrite="true" />
+		<ZipDirectory SourceDirectory="$(ArchivePath)" DestinationFile="$(MSBuildProjectDirectory)/../Build/$(AssemblyName)-v$(Version)_$(Configuration).zip" Overwrite="true" />
 	</Target>
 </Project>

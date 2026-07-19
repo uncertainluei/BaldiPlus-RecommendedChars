@@ -1,0 +1,16 @@
+{
+	"Guid": "io.github.uncertainluei.baldiplus.recommendedchars",
+	"Name": "Recommended Characters Pack",
+	"Author": "uncertain_luei",
+	"Version": "1.4",
+	"Description": "A mod that adds a bunch of requested characters to the game!",
+	"Assets":
+	[
+		{
+			"LocalPath": "BALDI_Data/StreamingAssets/Modded/uncertainluei",
+			"Destination": "BALDI_Data/StreamingAssets/Modded"
+		}
+	],
+	"Plugins": ["BepInEx/plugins/UncertainLuei.RecommendedChars.dll", "BepInEx/plugins/UncertainLuei.RecommendedChars.pdb"],
+	"Patchers": []
+}
