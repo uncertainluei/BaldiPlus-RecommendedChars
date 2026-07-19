@@ -102,7 +102,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             ModdedHighscoreManager.AddModToList(Info, saveGameSystem.GenerateTags());
             CustomOptionsCore.OnMenuInitialize += (menu, handler) => { if (!CoreGameManager.Instance) handler.AddCategory<RecommendedCharsOptionsMenu>("Opt_RecChars").name = "RecChars"; };
 
-            MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
+            //MTM101BaldiDevAPI.AddWarningScreen("You are running a <color=yellow>BETA</color> build of <color=green>Recommended Characters Pack</color>.\nAs such, the content added might not be fully implemented or polished, and you may run into <color=red>BUGS!!!</color>\nPlease report any bugs or crashes to the <color=red>Issues</color> page of the GitHub repo!", false);
         }
 
         internal static void PatchCompat(Type type, string guid)
