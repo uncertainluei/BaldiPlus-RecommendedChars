@@ -27,7 +27,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         
 
         private MovementModifier moveMod = new(default, 0f);
-        private SurpriseNpcBase[] surpriseNpcs;
         private PlayerManager liftedPlayer;
         private List<Cell> lights;
 
