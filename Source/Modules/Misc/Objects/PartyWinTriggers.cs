@@ -36,6 +36,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private RaycastHit hit;
         internal static Items itemEnum;
         internal static SoundObject speech;
+        private static bool speechLoaded;
 
         public override bool Use(PlayerManager pm)
         {
@@ -74,10 +75,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 RecommendedCharsPlugin.Log.LogError("Tried playing the secret message when it doesn't exist. You are not slick, buddy.");
                 yield break;
             }
-            if (!speech.soundClip)
+            if (!speechLoaded)
             {
                 string pathToDecrypt = Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Audio", "Sfx", "SecretMessage.ogg_enc");
                 speech.soundClip = RijndaelEncryption.Decrypt(File.ReadAllBytes(pathToDecrypt), "1999").ToAudioClip("SecretMessage", AudioType.OGGVORBIS);
+                speechLoaded = true;
                 yield return new WaitForEndOfFrame();
             }
             tape.audMan.PlaySingle(speech);

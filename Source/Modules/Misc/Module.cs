@@ -481,7 +481,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             ITM_PartySecretTape.itemEnum = endingItem.itemType;
             
-            ITM_PartySecretTape.speech = ObjectCreators.CreateSoundObject(null, key+"1", SoundType.Voice, Color.white, 166.87f);
+            ITM_PartySecretTape.speech = ObjectCreators.CreateSoundObject(AssetFinder.FindAllOfType<AudioClip>(false).First(x => x.length > 3f), key+"1", SoundType.Voice, Color.white, 166.87f);
             ITM_PartySecretTape.speech.encrypted = true;
             ITM_PartySecretTape.speech.additionalKeys = [
                 new() {encrypted = true, key = key+2, time = 2.17f},
