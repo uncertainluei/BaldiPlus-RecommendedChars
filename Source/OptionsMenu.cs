@@ -49,7 +49,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             confirmBtnYes = buttons[0];
             confirmBtnNo = buttons[1];
 
-            blackCover = Instantiate(Resources.FindObjectsOfTypeAll<MainMenu>().First(x => x.gameObject.scene == this.gameObject.scene).blackCover, transform);
+            blackCover = Instantiate(GameObject.FindObjectOfType<MainMenu>(true).blackCover, transform);
+            blackCover.SetActive(false);
 
             UpdatePageTitle();
         }

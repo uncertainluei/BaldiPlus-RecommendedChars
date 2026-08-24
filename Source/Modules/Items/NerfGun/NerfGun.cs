@@ -8,17 +8,17 @@
 
             if (pm.jumpropes.Count == 0) return false;
 
-            bool fail = true;
+            bool used = false;
             for (int i = pm.jumpropes.Count-1; i >= 0; i--)
             {
                 if (pm.jumpropes[i] is CircleJumprope)
                 {
-                    fail = false;
+                    used = true;
                     pm.jumpropes[i].End(false);
                 }
             }
             
-            return fail;
+            return used;
         }
     }
 }

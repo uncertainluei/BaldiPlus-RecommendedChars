@@ -19,7 +19,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
     [CaudexModule("Noongus"), CaudexModuleSaveTag("Mdl_Noongus")]
     [CaudexModuleConfig("Modules", "Noongus",
-        "An unknown creature who loves bricks!", false)]
+        "An unknown creature who loves bricks!", true)]
     public sealed class Module_Noongus : RecCharsModule
     {
         internal override byte IconId => 11;
