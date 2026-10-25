@@ -193,7 +193,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             int idx = 0;
             List<WeightedRoomAsset> rooms = [];
 
-            foreach (string file in Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Layouts", dir), "*.rbpl"))
+            foreach (string file in Directory.GetFiles(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Data", "Rooms", dir), "*.rbpl"))
             {
                 BinaryReader reader = new(File.OpenRead(file));
                 BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
@@ -224,7 +224,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private static BaldiLevel GetLevelData(params string[] paths)
         {
-            string path = Path.Combine(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Layouts"), Path.Combine(paths));
+            string path = Path.Combine(Path.Combine(AssetLoader.GetModPath(RecommendedCharsPlugin.Plugin), "Data", "Levels"), Path.Combine(paths));
             BinaryReader reader = new(File.OpenRead(path));
             return BaldiLevel.Read(reader);
         }
