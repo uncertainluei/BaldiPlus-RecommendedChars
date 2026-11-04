@@ -1,11 +1,9 @@
-﻿using AsmResolver.DotNet;
-using BaldisBasicsPlusAdvanced.API;
+﻿using BaldisBasicsPlusAdvanced.API;
 using HarmonyLib;
 
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components.Animation;
-using MTM101BaldAPI.Reflection;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 
@@ -48,7 +46,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void LoadCircle()
         {
             CircleNpc circle = GameObject.Instantiate((Playtime)NPCMetaStorage.Instance.Get(Character.Playtime).value, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<Playtime, CircleNpc>();
-            circle.name = "RecChars ShapeWorld Circle";
+            circle.name = "ShapeWorld Circle";
 
             CircleNpc.charEnum = EnumExtensions.ExtendEnum<Character>("RecChars_Circle");
             circle.character = CircleNpc.charEnum;
@@ -100,7 +98,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
              
             circle.sprNormal = sprites[0];
             circle.sprSad = sprites[1];
-
             circle.sprite.sprite = circle.sprNormal;
 
             CircleJumprope jumprope = GameObject.Instantiate(circle.jumpropePre, MTM101BaldiDevAPI.prefabTransform).SwapComponentSimple<Jumprope, CircleJumprope>();
@@ -113,48 +110,36 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             jumprope.ropeDelay = 0f;
             jumprope.ropeTime = 1f;
-            jumprope.maxJumps = 8;
-            jumprope.startVal = 64;
-            jumprope.penaltyVal = -8;
 
-            ObjMan.Add("Npc/Circle_Nerfed", circle);
-            ObjMan.Add("Comp/CircleRope_Nerfed", jumprope);
-            
-            CircleNpc unnerfedCircle = GameObject.Instantiate(circle, MTM101BaldiDevAPI.prefabTransform);
-            unnerfedCircle.name = "ShapeWorld Circle Unnerfed";
+            circle.SetNerfedPreset(RecommendedCharsConfig.nerfCircle.Value);
 
-            // The original speed in TCMG's Basics was 500 but this should flow better in-game
-            unnerfedCircle.normSpeed = 90f;
-            unnerfedCircle.runSpeed = 90f;
-            unnerfedCircle.sadSpeed = 90f;
-            unnerfedCircle.initialCooldown = 15f;
-            unnerfedCircle.successCooldown = 15f;
-
-            CircleJumprope unnerfedJumprope = GameObject.Instantiate(jumprope, MTM101BaldiDevAPI.prefabTransform);
-            unnerfedJumprope.name = "ShapeWorld Circle_Jumprope Unnerfed";
-
-            unnerfedCircle.jumpropePre = unnerfedJumprope;
-            unnerfedJumprope.maxJumps = 10;
-            unnerfedJumprope.startVal = 43;
-            unnerfedJumprope.penaltyVal = -5;
-
+            CircleNpc nerfedCircle = CreateVariant(circle, true);
+            ObjMan.Add("Npc/Circle_Nerfed", nerfedCircle);
+            CircleNpc unnerfedCircle = CreateVariant(circle, false);
             ObjMan.Add("Npc/Circle_Unnerfed", unnerfedCircle);
-            ObjMan.Add("Comp/CircleRope_Unnerfed", unnerfedJumprope);
+            ObjMan.Add("Npc/Circle", circle);
 
-            PineDebugNpcIcons.AddIcon([circle, unnerfedCircle], "BorderCircle.png");
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", circle);
+            PineDebugNpcIcons.AddIcon([circle, nerfedCircle, unnerfedCircle], "BorderCircle.png");
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle", nerfedCircle);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_circle_og", unnerfedCircle);
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_circle", circle.Poster);
-            NPCMetadata circleMeta = new(Plugin, [circle, unnerfedCircle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
+            NPCMetadata circleMeta = new(Plugin, [circle, nerfedCircle, unnerfedCircle], circle.name, NPCMetaStorage.Instance.Get(Character.Playtime).flags | NPCFlags.MakeNoise, ["student", "adv_exclusion_hammer_weakness"]);
             NPCMetaStorage.Instance.Add(circleMeta);
-            SetCirclePrefabs();
             SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(circle, circle.audGo));
 
             RecommendedCharsConfig.nerfCircle.SettingChanged += (x, y) =>
-            {
-                SetCirclePrefabs();
-                UpdateCircleInstances();
-            };
+                ObjMan.Get<CircleNpc>("Npc/Circle").SetNerfedPreset(RecommendedCharsConfig.nerfCircle.Value);
+        }
+
+        private CircleNpc CreateVariant(CircleNpc baseNpc, bool nerfed)
+        {
+            CircleNpc variant = GameObject.Instantiate(baseNpc, MTM101BaldiDevAPI.prefabTransform);
+            CircleJumprope jumprope = GameObject.Instantiate((CircleJumprope)variant.jumpropePre, MTM101BaldiDevAPI.prefabTransform);
+            variant.jumpropePre = jumprope;
+            variant.SetNerfedPreset(nerfed);
+            variant.name = "ShapeWorld Circle_" + (nerfed ? "Nerfed" : "Unnerfed");
+            variant.jumpropePre.name = variant.name+"_Jumprope";
+            return variant;
         }
 
         /*[CaudexLoadEventMod(RecommendedCharsPlugin.AnimationsGuid, LoadingEventOrder.Pre)]
@@ -200,37 +185,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                     default:
                         AddToNpcs(scene, 100);
                         break;
-                }
-            }
-        }
-
-        private void SetCirclePrefabs()
-        {
-            ObjMan.Add("Npc/Circle", ObjMan.Get<CircleNpc>(RecommendedCharsConfig.nerfCircle.Value ? "Npc/Circle_Nerfed" : "Npc/Circle_Unnerfed"));
-            ObjMan.Add("Comp/CircleRope", ObjMan.Get<CircleJumprope>(RecommendedCharsConfig.nerfCircle.Value ? "Comp/CircleRope_Nerfed" : "Comp/CircleRope_Unnerfed"));
-            //NPCMetaStorage.Instance.Get(CircleNpc.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<CircleNpc>("Npc/Circle").name);
-        }
-
-        private void UpdateCircleInstances()
-        {
-            SceneObject scene;
-            int i, c;
-            foreach (SceneObjectMetadata sceneMeta in SceneObjectMetaStorage.Instance.All().Where(x => x.tags.Contains("endless") == true || x.title.StartsWith("F")))
-            {
-                scene = sceneMeta.value;
-                if (RecommendedCharsConfig.guaranteeSpawnChar)
-                {
-                    for (i = 0, c = scene.forcedNpcs.Length; i < c; i++)
-                    {
-                        if (scene.forcedNpcs[i].character == CircleNpc.charEnum)
-                            scene.forcedNpcs[i] = ObjMan.Get<CircleNpc>("Npc/Circle");
-                    }
-                    continue;
-                }
-                for (i = 0, c = scene.potentialNPCs.Count; i < c; i++)
-                {
-                    if (scene.potentialNPCs[i].selection?.character == CircleNpc.charEnum)
-                        scene.potentialNPCs[i].selection = ObjMan.Get<CircleNpc>("Npc/Circle");
                 }
             }
         }

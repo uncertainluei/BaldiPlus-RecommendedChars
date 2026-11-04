@@ -481,50 +481,13 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             ITM_PartySecretTape.itemEnum = endingItem.itemType;
             
-            ITM_PartySecretTape.speech = ObjectCreators.CreateSoundObject(AssetFinder.FindAllOfType<AudioClip>(false).First(x => x.length > 3f), key+"1", SoundType.Voice, Color.white, 166.87f);
+            ITM_PartySecretTape.speech = ObjectCreators.CreateSoundObject(AssetFinder.FindAllOfType<AudioClip>(false).First(x => x.length > 3f), key+"1", SoundType.Voice, Color.white, 12.13f);
             ITM_PartySecretTape.speech.encrypted = true;
             ITM_PartySecretTape.speech.additionalKeys = [
                 new() {encrypted = true, key = key+2, time = 2.17f},
-                new() {encrypted = true, key = key+3, time = 3.8f},
-                new() {encrypted = true, key = key+4, time = 7.7f},
-                new() {encrypted = true, key = key+5, time = 9.85f},
-                new() {encrypted = true, key = key+6, time = 13.52f},
-                new() {encrypted = true, key = key+7, time = 16.84f},
-                new() {encrypted = true, key = key+2, time = 20.2f},
-                new() {encrypted = true, key = key+8, time = 21.2f},
-                new() {encrypted = true, key = key+9, time = 29.5f},
-                new() {encrypted = true, key = key+10, time = 35.5f},
-                new() {encrypted = true, key = key+11, time = 41.6f},
-                new() {encrypted = true, key = key+12, time = 49f},
-                new() {encrypted = true, key = key+13, time = 52.5f},
-                new() {encrypted = true, key = key+14, time = 55.65f},
-                new() {encrypted = true, key = key+15, time = 58.9f},
-                new() {encrypted = true, key = key+16, time = 63.7f},
-                new() {encrypted = true, key = key+17, time = 67.86f},
-                new() {encrypted = true, key = key+18, time = 73.5f},
-                new() {encrypted = true, key = key+19, time = 74.62f},
-                new() {encrypted = true, key = key+20, time = 79.5f},
-                new() {encrypted = true, key = key+21, time = 85.6f},
-                new() {encrypted = true, key = key+22, time = 89.96f},
-                new() {encrypted = true, key = key+23, time = 92.6f},
-                new() {encrypted = true, key = key+24, time = 96.8f},
-                new() {encrypted = true, key = key+25, time = 100f},
-                new() {encrypted = true, key = key+26, time = 104.4f},
-                new() {encrypted = true, key = key+2, time = 108.3f},
-                new() {encrypted = true, key = key+27, time = 109.7f},
-                new() {encrypted = true, key = key+28, time = 116f},
-                new() {encrypted = true, key = key+29, time = 117.86f},
-                new() {encrypted = true, key = key+30, time = 122.3f},
-                new() {encrypted = true, key = key+31, time = 127.3f},
-                new() {encrypted = true, key = key+32, time = 132f},
-                new() {encrypted = true, key = key+33, time = 134.8f},
-                new() {encrypted = true, key = key+34, time = 137.6f},
-                new() {encrypted = true, key = key+35, time = 141.8f},
-                new() {encrypted = true, key = key+36, time = 148f},
-                new() {encrypted = true, key = key+37, time = 152.7f},
-                new() {encrypted = true, key = key+38, time = 157.4f},
-                new() {encrypted = true, key = key+39, time = 159.4f},
-                new() {encrypted = true, key = key+40, time = 162.58f}
+                new() {encrypted = true, key = key+3, time = 4.93f},
+                new() {encrypted = true, key = key+4, time = 9.67f},
+                new() {encrypted = true, key = key+5, time = 11.212f}
             ];
         }
 
@@ -656,7 +619,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             winText.color = Color.white;
 
             winManager.audBlow = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "BlowCandle.wav"), "", SoundType.Effect, Color.white, 0);
-            winManager.audWow = AssetMan.Get<SoundObject>("Sfw/BaldWow");
+            winManager.audWow = AssetMan.Get<SoundObject>("Sfx/BaldWow");
             winManager.endingLevel.randomGenStructures = [ObjMan.Get<StructureWithParameters>("Strct/PartyWinBaldloonSpawner")];
 
             SceneObject scene = ObjectCreation.SceneObjectFromPath("Secret", "PartyEnding.bpl");

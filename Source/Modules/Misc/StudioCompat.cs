@@ -22,14 +22,17 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             
             AssetMan.Add("EditorSpr/Room_PartyCafeteria", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Room", "PartyCafeteria.png"));
             AssetMan.Add("EditorSpr/Room_PartyCafeteriaNoNanas", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Room", "PartyCafeteriaNoNanas.png"));
+            AssetMan.Add("EditorSpr/Room_PartyCafeteriaWin", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Room", "PartyCafeteriaWin.png"));
+            AssetMan.Add("EditorSpr/Room_BaldisOffice", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Room", "BaldisOffice.png"));
 
-            AssetMan.Add("EditorSpr/Obj_ArtPaintings", AssetLoader.SpritesFromSpritesheet(2, 4, 1f, Vector2.one/2, AssetLoader.TextureFromMod(BasePlugin, "Textures", "Compat", "LevelStudio", "Object", "ArtPaintings.png")));
             AssetMan.Add("EditorSpr/Obj_Cake", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "Cake.png"));
             AssetMan.Add("EditorSpr/Obj_CakeWCandle", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "CakeWCandle.png"));
             AssetMan.Add("EditorSpr/Obj_PartyElevator", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "PartyElevator.png"));
-        
+
+            AssetMan.Add("EditorSpr/Obj_ArtPaintings", AssetLoader.SpritesFromSpritesheet(2, 4, 1f, Vector2.one/2, AssetLoader.TextureFromMod(BasePlugin, "Textures", "Compat", "LevelStudio", "Object", "ArtPaintings.png")));
+            AssetMan.Add("EditorSpr/Obj_ElevatorTrigger", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "Trigger_Elevator.png"));
+            AssetMan.Add("EditorSpr/Obj_CandleTrigger", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "Trigger_Candle.png"));
             AssetMan.Add("EditorSpr/Obj_InvisibleWall", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "InvisibleWall.png"));
-            
             AssetMan.Add("EditorSpr/Obj_SurpriseBaldi", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "SurpriseBaldi.png"));
             AssetMan.Add("EditorSpr/Obj_SurpriseNpc", AssetLoader.SpriteFromMod(BasePlugin, Vector2.one/2, 1f, "Textures", "Compat", "LevelStudio", "Object", "SurpriseNpc.png"));
 
@@ -80,6 +83,18 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "posters", 
                 new PosterTool("recchars_bee", AssetMan.Get<Sprite>("EditorSpr/Poster_bee")).SetModdedFrame()
             );
+            EditorInterfaceModes.InsertToolsInCategory(mode, "rooms", "room_cafeteria", [
+                new RoomTool("recchars_partycafeteria", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteria")).SetModdedFrame(),
+                new RoomTool("recchars_partycafeterianonanas", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaNoNanas")).SetModdedFrame()
+            ]);
+
+            EditorInterfaceModes.AddToolsToCategory(mode, "objects", [
+                new ObjectToolNoRotation("recchars_cake", AssetMan.Get<Sprite>("EditorSpr/Obj_Cake")).SetModdedFrame(),
+                new ObjectToolNoRotation("recchars_cakewcandle", AssetMan.Get<Sprite>("EditorSpr/Obj_CakeWCandle")).SetModdedFrame(),
+                new ObjectTool("recchars_partyelevator", AssetMan.Get<Sprite>("EditorSpr/Obj_PartyElevator")).SetModdedFrame()
+            ]);
+
+            if (!RecommendedCharsConfig.spoilerEditorItems.Value) return; // Spoiler territory begins here
 
             EditorInterfaceModes.AddToolsToCategory(mode, "posters", [
                 new PosterTool("recchars_ferriswheel").SetModdedFrame(),
@@ -93,18 +108,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
                 new PosterTool("recchars_endofline").SetModdedFrame(),
             ]);
 
-            EditorInterfaceModes.InsertToolsInCategory(mode, "rooms", "room_cafeteria", [
-                new RoomTool("recchars_partycafeteria", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteria")).SetModdedFrame(),
-                new RoomTool("recchars_partycafeterianonanas", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaNoNanas")).SetModdedFrame(),
-                //new RoomTool("recchars_partycafeteriawin", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaNoNanas")).SetModdedFrame()
-            ]);
-            EditorInterfaceModes.InsertToolsInCategory(mode, "rooms", "room_office", [
-                //new RoomTool("recchars_baldioffice", null).SetModdedFrame(),
-            ]);
-
-            EditorInterfaceModes.InsertToolsInCategory(mode, "items", "item_tape", [
-                //new ItemTool("recchars_endingtape").SetModdedFrame(),
-            ]);
+            EditorInterfaceModes.InsertToolInCategory(mode, "rooms", "room_recchars_partycafeterianonanas",
+                new RoomTool("recchars_partycafeteriawin", AssetMan.Get<Sprite>("EditorSpr/Room_PartyCafeteriaWin")).SetModdedFrame());
+            EditorInterfaceModes.InsertToolInCategory(mode, "rooms", "room_office",
+                new RoomTool("recchars_baldioffice",  AssetMan.Get<Sprite>("EditorSpr/Room_BaldisOffice")).SetModdedFrame());
+            EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_tape", new ItemTool("recchars_endingtape").SetModdedFrame());
 
             Sprite[] paintingSprites = AssetMan.Get<Sprite[]>("EditorSpr/Obj_ArtPaintings");
             EditorTool[] paintings = new EditorTool[paintingSprites.Length];
@@ -113,22 +121,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
             EditorInterfaceModes.AddToolsToCategory(mode, "objects", paintings);
 
             EditorInterfaceModes.AddToolsToCategory(mode, "objects", [
-                new ObjectToolNoRotation("recchars_cake", AssetMan.Get<Sprite>("EditorSpr/Obj_Cake")).SetModdedFrame(),
-                new ObjectToolNoRotation("recchars_cakewcandle", AssetMan.Get<Sprite>("EditorSpr/Obj_CakeWCandle")).SetModdedFrame(),
-                new ObjectTool("recchars_partyelevator", AssetMan.Get<Sprite>("EditorSpr/Obj_PartyElevator")).SetModdedFrame(),
-                //new ExtInvisibleWallTool("recchars_invisiblewall", AssetMan.Get<Sprite>("EditorSpr/Obj_InvisibleWall")).SetModdedFrame(),
-                //new ObjectTool("recchars_elevatortrigger", null, 5).SetModdedFrame(),
-                //new ObjectTool("recchars_candletrigger", null, 35).SetModdedFrame(),
-                //new ExtRoomObjectTool("recchars_surprisebaldi", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseBaldi"), "recchars_partycafeteriawin").SetModdedFrame(),
-                //new ExtRoomObjectTool("recchars_surprisenpc", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseNpc"), "recchars_partycafeteriawin").SetModdedFrame()
+                new ExtInvisibleWallTool("recchars_invisiblewall", AssetMan.Get<Sprite>("EditorSpr/Obj_InvisibleWall")).SetModdedFrame(),
+                new ObjectTool("recchars_elevatortrigger", AssetMan.Get<Sprite>("EditorSpr/Obj_ElevatorTrigger"), 5).SetModdedFrame(),
+                new ObjectTool("recchars_candletrigger", AssetMan.Get<Sprite>("EditorSpr/Obj_CandleTrigger"), 35).SetModdedFrame(),
+                new ExtRoomObjectTool("recchars_surprisebaldi", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseBaldi"), "recchars_partycafeteriawin").SetModdedFrame(),
+                new ExtRoomObjectTool("recchars_surprisenpc", AssetMan.Get<Sprite>("EditorSpr/Obj_SurpriseNpc"), "recchars_partycafeteriawin").SetModdedFrame()
             ]);
-        }
-
-        [CaudexLoadEvent(LoadingEventOrder.Post)]
-        private static void AddFallbacksToMissingChars()
-        {
-            // TBA!!!!
-            // TODO: Create stuff for the ending
         }
     }
 }

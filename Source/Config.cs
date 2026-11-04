@@ -10,7 +10,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         internal static ConfigEntry<PartyModeConfigMode> partyMode;
         internal static bool guaranteeSpawnChar;
-        internal static ConfigEntry<bool> guaranteeSpawnConf, legacyTextures;
+        internal static ConfigEntry<bool> guaranteeSpawnConf, legacyTextures, spoilerEditorItems;
 
 
         internal enum PartyModeConfigMode : byte
@@ -68,6 +68,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 "LegacyTextures",
                 false,
                 "Reverts texture changes made throughout the mod's development to reflect those sent by the requesters.");
+            spoilerEditorItems = config.Bind(
+                "Misc",
+                "ShowSpoilerEditorItems",
+                false,
+                "Content not regularly seen in normal gameplay will be visible in Level Studio.");
         }
     }
 }

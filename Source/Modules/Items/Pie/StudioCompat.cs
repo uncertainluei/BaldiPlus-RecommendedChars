@@ -14,7 +14,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
         private static void AddEditorContent()
         {
             LevelStudioPlugin.Instance.selectableShopItems.Add("recchars_pie");
-            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.AddToolToCategory(mode, "items", new ItemTool("recchars_pie").SetModdedFrame()));
+            EditorInterfaceModes.AddModeCallback((mode, vanillaCompliant) => EditorInterfaceModes.InsertToolInCategory(mode, "items", "item_banana", new ItemTool("recchars_pie").SetModdedFrame()));
         }
     }
 }

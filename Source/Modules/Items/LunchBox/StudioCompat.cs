@@ -31,7 +31,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolsToCategory(mode, "items", [
+            EditorInterfaceModes.InsertToolsInCategory(mode, "items", "item_apple", [
                 new ItemTool("recchars_lunchbox_random", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_Random"), false).SetModdedFrame(),
                 new ExtItemTool("recchars_lunchbox_2", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_2"), "Ed_Tool_item_recchars_lunchbox_Desc", false).SetModdedFrame(),
                 new ExtItemTool("recchars_lunchbox_3", AssetMan.Get<Sprite>("EditorSpr/Item_LunchBox_3"), "Ed_Tool_item_recchars_lunchbox_Desc", false).SetModdedFrame(),

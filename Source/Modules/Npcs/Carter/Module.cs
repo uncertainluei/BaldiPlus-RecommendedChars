@@ -208,6 +208,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
         }
 
+        [CaudexGenModEvent(GenerationModType.Addend)]
+        private void FloorAddendLvl(string title, int num, CustomLevelObject lvl)
+        {
+            if (!title.StartsWith("F") || lvl.IsModifiedByMod(Plugin.Metadata.GUID+"/Carter", GenerationStageFlags.Addend))
+                return;
+            lvl.MarkAsModifiedByMod(Plugin.Metadata.GUID+"/Carter", GenerationStageFlags.Addend);
+            lvl.posters = lvl.posters.AddToArray(ObjMan.Get<PosterObject>("Pst/ClassicCarterMissing").Weighted(30));
+        }
+
         private void AddToNpcs(NPC npc, SceneObject scene, int weight, bool endless, int firstNo = 0)
         {
             if (!RecommendedCharsConfig.guaranteeSpawnChar)

@@ -17,6 +17,30 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public float sadSpeed = 20f;
 
         internal static Character charEnum = (Character)(-1);
+
+        public void SetNerfedPreset(bool nerfed)
+        {
+            if (nerfed)
+            {
+                normSpeed = 30f;
+                runSpeed = 50f;
+                sadSpeed = 20f;
+                initialCooldown = 25f;
+                successCooldown = 50f;
+                jumpropePre.maxJumps = 8;
+                jumpropePre.startVal = 64;
+                jumpropePre.penaltyVal = -8;
+                return;
+            }
+            normSpeed = 90f;
+            runSpeed = 90f;
+            sadSpeed = 90f;
+            initialCooldown = 15f;
+            successCooldown = 15f;
+            jumpropePre.maxJumps = 10;
+            jumpropePre.startVal = 43;
+            jumpropePre.penaltyVal = -5;
+        }
     }
 
     public class CircleJumprope : Jumprope

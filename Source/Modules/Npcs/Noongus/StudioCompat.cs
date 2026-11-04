@@ -28,7 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolToCategory(mode, "npcs",
+            EditorInterfaceModes.InsertToolInCategory(mode, "npcs", "npc_beans",
                 new NPCTool("recchars_noongus", AssetMan.Get<Sprite>("EditorSpr/Npc_Noongus")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "posters",
                 new PosterTool("recchars_pri_noongus").SetModdedFrame());

@@ -187,37 +187,36 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             Principal principle = (Principal)NPCMetaStorage.Instance.Get(Character.Principal).value;
             daycare.Navigator.accel = principle.Navigator.accel;
-
-            daycare.Navigator.speed = 36f;
-            daycare.Navigator.maxSpeed = 36f;
             daycare.Navigator.passableObstacles = principle.Navigator.passableObstacles;
             daycare.Navigator.preciseTarget = principle.Navigator.preciseTarget;
+            daycare.SetNerfedPreset(RecommendedCharsConfig.nerfMrDaycare.Value);
+            ObjMan.Add("Npc/MrDaycare", daycare);
 
             LevelLoaderPlugin.Instance.posterAliases.Add("recchars_pri_daycare", daycare.Poster);
             daycare.potentialRoomAssets = ObjectCreation.RoomAssetsFromDirectory(ObjMan.Get<CaudexRoomBlueprint>("Room/Daycare"), "Daycare");
 
-            MrDaycare unnerfedDaycare = GameObject.Instantiate(daycare, MTM101BaldiDevAPI.prefabTransform);
-            unnerfedDaycare.name = "MrDaycare Unnerfed";
+            MrDaycare unnerfedDaycare = CreateVariant(daycare, false);
             ObjMan.Add("Npc/MrDaycare_Unnerfed", unnerfedDaycare);
-
-            daycare.Navigator.speed = 30f;
-            daycare.Navigator.maxSpeed = 30f;
-            daycare.maxTimeoutLevel = 1;
-            daycare.ruleSensitivityMul = 1;
-            ObjMan.Add("Npc/MrDaycare_Nerfed", daycare);
+            
+            MrDaycare nerfedDaycare = CreateVariant(daycare, true);
+            ObjMan.Add("Npc/MrDaycare_Nerfed", nerfedDaycare);
 
             PineDebugNpcIcons.AddIcon([daycare, unnerfedDaycare], "BorderDaycare.png");
             CharacterRadarColorPatch.colors.Add(daycare.Character, daycare.audMan.subtitleColor);
 
-            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", daycare);
+            LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare", nerfedDaycare);
             LevelLoaderPlugin.Instance.npcAliases.Add("recchars_mrdaycare_og", unnerfedDaycare);
-            SetMrDaycarePrefab();
             SurpriseNpc.AddVisual(new SurpriseNpcVisualSprite(daycare));
             RecommendedCharsConfig.nerfMrDaycare.SettingChanged += (x, y) =>
-            {
-                SetMrDaycarePrefab();
-                UpdateMrDaycareInstances();
-            };
+                ObjMan.Get<MrDaycare>("Npc/MrDaycare").SetNerfedPreset(RecommendedCharsConfig.nerfMrDaycare.Value);
+        }
+
+        private MrDaycare CreateVariant(MrDaycare baseNpc, bool nerfed)
+        {
+            MrDaycare variant = GameObject.Instantiate(baseNpc, MTM101BaldiDevAPI.prefabTransform);
+            variant.name = "MrDaycare_" + (nerfed ? "Nerfed" : "Unnerfed");
+            variant.SetNerfedPreset(nerfed);
+            return variant;
         }
 
         private void CreateDaycareBlueprint()
@@ -302,7 +301,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             daycareRoom.functionContainer.AddChalkboardBuilder(ObjMan.Get<PosterObject>("Pst/DaycarePoster_Clock"));
 
             ObjectCreation.AddRoom(daycareRoom);
-
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycareflor", daycareRoom.texFloor);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycarewall", daycareRoom.texWall);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("recchars_daycareceil", daycareRoom.texCeil);
@@ -455,36 +453,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {
                     scene.forcedNpcs = scene.forcedNpcs.AddToArray(ObjMan.Get<MrDaycare>("Npc/MrDaycare"));
                     scene.additionalNPCs = Mathf.Max(scene.additionalNPCs - 1, 0);
-                }
-            }
-        }
-
-        private void SetMrDaycarePrefab()
-        {
-            ObjMan.Add("Npc/MrDaycare", ObjMan.Get<MrDaycare>(RecommendedCharsConfig.nerfMrDaycare.Value ? "Npc/MrDaycare_Nerfed" : "Npc/MrDaycare_Unnerfed"));
-            //NPCMetaStorage.Instance.Get(MrDaycare.charEnum).ReflectionSetVariable("defaultKey", ObjMan.Get<MrDaycare>("Npc/MrDaycare").name);
-        }
-
-        private void UpdateMrDaycareInstances()
-        {
-            SceneObject scene;
-            int i, c;
-            foreach (SceneObjectMetadata sceneMeta in SceneObjectMetaStorage.Instance.All().Where(x => x.tags.Contains("endless") == true || x.title.StartsWith("F")))
-            {
-                scene = sceneMeta.value;
-                if (RecommendedCharsConfig.guaranteeSpawnChar)
-                {
-                    for (i = 0, c = scene.forcedNpcs.Length; i < c; i++)
-                    {
-                        if (scene.forcedNpcs[i].character == MrDaycare.charEnum)
-                            scene.forcedNpcs[i] = ObjMan.Get<MrDaycare>("Npc/MrDaycare");
-                    }
-                    continue;
-                }
-                for (i = 0, c = scene.potentialNPCs.Count; i < c; i++)
-                {
-                    if (scene.potentialNPCs[i].selection?.character == MrDaycare.charEnum)
-                        scene.potentialNPCs[i].selection = ObjMan.Get<MrDaycare>("Npc/MrDaycare");
                 }
             }
         }

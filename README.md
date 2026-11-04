@@ -1,6 +1,6 @@
 ![Recommended Characters Pack](Info/logo.png)
-![Version](https://img.shields.io/badge/version-1.4.0.1-purple) ![GitHub License](https://img.shields.io/github/license/uncertainluei/BaldiPlus-RecommendedChars)
-![BB+ version](https://img.shields.io/badge/bb+-0.14.5-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.1-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![Version](https://img.shields.io/badge/version-1.4.1-purple) ![GitHub License](https://img.shields.io/badge/license-Apache-2.0-69C12E?color=green)
+![BB+ version](https://img.shields.io/badge/bb+-0.14.5-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.2-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
 [**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
 
@@ -16,7 +16,7 @@ A decently sized and modular Baldi's Basics Plus mod that adds content with no r
 - [Blue Guy, Gifter and Locks n' Bolts in BB+](https://gamebanana.com/requests/78660)
 - [Lunch Box Item in BB+](https://gamebanana.com/requests/80350)
 - [A Somewhat Eventful Request (only Evil Maintenance Machine and Carter)](https://gamebanana.com/requests/80398)
-- [Noongus (Baldi's Basics Plus Character Idea) ](https://gamebanana.com/requests/91150)
+- [Noongus (Baldi's Basics Plus Character Idea)](https://gamebanana.com/requests/91150)
 
 # Licensing and Credits
 The "Program" portion of the mod (the source code and the compiled library files) is licensed under the [Apache License, Version 2](LICENSE).
@@ -35,7 +35,7 @@ As per [the notice](Resources/uncertainluei/recommendedchars/NOTICE), any assets
 ### Fully optional:
 - [Crispy+](https://gamebanana.com/mods/529314)
 <br><br>
-- ~~[Dev API Connector (required when running alongside ThinkerAPI mods)](https://github.com/AlexBW145/BaldiAPIConnector/releases)~~*
+- A Dev API connector (required when running alongside ThinkerAPI mods)
 - ~~[Epic Entertainment Pack](https://gamebanana.com/mods/546336)~~*
 
 ### Functional (optional to run, required to build):
@@ -49,7 +49,7 @@ As per [the notice](Resources/uncertainluei/recommendedchars/NOTICE), any assets
 - ~~Fragile Windows~~*
 - ~~Eco Friendly~~*
 
-\**Support for ThinkerAPI and its mods is halted until further notice.*
+\**Support for Big Thinker's mods is halted until their next update.*
 <br>
 \*\*_Support will be brought back once PixelGuy's **True Plus Immersion Bundle** releases._
 

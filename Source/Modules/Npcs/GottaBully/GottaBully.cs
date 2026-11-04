@@ -44,7 +44,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 return;
             }
 
-            pm.plm.Entity.AddForce(new Force((pm.transform.position - transform.position + navigator.Velocity).normalized, speed, -speed));
+            pm.plm.Entity.AddForce(new Force((pm.transform.position - transform.position + navigator.Velocity).normalized, speed*3f, speed*-2.7f));
         }
     }
 
@@ -85,13 +85,12 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public override void OnStateTriggerEnter(Entity ent, Collider other, bool valid)
         {
             base.OnStateTriggerEnter(ent, other, valid);
-
+            if (!valid) return;
             if (other.isTrigger && other.GetComponent<Principal>() != null)
             {
                 gottaBully.BackHome();
                 return;
             }
-
             if (other.CompareTag("Player"))
             {
                 PlayerManager pm = other.GetComponent<PlayerManager>();

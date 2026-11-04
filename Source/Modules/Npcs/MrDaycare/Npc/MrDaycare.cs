@@ -10,7 +10,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     {
         internal static Character charEnum = (Character)(-1);
 
-        private readonly int[] lockTimes = [30, 60, 100, 200, 500, 3161];
+        public int[] lockTimes = [30, 60, 100, 200, 500, 3161];
 
         public int maxTimeoutLevel = -1;
         public float ruleSensitivityMul = 1.5f;
@@ -30,11 +30,24 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             behaviorStateMachine.ChangeState(new MrDaycare_Waiting(this));
         }
 
+        public void SetNerfedPreset(bool nerfed)
+        {
+            if (nerfed)
+            {
+                Navigator.speed = 30f;
+                Navigator.maxSpeed = 30f;
+                maxTimeoutLevel = 1;
+                ruleSensitivityMul = 1f;
+                return;
+            }
+            Navigator.speed = 36f;
+            Navigator.maxSpeed = 36f;
+            maxTimeoutLevel = lockTimes.Length-1;
+            ruleSensitivityMul = 1.5f;
+        }
+
         public void Start()
         {
-            if (maxTimeoutLevel < 0)
-                maxTimeoutLevel = lockTimes.Length-1;
-
             Cell currentCell = ec.CellFromPosition(transform.position);
             if (currentCell == null || !(daycareRoom = currentCell.room) || !daycareRoom.functionObject.TryGetComponent(out daycareFunction))
             {
@@ -65,7 +78,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 {
                     targetedPlayer = player;
                     Scold(DaycareGuiltManager.GetInstance(player).RuleBreak);
-                    behaviorStateMachine.ChangeState(new MrDaycare_ChasingPlayer(this, player));
+                    if (allKnowing)
+                        behaviorStateMachine.ChangeState(new MrDaycare_ChasingPlayer_AllKnowing(this, player));
+                    else
+                        behaviorStateMachine.ChangeState(new MrDaycare_ChasingPlayer(this, player));
                 }
             }
         }
@@ -179,6 +195,15 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     }
 
     public class MrDaycare_ChasingPlayer(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer(daycare, player)
+    {
+        public override void OnStateTriggerStay(Entity ent, Collider other, bool valid)
+        {
+            if (other.CompareTag("Player") && other.transform == player.transform)
+                daycare.SendToTimeout(valid);
+        }
+    }
+
+    public class MrDaycare_ChasingPlayer_AllKnowing(MrDaycare daycare, PlayerManager player) : Principal_ChasingPlayer_AllKnowing(daycare, player)
     {
         public override void OnStateTriggerStay(Entity ent, Collider other, bool valid)
         {

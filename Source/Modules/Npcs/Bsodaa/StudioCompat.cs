@@ -44,14 +44,20 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolToCategory(mode, "npcs",
+            EditorInterfaceModes.InsertToolInCategory(mode, "npcs", "npc_beans",
                 new NPCTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Npc_Bsodaa")).SetModdedFrame());
-            EditorInterfaceModes.AddToolToCategory(mode, mode.id == "rooms" ? "objects" : "npcs",
-                new ExtRoomObjectTool("recchars_bsodaahelper", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper"), "recchars_bsodaaroom").SetModdedFrame());
-            EditorInterfaceModes.AddToolToCategory(mode, "npcs", 
-                new ExtRoomObjectTool("recchars_bsodaahelper_diet", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper_Diet"), "recchars_bsodaaroom").SetModdedFrame());
 
-            EditorInterfaceModes.AddToolToCategory(mode, "rooms",
+            ExtRoomObjectTool[] bsodaaHelpers =
+            [
+                new ExtRoomObjectTool("recchars_bsodaahelper", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper"), "recchars_bsodaaroom").SetModdedFrame(),
+                new ExtRoomObjectTool("recchars_bsodaahelper_diet", AssetMan.Get<Sprite>("EditorSpr/Npc_BsodaaHelper_Diet"), "recchars_bsodaaroom").SetModdedFrame()
+            ];
+            if (mode.id == "rooms")
+                EditorInterfaceModes.AddToolsToCategory(mode, "objects", bsodaaHelpers);
+            else
+                EditorInterfaceModes.InsertToolsInCategory(mode, "npcs", "npc_recchars_bsodaa", bsodaaHelpers);
+
+            EditorInterfaceModes.InsertToolInCategory(mode, "rooms", "room_reflex",
                 new RoomTool("recchars_bsodaaroom", AssetMan.Get<Sprite>("EditorSpr/Room_BsodaaRoom")).SetModdedFrame());
             EditorInterfaceModes.AddToolToCategory(mode, "lights",
                 new LightTool("recchars_bsodaa", AssetMan.Get<Sprite>("EditorSpr/Light_Bsodaa")).SetModdedFrame());

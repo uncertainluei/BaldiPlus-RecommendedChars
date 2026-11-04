@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace UncertainLuei.BaldiPlus.RecommendedChars
 {
-    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(CaudexLibGuid, "0.3")]
+    [BepInAutoPlugin(ModGuid, ModName), BepInDependency(ApiGuid, "11.2"), BepInDependency(CaudexLibGuid, "0.3")]
     [BepInDependency(LevelLoaderGuid)]
 
     [BepInDependency(CrispyPlusGuid, BepInDependency.DependencyFlags.SoftDependency)]
@@ -182,7 +182,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             }
 
             yield return "Activating config callbacks";
-            bool editorInstalled = Chainloader.PluginInfos.ContainsKey(LevelStudioGuid);
             RecommendedCharsConfig.legacyTextures.SettingChanged += (x, y) => ObjectCreation.UpdateRequiredTextures();
         }
     }

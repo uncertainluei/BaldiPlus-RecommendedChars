@@ -348,11 +348,10 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             if (RecommendedCharsConfig.onlyOneNpcActivity.Value)
             {
                 // Interrupt Playtime/Circle's minigame
-                foreach (Jumprope jumprope in player.jumpropes)
-                    jumprope.End(false);
-
-                foreach (GrabbingGame game in playerGrabbingGames.grabbingGames)
-                    game.End(false);
+                while (player.jumpropes.Count > 0)
+                    player.jumpropes[0].End(false);
+                while (playerGrabbingGames.grabbingGames.Count > 0)
+                    playerGrabbingGames.grabbingGames[0].End(false);
             }
             playerGrabbingGames.grabbingGames.Add(this);
 

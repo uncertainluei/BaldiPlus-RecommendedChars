@@ -6,6 +6,8 @@
 	"Ed_Tool_room_recchars_partycafeterianonanas_Desc": "Only balloons spawn in this room.",
 	"Ed_Tool_room_recchars_partycafeteriawin_Title": "Party Cafeteria (Ending)",
 	"Ed_Tool_room_recchars_partycafeteriawin_Desc": "Exclusively for use in the Ending.",
+	"Ed_Tool_room_recchars_baldioffice_Title": "Baldi's Office",
+	"Ed_Tool_room_recchars_baldioffice_Desc": "Go see Baldi there for some tips!",
 
 	// Cake
 	"Ed_Tool_object_recchars_cake_Title": "Giant Cake",
@@ -38,6 +40,12 @@
 	// Invisible Wall
 	"Ed_Tool_object_recchars_invisiblewall_Title": "Invisible Wall",
 	"Ed_Tool_object_recchars_invisiblewall_Desc": "The theme tune of the Invisible Wall:\nIt's a solid quad, that's invisible, and a wall.",
+
+	// Triggers
+	"Ed_Tool_object_recchars_elevatortrigger_Title": "Party Elevator Trigger",
+	"Ed_Tool_object_recchars_elevatortrigger_Desc": "When entered by the player, calls Special Manager function ID 0 with itself passed as a parameter.",
+	"Ed_Tool_object_recchars_candletrigger_Title": "Candle Trigger",
+	"Ed_Tool_object_recchars_candletrigger_Desc": "If blown by the player, calls Special Manager function ID 1 with itself passed as a parameter.",
 
 	// Surprise NPCs
 	"Ed_Tool_object_recchars_surprisebaldi_Title": "Surprise Baldi",

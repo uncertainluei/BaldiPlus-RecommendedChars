@@ -9,8 +9,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public SoundObject audOhno, audClean;
         public List<PrimitiveDrop> entityPres = [];
 
-        public float normalSpeed = 25f, cleaningSpeed = 42f;
-        public Vector2 delayTimeRange = new(30f, 60f), activeTimeRange = new(30f, 60f); 
+        public float normalSpeed = 25f, cleaningSpeed = 42f, dropChance = 0.1f;
+        public Vector2 delayTimeRange = new(30f, 60f), activeTimeRange = new(30f, 60f);
 
         private readonly List<Entity> entitiesSpawned = [];
         private DijkstraMap dijkstraMap;
@@ -166,12 +166,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
     public class NavigationState_WanderRandomDropEntities(MaintenanceMachine machine, int priority) : NavigationState_WanderRandom(machine, priority)
     {
         private readonly MaintenanceMachine machine = machine;
-        private readonly float spawnChance = 0.1f;
 
         public override void DestinationEmpty()
         {
             base.DestinationEmpty();
-            if (Random.value < spawnChance)
+            if (Random.value < machine.dropChance)
                 machine.SpawnEntity();
         }
     }

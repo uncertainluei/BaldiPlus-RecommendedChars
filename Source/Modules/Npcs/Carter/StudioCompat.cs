@@ -28,7 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Compat.LevelStudio
 
         private static void AddContentToMode(EditorMode mode, bool vanillaCompliant)
         {
-            EditorInterfaceModes.AddToolToCategory(mode, "npcs",
+            EditorInterfaceModes.InsertToolInCategory(mode, "npcs", "npc_crafters",
                 new NPCTool("recchars_carter", AssetMan.Get<Sprite>("EditorSpr/Npc_Carter")).SetModdedFrame());
             EditorInterfaceModes.AddToolsToCategory(mode, "posters",
                 [new PosterTool("recchars_pri_carter").SetModdedFrame(), new PosterTool("recchars_classiccartermissing").SetModdedFrame()]);

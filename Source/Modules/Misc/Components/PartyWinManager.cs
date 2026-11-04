@@ -80,7 +80,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private new void OnDestroy()
         {
             base.OnDestroy(); // This wouldn't be needed if mystman knew to use the boolean cast!!!
-            Debug.LogError("HELLO!");
             SpoilerAreaPatches.surpressDijkstraOOB = false;
             CaudexEvents.OnItemUse -= TeleporterFeedback;
             Entity.physicalHeight = 5f; // Fixes edge case of entities suddenly being all the way up afterwards in certain scenarios

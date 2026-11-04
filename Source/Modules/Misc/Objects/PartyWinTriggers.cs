@@ -82,6 +82,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
                 speechLoaded = true;
                 yield return new WaitForEndOfFrame();
             }
+            tape.Ec.MakeNoise(tape.transform.position, 99);
             tape.audMan.PlaySingle(speech);
             yield return new WaitWhile(() => tape.audMan.AnyAudioIsPlaying);
 

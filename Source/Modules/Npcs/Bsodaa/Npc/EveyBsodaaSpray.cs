@@ -8,6 +8,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private bool finished = false;
         private float unscaledSpeed;
+        private IntVector2 _pos;
 
         public void Start()
         {
@@ -26,21 +27,14 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             time += (ec.EnvironmentTimeScale - bsodaa.TimeScale) * Time.deltaTime;
             base.Update();
 
-            if (!finished && time <= 0f)
+            if (finished) return;
+            if (time <= 0f || !entity.InBounds || !ec.ContainsCoordinates(transform.position) || entity.CurrentRoom?.type == RoomType.Null)
                 BsodaFinished(false);
         }
 
         public new void EntityTriggerEnter(Entity ent, Collider other, bool valid)
         {
             if (!valid || launching) return;
-            if (!other.isTrigger && other.gameObject.layer == 1)
-            {
-                if (!finished)
-                    BsodaFinished(false);
-                Destroy(gameObject);
-                return;
-            }
-
             if (ent)
             {
                 if (!finished)
