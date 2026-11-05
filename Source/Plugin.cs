@@ -144,6 +144,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             SoundObject[] sounds = [.. AssetFinder.FindAllOfType<SoundObject>(true)];
             AssetMan.Add("Sfx/Silence", sounds.First(x => x.name == "Silence"));
             AssetMan.Add("Sfx/BaldWow", sounds.First(x => x.name == "BAL_Wow"));
+            AssetMan.Add("Sfx/Buzz", sounds.First(x => x.name == "Lose_Buzz"));
 
             AssetMan.Add("Sfx/FoodCrunch", ((ITM_ZestyBar)ItemMetaStorage.Instance.FindByEnum(Items.ZestyBar).value.item).audEat);
             ITM_NanaPeel banana = (ITM_NanaPeel)ItemMetaStorage.Instance.FindByEnum(Items.NanaPeel).value.item;

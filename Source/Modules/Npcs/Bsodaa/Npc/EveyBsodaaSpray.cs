@@ -8,7 +8,6 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         private bool finished = false;
         private float unscaledSpeed;
-        private IntVector2 _pos;
 
         public void Start()
         {

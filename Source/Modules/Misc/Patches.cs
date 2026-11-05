@@ -32,6 +32,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars.Patches
 
         internal static bool surpressDijkstraOOB = false;
 
+        #pragma warning disable
         // Silence out of range errors by returning infinite when out of bounds
         [HarmonyPatch(typeof(DijkstraMap), "Value", typeof(int), typeof(int)), HarmonyPrefix]
         private static bool DijkstraMapValueInt(ref int __result, IntVector2 ___size, int x, int z)

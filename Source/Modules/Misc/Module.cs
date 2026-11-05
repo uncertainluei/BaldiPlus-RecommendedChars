@@ -620,6 +620,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
             winManager.audBlow = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(BasePlugin, "Audio", "Sfx", "BlowCandle.wav"), "", SoundType.Effect, Color.white, 0);
             winManager.audWow = AssetMan.Get<SoundObject>("Sfx/BaldWow");
+            winManager.audBuzz = AssetMan.Get<SoundObject>("Sfx/Buzz");
             winManager.endingLevel.randomGenStructures = [ObjMan.Get<StructureWithParameters>("Strct/PartyWinBaldloonSpawner")];
 
             SceneObject scene = ObjectCreation.SceneObjectFromPath("Secret", "PartyEnding.bpl");
