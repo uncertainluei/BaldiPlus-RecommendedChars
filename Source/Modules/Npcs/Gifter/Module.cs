@@ -111,7 +111,11 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         private void SetGifterTags()
         {
             ItemMetaStorage.Instance.FindByEnum(Items.BusPass).tags.Add("recchars:gifter_blacklist");
-            ItemMetaStorage.Instance.FindAllWithTags(false, ["lost_item", "shape_key", "shop_dummy"]).Do(x => { x.tags.Add("recchars:gifter_blacklist"); });
+
+            // The joyful feeling of writing angry notes. Incoming PR for MTM API...
+            ItemMetaStorage.Instance.FindAllWithTags(false, ["lost_item"]).Do(x => { x.tags.Add("recchars:gifter_blacklist"); });
+            ItemMetaStorage.Instance.FindAllWithTags(false, ["shape_key"]).Do(x => { x.tags.Add("recchars:gifter_blacklist"); });
+            ItemMetaStorage.Instance.FindAllWithTags(false, ["shop_dummy"]).Do(x => { x.tags.Add("recchars:gifter_blacklist"); });
         }
 
         [CaudexGenModEvent(GenerationModType.Addend)]
