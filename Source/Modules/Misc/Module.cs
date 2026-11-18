@@ -344,7 +344,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
             Notebook notebookObj = GameObject.Instantiate(AssetFinder.FindAllOfType<Notebook>(true).First(), MTM101BaldiDevAPI.prefabTransform);
             Painting paintingObj = notebookObj.gameObject.AddComponent<Painting>();
             paintingObj.name = "Painting_0";
-            paintingObj.sprite = notebookObj.sprite;
+            paintingObj.sprite = notebookObj.GetComponentInChildren<SpriteRenderer>();
+            GameObject.DestroyImmediate(notebookObj.animator);
             GameObject.DestroyImmediate(notebookObj);
             paintingObj.sprite.sprite = paintingSprites[0];
             paintingObj.audShatter = AssetMan.Get<SoundObject>("Sfx/FakeShatter");

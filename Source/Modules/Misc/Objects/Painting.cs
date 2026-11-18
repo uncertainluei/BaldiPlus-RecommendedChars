@@ -27,6 +27,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
 
         public void ClickableSighted(int _) {}
         public void ClickableUnsighted(int _) {}
+        public void ClickableInSight(int _) {}
 
         public bool ClickableHidden() => false;
         public bool ClickableRequiresNormalHeight() => true;

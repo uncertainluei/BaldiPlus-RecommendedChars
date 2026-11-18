@@ -24,8 +24,8 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public bool ClickableHidden() => false;
         public bool ClickableRequiresNormalHeight() => false;
         public void ClickableSighted(int player) {}
-
         public void ClickableUnsighted(int player) {}
+        public void ClickableInSight(int player) {}
 
         public void Clicked(int player)
             => BaseGameManager.Instance.CallSpecialManagerFunction(1, gameObject);

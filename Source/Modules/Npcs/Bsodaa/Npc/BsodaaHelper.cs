@@ -28,6 +28,7 @@ namespace UncertainLuei.BaldiPlus.RecommendedChars
         public bool ClickableRequiresNormalHeight() => true;
         public void ClickableSighted(int player) => _player = CoreGameManager.Instance.GetPlayer(player);
         public void ClickableUnsighted(int player) {}
+        public void ClickableInSight(int player) {}
 
         private int lastPlayer = -1;
         private PlayerManager _player;

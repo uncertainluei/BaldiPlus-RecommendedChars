@@ -1,8 +1,10 @@
+***This repository is no longer maintained. To check the more recent source code, please check the [repository on Codeberg](https://codeberg.org/uncertainluei/baldiplus-recommendedcharacters).***
+
 ![Recommended Characters Pack](Info/logo.png)
 ![Version](https://img.shields.io/badge/version-1.4.1-purple) ![GitHub License](https://img.shields.io/badge/license-Apache-2.0-69C12E?color=green)
-![BB+ version](https://img.shields.io/badge/bb+-0.14.5-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.2-69C12E?color=red&link=https://gamebanana.com/mods/383711)
+![BB+ version](https://img.shields.io/badge/bb+-0.14.6-69C12E?color=green) ![BepInEx version](https://img.shields.io/badge/bepinex-5.4.23-69C12E?color=yellow&link=https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) ![Caudex Lib version](https://img.shields.io/badge/caudexlib-0.3-69C12E?color=blue) ![MTM101BMDE version](https://img.shields.io/badge/mtm101bmde-11.2-69C12E?color=red&link=https://gamebanana.com/mods/383711)
 
-[**Download**](https://gamebanana.com/mods/591677) • [**Credits**](CREDITS.md)
+[**Download**](https://gamebanana.com/mods/591677)
 
 *aka "The WORST Baldi's Basics Mod I've Ever Played.." according to grays and land... (don't worry though, he just REALLY hates playtime)*
 
